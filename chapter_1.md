@@ -20,7 +20,7 @@ hideInToc: false
 
 ## Outline
 
-<toc mode="onlySiblings" minDepth="2" columns="1"/>
+<toc mode="onlySiblings" minDepth="2" columns="2"/>
 
 ---
 layout: two-cols
@@ -71,7 +71,7 @@ A binary `1001111` is representing the number 79:
 
 ---
 
-# Digital and Analog
+## Digital and Analog
 
 <div class="text-center">
 
@@ -83,7 +83,7 @@ More and more analog products are becoming digital.
 
 ---
 
-# Ex. Keypad Encoding
+## Ex. Keypad Encoding
 
 <div class="grid grid-cols-2 gap-4">
 
@@ -491,7 +491,7 @@ layout: two-cols-header
 
 ---
 
-# Moore's Law
+## Moore's Law
 
 <div class="grid grid-cols-2 gap-4">
 <div>
