@@ -6,7 +6,7 @@ layout: cover
 title: Chapter 1 - Digital System
 ---
 
-# Lecture 1: Digital System
+# Chapter 1: Digital System
 
 {{ $slidev.configs.subject }}
 
@@ -71,7 +71,7 @@ A binary `1001111` is representing the number 79:
 layout: two-cols-header
 ---
 
-## The Digital Transformation
+## The Digital Transformation: Music
 The shift from analog to digital technology has revolutionized how we create, store, and listen to music.
 
 :: left ::
@@ -102,22 +102,30 @@ To convert an analog signal to digital, we perform two key steps:
 
 :: right ::
 
+<img src="https://producelikeapro.com/blog/wp-content/uploads/2020/09/The-Ins-and-Outs-of-Audio-Signal-Flow_2-1536x529.png"/>
 <img src="https://circuitcrush.com/wp-content/uploads/Sampling-Analog-Signal-768x432.jpg"/>
 
 
 
-
+---
+layout: two-cols-header
 ---
 
-## Ex. Keypad Encoding
+## Keypad Encoding
 
-<div class="grid grid-cols-2 gap-4">
+A keypad is organized as a matrix of rows and columns. When a key is pressed, it connects one row wire to one column wire.
 
-![Button](https://raw.githubusercontent.com/slidevjs/docs-cn/main/public/assets/digital-1/page-7-image-1.png)
+:: left ::
 
-![Encoding](https://raw.githubusercontent.com/slidevjs/docs-cn/main/public/assets/digital-1/page-7-image-2.png)
+*   **Scanning:** A microcontroller scans the keypad by activating one row (or column) at a time and then reading the columns (or rows) to see if any button is pressed.
+*   **Encoding:** The unique row-column combination is then converted (encoded) into a binary number to identify the pressed key.
+*   **Example:** For a 4x4 keypad (16 keys), a 4-bit binary code is sufficient to represent each key (e.g., key '1' could be `0000`, '2' could be `0001`, etc.).
 
-</div>
+::right::
+
+<img src="https://circuitdigest.com/sites/default/files/inlineimages/4x4-matrix-keypad.gif" class="rounded-lg bg-white p-4" alt="Keypad Matrix Diagram">
+<p class="text-sm text-center mt-2">A 4x4 keypad connects one of 4 rows to one of 4 columns when a button is pressed.</p>
+
 
 ---
 layout: two-cols-header
@@ -125,13 +133,25 @@ layout: two-cols-header
 
 ## Ideal Switch to Real Switch
 
+An ideal switch is a perfect, theoretical component, while real-world switches like transistors have physical limitations.
+
 :: left ::
 
-<img src="https://www.mathworks.com/help/sps/ref/ideal_semi_switch_ports.png"/>
+### Ideal Switch
+*   Switches **instantaneously**.
+*   **Zero** resistance when closed (ON).
+*   **Infinite** resistance when open (OFF).
+*   Consumes **no power**.
+<img src="https://www.mathworks.com/help/sps/ref/ideal_semi_switch_ports.png" class="rounded-lg w-50"/>
 
 :: right ::
 
-<img src="https://i0.wp.com/darlingevil.com/wp-content/uploads/2018/03/transistor.jpg?resize=768%2C476&ssl=1"/>
+### Real Switch (Transistor)
+*   Has **finite** switching time (rise/fall time).
+*   Small, **non-zero** resistance when ON.
+*   Very high, but **not infinite**, resistance when OFF (leakage current).
+*   Transistors are the physical basis for digital logic.
+<img src="https://i0.wp.com/darlingevil.com/wp-content/uploads/2018/03/transistor.jpg?resize=768%2C476&ssl=1" class="rounded-lg w-70"/>
 
 
 
@@ -487,6 +507,7 @@ layout: two-cols-header
 ---
 
 ## Intel Summary
+<div class="text-sm text-center mt-2">
 
 | Processor   | Year | Feature Size (µm) | Transistors | Frequency (MHz) | Word Size | Package         |
 |-------------|------|-------------------|-------------|-----------------|-----------|-----------------|
@@ -499,11 +520,13 @@ layout: two-cols-header
 | 80486       | 1989 | 1-0.6             | 1.2M        | 25-100          | 32        | 168-pin PGA     |
 | Pentium     | 1993 | 0.8-0.35          | 3.2-4.5M    | 60-300          | 32        | 296-pin PGA     |
 
-
+</div>
 
 ---
 
 ## Intel Summary (Continue)
+
+<div class="text-sm text-center mt-2">
 
 | Processor   | Year | Feature Size (µm) | Transistors | Frequency (MHz) | Word Size | Package         |
 |-------------|------|-------------------|-------------|-----------------|-----------|-----------------|
@@ -516,6 +539,10 @@ layout: two-cols-header
 | Core i7 (SB)| 2011 | 0.032             | 995M        | 3400-3800       | 64        | 1155-pin LGA    |
 | Core i7 (SK)| 2015 | 0.014             | 1.75B       | 4000-4200       | 64        | 1151-pin LGA    |
 
+</div>
+
+---
+layout: two-cols-header
 ---
 
 ## Moore's Law

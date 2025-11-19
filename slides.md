@@ -44,8 +44,13 @@ hideInToc: true
 ---
 
 # Contents
-<Toc maxDepth='1' columns='2'/>
+<Toc maxDepth='1' columns='1'/>
 ---
 src: chapter_1.md
 ---
-
+---
+src: chapter_2.md
+---
+---
+src: chapter_3.md
+---
