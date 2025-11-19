@@ -6,25 +6,14 @@ theme: seriph
 background: https://cover.sli.dev
 # some information about your slides (markdown enabled)
 title: Welcome to 010113025 Digital Circuit & Logic Design
-info: |
-  ## Slidev Starter Template
-  Presentation slides for developers.
-
-  Learn more at [Sli.dev](https://sli.dev)
-# apply unocss classes to the current slide
-class: text-center
-# https://sli.dev/features/drawing
-drawings:
-  persist: false
-# slide transition: https://sli.dev/guide/animations.html#slide-transitions
-transition: slide-left
+transition: fade
 # enable MDC Syntax: https://sli.dev/features/mdc
 mdc: true
 # open graph
 # seoMeta:
 #  ogImage: https://cover.sli.dev
 # lineNumbers: true
-favicon: '/img/favicon_c_new.png'
+# favicon: '/img/favicon_c_new.png'
 
 presenter: Dr. Ruslee Sutthaweekul
 semester: 2/2025
@@ -59,3 +48,4 @@ hideInToc: true
 ---
 src: chapter_1.md
 ---
+

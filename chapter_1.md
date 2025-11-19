@@ -1,7 +1,7 @@
 ---
 theme: seriph
 background: https://cover.sli.dev
-transition: slide-left
+transition: fade
 layout: cover
 title: Chapter 1 - Digital System
 ---
@@ -20,17 +20,21 @@ hideInToc: false
 
 ## Outline
 
-<toc mode="onlySiblings" minDepth="2" columns="2"/>
+<toc mode="onlySiblings" minDepth="2" columns="3"/>
 
 ---
 layout: two-cols
 ---
 
-## Digital and Analog
-* A **digital signal** is a signal that at any time can have one of a finite set of possible values, and is also known as a *discrete signal*.
-* An **analog signal** can have one of an infinite number of possible values, and is also known as a *continuous signal*.
-:: right ::
-![Stairs](https://crossroadenergy.com/wp-content/uploads/2024/02/Digital-Vs-Analgo-1200x1200.jpg.webp)
+## Digital vs. Analog Signals
+An **analog signal** is continuous, representing information with an infinite range of values over time. Think of a smooth, flowing wave.
+ 
+A **digital signal** is discrete, representing information with a finite set of values (like 0s and 1s). It moves in distinct steps.
+ 
+::right::
+ 
+<img src="https://crossroadenergy.com/wp-content/uploads/2024/02/Digital-Vs-Analgo-1200x1200.jpg.webp" class="rounded-lg bg-white p-4" alt="Analog vs Digital Waveforms">
+<p class="text-sm text-center mt-2">An analog signal has continuous values, while a digital signal has discrete, step-like values.</p>
 
 
 ---
@@ -64,22 +68,44 @@ A binary `1001111` is representing the number 79:
 </div>
 
 ---
+layout: two-cols-header
+---
 
-## Digital and Analog
+## The Digital Transformation
+The shift from analog to digital technology has revolutionized how we create, store, and listen to music.
+
+:: left ::
+
+### Analog: Vinyl Record
+*   **Physical Medium:** Information is stored as continuous grooves on a physical disc.
+*   **Signal Degradation:** Susceptible to wear, dust, and scratches, which introduces noise.
+*   **Limited Portability:** Requires a large, stationary player.
+<img src="https://cdn.djcity.com.au/wp-content/uploads/2021/09/21104805/Fenton-RP106W-Vinyl-Record-Player-with-Bluetooth-Wood-1.jpg" class="rounded-lg mt-4 w-40" alt="Vinyl Record Player">
+
+::right::
+
+### Digital: Streaming Service
+*   **Abstract Data:** Information is stored as discrete binary data (0s and 1s).
+*   **Perfect Copies:** Can be copied and transmitted without any loss of quality.
+*   **Highly Portable:** Accessible on countless devices anywhere with a network connection.
+<img src="https://images.unsplash.com/photo-1611339555312-e607c8352fd7?w=800" class="rounded-lg mt-4 w-50" alt="Music Streaming on a Smartphone">
+
+---
+layout: two-cols
+---
+
+## Analog to Digital Conversion
+
+To convert an analog signal to digital, we perform two key steps:
+1.  **Sampling:** The value of the analog signal is measured at regular time intervals (the dots on the curve).
+2.  **Quantization:** Each sampled value is mapped to the nearest value in a finite set of discrete levels (the steps).
+
+:: right ::
 
 <img src="https://circuitcrush.com/wp-content/uploads/Sampling-Analog-Signal-768x432.jpg"/>
 
----
 
-## Digital and Analog
 
-<div class="text-center">
-
-<img src="https://substackcdn.com/image/fetch/$s_!xinp!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F8d47e8d6-ffe6-40e0-8575-85462a763dbd_996x500.png"/>
-
-</div>
-
-More and more analog products are becoming digital.
 
 ---
 
@@ -301,7 +327,8 @@ layout: two-cols
 layout: two-cols-header
 ---
 
-## Intel 4004 Micro-Processor (1971)
+## Intel Processor Evolution
+### Intel 4004 Micro-Processor (1971)
 
 ::left::
 
@@ -322,7 +349,7 @@ layout: two-cols-header
 
 ---
 
-## Intel Processor Evolution
+## Intel 8008/8080
 
 <div class="grid grid-cols-2 gap-8">
 <div>
@@ -493,8 +520,8 @@ layout: two-cols-header
 
 ## Moore's Law
 
-<div class="grid grid-cols-2 gap-4">
-<div>
+<div class="grid grid-cols-5 gap-4">
+<div class="col-span-2">
 
 *   **Gordon Moore**: co-founder of Intel.
     *   Predicted that number of transistors per chip would grow exponentially (double every 18 months).
@@ -502,7 +529,7 @@ layout: two-cols-header
 *   Today, the price of a transistor is less than a grain of rice.
 
 </div>
-<div>
+<div class="col-span-3">
 
 ![Moore's Law Graph](https://upload.wikimedia.org/wikipedia/commons/0/00/Moore%27s_Law_Transistor_Count_1970-2020.png)
 
@@ -570,13 +597,47 @@ layout: two-cols-header
 <p class="text-sm text-center mt-2">An example of a complex ASIC: NVIDIA's Turing GPU.</p>
 
 ---
+layout: two-cols-header
+---
 
-# The Development Process
+## The Development Process
 
-<div class="grid grid-cols-2 gap-8">
+A typical digital circuit design flow involves several key stages, from initial concept to final implementation.
 
-![Development Process 1](https://raw.githubusercontent.com/slidevjs/docs-cn/main/public/assets/digital-1/page-35-image.png)
+:: left ::
 
-![Development Process 2](https://raw.githubusercontent.com/slidevjs/docs-cn/main/public/assets/digital-1/page-36-image.png)
+* **Design Phase**
 
-</div>
+This phase focuses on defining what the circuit should do and describing its behavior at a high level of abstraction, typically using an HDL.
+* **Implementation Phase**
+
+This phase transforms the abstract design into a physical, manufacturable layout, ensuring it meets performance, area, and power targets.
+
+:: right ::
+
+```mermaid 
+flowchart LR;
+
+    subgraph Design[Design Phase]
+      direction TB
+      A[Problem Specification] --> B{Design Entry};
+      B -->|"HDL (Verilog/VHDL)"| C[RTL Design];
+      B -->|Schematic| C;
+      C --> D[Functional Simulation];
+    end
+
+    Design -- "realization (hardware)" ---> Implementation
+   
+
+    subgraph Implementation[Implementation Phase]
+      direction TB
+    E{Synthesis};
+    E --> F[Post-Synthesis Simulation];
+    F --> G[Implementation / P&R];
+    G --> H[Timing Simulation];
+    H --> I[Hardware Verification];
+    end
+
+    
+    
+```
