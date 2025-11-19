@@ -1,0 +1,6 @@
+/* style.css */
+h2 {
+  font-size: 3rem; /* Match h1 font-size */
+  color: #5d8392;      /* Match h1 color */
+  font-weight: 50;  /* Match h1 font-weight */
+}
