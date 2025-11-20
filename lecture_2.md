@@ -516,6 +516,23 @@ This is the simplest SOP form for this function (also known as the XOR function)
 
 <img src="https://i.imgur.com/t9y2L3c.png" class="rounded-lg bg-white p-4" alt="Circuit for 3-way light control">
 
+### VHDL Implementation
+
+```vhdl
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity three_way_light is
+    port ( x, y, z : in  std_logic;
+           f       : out std_logic );
+end three_way_light;
+
+architecture behavioral of three_way_light is
+begin
+    f <= x xor y xor z;
+end behavioral;
+```
+
 ---
 layout: two-cols-header
 ---
@@ -559,6 +576,24 @@ layout: two-cols-header
 **Graphical Symbol**
 <img src="https://i.imgur.com/d7y7g4E.png" class="rounded-lg bg-white p-4 w-48 mt-4" alt="Symbol for 2-to-1 Multiplexer">
 
+### VHDL Implementation
+
+```vhdl
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity mux_2to1 is
+    port ( x, y : in  std_logic;
+           s    : in  std_logic;
+           f    : out std_logic );
+end mux_2to1;
+
+architecture dataflow of mux_2to1 is
+begin
+    f <= (x and not s) or (y and s);
+end dataflow;
+```
+
 ---
 layout: two-cols-header
 ---
@@ -598,17 +633,32 @@ So, the final simplified expression is:
 
 ### Circuit Implementation
 
-The circuit is built from the simplified expression `A = K · (D' + S·B')`.
+The circuit is built from the simplified expression `A = K · (D' + S·B')`, which is much simpler than a circuit for the original expression.
 
-<div class="grid grid-cols-2 gap-4">
-<div>
+<img src="https://i.imgur.com/39wYg7R.png" class="rounded-lg bg-white p-4 w-96" alt="Circuit for Car Safety Alarm">
 
-<img src="https://i.imgur.com/39wYg7R.png" class="rounded-lg bg-white p-4" alt="Circuit for Car Safety Alarm">
+### VHDL Implementation
 
-</div>
-</div>
+This difference is also clear when implemented in VHDL.
 
-This implementation is much simpler than one built directly from the full truth table, demonstrating the value of algebraic simplification.
+**Unsimplified Expression:** `A = K·D' + D·K·S·B'`
+```vhdl
+-- Unsimplified architecture
+architecture unsimplified of car_alarm is
+begin
+    A <= (K and not D) or (D and K and S and not B);
+end unsimplified;
+```
+
+**Simplified Expression:** `A = K · (D' + S·B')`
+```vhdl
+-- Simplified architecture
+architecture simplified of car_alarm is
+begin
+    A <= K and (not D or (S and not B));
+end simplified;
+```
+While a synthesizer might optimize both to the same logic, the simplified version is more readable and directly maps to a more efficient circuit structure.
 
 ---
 layout: two-cols-header
@@ -650,6 +700,24 @@ The circuit combines an XOR gate for the sum and an AND gate for the carry.
 
 **Block Diagram**
 <img src="https://i.imgur.com/e5g4f3D.png" class="rounded-lg bg-white p-4 w-48 mt-4" alt="Block Diagram for a Half-Adder">
+
+### VHDL Implementation
+
+```vhdl
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity half_adder is
+    port ( x, y : in  std_logic;
+           s, c : out std_logic );
+end half_adder;
+
+architecture dataflow of half_adder is
+begin
+    s <= x xor y;
+    c <= x and y;
+end dataflow;
+```
 
 ---
 layout: two-cols-header

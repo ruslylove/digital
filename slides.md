@@ -57,3 +57,21 @@ src: lecture_3.md
 ---
 src: lecture_4.md
 ---
+---
+src: lecture_5.md
+---
+---
+src: lecture_6.md
+---
+---
+src: lecture_7.md
+---
+---
+src: lecture_8.md
+---
+---
+src: lecture_9.md
+---
+---
+src: lecture_10.md
+---
