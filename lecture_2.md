@@ -87,7 +87,7 @@ The light $L$ is ON ($1$) only if **both** switch $x1$ AND switch $x2$ are close
 
 $L(x1, x2) = x1 · x2$
 
-<img src="./AND.png" class="rounded-lg bg-white p-4 mt-4" alt="AND function with series switches">
+<img src="/AND.png" class="rounded-lg bg-white p-4 mt-4" alt="AND function with series switches">
 
 ::right::
 
@@ -96,7 +96,7 @@ The light $L$ is ON ($1$) if switch $x1$ OR switch $x2$ (or both) are closed ($1
 
 $L(x1, x2) = x1 + x2$
 
-<img src="./OR.png" class="rounded-lg bg-white p-4 mt-4" alt="OR function with parallel switches">
+<img src="/OR.png" class="rounded-lg bg-white p-4 mt-4" alt="OR function with parallel switches">
 
 ---
 layout: two-cols-header
@@ -116,7 +116,7 @@ What if we want an action to occur when a switch is *opened* instead of closed? 
 
 ::right::
 
-<img src="./NOT.png" class="rounded-lg bg-white p-4" alt="NOT function with a switch">
+<img src="/NOT.png" class="rounded-lg bg-white p-4" alt="NOT function with a switch">
 
 ---
 
@@ -173,19 +173,19 @@ These are the standard symbols for the fundamental logic gates.
 <div>
 
 ### AND Gate
-<img src="./and_logic.png" class="rounded-lg bg-white p-4" alt="AND Gate Symbol">
+<img src="/and_logic.png" class="rounded-lg bg-white p-4" alt="AND Gate Symbol">
 
 </div>
 <div>
 
 ### OR Gate
-<img src="./or_logic.png" class="rounded-lg bg-white p-4" alt="OR Gate Symbol">
+<img src="/or_logic.png" class="rounded-lg bg-white p-4" alt="OR Gate Symbol">
 
 </div>
 <div>
 
 ### NOT Gate (Inverter)
-<img src="./not_logic.png" class="rounded-lg bg-white p-4" alt="NOT Gate Symbol">
+<img src="/not_logic.png" class="rounded-lg bg-white p-4" alt="NOT Gate Symbol">
 
 </div>
 </div>
@@ -206,7 +206,7 @@ Each basic logic operation (AND, OR, NOT) is implemented by a physical circuit e
 
 ::right::
 
-<img src="./logic_network.png" class="rounded-lg bg-white p-4" alt="Logic Network Diagram">
+<img src="/logic_network.png" class="rounded-lg bg-white p-4" alt="Logic Network Diagram">
 
 ---
 layout: two-cols-header
@@ -495,10 +495,10 @@ $f(x1,x2) = x1'x2' + x1'x2 + x1x2$
 The simplified form $x1' + x2$ requires far fewer gates.
 
 **Original Circuit for $x1'x2' + x1'x2 + x1x2$**
-<img src="./sop.png" class="rounded-lg bg-white p-2 w-80" alt="Complex circuit for unsimplified function">
+<img src="/sop.png" class="rounded-lg bg-white p-2 w-80" alt="Complex circuit for unsimplified function">
 
 **Simplified Circuit for $x1' + x2$**
-<img src="./simplified.png" class="rounded-lg bg-white p-2 mt-4 w-70" alt="Simple circuit for simplified function">
+<img src="/simplified.png" class="rounded-lg bg-white p-2 mt-4 w-70" alt="Simple circuit for simplified function">
 
 ---
 layout: two-cols-header
@@ -605,10 +605,10 @@ layout: two-cols
 ### Circuit and Symbol
 
 **Circuit for $f = s'x_1 + sx_2$**
-<img src="./mux_circuit.png" class="rounded-lg bg-white p-4 w-80" alt="Circuit for 2-to-1 Multiplexer">
+<img src="/mux_circuit.png" class="rounded-lg bg-white p-4 w-80" alt="Circuit for 2-to-1 Multiplexer">
 
 **Graphical Symbol**
-<img src="./mux_symbol.png" class="rounded-lg bg-white p-4 w-48 mt-4" alt="Symbol for 2-to-1 Multiplexer">
+<img src="/mux_symbol.png" class="rounded-lg bg-white p-4 w-48 mt-4" alt="Symbol for 2-to-1 Multiplexer">
 
 :: right ::
 
