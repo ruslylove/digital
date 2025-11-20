@@ -3,10 +3,10 @@ theme: seriph
 background: https://cover.sli.dev
 transition: fade
 layout: cover
-title: Chapter 1 - Digital System
+title: Lecture 1 - Digital System
 ---
 
-# Chapter 1: Digital System
+# Lecture 1: Digital System
 
 {{ $slidev.configs.subject }}
 

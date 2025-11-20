@@ -3,11 +3,10 @@ theme: seriph
 background: https://cover.sli.dev
 transition: fade
 layout: cover
-title: Chapter 3 - Logic Optimization
+title: Lecture 3 - Logic Optimization
 ---
 
-# Chapter 3: Logic Optimization
-### Karnaugh Maps
+# Lecture 3: Logic Optimization using Karnaugh Maps
 
 {{ $slidev.configs.subject }}
 

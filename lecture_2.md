@@ -3,10 +3,10 @@ theme: seriph
 background: https://cover.sli.dev
 transition: fade
 layout: cover
-title: Chapter 2 - Logic Circuits
+title: Lecture 2 - Logic Circuits
 ---
 
-# Chapter 2: Logic Circuits
+# Lecture 2: Logic Circuits
 
 {{ $slidev.configs.subject }}
 
