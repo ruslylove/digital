@@ -320,24 +320,8 @@ Let's analyze the following circuit with two D flip-flops (A and B), one input (
     *   Each circle represents a state (the value of the flip-flops, AB).
     *   Each arrow represents a transition between states.
     *   The label on the arrow is in the format `input / output`.
-    
-```mermaid
-stateDiagram-v2
-    direction LR
-    state "00" as s00
-    state "01" as s01
-    state "10" as s10
-    state "11" as s11
 
-    s00 --> s00 : 0/0
-    s00 --> s01 : 1/0
-    s01 --> s00 : 0/1
-    s01 --> s11 : 1/0
-    s10 --> s00 : 0/1
-    s10 --> s10 : 1/0
-    s11 --> s00 : 0/1
-    s11 --> s10 : 1/0
-```
+<img src="/fsm_1.svg"/>
 
 This completes the analysis. The state diagram fully describes the circuit's behavior over time.
 

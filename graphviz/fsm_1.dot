@@ -1,0 +1,23 @@
+digraph StateMachine {
+    rankdir=LR;
+    layout=circo;
+    node[shape=circle];
+    
+    // Set coordinates for corner distribution
+    s00 [label="00", pos="0,1!"];  // Top-Left (or top of the diagram)
+    s01 [label="01", pos="1,1!"];  // Top-Right
+    s11 [label="11", pos="0,0!"];  // Bottom-Left
+    s10 [label="10", pos="1,0!"];  // Bottom-Right
+    
+    // Use the '!' after the coordinates to force the position
+    // and prevent 'neato' from trying to optimize the layout.
+
+    s00 -> s00 [label="0/0"];
+    s00 -> s01 [label="1/0"];
+    s01 -> s00 [label="0/1"];
+    s01 -> s11 [label="1/0"];
+    s10 -> s00 [label="0/1"];
+    s10 -> s10 [label="1/0"];
+    s11 -> s00 [label="0/1"];
+    s11 -> s10 [label="1/0"];
+}
