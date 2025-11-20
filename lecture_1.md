@@ -307,21 +307,21 @@ Jack Kilby's first hybrid IC (1958). It was made of germanium and measured 7/16"
 
 **1961:** TI and Fairchild introduced the first logic IC's (cost ~$50 in quantity!). This is a dual flip-flop with 4 transistors.
 
-<img src="./ic1.png" class="mt-4"/>
+<img src="/ic1.png" class="mt-4"/>
 
 </div>
 <div>
 
 **1963:** Densities and yields are improving. This circuit has four flip flops.
 
-<img src="./ic2.png" class="mt-4"/>
+<img src="/ic2.png" class="mt-4"/>
 
 </div>
 <div>
 
 **1967:** Fairchild markets the semi-custom chip shown below. Transistors could be easily rewired using a two-layer interconnect to create different circuits. This circuit contains ~150 logic gates.
 
-<img src="./ic3.png" class="mt-4"/>
+<img src="/ic3.png" class="mt-4"/>
 
 </div>
 </div>
