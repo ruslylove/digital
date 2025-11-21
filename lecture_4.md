@@ -31,7 +31,9 @@ title: Lecture 4 - Number Representation & Arithmetic Circuits
 
 ## Numbers in Different Radix Systems
 
-| Decimal | Binary | Octal | Hexadecimal |
+<div class="grid grid-cols-2 gap-20 text-center text-xs">
+
+| **Decimal** | **Binary** | **Octal** | **Hexadecimal** |
 |:-------:|:------:|:-----:|:-----------:|
 | 00      | 00000  | 00    | 00          |
 | 01      | 00001  | 01    | 01          |
@@ -42,6 +44,9 @@ title: Lecture 4 - Number Representation & Arithmetic Circuits
 | 06      | 00110  | 06    | 06          |
 | 07      | 00111  | 07    | 07          |
 | 08      | 01000  | 10    | 08          |
+
+| **Decimal** | **Binary** | **Octal** | **Hexadecimal** |
+|:-------:|:------:|:-----:|:-----------:|
 | 09      | 01001  | 11    | 09          |
 | 10      | 01010  | 12    | 0A          |
 | 11      | 01011  | 13    | 0B          |
@@ -52,6 +57,8 @@ title: Lecture 4 - Number Representation & Arithmetic Circuits
 | 16      | 10000  | 20    | 10          |
 | 17      | 10001  | 21    | 11          |
 | 18      | 10010  | 22    | 12          |
+
+</div>
 
 ---
 
