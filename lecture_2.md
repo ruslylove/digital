@@ -525,14 +525,15 @@ th:last-child, td:last-child {
 </style>
 
 ---
-layout: two-cols-header
----
+
 
 ## Minimality and Simplification
 
 A function in its canonical Sum-of-Products form may not be minimal. It's often possible to simplify the expression, which leads to a simpler, cheaper, and faster circuit.
 
-::left::
+<div class="grid grid-cols-5 gap-2">
+<div class="col-span-3">
+
 ### Example
 Consider the function represented by the truth table.
 
@@ -547,7 +548,9 @@ $f(x1,x2) = x1'x2' + x1'x2 + x1x2$
 5. $f = 1 · (x1' + x2)$
 6. $f = x1' + x2$
 
-::right::
+</div>
+<div class="col-span-2">
+
 
 ### Truth Table
 
@@ -557,6 +560,9 @@ $f(x1,x2) = x1'x2' + x1'x2 + x1x2$
 | 0 | 1 | 1 |
 | 1 | 0 | 0 |
 | 1 | 1 | 1 |
+
+</div>
+</div>
 
 ---
 
@@ -580,6 +586,8 @@ layout: two-cols-header
 *   Light is OFF if **two** switches are closed.
 *   Light is ON if **three** switches are closed.
 
+<img src="/room.png" class="rounded-lg bg-white p-2 mt-4 w-90"/>
+
 ::right::
 
 ### Truth Table
@@ -587,7 +595,7 @@ layout: two-cols-header
 <div class="text-sm">
 
 
-| x | y | z | f |
+| $x$ | $y$ | $z$ | $f$ |
 |:-:|:-:|:-:|:-:|
 | 0 | 0 | 0 | 0 |
 | 0 | 0 | 1 | **1** |
@@ -599,6 +607,24 @@ layout: two-cols-header
 | 1 | 1 | 1 | **1** |
 
 </div>
+
+<style>
+/* Target the table on this specific slide */
+table {
+  border-collapse: collapse; /* Merges adjacent borders */
+}
+
+/* Add a right border to all table headers and data cells */
+/* The value '1px solid #AC3520' uses your KMUTNB red color */
+th, td {
+  border-right: 1px solid #CCC; 
+}
+
+/* Optional: Remove the border from the very last column */
+th:last-child, td:last-child {
+  border-right: none;
+}
+</style>
 
 ---
 
@@ -612,7 +638,7 @@ This is the simplest SOP form for this function (also known as the XOR function)
 
 ### Circuit Implementation
 
-<iframe src="https://circuitverse.org/simulator/embed/three-doors-switches?theme=default&display_title=false&clock_time=false&fullscreen=true&zoom_in_out=false" style="border-width:1; border-style: solid; border-color:;" name="myiframe" id="projectPreview" scrolling="no" frameborder="1" marginheight="1px" marginwidth="1px" height="300" width="500" allowFullScreen></iframe>
+<iframe src="https://circuitverse.org/simulator/embed/three-doors-switches?theme=default&display_title=false&clock_time=false&fullscreen=true&zoom_in_out=false" style="border-width:1; border-style: solid; border-color:;" name="myiframe" id="projectPreview" scrolling="no" frameborder="1" marginheight="1px" marginwidth="1px" height="250" width="500" allowFullScreen></iframe>
 
 ---
 layout: two-cols-header
@@ -620,19 +646,20 @@ layout: two-cols-header
 
 ## Design Example: Multiplexer (MUX)
 
-::left::
+<div class="grid grid-cols-7 gap-4">
+<div class="col-span-2">
+
 **Problem:** Design a circuit that chooses between two data inputs, `x1` and `x2`, based on a control signal `s`. This is a 2-to-1 Multiplexer.
 
 *   If `s = 0`, the output `f` should be equal to `x1`.
 *   If `s = 1`, the output `f` should be equal to `x2`.
 
-:: right ::
+</div>
 
 
 
-<div class="grid grid-cols-2 gap-1 text-sm ">
 
-<div>
+<div class="text-sm col-span-2">
 
 ### Truth Table 
 
@@ -647,7 +674,7 @@ layout: two-cols-header
 | 1 | 1 | 0 | 0 |
 | 1 | 1 | 1 | **1** |
 </div>
-<div>
+<div class="col-span-3">
 
 ### Expression
 
@@ -666,6 +693,24 @@ $f = s'x_1 + sx_2$
 
 </div>
 
+<style>
+/* Target the table on this specific slide */
+table {
+  border-collapse: collapse; /* Merges adjacent borders */
+}
+
+/* Add a right border to all table headers and data cells */
+/* The value '1px solid #AC3520' uses your KMUTNB red color */
+th, td {
+  border-right: 1px solid #CCC; 
+}
+
+/* Optional: Remove the border from the very last column */
+th:last-child, td:last-child {
+  border-right: none;
+}
+</style>
+
 ---
 layout: two-cols
 ---
@@ -683,16 +728,23 @@ layout: two-cols
 <iframe src="https://circuitverse.org/simulator/embed/mux_2_to_1?theme=&display_title=false&clock_time=false&fullscreen=true&zoom_in_out=false" style="border-width:; border-style: ; border-color:;" name="myiframe" id="projectPreview" scrolling="no" frameborder="1" marginheight="0px" marginwidth="0px" height="500" width="400" allowFullScreen></iframe>
 
 ---
-layout: two-cols-header
----
+
 
 ## Design Example: Car Safety Alarm
+
+<div class="grid grid-cols-2 gap-4">
+
+<div>
 
 **Problem:** Design a car safety alarm `A` that sounds if:
 1.  The key is in (`K=1`) and the door is not closed (`D=0`), OR
 2.  The door is closed (`D=1`), the key is in (`K=1`), the driver is in the seat (`S=1`), and the seat belt is not closed (`B=0`).
 
-::left::
+<img src="/car.png" class="w-90 rounded-lg bg-white p-4"/>
+
+</div>
+
+<div>
 
 ### Boolean Expression
 
@@ -702,11 +754,9 @@ Translating the conditions into a Boolean expression:
 *   Condition 2: `D · K · S · B'`
 
 The final alarm function `A` is the OR of these two conditions:
-
 `A = K·D' + D·K·S·B'`
 
 This can be simplified slightly by factoring out `K`:
-
 `A = K · (D' + D·S·B')`
 
 Using the property `X + X'Y = X + Y`:
@@ -717,7 +767,10 @@ So, the final simplified expression is:
 
 `A = K · (D' + S·B')`
 
-::right::
+</div>
+</div>
+
+---
 
 ### Circuit Implementation
 

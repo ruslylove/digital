@@ -4,6 +4,7 @@ background: https://cover.sli.dev
 transition: fade
 layout: cover
 title: Lecture 1 - Digital System
+lectureIndex: 1
 ---
 
 # Lecture 1: Digital System
