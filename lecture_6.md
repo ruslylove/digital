@@ -225,7 +225,7 @@ Other flip-flops can be constructed from a D flip-flop and external gates.
 
 These define the next state `Q(t+1)` based on the current inputs and current state `Q(t)`.
 
-<div class="grid grid-cols-2 gap-8">
+<div class="grid grid-cols-3 gap-8">
 
 <div>
 
@@ -236,6 +236,9 @@ These define the next state `Q(t+1)` based on the current inputs and current sta
 |:-:|:------:|
 | 0 |   0    |
 | 1 |   1    |
+
+</div>
+<div>
 
 ### T Flip-Flop
 `Q(t+1) = T ⊕ Q`

@@ -47,7 +47,8 @@ The theoretical foundation of all modern digital computing was laid by George Bo
 ::left::
 ### George Boole (1815-1864)
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/George_Boole_color.jpg" class="rounded-lg w-38" alt="George Boole">
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/George_Boole_color.jpg" style="float: left; margin-right: 25px; width: 150px;" class="rounded-lg w-38" alt="George Boole">
 
 *   Developed **Boolean algebra** in the mid-1800s.
 *   His intent was not to build circuits, but to create an algebraic system to formalize human logic and thought.
@@ -56,7 +57,7 @@ The theoretical foundation of all modern digital computing was laid by George Bo
 
 ### Claude Shannon (1916-2001)
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/9/98/C.E._Shannon._Tekniska_museet_43069_%28cropped%29.jpg" class="rounded-lg w-40" alt="Claude Shannon">
+<img src="https://upload.wikimedia.org/wikipedia/commons/9/98/C.E._Shannon._Tekniska_museet_43069_%28cropped%29.jpg" style="float: left; margin-right: 25px; width: 150px;" class="rounded-lg w-40" alt="Claude Shannon">
 
 *   In his 1938 Master's thesis, he showed how Boolean algebra could be applied to switch-based circuits.
 *   He demonstrated that an "on" switch could be treated as `1` (true) and an "off" switch as `0` (false).
@@ -323,12 +324,31 @@ De Morgan's theorem provides a way to find the complement of a complex expressio
 
 ### Proof for $(x · y)' = x' + y'$
 
-| x | y | x·y | **(x·y)'** | x' | y' | **x'+y'** |
+| $x$ | $y$ | $x·y$ | **$\bm{(x·y)'}$** | $x'$ | $y'$ | **$\bm{x'+y'}$** |
 |:-:|:-:|:---:|:----------:|:--:|:--:|:-------:|
 | 0 | 0 |  0  |     **1**      | 1  | 1  |   **1**   |
 | 0 | 1 |  0  |     **1**      | 1  | 0  |   **1**   |
 | 1 | 0 |  0  |     **1**      | 0  | 1  |   **1**   |
 | 1 | 1 |  1  |     **0**      | 0  | 0  |   **0**   |
+
+<style>
+/* Target the table on this specific slide */
+table {
+  border-collapse: collapse; /* Merges adjacent borders */
+}
+
+/* Add a right border to all table headers and data cells */
+/* The value '1px solid #AAA' uses your KMUTNB red color */
+th, td {
+  border-right: 1px solid #AAA; 
+}
+
+/* Optional: Remove the border from the very last column */
+th:last-child, td:last-child {
+  border-right: none;
+}
+
+</style>
 
 ---
 
@@ -371,7 +391,7 @@ layout: two-cols
 A **minterm** is a product (AND) term that includes every input variable, either in its true or complemented form. Each minterm corresponds to a single row in a truth table where the output is `1`.
 
 ### Synthesis Steps
-1.  Identify all rows in the truth table where the function's output `f` is **1**.
+1.  Identify all rows in the truth table where the function's output $f$ is **1**.
 2.  For each of these rows, write a **minterm** product term. A variable is complemented if its value in the row is `0`, and true if its value is `1`.
 3.  The final expression is the **sum (OR)** of all the minterms.
 
@@ -385,7 +405,7 @@ This is also known as the **canonical sum-of-products** form.
 ### Example
 <div class="grid grid-cols-2 gap-2">
 
-<div>
+<div class="text-sm">
 
 | $a$ | $b$ | $c$ | $f$ | $\text{Minterm}$ |
 |:-:|:-:|:-:|:-:|:--------|
@@ -400,13 +420,37 @@ This is also known as the **canonical sum-of-products** form.
 </div>
 
 <div>
+<div class="p-4 border-1 border-solid border-black rounded-lg">
 
 $f(a,b,c) = a'b'c + a'bc + ab'c + abc$
+</div>
 
 This can also be written using $m$ notation:
+<div class="p-4 border-1 border-solid border-black rounded-lg">
+
 $f(a,b,c) = m₁ + m₃ + m₅ + m₇ = Σm(1,3,5,7)$
+
 </div>
 </div>
+</div>
+
+<style>
+/* Target the table on this specific slide */
+table {
+  border-collapse: collapse; /* Merges adjacent borders */
+}
+
+/* Add a right border to all table headers and data cells */
+/* The value '1px solid #AC3520' uses your KMUTNB red color */
+th, td {
+  border-right: 1px solid #AAA; 
+}
+
+/* Optional: Remove the border from the very last column */
+th:last-child, td:last-child {
+  border-right: none;
+}
+</style>
 
 ---
 layout: two-cols
@@ -431,7 +475,7 @@ This is also known as the **canonical product-of-sums** form.
 ### Example
 
 <div class="grid grid-cols-2 gap-1">
-<div>
+<div class="text-sm">
 
 | $a$ | $b$ | $c$ | $f$ | $\text{Maxterm}$ |
 |:-:|:-:|:-:|:-:|:--------|
@@ -446,15 +490,39 @@ This is also known as the **canonical product-of-sums** form.
 </div>
 
 <div>
+<div class="p-4 border-1 border-solid border-black rounded-lg">
 
 $f(a,b,c) = (a+b+c)·(a+b'+c)·(a'+b+c)·(a'+b'+c)$
+</div>
 
-This can also be written using 'M' notation:
+This can also be written using $M$ notation:
+
+<div class="p-4 border-1 border-solid border-black rounded-lg">
+
 $f(a,b,c) = M₀ · M₂ · M₄ · M₆ = ΠM(0,2,4,6)$
-
 </div>
 
 </div>
+
+</div>
+
+<style>
+/* Target the table on this specific slide */
+table {
+  border-collapse: collapse; /* Merges adjacent borders */
+}
+
+/* Add a right border to all table headers and data cells */
+/* The value '1px solid #AC3520' uses your KMUTNB red color */
+th, td {
+  border-right: 1px solid #AAA; 
+}
+
+/* Optional: Remove the border from the very last column */
+th:last-child, td:last-child {
+  border-right: none;
+}
+</style>
 
 ---
 layout: two-cols-header
@@ -483,7 +551,7 @@ $f(x1,x2) = x1'x2' + x1'x2 + x1x2$
 
 ### Truth Table
 
-| x1 | x2 | f |
+| $x1$ | $x2$ | $f$ |
 |:-:|:-:|:-:|
 | 0 | 0 | 1 |
 | 0 | 1 | 1 |
