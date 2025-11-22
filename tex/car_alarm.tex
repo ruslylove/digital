@@ -1,0 +1,35 @@
+\documentclass{article}
+\usepackage{circuitikz}
+\ctikzset{
+logic ports=ieee,
+logic ports/scale=0.7,
+}
+\begin{document}
+\begin{center}
+\begin{circuitikz}[]
+    \draw (0,0) 
+    node [label=left:$D$] {}
+    to [short, o-] (3,0)
+    node [not port, anchor=in 1, scale=0.5] (not1) {}
+    (not1.out)
+    -- ++(1,0) 
+    node [or port, anchor=in 1] (or1) {}
+    (or1.out) -- ++(0.5,0)
+    node [and port, anchor=in 1] (and2) {}
+    (and2.out)
+    to [short, -o] ++(1,0) node [label=right:$A$] {}
+    (0,-1) node [label=left:$S$] {}
+     to [short, o-] ++(2,0)
+     node [and port, anchor=in 1] (and1) {} 
+     (and1.out) -| (or1.in 2)
+     (0,-2) node [label=left:$B$] {}
+     to [short, o-] ++(1,0)
+     node [not port, anchor=in 1, scale=0.5] (not2) {}
+     (not2.out) -| (and1.in 2)
+     (0,-3) node [label=left:$K$] (k){}
+     to [short, o-] ++(4,0) -|
+     (and2.in 2)
+    ;
+\end{circuitikz}
+\end{center}
+\end{document}
