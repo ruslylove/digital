@@ -653,8 +653,11 @@ This is the simplest SOP form for this function (also known as the XOR function)
 ---
 
 ### VHDL implementation
+<div class="grid grid-cols-2 gap-2" >
+<div>
 
-```vhdl {*}{maxHeight:'400px'}
+**three_way_light.vhd**
+```vhdl {*}{lines:'true',maxHeight:'380px'}
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
@@ -684,6 +687,84 @@ begin
     f <= x1 xor x2 xor x3;
 end Arch_Simplified;
 ```
+</div>
+
+<div>
+
+**fun_tb.vhd**
+```vhdl {*}{lines:'true',maxHeight:'380px'}
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity func_tb is
+-- Testbenches do not have ports
+end func_tb;
+
+architecture behavior of func_tb is
+    -- Component Declaration
+    component func_implementation
+    Port(
+        x1 : in STD_LOGIC;
+        x2 : in STD_LOGIC;
+        x3 : in STD_LOGIC;
+        f  : out STD_LOGIC
+    );
+    end component;
+
+    -- Inputs
+    signal x1 : std_logic := '0';
+    signal x2 : std_logic := '0';
+    signal x3 : std_logic := '0';
+
+    -- Outputs
+    signal f : std_logic;
+
+begin
+    -- Instantiate the Unit Under Test (UUT)
+    uut: func_implementation port map (
+        x1 => x1,
+        x2 => x2,
+        x3 => x3,
+        f  => f
+    );
+
+    -- Stimulus process
+    stim_proc: process
+    begin
+        -- Hold reset state for 100 ns.
+        wait for 100 ns;	
+
+        -- 000 -> f=0
+        x1 <= '0'; x2 <= '0'; x3 <= '0'; wait for 10 ns;
+        
+        -- 001 -> f=1
+        x1 <= '0'; x2 <= '0'; x3 <= '1'; wait for 10 ns;
+        
+        -- 010 -> f=1
+        x1 <= '0'; x2 <= '1'; x3 <= '0'; wait for 10 ns;
+        
+        -- 011 -> f=0
+        x1 <= '0'; x2 <= '1'; x3 <= '1'; wait for 10 ns;
+        
+        -- 100 -> f=1
+        x1 <= '1'; x2 <= '0'; x3 <= '0'; wait for 10 ns;
+        
+        -- 101 -> f=0
+        x1 <= '1'; x2 <= '0'; x3 <= '1'; wait for 10 ns;
+        
+        -- 110 -> f=0
+        x1 <= '1'; x2 <= '1'; x3 <= '0'; wait for 10 ns;
+        
+        -- 111 -> f=1
+        x1 <= '1'; x2 <= '1'; x3 <= '1'; wait for 10 ns;
+
+        wait;
+    end process;
+
+end behavior;
+```
+</div>
+</div>
 
 
 ---
@@ -822,7 +903,9 @@ So, the final simplified expression is:
 
 The circuit is built from the simplified expression `A = K · (D' + S·B')`, which is much simpler than a circuit for the original expression.
 
-<img src="https://i.imgur.com/39wYg7R.png" class="rounded-lg bg-white p-4 w-96" alt="Circuit for Car Safety Alarm">
+<img src="/car_alarm.png" class="rounded-lg bg-white p-2 w-130" alt="Circuit for Car Safety Alarm">
+
+---
 
 ### VHDL Implementation
 

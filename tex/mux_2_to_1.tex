@@ -1,0 +1,48 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+\usetikzlibrary{arrows,positioning}
+
+\begin{document}
+
+\begin{tikzpicture}[
+    % Style for logic gates
+    logigate/.style={
+        logic port,
+        scale=0.8
+    },
+    % Style for small junction circles
+    circ/.style={
+        circle, 
+        fill, 
+        inner sep=1pt
+    }
+]
+
+    % --- GATES ---
+    % Place the gates using relative positioning for easy adjustments
+    \node[not port, logigate] (not1) at (0, 2.5) {};
+    \node[and port, logigate] (and1) at (2, 3) {};
+    \node[and port, logigate] (and2) at (2, 1) {};
+    \node[or port, logigate]  (or1)  at (4, 2) {};
+
+    % --- INPUTS ---
+    \node (s_in)  at (-2, 2.5) {$s$};
+    \node (x1_in) at (-2, 3.5) {$x_1$};
+    \node (x2_in) at (-2, 0.5) {$x_2$};
+
+    % --- CONNECTIONS ---
+    \draw (s_in) -- (not1.in);
+    \draw (not1.out) -- (and1.in 1);
+    \draw (x1_in) -- (and1.in 2);
+    \draw (s_in) -| (and2.in 1); % Wire s to the second AND gate
+    \node at (s_in -| and2.in 1) [circ] {}; % Junction point for s
+    \draw (x2_in) -- (and2.in 2);
+    \draw (and1.out) -- (or1.in 1);
+    \draw (and2.out) -- (or1.in 2);
+
+    % --- OUTPUT ---
+    \draw (or1.out) -- ++(1,0) node[right] {$f = s'x_1 + sx_2$};
+
+\end{tikzpicture}
+
+\end{document}
