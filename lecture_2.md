@@ -10,9 +10,8 @@ title: Lecture 2 - Logic Circuits
 
 {{ $slidev.configs.subject }}
 
-<div class="abs-br m-6 text-sm">
-010113025 Digital Circuits and Logic Design
-</div>
+{{ $slidev.configs.presenter}}
+
 
 ---
 hideInToc: false
@@ -48,7 +47,7 @@ The theoretical foundation of all modern digital computing was laid by George Bo
 ### George Boole (1815-1864)
 
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/George_Boole_color.jpg" style="float: left; margin-right: 25px; width: 150px;" class="rounded-lg w-38" alt="George Boole">
+<img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/George_Boole_color.jpg" style="float: left; margin-right: 35px; width: 150px;" class="rounded-lg w-38 mt-2" alt="George Boole">
 
 *   Developed **Boolean algebra** in the mid-1800s.
 *   His intent was not to build circuits, but to create an algebraic system to formalize human logic and thought.
@@ -57,7 +56,7 @@ The theoretical foundation of all modern digital computing was laid by George Bo
 
 ### Claude Shannon (1916-2001)
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/9/98/C.E._Shannon._Tekniska_museet_43069_%28cropped%29.jpg" style="float: left; margin-right: 25px; width: 150px;" class="rounded-lg w-40" alt="Claude Shannon">
+<img src="https://upload.wikimedia.org/wikipedia/commons/9/98/C.E._Shannon._Tekniska_museet_43069_%28cropped%29.jpg" style="float: left; margin-right: 35px; width: 150px;" class="rounded-lg w-40 mt-2" alt="Claude Shannon">
 
 *   In his 1938 Master's thesis, he showed how Boolean algebra could be applied to switch-based circuits.
 *   He demonstrated that an "on" switch could be treated as `1` (true) and an "off" switch as `0` (false).
@@ -864,7 +863,7 @@ end dataflow;
 layout: two-cols-header
 ---
 
-## Chapter 2 Summary
+## Lecture 2 Summary
 
 This chapter covered the bridge from theory to practice in digital logic design.
 
