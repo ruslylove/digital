@@ -525,7 +525,6 @@ th:last-child, td:last-child {
 
 ---
 
-
 ## Minimality and Simplification
 
 A function in its canonical Sum-of-Products form may not be minimal. It's often possible to simplify the expression, which leads to a simpler, cheaper, and faster circuit.
@@ -564,6 +563,8 @@ $f(x1,x2) = x1'x2' + x1'x2 + x1x2$
 </div>
 
 ---
+layout: two-cols
+---
 
 The simplified form $x1' + x2$ requires far fewer gates.
 
@@ -573,13 +574,18 @@ The simplified form $x1' + x2$ requires far fewer gates.
 **Simplified Circuit for $x1' + x2$**
 <img src="/simplified.png" class="rounded-lg bg-white p-2 mt-4 w-70" alt="Simple circuit for simplified function">
 
+:: right ::
+
+<iframe src="https://circuitverse.org/simulator/embed/minimal?theme=&display_title=false&clock_time=false&fullscreen=true&zoom_in_out=true" style="border-width:; border-style: solid; border-color:;" name="myiframe" id="projectPreview" scrolling="no" frameborder="1" marginheight="0px" marginwidth="0px" height="400" width="500" allowFullScreen></iframe>
+
+
 ---
 layout: two-cols-header
 ---
 
 ## Design Example: Three-Way Light Control
 ::left::
-**Problem:** A room has three doors, each with a switch (x, y, z) to control a single light. The light should toggle its state whenever any switch is flipped. Assume the light is OFF when all switches are open (0).
+**Problem:** A room has three doors, each with a switch ($x_1$, $x_2$, $x_3$) to control a single light. The light should toggle its state whenever any switch is flipped. Assume the light is OFF when all switches are open (0).
 
 *   Light is ON if **one** switch is closed.
 *   Light is OFF if **two** switches are closed.
@@ -594,7 +600,7 @@ layout: two-cols-header
 <div class="text-sm">
 
 
-| $x$ | $y$ | $z$ | $f$ |
+| $\bm{x_1}$ | $\bm{x_2}$ | $\bm{x_3}$ | $\bm{f}$ |
 |:-:|:-:|:-:|:-:|
 | 0 | 0 | 0 | 0 |
 | 0 | 0 | 1 | **1** |
@@ -626,18 +632,59 @@ th:last-child, td:last-child {
 </style>
 
 ---
+layout: two-cols
+---
 
 ### Sum-of-Products
 
 From the truth table, we can write the SOP expression:
 
-$f = x'y'z + x'yz' + xy'z' + xyz$
+$f = x_1'x_2'x_3 + x_1'x_2x_3' + x_1x_2'x_3' + x_1x_2x_3$
 
 This is the simplest SOP form for this function (also known as the XOR function).
 
 ### Circuit Implementation
 
-<iframe src="https://circuitverse.org/simulator/embed/three-doors-switches?theme=default&display_title=false&clock_time=false&fullscreen=true&zoom_in_out=false" style="border-width:1; border-style: solid; border-color:;" name="myiframe" id="projectPreview" scrolling="no" frameborder="1" marginheight="1px" marginwidth="1px" height="250" width="500" allowFullScreen></iframe>
+<img src="/three_way_light.png" class="mt-4 w-100"/>
+
+:: right ::
+<<iframe src="https://circuitverse.org/simulator/embed/three-way-light-control?theme=default&display_title=false&clock_time=false&fullscreen=true&zoom_in_out=true" style="border-width:; border-style: hidden; border-color:;" name="myiframe" id="projectPreview" scrolling="no" frameborder="1" marginheight="0px" marginwidth="0px" height="400" width="500" allowFullScreen></iframe>
+
+---
+
+### VHDL implementation
+
+```vhdl {*}{maxHeight:'400px'}
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity three_way_light is
+    Port ( 
+        x1 : in  STD_LOGIC;
+        x2 : in  STD_LOGIC;
+        x3 : in  STD_LOGIC;
+        f  : out STD_LOGIC
+    );
+end three_way_light;
+
+-- ARCHITECTURE 1: Direct Sum of Products (SOP) Implementation
+-- This matches your prompt exactly.
+architecture Arch_SOP of three_way_light is
+begin
+    f <= (not x1 and not x2 and x3) or
+         (not x1 and x2 and not x3) or
+         (x1 and not x2 and not x3) or
+         (x1 and x2 and x3);
+end Arch_SOP;
+
+-- ARCHITECTURE 2: Simplified Implementation
+-- This does the exact same thing but is more efficient.
+architecture Arch_Simplified of three_way_light is
+begin
+    f <= x1 xor x2 xor x3;
+end Arch_Simplified;
+```
+
 
 ---
 layout: two-cols-header
