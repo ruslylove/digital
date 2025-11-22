@@ -16,6 +16,42 @@ lectureIndex: 1
 </div>
 
 ---
+layout: two-cols-header
+---
+
+## Why Study Digital Systems?
+
+Digital circuits are the **brain** of the modern world. As a future electrical engineer, you will design, build, and understand the systems that power our lives.
+
+:: left ::
+
+*   **Smart Devices:** Phones, watches, and home assistants.
+*   **Computing:** Laptops, servers, and supercomputers.
+*   **Communication:** 5G networks, Wi-Fi, and the Internet.
+*   **Automotive:** Engine control, safety systems (ABS, airbags), and infotainment.
+*   **Aerospace & Defense:** Avionics, guidance systems, and modern radar.
+
+Understanding the fundamentals of digital logic is essential for a career in almost any field of electrical and computer engineering.
+
+:: right ::
+
+<img src="https://images.unsplash.com/photo-1555664424-778a1e5e1b48?w=800" class="rounded-lg bg-white p-2 mt-4" alt="A modern circuit board">
+<p class="text-xs text-center">The principles you learn here are built into every complex electronic device.</p>
+
+---
+
+## Learning Objectives
+
+By the end of this lecture, you will be able to:
+
+*   **Differentiate** between analog and digital signals.
+*   **Explain** how information is represented using binary.
+*   **Describe** the key historical inventions that led to the modern computer, from vacuum tubes to the integrated circuit.
+*   **Recognize** the impact of Moore's Law on the growth of computing power.
+*   **Categorize** the main types of digital logic chips (Standard, PLD/FPGA, ASIC).
+*   **Appreciate** the role of digital systems in modern engineering and technology.
+
+---
 hideInToc: false
 ---
 
@@ -34,7 +70,7 @@ A **digital signal** is discrete, representing information with a finite set of 
  
 ::right::
  
-<img src="https://crossroadenergy.com/wp-content/uploads/2024/02/Digital-Vs-Analgo-1200x1200.jpg.webp" class="rounded-lg bg-white p-4" alt="Analog vs Digital Waveforms">
+<img src="https://crossroadenergy.com/wp-content/uploads/2024/02/Digital-Vs-Analgo-1200x1200.jpg.webp" class="rounded-lg bg-white p-4 w-90 mt-2 mx-auto" alt="Analog vs Digital Waveforms">
 <p class="text-sm text-center mt-2">An analog signal has continuous values, while a digital signal has discrete, step-like values.</p>
 
 
@@ -44,15 +80,15 @@ layout: two-cols-header
 
 ## Switch and Binary Bit Representation
 
-The most common digital signals are those that can have one of only two possible values, like on or off (0 and 1) => switch => a binary representation.
+The most common digital signals are those that can have one of only two possible values, like `on` or `off` (`0` and `1`) => switch => a binary representation.
 
 :: left ::
 
-<img src="https://electricalacademia.com/wp-content/uploads/2018/11/20-4.jpg"/>
+<img src="https://electricalacademia.com/wp-content/uploads/2018/11/20-4.jpg" class="w-100"/>
 
 :: right ::
 
-<img src="https://electricalacademia.com/wp-content/uploads/2018/11/20-5.jpg"/>
+<img src="https://electricalacademia.com/wp-content/uploads/2018/11/20-5.jpg" class="w-100 mx-auto"/>
 
 
 
@@ -103,8 +139,8 @@ To convert an analog signal to digital, we perform two key steps:
 
 :: right ::
 
-<img src="https://producelikeapro.com/blog/wp-content/uploads/2020/09/The-Ins-and-Outs-of-Audio-Signal-Flow_2-1536x529.png"/>
-<img src="https://circuitcrush.com/wp-content/uploads/Sampling-Analog-Signal-768x432.jpg"/>
+<img src="https://producelikeapro.com/blog/wp-content/uploads/2020/09/The-Ins-and-Outs-of-Audio-Signal-Flow_2-1536x529.png" class="mt-4"/>
+<img src="https://circuitcrush.com/wp-content/uploads/Sampling-Analog-Signal-768x432.jpg" class="mt-4"/>
 
 
 
@@ -143,16 +179,16 @@ An ideal switch is a perfect, theoretical component, while real-world switches l
 *   **Zero** resistance when closed (ON).
 *   **Infinite** resistance when open (OFF).
 *   Consumes **no power**.
-<img src="https://www.mathworks.com/help/sps/ref/ideal_semi_switch_ports.png" class="rounded-lg w-50"/>
+<img src="https://www.mathworks.com/help/sps/powersys/ref/block_ref_2366.gif" class="rounded-lg mt-4 w-80"/>
 
 :: right ::
 
 ### Real Switch (Transistor)
 *   Has **finite** switching time (rise/fall time).
 *   Small, **non-zero** resistance when ON.
-*   Very high, but **not infinite**, resistance when OFF (leakage current).
-*   Transistors are the physical basis for digital logic.
-<img src="https://i0.wp.com/darlingevil.com/wp-content/uploads/2018/03/transistor.jpg?resize=768%2C476&ssl=1" class="rounded-lg w-70"/>
+*   Very high, but **not infinite**, resistance when OFF.
+*   `Transistors` are the physical basis for digital logic.
+<img src="https://i0.wp.com/darlingevil.com/wp-content/uploads/2018/03/transistor.jpg?resize=768%2C476&ssl=1" class="rounded-lg w-67 mx-auto"/>
 
 
 
@@ -163,10 +199,13 @@ layout: two-cols
 ## Digital Hardware
 
 *   1930's Relays
-<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQ65WxvJKAeihlwc74ukh-hfq65LIKXxNDSA&s"/>
+<img src="https://how2electronics.com/wp-content/uploads/2022/12/understanding-relay-pinouts-and-contacts.jpg" class="w-90"/>
 :: right ::
 *   1940's VacuumTube – No moving part, Faster than Relays
-<img src="https://cdn-blog.adafruit.com/uploads/2017/10/37069392422_56b2c8d7b3_b.jpg" style="width:300px"/>
+<div class="flex gap-4 items-center">
+<img src="https://cdn-blog.adafruit.com/uploads/2017/10/37069392422_56b2c8d7b3_b.jpg" class="w-50 mt-5"/>
+<img src="https://static.wixstatic.com/media/b3b6fa_502a0c330cf045a7a2ea85854d96cf69~mv2.jpg/v1/fill/w_572,h_540,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/b3b6fa_502a0c330cf045a7a2ea85854d96cf69~mv2.jpg" class="w-50 mt-5" />
+</div>
 
 
 ---
@@ -185,9 +224,9 @@ layout: two-cols
 <div class="col-span-5">
 
 <div class="grid grid-cols-2 gap-4">
-<img src="https://www.radiomuseum.org/forumdata/users/7800/2N560_Composite_with_Transisto_2.jpg"/>
+<img src="https://cdn.sparkfun.com/assets/learn_tutorials/1/9/3/intro.png"/>
 <img src="https://ethw.org/w/images/5/58/Logic_Gates_Dec_System_Building_Blocks_1103_Attribution.jpg?20120302164220"/>
-<img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Agc_nor2.jpg" />
+<img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Agc_nor2.jpg" class="mt-1" />
 <img src="https://hackster.imgix.net/uploads/attachments/1249774/_JBfBEpQNXw.blob?auto=compress&w=900&h=675&fit=min&fm=jpg"/>
 </div>
 
@@ -198,15 +237,14 @@ layout: two-cols
 
 ## ENIAC - The First Electronic Computer
 ### ENIAC (Electrical Numerical Integrator And Calculator) 1946
-<br>
 
 <div class="grid grid-cols-3 gap-4">
 
 <div class="col-span-1">
 
-<img src="https://www.aps.org/_ipx/w_828,q_90/https%3A%2F%2Fcdn.sanity.io%2Fimages%2Fi2z87pbo%2Fproduction%2Fa9132a54f148d9eef366dbf5f7a8cb5c25603971-2500x1597.webp%3Fauto%3Dformat%26fit%3Dmax%26w%3D828%26q%3D90" class="rounded-lg" style="width:300px" />
-<br>
-<img src="https://www.aps.org/_ipx/w_828,q_90/https%3A%2F%2Fcdn.sanity.io%2Fimages%2Fi2z87pbo%2Fproduction%2F77e84894dd3ea6d6585ab07b6e826e157b40e996-2846x1924.jpg%3Fauto%3Dformat%26fit%3Dmax%26w%3D828%26q%3D90" class="rounded-lg" style="width:300px"/>
+<img src="https://www.aps.org/_ipx/w_828,q_90/https%3A%2F%2Fcdn.sanity.io%2Fimages%2Fi2z87pbo%2Fproduction%2Fa9132a54f148d9eef366dbf5f7a8cb5c25603971-2500x1597.webp%3Fauto%3Dformat%26fit%3Dmax%26w%3D828%26q%3D90" class="rounded-lg w-90 mt-2"  />
+
+<img src="https://www.aps.org/_ipx/w_828,q_90/https%3A%2F%2Fcdn.sanity.io%2Fimages%2Fi2z87pbo%2Fproduction%2F77e84894dd3ea6d6585ab07b6e826e157b40e996-2846x1924.jpg%3Fauto%3Dformat%26fit%3Dmax%26w%3D828%26q%3D90" class="rounded-lg w-90 mt-2" />
 
 </div>
 
@@ -246,8 +284,9 @@ layout: two-cols-header
 
 :: right ::
 
-![First Bug](https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/First_Computer_Bug%2C_1945.jpg/2560px-First_Computer_Bug%2C_1945.jpg)
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/First_Computer_Bug%2C_1945.jpg/2560px-First_Computer_Bug%2C_1945.jpg" class="rounded-lg mx-auto w-70"/>
 
+<img src="/first_bug.jpg" class="rounded-lg mt-4 mx-auto w-50" />
 ---
 
 ## The First Transistor (1947) - A Revolution in Electronics
@@ -277,9 +316,9 @@ layout: two-cols-header
 <div class="grid grid-cols-2 gap-4">
 <div>
 
-<img src="https://www.allaboutcircuits.com/uploads/articles/Kilbys-Germanium-Integrated-Circuit.jpg" class="rounded-lg w-80" />
+<img src="https://www.allaboutcircuits.com/uploads/articles/Kilbys-Germanium-Integrated-Circuit.jpg" class="rounded-lg w-80 mx-auto" />
 
-<p class="text-sm text-center mt-2">
+<p class="text-xs text-center mt-2">
 Jack Kilby's first hybrid IC (1958). It was made of germanium and measured 7/16" x 1/16".
 </p>
 
@@ -290,7 +329,7 @@ Jack Kilby's first hybrid IC (1958). It was made of germanium and measured 7/16"
 <div>
 
 
-<img src="https://www.nutsvolts.com/uploads/wygwam/NV_0222_Steber_Figure10.jpg" class="rounded-lg w-70"/>
+<img src="https://www.nutsvolts.com/uploads/wygwam/NV_0222_Steber_Figure10.jpg" class="rounded-lg w-60 mx-auto"/>
 
 *   Kilby built the first hybrid IC, while Noyce created the first monolithic IC, which was more practical for manufacturing.
 *   This invention allowed for putting all electronic components onto a single die, dramatically increasing performance and decreasing cost.
@@ -308,21 +347,21 @@ Jack Kilby's first hybrid IC (1958). It was made of germanium and measured 7/16"
 
 **1961:** TI and Fairchild introduced the first logic IC's (cost ~$50 in quantity!). This is a dual flip-flop with 4 transistors.
 
-<img src="/ic1.png" class="mt-4"/>
+<img src="/ic1.png" class="mt-4 w-60 mx-auto"/>
 
 </div>
 <div>
 
 **1963:** Densities and yields are improving. This circuit has four flip flops.
 
-<img src="/ic2.png" class="mt-4"/>
+<img src="/ic2.png" class="mt-4 w-60 mx-auto"/>
 
 </div>
 <div>
 
 **1967:** Fairchild markets the semi-custom chip shown below. Transistors could be easily rewired using a two-layer interconnect to create different circuits. This circuit contains ~150 logic gates.
 
-<img src="/ic3.png" class="mt-4"/>
+<img src="/ic3.png" class="mt-4 w-60 mx-auto"/>
 
 </div>
 </div>
@@ -331,7 +370,7 @@ Jack Kilby's first hybrid IC (1958). It was made of germanium and measured 7/16"
 layout: two-cols
 ---
 
-## INTegrated ELectronics = Intel (1968)
+## Intel (1968)
 
 *   Founded in July 1968 by semiconductor pioneers **Robert Noyce** and **Gordon Moore**, who left Fairchild Semiconductor.
 *   The name is a portmanteau of **Int**egrated **El**ectronics.
@@ -348,163 +387,65 @@ layout: two-cols
 layout: two-cols-header
 ---
 
-## Intel Processor Evolution
-### Intel 4004 Micro-Processor (1971)
+## Milestone: The Microprocessor & the PC
+
+The invention of the microprocessor on a single chip led to the personal computer revolution, fundamentally changing the world.
 
 ::left::
 
-<img src="https://wifihifi.com/wp-content/uploads/2021/11/4004-schematic.jpg" class="rounded-lg w-80"/>
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Intel_C4004.jpg/1200px-Intel_C4004.jpg" class="rounded-lg w-80"/>
+### Intel 4004 (1971)
+*   The world's **first microprocessor**.
+*   It proved that a complex general-purpose processor could be built on a single chip.
+*   Initially designed for a calculator, it paved the way for all future CPUs.
+
+### Intel 8088 & the IBM PC (1981)
+*   This processor, a variant of the 8086, was chosen for the **original IBM PC**.
+*   Its selection established the **x86 architecture** as the industry standard, a legacy that continues today.
+
+::right::
+<div class="flex items-center">
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Intel_C4004.jpg/1200px-Intel_C4004.jpg" class="rounded-lg w-40 mt-1 mx-auto"/>
+<img src="http://www.vintagecalculators.com/assets/images/NCR18-36_1.jpg" class="rounded-lg w-40 mt-1 mx-auto" />
+</div>
+<p class="text-xs text-center">Intel 4004: The chip that started it all.</p>
+<img src="https://external-preview.redd.it/dRMlIwz2nWdkuj9a6NyPzmhI_KQvx553vC3dmA4Pm1I.jpg?width=640&crop=smart&auto=webp&s=41a127b251329349e99684961b3916ce0884a8af" class="rounded-lg w-40 mt-1 mx-auto"/>
+<p class="text-xs text-center">The IBM PC, powered by an Intel 8088.</p>
+
+---
+layout: two-cols-header
+---
+
+## Milestone: 32-bit, Multi-Core & Efficiency
+
+Processor design has evolved from simply increasing clock speed to focusing on architectural improvements, parallelism, and power efficiency.
+
+::left::
+
+### The 32-bit Leap: Intel 80386 (1985)
+*   The first 32-bit x86 processor, a massive jump in capability.
+*   It enabled **modern multitasking operating systems** like Microsoft Windows and Linux.
+
+### The Multi-Core: Core 2 Duo (2006)
+*   Instead of just chasing higher clock speeds, which created heat and power issues, Intel shifted focus.
+*   The **Core architecture** placed multiple processors ("cores") on a single chip, dramatically increasing performance through parallelism.
 
 ::right::
 
-**First microprocessor (1971)**
-*   For Busicom calculator
+### The Modern Era: Core i-Series
+*   Integrates more functions (graphics, memory controller) onto the CPU.
+*   Focus continues on adding more cores, increasing power efficiency, and adding specialized instructions for tasks like AI and media processing.
 
-**Characteristics**
-*   10 µm process
-*   2300 transistors
-*   400 – 800 kHz
-*   4-bit word size
-*   16-pin DIP package
 
----
-
-## Intel 8008/8080
-
-<div class="grid grid-cols-2 gap-8">
+<div class="grid grid-cols-2">
 <div>
-
-### 8008 (1972)
-*   8-bit follow-on
-*   Used in Dumb terminals
-*   **3500** transistors
-*   **500-800** kHz
-<img src="https://www.intel.com/content/dam/www/central-libraries/us/en/images/2022-04/8008-die.jpg" class="rounded-lg w-70"/>
-<img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/KL_Intel_C8008-1.jpg" class="rounded-lg w-60"/>
-
+<img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Intel_80386_IV_die.JPG" class="rounded-lg w-35 mt-2 mx-auto"/>
+<p class="text-xs text-center">The 80386 die.</p>
 </div>
 <div>
-
-### 8080 (1974)
-*   16-bit address bus
-*   Used in Altair computer (early hobbyist PC)
-*   **4500** transistors
-*   **2** MHz
-
-<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRi9gTn8g6db73nZWWAjoC1lJAUhtltwyzQ0Q&s" class="rounded-lg w-45"/>
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/KL_Tesla_MHB8080.jpg/500px-KL_Tesla_MHB8080.jpg" class="rounded-lg w-60"/>
-
-
+<img src="https://images.bit-tech.net/content_images/2006/07/intel_core_2_duo_processors/die-large.jpg" class="rounded-lg w-40 mt-4 mx-auto"/>
+<p class="text-xs text-center">A Core 2 Duo.</p>
 </div>
 </div>
-
----
-
-## Intel 8086 / 8088 (1978)
-
-<div class="grid grid-cols-2 gap-4">
-<div>
-
-*   **16-bit processor** that introduced the **x86 architecture**.
-*   The **8088** (with an 8-bit external bus) was famously used in the original **IBM PC**.
-*   **29k** transistors using a **3 µm** process.
-*   Clock speed: **5-10 MHz**.
-
-</div>
-<div>
-
-<img src="https://static.righto.com/images/8086-overview/metal-w600.jpg" class="rounded-lg w-60"/>
-<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhlcJXUHfM8Lb8X3RPNDlpdsdqW29qxL9WLg&s" class="rounded-lg w-80 mt-4"/>
-
-</div>
-</div>
-
----
-
-## Intel 80286 & 80386
-
-<div class="grid grid-cols-2 gap-8">
-<div>
-
-### 80286 (1982)
-*   Introduced **protected mode**, enabling multitasking.
-*   Used in the **IBM PC/AT**.
-*   **134k** transistors, **6-12 MHz**.
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Intel_80286_die.JPG/250px-Intel_80286_die.JPG" class="rounded-lg w-60 mt-2"/>
-
-</div>
-<div>
-
-### 80386 (1985)
-*   First **32-bit** x86 processor.
-*   A huge leap, enabling modern operating systems.
-*   **275k** transistors, **16-33 MHz**.
-<img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Intel_80386_IV_die.JPG" class="rounded-lg w-80 mt-2"/>
-
-</div>
-</div>
-
----
-
-## Intel 80486 & Pentium
-
-<div class="grid grid-cols-2 gap-8">
-<div>
-
-### 80486 (1989)
-*   Integrated the **floating-point unit (FPU)** on-chip.
-*   Included on-chip cache for the first time.
-*   **1.2M** transistors, **25-100 MHz**.
-<img src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Cyrix_Cx486DLC_die.JPG" class="rounded-lg w-60 mt-2"/>
-
-</div>
-<div>
-
-### Pentium (1993)
-*   Introduced a **superscalar** architecture (could execute multiple instructions per clock cycle).
-*   **3.1M** transistors, **60-300 MHz**.
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Intel_Pentium_P54C_die.jpg/1200px-Intel_Pentium_P54C_die.jpg" class="rounded-lg w-70 mt-2"/>
-
-</div>
-</div>
-
----
-
-## Pentium Evolution & The Core Era
-
-<div class="grid grid-cols-2 gap-8">
-<div>
-
-### Pentium 4 (2000)
-*   Focused on high clock speeds with its **NetBurst** architecture.
-*   Reached speeds up to **3.8 GHz**.
-*   **42M - 125M** transistors.
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Intel%40130nm%40NetBurst%40Northwood%40Pentium4%40SL6PF_DSC07596_%2832847415126%29.jpg/250px-Intel%40130nm%40NetBurst%40Northwood%40Pentium4%40SL6PF_DSC07596_%2832847415126%29.jpg" class="rounded-lg w-60 mt-2"/>
-
-</div>
-<div>
-
-### Core 2 (2006)
-*   Shifted focus from clock speed to **efficiency and multi-core** performance.
-*   The **Core architecture** was a major success.
-*   **291M** transistors (in dual-core variants).
-<img src="https://images.bit-tech.net/content_images/2006/07/intel_core_2_duo_processors/die-large.jpg" class="rounded-lg w-80 mt-2"/>
-
-</div>
-</div>
-
----
-
-## Intel Core i-Series (2008-Present)
-
-*   Introduced the **Core i3, i5, and i7** branding, segmenting the market.
-*   Integrated the memory controller and, later, graphics onto the CPU die.
-*   Focus on multi-core performance, power efficiency, and specialized instructions (e.g., AVX).
-*   Transistor counts have grown into the **billions**, with processes shrinking to a few nanometers.
-
-<img src="https://cdn.mos.cms.futurecdn.net/FGk2jZwutGu5Rzv8fJ8RL5-1638-80.jpg" class="rounded-lg w-1/2 mx-auto mt-4"/>
-
 ---
 
 ## Intel Summary
@@ -602,7 +543,7 @@ layout: two-cols-header
 
 ::right::
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Xilinx_Spartan_FPGA_die_shot.jpg/1994px-Xilinx_Spartan_FPGA_die_shot.jpg" class="rounded-lg w-80" alt="FPGA Die">
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Xilinx_Spartan_FPGA_die_shot.jpg/1994px-Xilinx_Spartan_FPGA_die_shot.jpg" class="rounded-lg w-80 mt-4 mx-auto" alt="FPGA Die">
 <p class="text-sm text-center mt-2">Die of an FPGA showing logic cells and interconnection wires.</p>
 
 ---
@@ -621,7 +562,7 @@ layout: two-cols-header
 
 ::right::
 
-<img src="https://developer.nvidia.com/blog/wp-content/uploads/2018/09/image7.jpg" class="rounded-lg" alt="ASIC Die">
+<img src="https://developer.nvidia.com/blog/wp-content/uploads/2018/09/image7.jpg" class="rounded-lg mt-4 w-80 mx-auto" alt="ASIC Die">
 <p class="text-sm text-center mt-2">An example of a complex ASIC: NVIDIA's Turing GPU.</p>
 
 ---
@@ -665,7 +606,46 @@ flowchart LR;
     G --> H[Timing Simulation];
     H --> I[Hardware Verification];
     end
-
-    
-    
 ```
+
+---
+layout: default
+---
+
+## Where Do We Go From Here?
+
+This lecture was a historical overview. In the coming lectures, we will dive into the fundamental building blocks of digital systems:
+
+*   **Number Systems:** Beyond binary, we'll explore other systems like hexadecimal used in computing.
+*   **Boolean Algebra:** The mathematical foundation for digital logic.
+*   **Logic Gates:** The basic electronic circuits (AND, OR, NOT) that perform Boolean operations.
+*   **Combinational Logic Circuits:** Designing circuits without memory, like adders and decoders.
+*   **Sequential Logic Circuits:** Designing circuits with memory, like counters and state machines.
+*   **Dedicated Microprocessors:** Understanding the architecture, datapath, and control unit of specialized processors.
+
+These concepts are the foundation upon which all modern digital electronics are built.
+
+---
+layout: two-cols-header
+---
+
+## Lecture 1 Summary
+
+This lecture provides an introduction to digital systems, tracing their evolution from basic concepts to modern processors.
+:: left ::
+
+*   **Fundamentals:** Distinguishes between **analog** (continuous) and **digital** (discrete) signals, represented by binary values. Covers Analog-to-Digital conversion (**sampling** and **quantization**).
+
+*   **Early Hardware:** Traces history from **relays** and **vacuum tubes** to **ENIAC** (1946), the first electronic computer.
+
+*   **Key Inventions:** Highlights the **transistor** (1947) and the **Integrated Circuit (IC)** (1958) as revolutionary milestones.
+
+:: right ::
+
+*   **Microprocessors:** Details the evolution of Intel processors from the **4004 (1971)** to modern multi-core CPUs, establishing the x86 architecture.
+
+*   **Moore's Law:** Explains the prediction of exponential growth in transistor density on chips.
+
+*   **Types of Logic Chips:** Categorizes chips into **Standard (74xx)**, **Programmable (FPGAs)**, and **Custom (ASICs)**.
+
+*   **Design Process:** Outlines the modern digital design flow, from specification and HDL to physical implementation.

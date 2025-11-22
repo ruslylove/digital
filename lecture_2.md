@@ -649,10 +649,10 @@ layout: two-cols-header
 <div class="grid grid-cols-7 gap-4">
 <div class="col-span-2">
 
-**Problem:** Design a circuit that chooses between two data inputs, `x1` and `x2`, based on a control signal `s`. This is a 2-to-1 Multiplexer.
+**Problem:** Design a circuit that chooses between two data inputs, $x_1$ and $x_2$, based on a control signal $s$. This is a 2-to-1 Multiplexer.
 
-*   If `s = 0`, the output `f` should be equal to `x1`.
-*   If `s = 1`, the output `f` should be equal to `x2`.
+*   If $s = 0$, the output $f$ should be equal to $x_1$.
+*   If $s = 1$, the output $f$ should be equal to $x_2$.
 
 </div>
 
@@ -663,7 +663,7 @@ layout: two-cols-header
 
 ### Truth Table 
 
-| s | x1 | x2 | f |
+| $\bm{s}$ | $\bm{x_1}$ | $\bm{x_2}$ | $\bm{f}$ |
 |:-:|:-:|:-:|:-:|
 | 0 | 0 | 0 | 0 |
 | 0 | 0 | 1 | 0 |
@@ -725,7 +725,7 @@ layout: two-cols
 
 :: right ::
 
-<iframe src="https://circuitverse.org/simulator/embed/mux_2_to_1?theme=&display_title=false&clock_time=false&fullscreen=true&zoom_in_out=false" style="border-width:; border-style: ; border-color:;" name="myiframe" id="projectPreview" scrolling="no" frameborder="1" marginheight="0px" marginwidth="0px" height="500" width="400" allowFullScreen></iframe>
+<iframe src="https://circuitverse.org/simulator/embed/mux_2_to_1?theme=&display_title=false&clock_time=false&fullscreen=true&zoom_in_out=false" style="border-width:; border-style: ; border-color:;" name="myiframe" id="projectPreview" scrolling="no" frameborder="1" marginheight="0px" marginwidth="0px" height="450" width="400" allowFullScreen></iframe>
 
 ---
 
