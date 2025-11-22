@@ -11,9 +11,8 @@ lectureIndex: 1
 
 {{ $slidev.configs.subject }}
 
-<div class="abs-br m-6 text-sm">
-010113025 Digital Circuits and Logic Design
-</div>
+{{ $slidev.configs.presenter}}
+
 
 ---
 layout: two-cols-header
@@ -57,7 +56,7 @@ hideInToc: false
 
 ## Outline
 
-<toc mode="onlySiblings" minDepth="2" columns="3"/>
+<toc mode="onlySiblings" minDepth="2" columns="4"/>
 
 ---
 layout: two-cols
@@ -108,24 +107,54 @@ A binary `1001111` is representing the number 79:
 layout: two-cols-header
 ---
 
-## The Digital Transformation: Music
+## Analog to Digital Transformation: Tape Record to CD Audio
 The shift from analog to digital technology has revolutionized how we create, store, and listen to music.
 
 :: left ::
 
-### Analog: Vinyl Record
-*   **Physical Medium:** Information is stored as continuous grooves on a physical disc.
-*   **Signal Degradation:** Susceptible to wear, dust, and scratches, which introduces noise.
-*   **Limited Portability:** Requires a large, stationary player.
-<img src="https://cdn.djcity.com.au/wp-content/uploads/2021/09/21104805/Fenton-RP106W-Vinyl-Record-Player-with-Bluetooth-Wood-1.jpg" class="rounded-lg mt-4 w-40" alt="Vinyl Record Player">
+### Analog: Magnetic Tape (Cassette/Reel)
+*   **Physical Medium:** Audio stored as magnetic patterns on a plastic tape.
+*   **Signal Degradation:** Prone to hiss, wow and flutter, and demagnetization over time.
+*   **Sequential Access:** Finding a specific track requires fast-forwarding or rewinding.
+<img src="https://upload.wikimedia.org/wikipedia/commons/f/f0/Compactcassette.jpg" class="rounded-lg mt-4 w-50 mx-auto" alt="Cassette Tape">
 
 ::right::
 
-### Digital: Streaming Service
-*   **Abstract Data:** Information is stored as discrete binary data (0s and 1s).
-*   **Perfect Copies:** Can be copied and transmitted without any loss of quality.
-*   **Highly Portable:** Accessible on countless devices anywhere with a network connection.
-<img src="https://images.unsplash.com/photo-1611339555312-e607c8352fd7?w=800" class="rounded-lg mt-4 w-50" alt="Music Streaming on a Smartphone">
+### Digital: CD Audio
+*   **Abstract Data:** Audio stored as binary data (pits and lands) on a polycarbonate disc.
+*   **High Fidelity & Durability:** Offers clear, consistent sound quality, less susceptible to wear than tape.
+*   **Random Access:** Tracks can be accessed instantly.
+<img src="https://www.soundandvision.com/images/styles/600_wide/public/100517_tbt_sony_cdp-101_0.jpg" class="rounded-lg mt-4 w-70 mx-auto" alt="CD Audio Disc">
+
+---
+layout: two-cols-header
+---
+
+## Analog to Digital Transformation: Industrial Automation
+The evolution from analog to digital sensors has been a cornerstone of modern automation and "smart" factories.
+:: left ::
+
+### Analog Sensor (e.g., Pressure Gauge)
+<div class="text-sm">
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/7/74/MAXIMATOR-High-Pressure-Manometer-01a.jpg" class="rounded-lg mt-4 w-20" alt="Analog Pressure Gauge" style="float: left; margin-right: 25px; width: 150px;">
+
+*   **Continuous Signal:** Outputs a varying voltage or current (e.g., 4-20mA) that is proportional to the measured property (like pressure).
+*   **Noise Susceptibility:** The signal can be degraded by electrical noise, affecting accuracy.
+*   **Limited Information:** Only provides a single data point—the measurement itself.
+</div>
+::right::
+
+### Digital Sensor (e.g., Smart Sensor)
+<div class="text-sm">
+
+<img src="https://www.ifm.com/binaries/content/assets/webanimations/rotatable3d/pg1/pg_gedreht.png" class="rounded-lg w-60" alt="Digital Smart Sensor" style="float: left; margin-right: 25px; width: 150px;">
+
+*   **Discrete Data:** An internal ADC converts the measurement into a digital format. The sensor communicates this data via a digital protocol (e.g., IO-Link, I2C).
+*   **Noise Immunity:** Digital communication is highly resistant to electrical noise.
+*   **Rich Information:** Can provide the measurement, diagnostics, calibration data, and device identity over a single connection.
+
+</div>
 
 ---
 layout: two-cols
@@ -139,8 +168,8 @@ To convert an analog signal to digital, we perform two key steps:
 
 :: right ::
 
-<img src="https://producelikeapro.com/blog/wp-content/uploads/2020/09/The-Ins-and-Outs-of-Audio-Signal-Flow_2-1536x529.png" class="mt-4"/>
-<img src="https://circuitcrush.com/wp-content/uploads/Sampling-Analog-Signal-768x432.jpg" class="mt-4"/>
+<img src="/adc.png" class="mt-10 w-90 mx-auto"/>
+<img src="https://circuitcrush.com/wp-content/uploads/Sampling-Analog-Signal-768x432.jpg" class="mt-4 w-90 mx-auto"/>
 
 
 
@@ -224,10 +253,10 @@ layout: two-cols
 <div class="col-span-5">
 
 <div class="grid grid-cols-2 gap-4">
-<img src="https://cdn.sparkfun.com/assets/learn_tutorials/1/9/3/intro.png"/>
-<img src="https://ethw.org/w/images/5/58/Logic_Gates_Dec_System_Building_Blocks_1103_Attribution.jpg?20120302164220"/>
-<img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Agc_nor2.jpg" class="mt-1" />
-<img src="https://hackster.imgix.net/uploads/attachments/1249774/_JBfBEpQNXw.blob?auto=compress&w=900&h=675&fit=min&fm=jpg"/>
+<img src="https://cdn.sparkfun.com/assets/learn_tutorials/1/9/3/intro.png" class="rounded-lg"/>
+<img src="https://ethw.org/w/images/5/58/Logic_Gates_Dec_System_Building_Blocks_1103_Attribution.jpg?20120302164220" class="rounded-lg"/>
+<img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Agc_nor2.jpg" class="mt-1 rounded-lg" />
+<img src="https://hackster.imgix.net/uploads/attachments/1249774/_JBfBEpQNXw.blob?auto=compress&w=900&h=675&fit=min&fm=jpg" class="rounded-lg mx-auto"/>
 </div>
 
 </div>
@@ -405,7 +434,7 @@ The invention of the microprocessor on a single chip led to the personal compute
 ::right::
 <div class="flex items-center">
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Intel_C4004.jpg/1200px-Intel_C4004.jpg" class="rounded-lg w-40 mt-1 mx-auto"/>
-<img src="http://www.vintagecalculators.com/assets/images/NCR18-36_1.jpg" class="rounded-lg w-40 mt-1 mx-auto" />
+<img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Busicom_141_PF_1.jpg" class="rounded-lg w-30 mt-1 mx-auto" />
 </div>
 <p class="text-xs text-center">Intel 4004: The chip that started it all.</p>
 <img src="https://external-preview.redd.it/dRMlIwz2nWdkuj9a6NyPzmhI_KQvx553vC3dmA4Pm1I.jpg?width=640&crop=smart&auto=webp&s=41a127b251329349e99684961b3916ce0884a8af" class="rounded-lg w-40 mt-1 mx-auto"/>
@@ -442,7 +471,7 @@ Processor design has evolved from simply increasing clock speed to focusing on a
 <p class="text-xs text-center">The 80386 die.</p>
 </div>
 <div>
-<img src="https://images.bit-tech.net/content_images/2006/07/intel_core_2_duo_processors/die-large.jpg" class="rounded-lg w-40 mt-4 mx-auto"/>
+<img src="https://images.bit-tech.net/content_images/2006/07/intel_core_2_duo_processors/die-large.jpg" class="rounded-lg w-40 mt-3 mx-auto"/>
 <p class="text-xs text-center">A Core 2 Duo.</p>
 </div>
 </div>
@@ -522,10 +551,13 @@ layout: two-cols-header
 ::right::
 
 <div class="grid grid-cols-2 gap-4">
-<img src="https://mecha-tronx.com/wp-content/uploads/2022/08/IC-74HC00-2-INPUT-NAND-Gate-7400-1.jpg" class="rounded-lg" alt="7400 NAND Gate IC">
-<img src="https://www.hackatronic.com/wp-content/uploads/2025/04/7400-Quad-NAND-Gate-Pinout-Diagram.webp" class="rounded-lg bg-white p-2" alt="7400 Logic Diagram">
+<img src="https://mecha-tronx.com/wp-content/uploads/2022/08/IC-74HC00-2-INPUT-NAND-Gate-7400-1.jpg" class="rounded-lg w-40" alt="7400 NAND Gate IC">
+<img src="https://www.hackatronic.com/wp-content/uploads/2025/04/7400-Quad-NAND-Gate-Pinout-Diagram.webp" class="rounded-lg bg-white p-2 mt-5 w-40" alt="7400 Logic Diagram">
 </div>
 <p class="text-sm text-center mt-2">A 74HC00 chip containing four separate NAND gates.</p>
+<img src="https://hackaday.com/wp-content/uploads/2020/01/breadboard800.jpg"  class="rounded-lg w-80 mx-auto"/>
+<p class="text-sm text-center mt-2">A 74xx 24H Digital Quartz Clock.</p>
+
 
 ---
 layout: two-cols-header
@@ -543,8 +575,11 @@ layout: two-cols-header
 
 ::right::
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Xilinx_Spartan_FPGA_die_shot.jpg/1994px-Xilinx_Spartan_FPGA_die_shot.jpg" class="rounded-lg w-80 mt-4 mx-auto" alt="FPGA Die">
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Xilinx_Spartan_FPGA_die_shot.jpg/1994px-Xilinx_Spartan_FPGA_die_shot.jpg" class="rounded-lg w-40 mt-4 mx-auto" alt="FPGA Die">
 <p class="text-sm text-center mt-2">Die of an FPGA showing logic cells and interconnection wires.</p>
+
+<img src="https://s3.amazonaws.com/iphonecde/_HDLS.GIF" class="rounded-lg w-65 mt-4 mx-auto" alt="HDL languages"/>
+<p class="text-sm text-center mt-2">VHDL and Verilog are the most popular HDLs.</p>
 
 ---
 layout: two-cols-header
