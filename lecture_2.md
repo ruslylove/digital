@@ -169,24 +169,63 @@ A **truth table** is a tabular listing that fully describes a logic function by 
 
 These are the standard symbols for the fundamental logic gates.
 
-<div class="grid grid-cols-3 gap-8 text-center">
+<div class="grid grid-cols-3 gap-8">
 <div>
 
 ### AND Gate
 <img src="/and_logic.png" class="rounded-lg bg-white p-4" alt="AND Gate Symbol">
+```vhdl
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
 
+entity and_gate is
+    Port ( x1, x2 : in  STD_LOGIC;
+           Y    : out STD_LOGIC);
+end and_gate;
+
+architecture Behavioral of and_gate is
+begin
+    Y <= x1 AND x2;
+end Behavioral;
+```
 </div>
 <div>
 
 ### OR Gate
 <img src="/or_logic.png" class="rounded-lg bg-white p-4" alt="OR Gate Symbol">
+```vhdl
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
 
+entity or_gate is
+    Port ( x1, x2 : in  STD_LOGIC;
+           Y    : out STD_LOGIC);
+end or_gate;
+
+architecture Behavioral of or_gate is
+begin
+    Y <= x1 OR x2;
+end Behavioral;
+```
 </div>
 <div>
 
 ### NOT Gate (Inverter)
-<img src="/not_logic.png" class="rounded-lg bg-white p-4" alt="NOT Gate Symbol">
+<img src="/not_logic.png" class="rounded-lg bg-white p-2" alt="NOT Gate Symbol">
+```vhdl
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
 
+entity not_gate is
+    Port ( x : in  STD_LOGIC;
+           Y : out STD_LOGIC);
+end not_gate;
+
+architecture Behavioral of not_gate is
+begin
+    Y <= NOT x;
+end Behavioral;
+```
 </div>
 </div>
 
@@ -206,7 +245,23 @@ Each basic logic operation (AND, OR, NOT) is implemented by a physical circuit e
 
 ::right::
 
-<img src="/logic_network.png" class="rounded-lg bg-white p-4" alt="Logic Network Diagram">
+<img src="/logic_network.png" class="rounded-lg bg-white p-2" alt="Logic Network Diagram">
+<div class="p-2">
+```vhdl
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity logic_function is
+    Port ( x1,x2,x3 : in  STD_LOGIC;
+           f        : out STD_LOGIC);
+end logic_function;
+
+architecture Behavioral of logic_function is
+begin
+    f <= (x1 OR x2) AND x3;
+end Behavioral;
+```
+</div>
 
 ---
 layout: two-cols-header
