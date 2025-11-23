@@ -951,25 +951,31 @@ We can define the behavior for both outputs in a single truth table.
 | 1 | 0 |     0     |    1    |
 | 1 | 1 |     1     |    0    |
 
-**Sum bit (s):**
+::right::
+
+**Sum bit `s`:**
 The sum is `1` only if the inputs are different. This is the **XOR** function.
 `s = x'y + xy' = x ⊕ y`
 
-**Carry bit (c):**
+**Carry bit `c`:**
 The carry is `1` only if both inputs are `1`. This is the **AND** function.
 `c = xy`
 
-::right::
+---
+layout: two-cols
+---
 
 ### Circuit and Symbol
 
 The circuit combines an XOR gate for the sum and an AND gate for the carry.
 
 **Circuit Implementation**
-<img src="https://i.imgur.com/2s3P0sC.png" class="rounded-lg bg-white p-4 w-80" alt="Circuit for a Half-Adder">
+<img src="/half_adder.svg" class="rounded-lg bg-white p-4 w-80" alt="Circuit for a Half-Adder">
 
 **Block Diagram**
-<img src="https://i.imgur.com/e5g4f3D.png" class="rounded-lg bg-white p-4 w-48 mt-4" alt="Block Diagram for a Half-Adder">
+<img src="/half_adder_block.svg" class="rounded-lg bg-white p-4 w-56 mt-4" alt="Block Diagram for a Half-Adder">
+
+:: right ::
 
 ### VHDL Implementation
 
