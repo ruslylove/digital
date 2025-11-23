@@ -28,7 +28,15 @@ hideInToc: false
 
 In our design flow, after deriving a Boolean expression from a truth table (e.g., using minterms), the next step is often **optimization**. The goal is to simplify the expression to create a more efficient circuit.
 
-<img src="https://i.imgur.com/v8tJ3gP.png" class="rounded-lg bg-white p-4" alt="Digital Logic Design Flow">
+```mermaid
+graph LR
+  A[Specification] --> B[Truth Table];
+  B --> C(Initial<br>Boolean Expression);
+  C --> D{"Optimization<br>(e.g. K-Map)"};
+  D --> E(Simplified<br>Boolean Expression);
+  E --> F[Logic Circuit];
+  style D fill:#f9f,stroke:#333,stroke-width:2px,color:black
+```
 
 *   **Why Optimize?** A simpler expression means a circuit with fewer gates, which is generally cheaper, faster, and consumes less power.
 *   **How?** While algebraic manipulation works, it can be cumbersome and doesn't follow specific rules. The **Karnaugh Map** provides a systematic, graphical method for simplification.
@@ -294,7 +302,7 @@ $F = y' + w'z' + xz'$
 
 ::right::
 
-<img src="/kmap_4x4.svg" class="rounded-lg bg-white p-4 w-80 mx-auto" alt="K-map for F(w,x,y,z) = Σ(0,1,2,4,5,6,8,9,12,13,14)">
+<img src="/kmap_4x4_ex5.svg" class="rounded-lg bg-white p-4 w-80 mx-auto" alt="K-map for F(w,x,y,z) = Σ(0,1,2,4,5,6,8,9,12,13,14)">
 
 <div class="text-xs">
 
@@ -312,29 +320,29 @@ layout: two-cols-header
 
 Sometimes, a function can have more than one minimal sum-of-products expression.
 
-**Function:** `F(A,B,C,D) = Σ(1,3,5,7,9,11,13,15) + Σ(0,2,8,10)`
-
-Actually, let's use a different function from the PDF: `F = Σ(0,1,2,5,7,8,9,10,13,15)`
+**Function:** `F(A, B, C, D) = Σ(0,1,2,5,7,8,9,10,13,15)`
 
 ::left::
-
 1.  **Plot the 1s:** Plot the minterms on the map.
 2.  **Identify Prime Implicants:**
     *   `m₀, m₁, m₈, m₉` -> `B'C'`
     *   `m₀, m₂, m₈, m₁₀` -> `B'D'`
-    *   `m₅, m₇, m₁₃, m₁₅` -> `BD`
-    *   `m₁, m₅` -> `A'C'D`
-    *   `m₉, m₁₃` -> `AC'D`
-    *   `m₂, m₁₀` -> `C'D'`
-    *   `m₇, m₁₅` -> `CD`
-
+    *   `m₅, m₇, m₁₃, m₁₅` -> `B'C'`
+    *   `m₁, m₅, m₉, m₁₃` -> `C'D`
 3.  **Find Essential PIs:**
     *   `B'D'` is essential (covers `m₂`, `m₁₀`).
     *   `BD` is essential (covers `m₇`, `m₁₅`).
 
+:: right ::
 4.  **Cover Remaining 1s:** The remaining `1`s (`m₁, m₉`) can be covered in two ways, leading to two minimal solutions.
 
-::right::
+<img src="/kmap_4x4_ex6_1.svg" class="mx-auto w-60 p-2"/>
+
+---
+
+<div class="grid grid-cols-2 gap-4">
+
+<div>
 
 ### Solution 1
 
@@ -342,31 +350,23 @@ Group `m₀,m₁,m₈,m₉` to get `B'C'`.
 
 `F = BD + B'D' + B'C'`
 
-<img src="https://i.imgur.com/s6tXf7F.png" class="rounded-lg bg-white p-4 w-90" alt="K-map solution 1">
+<img src="/kmap_4x4_ex6_sol_1.svg" class="rounded-lg bg-white p-4 w-60 " alt="K-map solution 1">
+
+</div>
+<div>
 
 ### Solution 2
 
-Group `m₁,m₅,m₉,m₁₃` is not possible.
-Group `m₁,m₅` and `m₉,m₁₃` is not a valid grouping.
-Let's re-examine the PDF example `F = Σ(1,3,5,7,9,11,13,15)`. This is simply `D`.
+Group `m₁,m₅,m₉,m₁₃` to get `C'D`.
 
-Let's use the example from the PDF `F(A,B,C,D) = Σ(0,1,5,7,8,10,14,15)`.
+`F = BD + B'D' + C'D`
 
-**Essential PIs:**
-* `B'D'` (covers m0, m8)
-* `BD` (covers m5, m7, m14, m15)
+<img src="/kmap_4x4_ex6_sol_2.svg" class="rounded-lg bg-white p-4 w-60" alt="K-map solution 1">
+</div>
+</div>
 
-**Remaining 1s:** `m1` and `m10`.
-
-**Solution 1:** Cover `m1` with `A'C'D` and `m10` with `AB'D'`.
-`F = BD + B'D' + A'C'D + AB'D'`
-
-**Solution 2:** Cover `m1` with `A'B'C'` and `m10` with `ACD'`.
-`F = BD + B'D' + A'B'C' + ACD'`
 
 This shows that multiple minimal forms can exist. The choice between them might depend on other factors like which signals are already available in the circuit.
-
-<img src="https://i.imgur.com/s6tXf7F.png" class="rounded-lg bg-white p-4 w-90" alt="K-map with multiple solutions">
 
 ---
 layout: two-cols-header
@@ -382,6 +382,9 @@ Sometimes, a function's output value for certain input combinations is not speci
     *   The input combination is impossible or will never happen.
     *   The output for that input doesn't matter for the circuit's function.
 *   **Example:** A circuit that processes a 4-bit BCD (Binary-Coded Decimal) number. The input combinations for `1010` through `1111` are invalid and can be treated as don't-cares.
+
+::right::
+
 *   **How to use them:**
     *   Don't-care minterms are marked with an **X** on the K-map.
     *   You can choose to treat an **X** as a `1` if it helps you create a larger group of `1`s.
@@ -390,40 +393,35 @@ Sometimes, a function's output value for certain input combinations is not speci
 
 The goal is to strategically use don't-cares to achieve the simplest possible expression.
 
-::right::
+---
 
 ### Example: `F(w,x,y,z) = Σm(1,3,7,11,15) + d(0,2,5)`
 
 The `1`s must be covered. The `X`s are optional.
 
-**Solution 1:** Group `m(1,3,5,7)` to get `w'z`. Then group `m(11,15)` to get `wyz`.
-`F = w'z + wyz`
+**Solution 1:** Group `m(3,7,11,15)` to get `yz`. Then group `m(1,3,5,7)` to get `w'z`.
 
-**Solution 2 (Better):** Group `m(1,3,5,7,11,15)` is not possible.
-Group `m(1,3,5,7)` to get `w'z`.
-Let's re-examine the PDF example.
-`F(w,x,y,z) = Σ(1,3,7,11,15)` and `d(w,x,y,z) = Σ(0,2,5)`
+$F = yz + w'z$
 
-*   The group of four `1`s (`m₁`, `m₃`, `m₇`, `m₁₅`) is not possible.
-*   We can group `m(1,3,5,7)` to get `w'z`.
-*   We can group `m(1,3,7,11,15)` by using `d(5)` to get a group of four (`m₁,₃,₅,₇`) which gives `w'z`.
-*   The essential prime implicant is `yz` (covering `m₃, m₇, m₁₁, m₁₅`).
-*   To cover `m₁`, we can group it with `d₀` to get `w'x'y'`. Or group with `d₅` to get `w'z`.
-*   From the PDF, one solution is `F = yz + w'x'`. Here we used `d₀` and `d₅` as `1`s.
+**Solution 2:** Group `m(3,7,11,15)` to get `yz`. Then group `m(0,1,2,3)` to get `w'x'`.
 
-<img src="https://i.imgur.com/kQ5jF7b.png" class="rounded-lg bg-white p-4" alt="K-map with Don't Cares">
+$F = yz + w'x'$
+
+<img src="/kmap_dontcare.svg" class="rounded-lg bg-white p-2 mx-auto" alt="K-map with Don't Cares">
 
 ---
-layout: two-cols-header
----
+
 
 ## Product-of-Sums (POS) Simplification
 
 K-maps can also be used to find a minimal Product-of-Sums expression. The key is to **group the 0s** instead of the 1s.
 
-::left::
+<div class="grid grid-cols-2 gap-2">
+
+<div>
 
 ### Method 1: Simplify F' then apply De Morgan's
+
 
 1.  On the K-map, group the **0s** to find the minimal SOP expression for the complement function, `F'`.
 2.  Apply De Morgan's theorem to the result to find `F`.
@@ -431,32 +429,38 @@ K-maps can also be used to find a minimal Product-of-Sums expression. The key is
 
 **Example:** If `F' = AB + C'D`, then:
 `F = (AB + C'D)' = (AB)' · (C'D)' = (A'+B') · (C+D')`
+</div>
+<div>
 
 ### Method 2: Direct POS from grouping 0s
-
 1.  Group the **0s** on the map.
 2.  For each group, write a **sum term** (maxterm) using the following rules (dual of SOP):
     *   If a variable is **0** in the group, use its **true** form (e.g., `A`).
     *   If a variable is **1** in the group, use its **complemented** form (e.g., `A'`).
     *   If a variable changes within the group, it is eliminated.
 3.  The final expression is the **product (AND)** of all the sum terms.
+</div>
+</div>
 
-::right::
+---
+layout: two-cols-header
+---
 
-### Example: `F = Σm(0,1,2,5,8,9,10)`
+### Example: `F(A, B, C, D) = Σm(0,1,2,5,8,9,10)`
 
 Let's find the POS form by grouping the `0`s (`m₃, m₄, m₆, m₇, m₁₁, m₁₂, m₁₃, m₁₄, m₁₅`).
-
+:: left ::
 1.  **Group the 0s:**
-    *   **Group 1 (Blue):** `m₄, m₅, m₁₂, m₁₃` -> `A=1`, `C=0`. This gives the sum term `(A' + C)`.
+    *   **Group 1 (Red):** `m₁₂, m₁₃, m₁₄, m₁₅` -> `A=1`, `B=1`. This gives the sum term `(A' + B')`.
     *   **Group 2 (Green):** `m₃, m₇, m₁₁, m₁₅` -> `C=1`, `D=1`. This gives the sum term `(C' + D')`.
-    *   **Group 3 (Red):** `m₄, m₆, m₁₂, m₁₄` -> `B=1`, `D=0`. This gives the sum term `(B' + D)`.
+    *   **Group 3 (Yellow):** `m₄, m₆, m₁₂, m₁₄` -> `B=1`, `D=0`. This gives the sum term `(B' + D)`.
 
 2.  **Write the Expression:**
 
-`F = (A' + C) · (C' + D') · (B' + D)`
+`F = (A' + B') · (C' + D') · (B' + D)`
 
-<img src="https://i.imgur.com/u5j4s6G.png" class="rounded-lg bg-white p-4" alt="K-map for POS Simplification">
+:: right ::
+<img src="/kmap_pos.svg" class="rounded-lg bg-white p-4 w-80 mx-auto" alt="K-map for POS Simplification">
 
 ---
 layout: two-cols-header
@@ -470,35 +474,34 @@ NAND and NOR gates are known as **universal gates** because any other logic gate
 
 ### NAND Implementation
 
-<div class="grid grid-cols-2 gap-x-8 gap-y-2 items-center">
+
 
 **NOT**
-<img src="https://i.imgur.com/g8z6h0F.png" class="rounded-lg bg-white p-2 w-40" alt="NOT from NAND">
+<img src="/nand_as_not.svg" class="rounded-lg bg-white p-2 w-60" alt="NOT from NAND">
 
 **AND**
-<img src="https://i.imgur.com/d9f7j4G.png" class="rounded-lg bg-white p-2 w-60" alt="AND from NAND">
+<img src="/nand_as_and.svg" class="rounded-lg bg-white p-2 w-70" alt="AND from NAND">
 
 **OR**
-<img src="https://i.imgur.com/h1tL10R.png" class="rounded-lg bg-white p-2 w-60" alt="OR from NAND">
+<img src="/nand_as_or.svg" class="rounded-lg bg-white p-2 w-80" alt="OR from NAND">
 
-</div>
+
 
 ::right::
 
 ### NOR Implementation
 
-<div class="grid grid-cols-2 gap-x-8 gap-y-2 items-center">
 
 **NOT**
-<img src="https://i.imgur.com/o6X5g6F.png" class="rounded-lg bg-white p-2 w-40" alt="NOT from NOR">
+<img src="/nor_as_not.svg" class="rounded-lg bg-white p-2 w-60" alt="NOT from NOR">
 
 **OR**
-<img src="https://i.imgur.com/qg9bZ7A.png" class="rounded-lg bg-white p-2 w-60" alt="OR from NOR">
+<img src="/nor_as_or.svg" class="rounded-lg bg-white p-2 w-70" alt="OR from NOR">
 
 **AND**
-<img src="https://i.imgur.com/H1tL10R.png" class="rounded-lg bg-white p-2 w-60" alt="AND from NOR">
+<img src="/nor_as_and.svg" class="rounded-lg bg-white p-2 w-80" alt="AND from NOR">
 
-</div>
+
 
 ---
 layout: two-cols-header
@@ -524,10 +527,12 @@ This is a very common and efficient way to implement logic from a K-map.
 ::right::
 
 **AND-OR Circuit**
-<img src="https://i.imgur.com/s6tXf7F.png" class="rounded-lg bg-white p-4" alt="AND-OR circuit">
+<img src="/two_level_sop.svg" class="rounded-lg bg-white p-4 w-80" alt="AND-OR circuit">
 
 **Equivalent NAND-NAND Circuit**
-<img src="https://i.imgur.com/k2j4m5N.png" class="rounded-lg bg-white p-4 mt-4" alt="NAND-NAND circuit">
+<img src="/two_level_sop_nand.svg" class="rounded-lg bg-white p-4 mt-1 w-80" alt="NAND-NAND circuit">
+
+
 
 ---
 layout: two-cols-header
@@ -553,10 +558,10 @@ This is the standard implementation method when starting from a POS expression (
 ::right::
 
 **OR-AND Circuit**
-<img src="https://i.imgur.com/u5j4s6G.png" class="rounded-lg bg-white p-4" alt="OR-AND circuit">
+<img src="/two_level_pos.svg" class="rounded-lg bg-white p-1 w-80" alt="OR-AND circuit">
 
 **Equivalent NOR-NOR Circuit**
-<img src="https://i.imgur.com/kQ5jF7b.png" class="rounded-lg bg-white p-4 mt-4" alt="NOR-NOR circuit">
+<img src="/two_level_pos_nor.svg" class="rounded-lg bg-white p-4 mt-1 w-80" alt="NOR-NOR circuit">
 
 ---
 layout: two-cols-header
@@ -578,11 +583,13 @@ The XOR and XNOR functions are fundamental in arithmetic and comparison circuits
 *   Expression: `(x ⊕ y)' = xy + x'y'`
 *   It is an **even function**: output is `1` if an even number of inputs are `1`.
 
+::right::
+
 ### Properties
 *   **Commutative:** `A ⊕ B = B ⊕ A`
 *   **Associative:** `(A ⊕ B) ⊕ C = A ⊕ (B ⊕ C)`
-
-::right::
+<br>
+<br>
 
 ### Identities
 *   `x ⊕ 0 = x`
@@ -590,13 +597,19 @@ The XOR and XNOR functions are fundamental in arithmetic and comparison circuits
 *   `x ⊕ x = 0`
 *   `x ⊕ x' = 1`
 
-### Logic Symbols
+---
+
+### Logic Symbols & Truth Tables
+
+<div class="grid grid-cols-2 gap-4">
 
 **XOR Gate**
-<img src="https://www.circuitbread.com/wp-content/uploads/2021/08/xor-gate-symbol.png" class="rounded-lg bg-white p-4 w-60" alt="XOR Gate Symbol">
+<img src="/xor_symbol.svg" class="rounded-lg bg-white p-4 w-100" alt="XOR Gate Symbol">
 
 **XNOR Gate**
-<img src="https://www.circuitbread.com/wp-content/uploads/2021/08/xnor-gate-symbol.png" class="rounded-lg bg-white p-4 w-60 mt-4" alt="XNOR Gate Symbol">
+<img src="/xnor_symbol.svg" class="rounded-lg bg-white p-4 w-100" alt="XNOR Gate Symbol">
+
+</div>
 
 ---
 layout: two-cols-header
@@ -611,20 +624,20 @@ The checkerboard pattern of XOR/XNOR functions is easy to spot on a K-map.
 ### Odd Function (XOR)
 `F = A ⊕ B ⊕ C = Σm(1,2,4,7)`
 
-<img src="https://i.imgur.com/3ZJgY4j.png" class="rounded-lg bg-white p-4" alt="3-variable XOR K-map">
+<img src="/kmap_odd.svg" class="rounded-lg bg-white p-4" alt="3-variable XOR K-map">
 
 **Logic Diagram**
-<img src="https://i.imgur.com/qg9bZ7A.png" class="rounded-lg bg-white p-4 w-80" alt="3-input XOR gate">
+<img src="/logic_odd.svg" class="rounded-lg bg-white p-4 w-80" alt="3-input XOR gate">
 
 ::right::
 
 ### Even Function (XNOR)
 `F = (A ⊕ B ⊕ C)' = Σm(0,3,5,6)`
 
-<img src="https://i.imgur.com/H1tL10R.png" class="rounded-lg bg-white p-4" alt="3-variable XNOR K-map">
+<img src="/kmap_even.svg" class="rounded-lg bg-white p-4" alt="3-variable XNOR K-map">
 
 **Logic Diagram**
-<img src="https://i.imgur.com/00T1g0W.png" class="rounded-lg bg-white p-4 w-80" alt="3-input XNOR gate">
+<img src="/logic_odd.svg" class="rounded-lg bg-white p-4 w-80" alt="3-input XNOR gate">
 
 ---
 layout: two-cols-header
@@ -642,7 +655,7 @@ This circuit generates a parity bit `P` for a 3-bit message (`x,y,z`). The outpu
 
 `P = x ⊕ y ⊕ z`
 
-<img src="https://i.imgur.com/8aZ2Y2m.png" class="rounded-lg bg-white p-4 w-90" alt="3-bit even parity generator">
+<img src="/logic_parity_generator.svg" class="rounded-lg bg-white p-1 w-100" alt="3-bit even parity generator">
 
 ::right::
 
@@ -652,8 +665,69 @@ This circuit checks a 4-bit message (`x,y,z,P`) for errors. If the number of `1`
 
 `C = x ⊕ y ⊕ z ⊕ P`
 
-<img src="https://i.imgur.com/1y3w2aD.png" class="rounded-lg bg-white p-4 w-90" alt="4-bit even parity checker">
+<img src="/logic_parity_checker.svg" class="rounded-lg bg-white p-1 w-120" alt="4-bit even parity checker">
 
+---
+
+
+### VHDL Implementation
+
+<div class="grid grid-cols-2 gap-4">
+<div>
+
+**Parity Genertor**
+```vhdl {*}{maxHeight:'400px',lines:'true'}
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity parity_generator is
+    Port ( 
+        x : in  STD_LOGIC;
+        y : in  STD_LOGIC;
+        z : in  STD_LOGIC;
+        p_even : out  STD_LOGIC; -- Output for Even Parity scheme
+    );
+end parity_generator;
+
+architecture Behavioral of parity_generator is
+begin
+
+    -- Even Parity Logic: P = x XOR y XOR z
+    -- If the number of 1s in input is odd, P becomes 1 (making total 1s even).
+    p_even <= x XOR y XOR z;
+
+end Behavioral;
+```
+</div>
+<div>
+
+**Parity Checker**
+```vhdl {*}{maxHeight:'400px',lines:'true'}
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity parity_checker is
+    Port ( 
+        x : in  STD_LOGIC;
+        y : in  STD_LOGIC;
+        z : in  STD_LOGIC;
+        p_in : in  STD_LOGIC; -- The received parity bit
+        error : out  STD_LOGIC -- 0 = No Error, 1 = Error Detected
+    );
+end parity_checker;
+
+architecture Behavioral of parity_checker is
+begin
+
+    -- Checker Logic: C = x XOR y XOR z XOR P
+    -- Checks if the total number of 1s (data + parity) is Even.
+    error <= x XOR y XOR z XOR p_in;
+
+end Behavioral;
+```
+</div>
+
+</div>
 ---
 layout: two-cols-header
 ---
@@ -665,17 +739,21 @@ This chapter introduced powerful graphical and procedural methods for logic opti
 ::left::
 
 ### Core Concepts & Methods
+<div class="text-sm">
 
 *   **Karnaugh Maps:** A graphical method to simplify Boolean expressions by visually grouping adjacent minterms (`1`s) or maxterms (`0`s).
 *   **Grouping Rules:** Create the largest possible rectangular groups of `1`s or `0`s (in powers of 2), using wrap-around and overlapping to minimize terms.
 *   **Prime Implicants:** The goal is to cover all required terms using a minimal set of Essential Prime Implicants.
 *   **Don't-Cares (X):** Used as wildcards (either `1` or `0`) to help form even larger groups, leading to simpler expressions.
-
+</div>
 ::right::
 
 ### Implementation Strategies
+<div class="text-sm">
 
 *   **SOP & POS:** K-maps can produce minimal Sum-of-Products (by grouping `1`s) or Product-of-Sums (by grouping `0`s).
 *   **Universal Gates:** Any logic function can be implemented using only **NAND** gates or only **NOR** gates.
 *   **Two-Level Logic:** SOP expressions map to AND-OR or NAND-NAND circuits, while POS expressions map to OR-AND or NOR-NOR circuits.
 *   **XOR/XNOR:** Special functions with distinct checkerboard patterns on K-maps, useful for parity, comparators, and arithmetic circuits.
+
+</div>

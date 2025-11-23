@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1763882863.48916 "/Users/rus/development/digital/tex/kmap_4x4_ex5.tex" "kmap_4x4_ex5.pdf" "kmap_4x4_ex5" 1763882864.66789 0
-  "/Users/rus/development/digital/tex/kmap_4x4_ex5.tex" 1763881972.16004 1011 33eecbba928317b1ed2f0aa81d1ca4dd ""
+["pdflatex"] 1763895737.39811 "/Users/rus/development/digital/tex/kmap_4x4_ex5.tex" "kmap_4x4_ex5.pdf" "kmap_4x4_ex5" 1763895738.43064 0
+  "/Users/rus/development/digital/tex/kmap_4x4_ex5.tex" 1763895737.10488 1012 3af4d940124ff3df3d572c097a591a9a ""
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmmi6.tfm" 1136768653 1512 f21f83efb36853c0b70002322c1ab3ad ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmmi9.tfm" 1136768653 1524 d89e2d087a9828407a196f428428ef4a ""
@@ -111,8 +111,8 @@
   "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1763819811 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
   "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1763819727 3345735 98e8d6ce829fe76d41a990640e1359a8 ""
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
-  "kmap_4x4_ex5.aux" 1763882864.5626 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
-  "kmap_4x4_ex5.tex" 1763881972.16004 1011 33eecbba928317b1ed2f0aa81d1ca4dd ""
+  "kmap_4x4_ex5.aux" 1763895738.35592 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "kmap_4x4_ex5.tex" 1763895737.10488 1012 3af4d940124ff3df3d572c097a591a9a ""
   (generated)
   "kmap_4x4_ex5.aux"
   "kmap_4x4_ex5.log"

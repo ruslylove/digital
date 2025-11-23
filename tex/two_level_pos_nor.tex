@@ -1,0 +1,63 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+
+\ctikzset{
+logic ports=ieee,
+logic ports/scale=0.7,
+}
+
+\begin{document}
+\begin{circuitikz}[]
+
+    % ============================
+    % 1. FIRST LEVEL (Left Side)
+    % ============================
+    
+    % Top Gate: NOR for (A+B)
+    \draw (0, 4) node[nor port] (NOR_AB) {};
+    \draw (NOR_AB.in 1) -- ++(-1, 0) node[left] {$A$};
+    \draw (NOR_AB.in 2) -- ++(-1, 0) node[left] {$B$};
+
+    % Middle Gate: Inverter for Input E
+    % We use a NOR wired as a NOT gate for E
+    \draw (0, 2) node[nor port] (NOR_E) {};
+    % Wire E to both inputs
+    \draw (NOR_E.in 1) -- ++(-0.5, 0) coordinate(splitE) -- ++(-0.5, 0) node[left] {$E$};
+    \draw (splitE) node[circ]{} |- (NOR_E.in 2);
+
+    % Bottom Gate: NOR for (C+D)
+    \draw (0, 0) node[nor port] (NOR_CD) {};
+    \draw (NOR_CD.in 1) -- ++(-1, 0) node[left] {$C$};
+    \draw (NOR_CD.in 2) -- ++(-1, 0) node[left] {$D$};
+
+
+    % ============================
+    % 2. SECOND LEVEL (Right Side)
+    % ============================
+
+    % Final Gate: 3-Input NOR
+    % Replaces the final AND gate
+    \draw (3, 2) node[nor port, number inputs=3] (FINAL) {};
+
+
+    % ============================
+    % 3. CONNECTIONS
+    % ============================
+    
+    % Connect Top NOR to Final Top Input
+    \draw (NOR_AB.out) -- ++(0.5,0) |- (FINAL.in 1);
+
+    % Connect Middle NOR (Inverter) to Final Middle Input
+    \draw (NOR_E.out) -- (FINAL.in 2);
+
+    % Connect Bottom NOR to Final Bottom Input
+    \draw (NOR_CD.out) -- ++(0.5,0) |- (FINAL.in 3);
+
+
+    % ============================
+    % 4. OUTPUT
+    % ============================
+    \draw (FINAL.out) -- ++(1, 0) node[right] {$F = (A+B)(C+D)E$};
+
+\end{circuitikz}
+\end{document}
