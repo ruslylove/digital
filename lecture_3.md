@@ -637,7 +637,7 @@ The checkerboard pattern of XOR/XNOR functions is easy to spot on a K-map.
 <img src="/kmap_even.svg" class="rounded-lg bg-white p-4" alt="3-variable XNOR K-map">
 
 **Logic Diagram**
-<img src="/logic_odd.svg" class="rounded-lg bg-white p-4 w-80" alt="3-input XNOR gate">
+<img src="/logic_even.svg" class="rounded-lg bg-white p-4 w-80" alt="3-input XNOR gate">
 
 ---
 layout: two-cols-header
