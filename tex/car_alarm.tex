@@ -1,11 +1,11 @@
-\documentclass{article}
+\documentclass[border=10pt]{standalone}
 \usepackage{circuitikz}
 \ctikzset{
 logic ports=ieee,
 logic ports/scale=0.7,
 }
 \begin{document}
-\begin{center}
+
 \begin{circuitikz}[]
     \draw (0,0) 
     node [label=left:$D$] {}
@@ -31,5 +31,4 @@ logic ports/scale=0.7,
      (and2.in 2)
     ;
 \end{circuitikz}
-\end{center}
 \end{document}

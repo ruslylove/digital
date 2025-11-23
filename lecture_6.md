@@ -324,7 +324,7 @@ Let's analyze the following circuit with two D flip-flops (A and B), one input (
     *   Each arrow represents a transition between states.
     *   The label on the arrow is in the format `input / output`.
 
-<img src="/fsm_1.svg"/>
+<img src="/fsm_1.svg" class="w-60"/>
 
 This completes the analysis. The state diagram fully describes the circuit's behavior over time.
 
