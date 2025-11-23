@@ -685,7 +685,7 @@ entity parity_generator is
         x : in  STD_LOGIC;
         y : in  STD_LOGIC;
         z : in  STD_LOGIC;
-        p_even : out  STD_LOGIC; -- Output for Even Parity scheme
+        p_even : out  STD_LOGIC -- Output for Even Parity scheme
     );
 end parity_generator;
 
@@ -712,7 +712,7 @@ entity parity_checker is
         y : in  STD_LOGIC;
         z : in  STD_LOGIC;
         p_in : in  STD_LOGIC; -- The received parity bit
-        error : out  STD_LOGIC -- 0 = No Error, 1 = Error Detected
+        err : out  STD_LOGIC -- 0 = No Error, 1 = Error Detected
     );
 end parity_checker;
 
@@ -721,7 +721,7 @@ begin
 
     -- Checker Logic: C = x XOR y XOR z XOR P
     -- Checks if the total number of 1s (data + parity) is Even.
-    error <= x XOR y XOR z XOR p_in;
+    err <= x XOR y XOR z XOR p_in;
 
 end Behavioral;
 ```
