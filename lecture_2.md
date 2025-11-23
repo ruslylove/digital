@@ -903,7 +903,7 @@ So, the final simplified expression is:
 
 The circuit is built from the simplified expression `A = K · (D' + S·B')`, which is much simpler than a circuit for the original expression.
 
-<img src="/car_alarm.png" class="rounded-lg bg-white p-2 w-130" alt="Circuit for Car Safety Alarm">
+<img src="/car_alarm.svg" class="rounded-lg bg-white p-2" alt="Circuit for Car Safety Alarm">
 
 ---
 
