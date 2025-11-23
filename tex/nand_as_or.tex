@@ -1,0 +1,42 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+
+\ctikzset{
+logic ports=ieee,
+logic ports/scale=0.7,
+}
+
+\begin{document}
+\begin{circuitikz}[]
+
+    % === Input Inverters ===
+    % Inverter for Input A (Top left)
+    \draw (0, 1) node[nand port] (NOTA) {};
+    % Connect input A to both terminals
+    \draw (NOTA.in 1) -- ++(-0.5,0) coordinate(splitA) -- ++(-0.5,0) node[left] {$A$};
+    \draw (splitA) node[circ]{} |- (NOTA.in 2);
+
+    % Inverter for Input B (Bottom left)
+    \draw (0, -1) node[nand port] (NOTB) {};
+    % Connect input B to both terminals
+    \draw (NOTB.in 1) -- ++(-0.5,0) coordinate(splitB) -- ++(-0.5,0) node[left] {$B$};
+    \draw (splitB) node[circ]{} |- (NOTB.in 2);
+
+
+    % === Final NAND Gate ===
+    % Placed to the right, centered vertically
+    \draw (3, 0) node[nand port] (FINAL) {};
+
+
+    % === Connections ===
+    % Connect output of A-inverter to top input of final gate
+    \draw (NOTA.out) -| (FINAL.in 1);
+    % Connect output of B-inverter to bottom input of final gate
+    \draw (NOTB.out) -| (FINAL.in 2);
+
+
+    % === Final Output ===
+    \draw (FINAL.out) -- ++(1,0) node[right] {$Y = A + B$};
+
+\end{circuitikz}
+\end{document}

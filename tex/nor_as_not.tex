@@ -1,0 +1,26 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+
+\ctikzset{
+logic ports=ieee,
+logic ports/scale=0.7,
+}
+
+\begin{document}
+\begin{circuitikz}[]
+    
+    % 1. Place the NOR gate
+    \draw (2,0) node[nor port] (NOR1) {};
+
+    % 2. Draw Input A and split it
+    \draw (-1,0) node[left] {$A$} -- (0.5,0) node[circ] (split) {};
+
+    % 3. Connect split point to both inputs
+    \draw (split) |- (NOR1.in 1);
+    \draw (split) |- (NOR1.in 2);
+
+    % 4. Output
+    \draw (NOR1.out) -- ++(1,0) node[right] {$Y = \overline{A}$};
+
+\end{circuitikz}
+\end{document}

@@ -1,0 +1,29 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{karnaugh-map}
+
+\begin{document}
+
+% 3 Variables: Rows=A, Columns=BC
+\begin{karnaugh-map}[4][2][1][$BC$][$A$]
+
+    % 1. Place Minterms
+    % m0 (000), m3 (011), m5 (101), m6 (110)
+    \minterms{0, 3, 5, 6}
+
+    % 2. Grouping
+    % NOTE: In an XOR/XNOR map, no 1s are adjacent.
+    % We cannot draw any loops of size 2 or 4.
+    % The simplified equation remains the sum of these 4 minterms:
+    % F = A'B'C + A'BC' + AB'C' + ABC
+    
+    % If you must show groups, you would circle each 1 individually.
+    % Uncomment the lines below to see individual circles:
+    
+    % \implicant{1}{1}
+    % \implicant{2}{2}
+    % \implicant{4}{4}
+    % \implicant{7}{7}
+
+\end{karnaugh-map}
+
+\end{document}

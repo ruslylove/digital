@@ -1,0 +1,28 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{karnaugh-map}
+
+\begin{document}
+
+% [4][4] specifies a 4-variable map (4x4 grid)
+% [$CD$] labels the columns (Top)
+% [$AB$] labels the rows (Left)
+\begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+
+    % 1. Place the '1's (Minterms)
+    % You list the decimal position of the cells that should be 1.
+    % Note: The package automatically puts them in the correct Gray code spot.
+    \minterms{0, 1, 2, 5, 7, 8, 9, 10, 13, 15}
+
+    % 2. Place the '0's (Maxterms) - Optional, often left blank
+    %\maxterms{ 3, 7, 10, 11, 15}
+
+    % 3. Draw the loops (Implicants)
+    % Syntax: \implicant{cell_start}{cell_end}
+    \implicantcorner 
+    \implicant{5}{15}
+    \implicantedge{0}{1}{8}{9}
+    
+
+\end{karnaugh-map}
+
+\end{document}
