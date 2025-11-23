@@ -1,0 +1,36 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{karnaugh-map}
+
+\begin{document}
+
+% [4][4] specifies a 4-variable map (4x4 grid)
+% [$CD$] labels the columns (Top)
+% [$AB$] labels the rows (Left)
+\begin{karnaugh-map}[4][4][1][$yz$][$wx$]
+
+    % 1. Place the '1's (Minterms)
+    % You list the decimal position of the cells that should be 1.
+    % Note: The package automatically puts them in the correct Gray code spot.
+    \minterms{0, 1, 2, 4, 5, 6, 12, 8, 9, 13, 14}
+
+    % 2. Place the '0's (Maxterms) - Optional, often left blank
+    \maxterms{ 3, 7, 10, 11, 15}
+
+    % 3. Draw the loops (Implicants)
+    % Syntax: \implicant{cell_start}{cell_end}
+    
+    % A square group of 4 (covering cells 0, 1, 4, 5)
+    \implicant{0}{9} 
+
+    % A grouping of the corners (wrapping around)
+    % Using corner cells 0 and 10 usually creates a corner group
+    % But here let's group the vertical wrap of 8 and 12
+    \implicantedge{0}{4}{2}{6}
+
+    \implicantedge{4}{12}{6}{14}
+
+
+
+\end{karnaugh-map}
+
+\end{document}
