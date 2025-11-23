@@ -1,0 +1,37 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+
+\ctikzset{
+logic ports=ieee,
+logic ports/scale=0.7,
+}
+
+\begin{document}
+
+\begin{circuitikz}[]
+    
+    % 1. Place the Logic Gates
+    % We position the XOR gate at (3,2) and the AND gate at (3,0)
+    \draw (3,2) node[xor port] (XOR) {}
+     (3,0) node[and port] (AND) {}
+
+    % 2. Draw Inputs (x and y) and connect to XOR
+    % We draw a line from the XOR input to the left to create the input labels
+    % We also mark coordinates (pointX and pointY) to branch off wires later
+    (XOR.in 1) -- ++(-3,0) node[left] {$x$} coordinate[pos=0.2] (pointX)
+    (XOR.in 2) -- ++(-3,0) node[left] {$y$} coordinate[pos=0.4] (pointY)
+
+    % 3. Connect Inputs to AND gate
+    % We use the coordinates we marked earlier to drop wires down
+    % The syntax 'to[short, *-]' adds the connection dot
+    % The syntax '|- (AND.in 1)' creates a vertical-then-horizontal path
+    (pointX) to[short, *-] (pointX |- AND.in 1) -- (AND.in 1)
+    (pointY) to[short, *-] (pointY |- AND.in 2) -- (AND.in 2)
+
+    % 4. Draw Outputs (S and C)
+    (XOR.out) -- ++(1,0) node[right] {$s = x \oplus y$}
+    (AND.out) -- ++(1,0) node[right] {$c = xy$}
+    ;
+
+\end{circuitikz}
+\end{document}

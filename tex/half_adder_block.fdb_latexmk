@@ -1,7 +1,19 @@
 # Fdb version 4
-["pdflatex"] 1763879084.1424 "/Users/rus/development/digital/tex/car_alarm.tex" "car_alarm.pdf" "car_alarm" 1763879085.38319 0
-  "/Users/rus/development/digital/tex/car_alarm.tex" 1763879083.90064 909 fd3e8f673d6605bd5da737ccbc9438f5 ""
-  "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb" 1248133631 36299 5f9df58c2139e7edcf37c8fca4bd384d ""
+["pdflatex"] 1763879812.48071 "/Users/rus/development/digital/tex/half_adder_block.tex" "half_adder_block.pdf" "half_adder_block" 1763879813.57448 0
+  "/Users/rus/development/digital/tex/half_adder_block.tex" 1763879812.24154 2232 f611a71410d7800fdbcc73163e37f6eb ""
+  "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
+  "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmmi12.tfm" 1136768653 1524 4414a8315f39513458b80dfc63bff03a ""
+  "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmmi6.tfm" 1136768653 1512 f21f83efb36853c0b70002322c1ab3ad ""
+  "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmmi8.tfm" 1136768653 1520 eccf95517727cb11801f4f1aee3a21b4 ""
+  "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmr12.tfm" 1136768653 1288 655e228510b4c2a1abe905c368440826 ""
+  "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmr6.tfm" 1136768653 1300 b62933e007d01cfd073f79b963c01526 ""
+  "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmr8.tfm" 1136768653 1292 21c1c5bfeaebccffdb478fd231a0997d ""
+  "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm" 1136768653 1124 6c73e740cf17375f03eec0ee63599741 ""
+  "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmsy6.tfm" 1136768653 1116 933a60c408fc0a863a92debe84b2d294 ""
+  "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmsy8.tfm" 1136768653 1120 8b7d695260f3cff42e636090a8002094 ""
+  "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb" 1248133631 36741 fa121aac0049305630cf160b86157ee4 ""
+  "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1248133631 35752 024fb6c41858982481f6968b5fc26508 ""
+  "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb" 1248133631 32722 d7379af29a190c3f453aba36302ff5a9 ""
   "/usr/local/texlive/2025/texmf-dist/tex/context/base/mkii/supp-pdf.mkii" 1461363279 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "/usr/local/texlive/2025/texmf-dist/tex/generic/circuitikz/pgfcirc.defines.tex" 1736550187 46557 9adcccd6eb69fb5553fe8449b51f7543 ""
   "/usr/local/texlive/2025/texmf-dist/tex/generic/circuitikz/pgfcircbipoles.tex" 1736550187 313284 6adca7701e0659dde0293b21114e4157 ""
@@ -115,10 +127,10 @@
   "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1763819811 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
   "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1763819727 3345735 98e8d6ce829fe76d41a990640e1359a8 ""
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
-  "car_alarm.aux" 1763879085.30916 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
-  "car_alarm.tex" 1763879083.90064 909 fd3e8f673d6605bd5da737ccbc9438f5 ""
+  "half_adder_block.aux" 1763879813.49796 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "half_adder_block.tex" 1763879812.24154 2232 f611a71410d7800fdbcc73163e37f6eb ""
   (generated)
-  "car_alarm.aux"
-  "car_alarm.log"
-  "car_alarm.pdf"
+  "half_adder_block.aux"
+  "half_adder_block.log"
+  "half_adder_block.pdf"
   (rewritten before read)
