@@ -68,47 +68,52 @@ This corresponds to `m₁ + m₂ + m₃`.
 
 ::right::
 
-<div class="grid grid-cols-2 gap-4 text-center">
+<div class="grid grid-cols-2 gap-1 text-center">
 <div>
 
 **Minterm Layout**
-<img src="https://i.imgur.com/uG9jP2N.png" class="rounded-lg bg-white p-2" alt="2-variable K-map layout">
+<img src="/kmap_2var_minterm.svg" class="rounded-lg bg-white p-2" alt="2-variable K-map layout">
 
 </div>
 <div>
 
 **Variable Layout**
-<img src="https://i.imgur.com/6Xy7Z8B.png" class="rounded-lg bg-white p-2" alt="2-variable K-map with variables">
+<img src="/kmap_2var_variable.svg" class="rounded-lg bg-white p-2" alt="2-variable K-map with variables">
 
 </div>
 <div>
 
 **Plot for `f = xy`**
-<img src="https://i.imgur.com/4f5tY6C.png" class="rounded-lg bg-white p-2" alt="K-map for xy">
+<img src="/kmap_x_and_y.svg" class="rounded-lg bg-white p-2" alt="K-map for xy">
 
 </div>
 <div>
 
 **Plot for `f = x + y`**
-<img src="https://i.imgur.com/h8tZ9bE.png" class="rounded-lg bg-white p-2" alt="K-map for x+y">
+<img src="/kmap_x_or_y.svg" class="rounded-lg bg-white p-2" alt="K-map for x+y">
 
 </div>
 </div>
 
+---
+layout: two-cols-header
 ---
 
 ## Three-Variable K-Map
 
 A three-variable map contains 2³ = 8 squares. The columns are arranged in a **Gray code** sequence (`00, 01, 11, 10`).
 
-*   **Gray Code:** Only one bit changes between adjacent columns. This is crucial because it means adjacent squares represent minterms that differ by only one variable.
+:: left ::
+*   **Gray Code:** Only one bit changes between adjacent columns. It means adjacent squares represent minterms that differ by only one variable.
 *   **Adjacency:** This applies to the "wrap-around" as well (column `10` is adjacent to `00`).
 *   **Simplification:** Two adjacent `1`s can be grouped to eliminate one variable. For example, `m₅` and `m₇` are adjacent.
     *   `f = xy'z + xyz`
     *   `f = xz(y' + y)`
     *   `f = xz`
 
-<img src="https://i.imgur.com/fC3j5wW.png" class="rounded-lg bg-white p-4 mt-4" alt="3-variable K-map layout">
+:: right ::
+
+<img src="/kmap_3var_structure.svg" class="rounded-lg bg-white p-4 mt-4 w-100" alt="3-variable K-map layout">
 
 ---
 
@@ -147,7 +152,7 @@ This is the XOR function, `x ⊕ y`.
 
 ::right::
 
-<img src="https://i.imgur.com/8aL3f8D.png" class="rounded-lg bg-white p-4" alt="K-map for F(x,y,z) = Σ(2,3,4,5)">
+<img src="\kmap_3var_ex1.svg" class="rounded-lg bg-white p-4 w-90 mx-auto" alt="K-map for F(x,y,z) = Σ(2,3,4,5)">
 
 ---
 layout: two-cols-header
@@ -171,7 +176,7 @@ Note that `m₄` could also be grouped with `m₅` if there was a `1` there, but
 
 ::right::
 
-<img src="https://i.imgur.com/vj5kL2R.png" class="rounded-lg bg-white p-4" alt="K-map for F(x,y,z) = Σm(3,4,6,7)">
+<img src="/kmap_3var_ex2.svg" class="rounded-lg bg-white p-4 w-100" alt="K-map for F(x,y,z) = Σm(3,4,6,7)">
 
 ---
 layout: two-cols-header
@@ -179,11 +184,13 @@ layout: two-cols-header
 
 ## Example 3: Grouping Four Squares
 
-A group of four adjacent `1`s eliminates **two** variables.
+A group of four adjacent `1s` eliminates **two** variables.
 
 **Function:** `F(x,y,z) = Σm(0,2,4,6)`
 
 ::left::
+
+<div class="text-sm">
 
 1.  **Plot the 1s:** Place `1`s for minterms 0, 2, 4, and 6.
 2.  **Identify Groups:** All four `1`s can be combined into a single large group.
@@ -195,9 +202,11 @@ A group of four adjacent `1`s eliminates **two** variables.
 
 `F = z'`
 
+</div>
+
 ::right::
 
-<img src="https://i.imgur.com/g8z5Y8N.png" class="rounded-lg bg-white p-4" alt="K-map for F(x,y,z) = Σm(0,2,4,6)">
+<img src="/kmap_3var_ex3.svg" class="rounded-lg bg-white p-4 w-100" alt="K-map for F(x,y,z) = Σm(0,2,4,6)">
 
 ---
 layout: two-cols-header
@@ -209,6 +218,8 @@ This example shows how groups can overlap.
 
 ::left::
 
+<div class="text-sm">
+
 1.  **Plot the 1s:** Place `1`s for minterms 0, 2, 4, 5, and 6.
 2.  **Identify Groups:**
     *   First, find the largest groups. We can create a group of four with `m₀, m₂, m₄, m₆`. This gives the term `z'`.
@@ -219,9 +230,11 @@ This example shows how groups can overlap.
 
 Even though `m₄` is used in two groups, this is allowed and results in the simplest expression.
 
+</div>
+
 ::right::
 
-<img src="https://i.imgur.com/kYt7P8J.png" class="rounded-lg bg-white p-4" alt="K-map for F(x,y,z) = Σm(0,2,4,5,6)">
+<img src="\kmap_3var_ex4.svg" class="rounded-lg bg-white p-4 w-100" alt="K-map for F(x,y,z) = Σm(0,2,4,5,6)">
 
 ---
 
@@ -239,16 +252,22 @@ When simplifying, we look for **Prime Implicants**.
 3.  Select a minimum number of the remaining Prime Implicants to cover any uncovered `1`s.
 
 ---
+layout: two-cols-header
+---
 
 ## Four-Variable K-Map
 
 A four-variable map contains 2⁴ = 16 squares. The structure is extended from the 3-variable map, with both rows and columns using a **Gray code** sequence.
 
+:: left ::
+
 *   **Structure:** The map is a 4x4 grid. The rows represent variables `w` and `x`, and the columns represent `y` and `z`.
 *   **Gray Code:** The `00, 01, 11, 10` sequence for both axes ensures that any two adjacent squares (horizontally or vertically) differ by only one variable.
 *   **Adjacency:** Wrap-around adjacency applies to both rows and columns. The top row is adjacent to the bottom row, and the leftmost column is adjacent to the rightmost column.
 
-<img src="https://i.imgur.com/L9g3g7c.png" class="rounded-lg bg-white p-4 mt-4 w-3/4 mx-auto" alt="4-variable K-map layout">
+:: right ::
+
+<img src="/kmap_4x4_structure.svg" class="rounded-lg bg-white p-1 mt-2 w-80 mx-auto" alt="4-variable K-map layout">
 
 ---
 layout: two-cols-header
@@ -256,24 +275,34 @@ layout: two-cols-header
 
 ## Example 5: 4-Variable Simplification
 
-**Function:** `F(w,x,y,z) = Σ(0,1,2,4,5,6,8,9,12,13,14)`
+**Function:** $F(w,x,y,z) = Σ(0,1,2,4,5,6,8,9,12,13,14)$
 
 ::left::
+<div class="text-sm">
 
 1.  **Plot the 1s:** Place a `1` in each square corresponding to the function's minterms.
 2.  **Identify Groups:** Look for the largest possible groups of 1s.
-    *   **Group 1 (Blue):** A group of 8 covering the two columns where `y=0` (`y'`). This group covers `m₀, m₁, m₄, m₅, m₈, m₉, m₁₂, m₁₃`. The term is `y'`.
-    *   **Group 2 (Green):** A group of 4 using wrap-around adjacency. This covers `m₀, m₂, m₈, m₁₀`. The term is `w'z'`.
-    *   **Group 3 (Red):** A group of 4 using wrap-around adjacency. This covers `m₄, m₆, m₁₂, m₁₄`. The term is `xz'`.
+    *   **Group 1 (Red):** A group of 8 covering the two columns where `y=0` (`y'`). This group covers `m₀, m₁, m₄, m₅, m₈, m₉, m₁₂, m₁₃`. The term is `y'`.
+    *   **Group 2 (Green):** A group of 4 using wrap-around adjacency. This covers `m₀, m₂, m₄, m₆`. The term is `w'z'`.
+    *   **Group 3 (Yellow):** A group of 4 using wrap-around adjacency. This covers `m₄, m₆, m₁₂, m₁₄`. The term is `xz'`.
 3.  **Write the Expression:** The simplified function is the sum of the terms for the essential prime implicants.
+<div class="text-center">
 
-`F = y' + w'z' + xz'`
-
-Note that all `1`s are covered. The minterms covered by `y'` are essential. The remaining `1`s (`m₂, m₆, m₁₀, m₁₄`) are covered by the other two groups.
+$F = y' + w'z' + xz'$
+</div>
+</div>
 
 ::right::
 
-<img src="https://i.imgur.com/k2j4m5N.png" class="rounded-lg bg-white p-4" alt="K-map for F(w,x,y,z) = Σ(0,1,2,4,5,6,8,9,12,13,14)">
+<img src="/kmap_4x4.svg" class="rounded-lg bg-white p-4 w-80 mx-auto" alt="K-map for F(w,x,y,z) = Σ(0,1,2,4,5,6,8,9,12,13,14)">
+
+<div class="text-xs">
+
+Note that all `1`s are covered. The minterms covered by `y'` are essential. The remaining `1`s (`m₂, m₆, m₁₄`) are covered by the other two groups.
+
+</div>
+
+
 
 ---
 layout: two-cols-header

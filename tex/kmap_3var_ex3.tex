@@ -1,0 +1,20 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{karnaugh-map}
+
+\begin{document}
+
+% 3-variable map: 4 columns (yz), 2 rows (x)
+\begin{karnaugh-map}[4][2][1][$yz$][$x$]
+
+    % 1. Place the minterms
+    % 0 (000), 2 (010), 4 (100), 6 (110)
+    \minterms{0, 2, 4, 6}
+
+    % 2. Draw the "Wrap-Around" Group
+    % We group the Left Column (0 to 4) with the Right Column (2 to 6).
+    % Syntax: \implicantedge{Start_Left}{End_Left}{Start_Right}{End_Right}
+    \implicantedge{0}{4}{2}{6}
+
+\end{karnaugh-map}
+
+\end{document}

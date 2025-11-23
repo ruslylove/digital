@@ -1,0 +1,29 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{karnaugh-map}
+
+\begin{document}
+
+% 3 Variables: 2 rows (x), 4 columns (yz)
+\begin{karnaugh-map}[4][2][1][$yz$][$x$]
+
+    % 1. Place Minterms
+    % Row 0: m2 (010), m3 (011) -> These are adjacent
+    % Row 1: m4 (100), m5 (101) -> These are adjacent
+    \minterms{2, 3, 4, 5}
+
+    % 2. Grouping
+    
+    % Top Row Pair (Cells 3 and 2)
+    % Note: In K-map ordering (0,1,3,2), cell 3 is to the left of cell 2.
+    % So we define the implicant from 3 (top-left) to 2 (bottom-right).
+    % Simplification: x'y
+    \implicant{3}{2}
+
+    % Bottom Row Pair (Cells 4 and 5)
+    % Cell 4 is on the left, 5 is on the right.
+    % Simplification: xy'
+    \implicant{4}{5}
+
+\end{karnaugh-map}
+
+\end{document}

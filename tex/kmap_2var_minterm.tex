@@ -1,0 +1,18 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{karnaugh-map}
+
+\begin{document}
+
+% 2 Variables: 2 rows (x), 2 columns (y)
+\begin{karnaugh-map}[2][2][1][$y$][$x$]
+
+    % \manualterms fills the grid based on decimal index (0 to 3).
+    % The package automatically puts m2 in the far right column (10)
+    % and m3 in the middle-right column (11).
+    \manualterms{
+        $m_0$, $m_1$, $m_2$, $m_3$
+    }
+
+\end{karnaugh-map}
+
+\end{document}
