@@ -13,7 +13,7 @@ mdc: true
 # seoMeta:
 #  ogImage: https://cover.sli.dev
 # lineNumbers: true
-# favicon: '/img/favicon_c_new.png'
+favicon: '/img/digital.png'
 
 presenter: Dr. Ruslee Sutthaweekul
 semester: 2/2025
@@ -35,7 +35,7 @@ Semester {{ $slidev.configs.semester }}
   <button @click="$slidev.nav.openInEditor()" title="Open in Editor" class="slidev-icon-btn">
     <carbon:edit />
   </button>
-  <a href="https://github.com/ruslylove/compro" target="_blank" class="slidev-icon-btn">
+  <a href="https://github.com/ruslylove/digital" target="_blank" class="slidev-icon-btn">
     <carbon:logo-github />
   </a>
 </div>
