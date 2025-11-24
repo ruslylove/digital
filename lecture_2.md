@@ -33,8 +33,7 @@ layout: two-cols
 *   The general form of a logic circuit is a **switching network**, which takes a set of discrete inputs and produces a set of discrete outputs.
 
 :: right ::
-<img src="https://cs50.harvard.edu/college/2020/fall/test/logical/Q3.png" class="rounded-lg bg-white p-4 w-90" alt="Logic Circuit" />
-<img src="https://images.squarespace-cdn.com/content/v1/52711462e4b0932c24aa05ae/1557396856263-LNTTWGAQ3BGEKPIXZ8K9/LogicGates_spot.jpg?format=1500w" />
+<img src="/BCD_adder.png" class="rounded-lg bg-white p-4 w-100 mx-auto" alt="Logic Circuit" />
 
 
 ---
@@ -68,8 +67,8 @@ The theoretical foundation of all modern digital computing was laid by George Bo
 
 *   Provides the mathematical foundation for designing and analyzing digital logic circuits.
 *   It's a 2-valued algebra that works with devices that have two states (e.g., on/off, high/low).
-*   We use **Boolean variables** (like `A`, `B`, `x`, `y`) to represent the inputs and outputs of a circuit.
-*   A variable can only take one of two values: **0** or **1**.
+*   We use **Boolean variables** (like $A$, $B$, $x$, $y$) to represent the inputs and outputs of a circuit.
+*   A variable can only take one of two values: $\bm{0}$ or $\bm{1}$.
 *   These symbols represent the two possible states of the variable, not numerical values. They commonly refer to low or high voltage levels in a circuit.
 
 ---
@@ -87,7 +86,7 @@ The light $L$ is ON ($1$) only if **both** switch $x1$ AND switch $x2$ are close
 
 $L(x1, x2) = x1 · x2$
 
-<img src="/AND.png" class="rounded-lg bg-white p-4 mt-4" alt="AND function with series switches">
+<img src="/AND.png" class="rounded-lg bg-white p-4 mt-4 w-90" alt="AND function with series switches">
 
 ::right::
 
@@ -96,7 +95,7 @@ The light $L$ is ON ($1$) if switch $x1$ OR switch $x2$ (or both) are closed ($1
 
 $L(x1, x2) = x1 + x2$
 
-<img src="/OR.png" class="rounded-lg bg-white p-4 mt-4" alt="OR function with parallel switches">
+<img src="/OR.png" class="rounded-lg bg-white p-4 mt-4 w-90" alt="OR function with parallel switches">
 
 ---
 layout: two-cols-header
@@ -116,7 +115,7 @@ What if we want an action to occur when a switch is *opened* instead of closed? 
 
 ::right::
 
-<img src="/NOT.png" class="rounded-lg bg-white p-4" alt="NOT function with a switch">
+<img src="/NOT.png" class="rounded-lg bg-white p-4 w-90 mx-auto" alt="NOT function with a switch">
 
 ---
 
@@ -162,7 +161,24 @@ A **truth table** is a tabular listing that fully describes a logic function by 
 </div>
 </div>
 
+<style>
+/* Target the table on this specific slide */
+table {
+  border-collapse: collapse; /* Merges adjacent borders */
+}
 
+/* Add a right border to all table headers and data cells */
+/* The value '1px solid #AAA' uses your KMUTNB red color */
+th, td {
+  border-right: 1px solid #AAA; 
+}
+
+/* Optional: Remove the border from the very last column */
+th:last-child, td:last-child {
+  border-right: none;
+}
+
+</style>
 ---
 
 ## Basic Logic Gates
@@ -170,10 +186,13 @@ A **truth table** is a tabular listing that fully describes a logic function by 
 These are the standard symbols for the fundamental logic gates.
 
 <div class="grid grid-cols-3 gap-8">
+
 <div>
 
 ### AND Gate
-<img src="/and_logic.png" class="rounded-lg bg-white p-4" alt="AND Gate Symbol">
+
+<img src="/and_symbol.svg" class="rounded-lg bg-white p-4 w-100" alt="AND Gate Symbol"/>
+
 ```vhdl
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -189,10 +208,13 @@ begin
 end Behavioral;
 ```
 </div>
+
 <div>
 
 ### OR Gate
-<img src="/or_logic.png" class="rounded-lg bg-white p-4" alt="OR Gate Symbol">
+
+<img src="/or_symbol.svg" class="rounded-lg bg-white p-4 w-100" alt="OR Gate Symbol"/>
+
 ```vhdl
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -207,11 +229,15 @@ begin
     Y <= x1 OR x2;
 end Behavioral;
 ```
+
 </div>
+
 <div>
 
 ### NOT Gate (Inverter)
-<img src="/not_logic.png" class="rounded-lg bg-white p-2" alt="NOT Gate Symbol">
+
+<img src="/not_symbol.svg" class="rounded-lg bg-white p-3 w-100 mx-auto" alt="NOT Gate Symbol"/>
+
 ```vhdl
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -226,7 +252,9 @@ begin
     Y <= NOT x;
 end Behavioral;
 ```
+
 </div>
+
 </div>
 
 ---
@@ -246,7 +274,9 @@ Each basic logic operation (AND, OR, NOT) is implemented by a physical circuit e
 ::right::
 
 <img src="/logic_network.png" class="rounded-lg bg-white p-2" alt="Logic Network Diagram">
+
 <div class="p-2">
+
 ```vhdl
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -261,6 +291,7 @@ begin
     f <= (x1 OR x2) AND x3;
 end Behavioral;
 ```
+
 </div>
 
 ---
@@ -410,16 +441,7 @@ th:last-child, td:last-child {
 
 De Morgan's law can be visualized using Venn diagrams. The shaded area represents the result of the expression.
 
-<div class="grid grid-cols-2 gap-4 text-center">
-
-
-**$(A · B)'$** 
-<img src="https://adacomputerscience.org/images/content/computer_science/computer_systems/boolean_logic/figures/ada_cs_boolean_venn_not_a_and_b.svg" class="rounded-lg bg-white p-2 w-60" alt="Venn Diagram for (x+y)'">
-
-**$A' + B'$** 
-<img src="https://adacomputerscience.org/images/content/computer_science/computer_systems/boolean_logic/figures/ada_cs_boolean_venn_not_a_or_not_b.svg" class="rounded-lg bg-white p-2 w-60" alt="Venn Diagram for x'y'">
-
-</div>
+<img src="/venn.svg" class=""/>
 
 The resulting area is identical, proving the equivalence.
 
