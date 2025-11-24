@@ -1,0 +1,33 @@
+\documentclass[border=10pt]{standalone}
+% We explicitly load the 'ieee' style option here.
+% This ensures strictly IEEE standard logic gates (Curved/Distinctive).
+\usepackage{circuitikz}
+
+\ctikzset{
+logic ports=ieee,
+logic ports/scale=0.7,
+}
+
+\begin{document}
+
+\begin{circuitikz}[]
+
+    % ==========================
+    % 1. NOT GATE (IEEE Shape)
+    % ==========================
+    % The 'not port' automatically uses the IEEE distinctive shape
+    % because of the package option above.
+    \draw (0,0) node[not port] (NOT) {};
+    
+    % Inputs
+    \draw (NOT.in) -- ++(-0.5,0) node[left] {$x$};
+    
+    % Output
+    \draw (NOT.out) -- ++(0.5,0) node[right] {$Y = \overline{x}$};
+    % Label
+    \node at (NOT.down) [below=0.3cm] {};
+
+
+\end{circuitikz}
+
+\end{document}

@@ -1,0 +1,87 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+
+
+\ctikzset{
+logic ports=ieee,
+logic ports/scale=0.7,
+}
+
+\begin{document}
+\begin{circuitikz}
+
+  % --- 1. Input Nodes ---
+  \node (x1) at (0, 10) {$x_1$};
+  \node (x2) at (0, 8) {$x_2$};
+  \node (x3) at (0, 6) {$x_3$};
+  \node (x4) at (0, 4) {$x_4$};
+
+  % --- 2. NOT Gates (Inverters) ---
+  % We need x1' and x3'
+  \node[not port] (NOT1) at (2, 9) {}; % Inverts x1
+  \node[not port] (NOT3) at (2, 5) {}; % Inverts x3
+
+  % Connect Inputs to Inverters
+  \draw (x1) |- (NOT1.in);
+  \draw (x3) |- (NOT3.in);
+
+  % --- 3. AND Gates (Product Terms) ---
+  
+  % Term A: x1 AND x3' (Shared)
+  \node[and port] (AND_A) at (6, 9) {};
+  
+  % Term B: x1' AND x3 (Shared)
+  \node[and port] (AND_B) at (6, 7) {};
+  
+  % Term C: x2 AND x3' AND x4 (Specific to f1)
+  \node[and port, number inputs=3] (AND_C) at (6, 5) {};
+  
+  % Term D: x2 AND x3 AND x4 (Specific to f2)
+  \node[and port, number inputs=3] (AND_D) at (6, 3) {};
+
+  % --- 4. Wiring the AND Gates ---
+  
+  % Wire AND_A (x1 * x3')
+  \draw (x1) -- (1,10) |- (AND_A.in 1);
+  \draw (NOT3.out) -- (3,5) |- (AND_A.in 2);
+
+  % Wire AND_B (x1' * x3)
+  \draw (NOT1.out) -- (3,9) |- (AND_B.in 1);
+  \draw (x3) -- (1,6) |- (AND_B.in 2);
+
+  % Wire AND_C (x2 * x3' * x4)
+  \draw (x2) -- (1,8) |- (AND_C.in 1);
+  \draw (NOT3.out) -- (3,5) |- (AND_C.in 2); % Connects to x3'
+  \draw (x4) -- (1,4) |- (AND_C.in 3);
+
+  % Wire AND_D (x2 * x3 * x4)
+  \draw (x2) -- (1,8) |- (AND_D.in 1);
+  \draw (x3) -- (1,6) |- (AND_D.in 2);       % Connects to x3 (uncoupled)
+  \draw (x4) -- (1,4) |- (AND_D.in 3);
+
+  % --- 5. OR Gates (Outputs) ---
+  
+  % f1 = A + B + C
+  \node[or port, number inputs=3] (OR_F1) at (10, 8) {};
+  
+  % f2 = A + B + D
+  \node[or port, number inputs=3] (OR_F2) at (10, 4) {};
+
+  % --- 6. Wiring Outputs ---
+  
+  % Connect to OR_F1
+  \draw (AND_A.out) -- (7,9) |- (OR_F1.in 1);
+  \draw (AND_B.out) -- (7,7) |- (OR_F1.in 2);
+  \draw (AND_C.out) -- (7,5) |- (OR_F1.in 3);
+  
+  % Connect to OR_F2
+  \draw (AND_A.out) -- (7,9) |- (OR_F2.in 1);
+  \draw (AND_B.out) -- (7,7) |- (OR_F2.in 2);
+  \draw (AND_D.out) -- (7,3) |- (OR_F2.in 3);
+
+  % --- 7. Final Labels ---
+  \draw (OR_F1.out) -- ++(1,0) node[right] {$f_1$};
+  \draw (OR_F2.out) -- ++(1,0) node[right] {$f_2$};
+
+\end{circuitikz}
+\end{document}
