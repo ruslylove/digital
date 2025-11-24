@@ -11,7 +11,7 @@ lectureIndex: 1
 
 {{ $slidev.configs.subject }}
 
-{{ $slidev.configs.presenter}}
+{{ $slidev.configs.author }}
 
 
 ---
@@ -208,7 +208,7 @@ An ideal switch is a perfect, theoretical component, while real-world switches l
 *   **Zero** resistance when closed (ON).
 *   **Infinite** resistance when open (OFF).
 *   Consumes **no power**.
-<img src="https://www.mathworks.com/help/sps/powersys/ref/block_ref_2366.gif" class="rounded-lg mt-4 w-80"/>
+<img src="/circuit_switch.png" class="rounded-lg mt-4 w-80"/>
 
 :: right ::
 
@@ -217,9 +217,11 @@ An ideal switch is a perfect, theoretical component, while real-world switches l
 *   Small, **non-zero** resistance when ON.
 *   Very high, but **not infinite**, resistance when OFF.
 *   `Transistors` are the physical basis for digital logic.
-<img src="https://i0.wp.com/darlingevil.com/wp-content/uploads/2018/03/transistor.jpg?resize=768%2C476&ssl=1" class="rounded-lg w-67 mx-auto"/>
+<div class="grid grid-cols-2 gap-4">
+<img src="/circuit_transistor.png" />
+<img src="https://i0.wp.com/darlingevil.com/wp-content/uploads/2018/03/transistor.jpg?resize=768%2C476&ssl=1" class="rounded-lg"/>
 
-
+</div >
 
 ---
 layout: two-cols

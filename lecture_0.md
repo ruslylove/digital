@@ -15,13 +15,12 @@ layout: intro
 - **Course Name:** Digital Circuit and Logic Design
 - **Credits:** 3(3-0-6)
 
-## Instructor
+## Instructors
 
 - **Section 1:** Asst. Prof. Dr. Noppadol Charbkaew (Leader)
 - **Section 2:** Asst. Prof. Dr. Ruslee Sutthaweekul
 - **Section 3:** Assoc. Prof. Chatchai Sermpongpan
-
-- **Google Classroom code:** js3udyu
+- **Section 4\*:** Asst. Prof. Dr. Noppadol Charbkaew (M 13:00-16:00)
 
 ---
 layout: intro
@@ -34,10 +33,10 @@ This course introduces the fundamental concepts of digital logic circuits. Topic
 ## Course Assessment
 
 - **Midterm Exam:** 30%
-  - *Date: Sat. Jan. 2026*
+  - *Date: Sat. Jan. 2026* (TBA)
 - **Final Exam:** 30%
   - *Date: 24th Mar 2026*
-- **Mini Project:** 40%
+- **Assignment/Project:** 40%
   - *Date: Dec 2025 – Mar 2026*
 
 ---

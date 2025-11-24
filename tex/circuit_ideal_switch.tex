@@ -1,0 +1,45 @@
+\documentclass{standalone} % 'standalone' is good for generating just the circuit image
+\usepackage[utf8]{inputenc}
+\usepackage{circuitikz}
+
+\begin{document}
+\begin{circuitikz}[american] % Using 'american' style for components
+
+    % 1. Define the component labels
+    \def\SwLabel{S}
+    \def\GateLabel{G}
+
+    % 2. Draw the main circuit line (Source and Drain path)
+    \draw (0, 0) to[short, *-] (0, 3) node[above] {Drain (D)};
+
+    % 3. Draw the N-Channel MOSFET (Ideal Switch)
+    \draw (0, 3) node[anchor=south] {}
+          to[R, l_={R\_load}] (0, 4.5); % Add a load for context
+    \draw (0, 4.5) to[short, -*] (0, 6); % Connect to power
+
+    % Draw the MOSFET (nmos or a generic controlled switch)
+    \draw (0, 3) -- (2, 3)
+          node[nmos, anchor=D, bulk=no, bodydiode=no] (Mosfet) {} % nmos symbol
+          (2, 3) -- (2, 0);
+
+    % 4. Add the gate control signal and label
+    \draw (Mosfet.G) -- ++(1.5, 0) node[right] {Control Signal};
+    \draw (Mosfet.G) node[left] {Gate ($\mathbf{\mathbf{G}}$)};
+    
+    % 5. Add terminal labels (Source and Drain)
+    \draw (Mosfet.D) node[above right] {Drain ($\mathbf{\mathbf{D}}$)};
+    \draw (Mosfet.S) node[below right] {Source ($\mathbf{\mathbf{S}}$)};
+
+    % 6. Indicate the Switch State
+    \draw[->, dashed, color=blue] (1, 3.5) -- (1, 4.5) node[midway, right] {I};
+    \node[draw, minimum width=2.5cm, minimum height=1cm, align=center, fill=blue!10] 
+          at (3.5, 5.5) {Ideal Switch \\ (N-MOSFET Representation)};
+
+    % Optional: Add a simple general controlled switch symbol if preferred
+    % \draw (5, 0) to [cute open switch, name=sw, l=\SwLabel] (5, 3);
+    % \draw (sw.wiper) -- ++(1, 0) node[right] {Gate $\mathbf{\mathbf{G}}$};
+    % \draw (sw.out 1) node[left] {Terminal 1};
+    % \draw (sw.out 2) node[left] {Terminal 2};
+
+\end{circuitikz}
+\end{document}
