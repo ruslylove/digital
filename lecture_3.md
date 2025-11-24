@@ -10,6 +10,8 @@ title: Lecture 3 - Logic Optimization
 
 {{ $slidev.configs.subject }}
 
+{{ $slidev.configs.author }}
+
 <div class="abs-br m-6 text-sm">
 010113025 Digital Circuits and Logic Design
 </div>

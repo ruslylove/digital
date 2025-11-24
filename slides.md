@@ -13,9 +13,8 @@ mdc: true
 # seoMeta:
 #  ogImage: https://cover.sli.dev
 # lineNumbers: true
-favicon: '/img/digital.png'
-
-presenter: Dr. Ruslee Sutthaweekul
+favicon: '/img/60348.jpg'
+author: Dr. Ruslee Sutthaweekul
 semester: 2/2025
 subject: 010113025 Digital Circuit & Logic Design
 
@@ -23,7 +22,7 @@ subject: 010113025 Digital Circuit & Logic Design
 ---
 # {{ $slidev.configs.subject }}
 
-Presented by {{ $slidev.configs.presenter }}
+Presented by {{ $slidev.configs.author }}
 
 Semester {{ $slidev.configs.semester }}
 

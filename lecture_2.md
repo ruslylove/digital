@@ -10,7 +10,7 @@ title: Lecture 2 - Logic Circuits
 
 {{ $slidev.configs.subject }}
 
-{{ $slidev.configs.presenter}}
+{{ $slidev.configs.author }}
 
 
 ---
@@ -630,6 +630,11 @@ The simplified form $x1' + x2$ requires far fewer gates.
 <img src="/simplified.png" class="rounded-lg bg-white p-2 mt-4 w-70" alt="Simple circuit for simplified function">
 
 :: right ::
+
+---
+layout: iframe
+url: https://circuitverse.org/simulator/embed/minimal?theme=&display_title=false&clock_time=false&fullscreen=true&zoom_in_out=true
+---
 
 <iframe src="https://circuitverse.org/simulator/embed/minimal?theme=&display_title=false&clock_time=false&fullscreen=true&zoom_in_out=true" style="border-width:; border-style: solid; border-color:;" name="myiframe" id="projectPreview" scrolling="no" frameborder="1" marginheight="0px" marginwidth="0px" height="400" width="500" allowFullScreen></iframe>
 
