@@ -35,7 +35,7 @@ Understanding the fundamentals of digital logic is essential for a career in alm
 :: right ::
 
 <img src="https://images.unsplash.com/photo-1555664424-778a1e5e1b48?w=800" class="rounded-lg bg-white p-2 mt-4" alt="A modern circuit board">
-<p class="text-xs text-center">The principles you learn here are built into every complex electronic device.</p>
+<p class="text-xs text-center">Figure 1. The principles you learn here are built into every complex electronic device.</p>
 
 ---
 
@@ -59,18 +59,15 @@ hideInToc: false
 <toc mode="onlySiblings" minDepth="2" columns="4"/>
 
 ---
-layout: two-cols
----
+
 
 ## Digital vs. Analog Signals
-An **analog signal** is continuous, representing information with an infinite range of values over time. Think of a smooth, flowing wave.
+* An **analog signal** is continuous, representing information with an infinite range of values over time. Think of a smooth, flowing wave.
+* A **digital signal** is discrete, representing information with a finite set of values (like 0s and 1s). It moves in distinct steps.
  
-A **digital signal** is discrete, representing information with a finite set of values (like 0s and 1s). It moves in distinct steps.
  
-::right::
- 
-<img src="https://crossroadenergy.com/wp-content/uploads/2024/02/Digital-Vs-Analgo-1200x1200.jpg.webp" class="rounded-lg bg-white p-4 w-90 mt-2 mx-auto" alt="Analog vs Digital Waveforms">
-<p class="text-sm text-center mt-2">An analog signal has continuous values, while a digital signal has discrete, step-like values.</p>
+<img src="/analog_vs_digital.svg" class="rounded-lg bg-white p-4 w-135 mt-2 mx-auto" alt="Analog vs Digital Waveforms">
+<p class="text-sm text-center mt-2">Figure 2. An analog signal has continuous values, while a digital signal has discrete, step-like values.</p>
 
 
 ---
@@ -81,14 +78,8 @@ layout: two-cols-header
 
 The most common digital signals are those that can have one of only two possible values, like `on` or `off` (`0` and `1`) => switch => a binary representation.
 
-:: left ::
-
-<img src="https://electricalacademia.com/wp-content/uploads/2018/11/20-4.jpg" class="w-100"/>
-
-:: right ::
-
-<img src="https://electricalacademia.com/wp-content/uploads/2018/11/20-5.jpg" class="w-100 mx-auto"/>
-
+<img src="/switch_binary.svg" class="w-120 mx-auto"/>
+<p class="text-sm text-center mt-2">Figure 3. Switch and Binary Representation.</p>
 
 
 ---
@@ -99,7 +90,7 @@ A binary `1001111` is representing the number 79:
 
 <div class="text-center">
 
-<img src="https://electricalacademia.com/wp-content/uploads/2018/11/20-12.jpg"/>
+<img src="/binary_rep.svg" class="mx-auto mt-4 w-200 p-5"/>
 
 </div>
 
@@ -168,8 +159,8 @@ To convert an analog signal to digital, we perform two key steps:
 
 :: right ::
 
-<img src="/adc.png" class="mt-10 w-90 mx-auto"/>
-<img src="https://circuitcrush.com/wp-content/uploads/Sampling-Analog-Signal-768x432.jpg" class="mt-4 w-90 mx-auto"/>
+<img src="/adc.png" class="mt-4 w-90 mx-auto"/>
+<img src="/adc.svg" class="mt-4 w-100 mx-auto"/>
 
 
 
@@ -644,6 +635,8 @@ flowchart LR;
     H --> I[Hardware Verification];
     end
 ```
+<p class="text-sm text-center mt-2">A Development Flow of Digtial Circuit</p>
+
 
 ---
 layout: default
