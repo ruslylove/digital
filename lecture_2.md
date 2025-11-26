@@ -831,7 +831,7 @@ entity three_way_light_tb is
 -- Testbenches do not have ports
 end three_way_light_tb;
 
-architecture behavior of func_tb is
+architecture behavior of three_way_light_tb is
     -- Component Declaration
     component three_way_light
     Port(
@@ -897,6 +897,12 @@ end behavior;
 </div>
 </div>
 
+
+---
+
+### Questa Simulation Result
+
+<img src="/three_way_light_sim.png" class="w-200 pt-4" />
 
 ---
 layout: two-cols-header
