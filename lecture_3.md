@@ -759,3 +759,43 @@ This chapter introduced powerful graphical and procedural methods for logic opti
 *   **XOR/XNOR:** Special functions with distinct checkerboard patterns on K-maps, useful for parity, comparators, and arithmetic circuits.
 
 </div>
+---
+layout: default
+---
+
+## Exercise 1: 3-Variable Function Simplification (SOP)
+
+Simplify the following Boolean function using a 3-variable Karnaugh Map.
+
+$F(A,B,C) = \Sigma m(0,2,3,4,6)$
+
+1.  **Truth Table:** Construct the truth table for the function.
+2.  **K-Map:** Draw the 3-variable K-map and plot the `1`s.
+3.  **Simplification (SOP):** Group the `1`s to find the minimal Sum-of-Products (SOP) expression. Clearly indicate your groupings.
+4.  **Logic Circuit:** Draw the logic circuit diagram for your simplified SOP expression using basic gates (AND, OR, NOT).
+
+---
+
+## Exercise 2: 4-Variable Function with Don't Cares (SOP)
+
+Simplify the following Boolean function using a 4-variable Karnaugh Map, taking advantage of don't-care conditions.
+
+$F(w,x,y,z) = \Sigma m(0,1,2,7,8,9,10,15)$ +
+$d(w,x,y,z) = \Sigma d(5,13)$
+
+1.  **K-Map:** Draw the 4-variable K-map and plot the `1`s and `X`s (don't-cares).
+2.  **Simplification (SOP):** Group the `1`s (using `X`s strategically) to find the minimal Sum-of-Products (SOP) expression. Clearly indicate your groupings and which `X`s were treated as `1`s.
+3.  **Logic Circuit:** Draw the logic circuit diagram for your simplified SOP expression.
+
+---
+
+## Exercise 3: 3-Variable Function Simplification (POS)
+
+Simplify the following Boolean function using a 3-variable Karnaugh Map to obtain a minimal **Product-of-Sums (POS)** expression.
+
+$F(x,y,z) = \Sigma m(0,1,2,5,7)$
+
+1.  **K-Map:** Draw the 3-variable K-map and plot the `0`s (implied from the minterms not listed).
+2.  **Simplification (POS):** Group the `0`s to find the minimal Product-of-Sums (POS) expression. Clearly indicate your groupings.
+3.  **Logic Circuit (NOR-NOR):** Draw the two-level NOR-NOR logic circuit for your simplified POS expression.
+
