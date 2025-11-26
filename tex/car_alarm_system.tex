@@ -1,0 +1,25 @@
+\documentclass[border=10pt]{standalone}
+
+\begin{document}
+\begin{tabular}{|c|c|c|c||c|l|}
+    \hline
+    \multicolumn{4}{|c||}{\textbf{Inputs}} & \multicolumn{2}{c|}{\textbf{Output}} \\
+    \hline
+    $K$ (Key) & $D$ (Door) & $S$ (Seat) & $B$ (Belt) & $\mathbf{A}$ (Alarm) & \textbf{Condition} \\
+    \hline
+    \multicolumn{6}{|l|}{\textit{Condition 1: Key in, Door open}} \\
+    \hline
+    1 & 0 & 0 & 0 & 1 & $K \cdot D'$ \\
+    \hline
+    1 & 0 & 1 & 0 & 1 & $K \cdot D'$ \\
+    \hline
+    1 & 0 & 0 & 1 & 1 & $K \cdot D'$ \\
+    \hline
+    1 & 0 & 1 & 1 & 1 & $K \cdot D'$ \\
+    \hline
+    \multicolumn{6}{|l|}{\textit{Condition 2: Door closed, Key in, Driver seated, Belt open}} \\
+    \hline
+    1 & 1 & 1 & 0 & 1 & $D \cdot K \cdot S \cdot B'$ \\
+    \hline
+\end{tabular}
+\end{document}

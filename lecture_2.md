@@ -722,8 +722,6 @@ layout: two-cols-header
 *   Light is OFF if **two** switches are closed.
 *   Light is ON if **three** switches are closed.
 
-<img src="/room.png" class="rounded-lg bg-white p-2 mt-4 w-90"/>
-
 ::right::
 
 ### Truth Table
@@ -1003,7 +1001,7 @@ layout: two-cols
 1.  The key is in ($K=1$) and the door is not closed ($D=0$), OR
 2.  The door is closed ($D=1$), the key is in ($K=1$), the driver is in the seat ($S=1$), and the seat belt is not closed ($B=0$).
 
-<img src="/car.png" class="w-90 rounded-lg bg-white p-4"/>
+<img src="/car_alarm_truthtable.svg" class="w-100  bg-white pt-4"/>
 
 </div>
 
@@ -1047,57 +1045,88 @@ The circuit is built from the simplified expression $A = K · (D' + S·B')$, whi
 
 ### VHDL Implementation
 
-This difference is also clear when implemented in VHDL.
+```vhdl {*}{maxHeight:'430px',lines:true}
+-- Standard Libraries
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
 
-**Unsimplified Expression:** $A = K·D' + D·K·S·B'$
-```vhdl
--- Unsimplified architecture
-architecture unsimplified of car_alarm is
-begin
-    A <= (K and not D) or (D and K and S and not B);
-end unsimplified;
+---------------------------------------------------------------------
+-- ENTITY: Defines the interface with four inputs and one output
+---------------------------------------------------------------------
+ENTITY Car_Alarm_Logic IS
+    PORT (
+        K, D, S, B : IN  STD_LOGIC;  -- Inputs
+        A          : OUT STD_LOGIC   -- Output
+    );
+END ENTITY Car_Alarm_Logic;
+
+---------------------------------------------------------------------
+-- ARCHITECTURE: Implementation using the Simplified Boolean Expression
+-- A = K AND (NOT D OR (S AND NOT B))
+---------------------------------------------------------------------
+ARCHITECTURE RTL OF Car_Alarm_Logic IS
+BEGIN
+    -- Concurrent signal assignment based on the simplified equation:
+    -- A = K · (D' + S · B')
+    A <= K AND (NOT D OR (S AND NOT B));
+    
+END ARCHITECTURE RTL;
 ```
 
-**Simplified Expression:** $A = K · (D' + S·B')$
-```vhdl
--- Simplified architecture
-architecture simplified of car_alarm is
-begin
-    A <= K and (not D or (S and not B));
-end simplified;
-```
-While a synthesizer might optimize both to the same logic, the simplified version is more readable and directly maps to a more efficient circuit structure.
+---
 
----
-layout: two-cols-header
----
 
 ## Design Example: Half-Adder
 
 **Problem:** Design a circuit that adds two single bits, $x$ and $y$, and produces two outputs: a **sum** bit $s$ and a **carry** bit $c$. This is a fundamental arithmetic circuit.
 
-::left::
-
 ### Truth Table & Expressions
 
-We can define the behavior for both outputs in a single truth table.
+<div class="grid grid-cols-5 gap-4">
 
-| x | y | c (carry) | s (sum) |
+<div class="col-span-2">
+
+We can define the behavior for both outputs in a single truth table.
+<div class="text-sm">
+
+| $x$ | $y$ | $Sum (s)$ | $Carry (c)$ |
 |:-:|:-:|:---------:|:-------:|
 | 0 | 0 |     0     |    0    |
-| 0 | 1 |     0     |    1    |
-| 1 | 0 |     0     |    1    |
-| 1 | 1 |     1     |    0    |
+| 0 | 1 |     1     |    0    |
+| 1 | 0 |     1     |    0    |
+| 1 | 1 |     0     |    1    |
+</div>
+</div>
+<div class="col-span-3">
 
-::right::
-
-**Sum bit $s$:**
+**Sum bit ($s$):**
 The sum is $1$ only if the inputs are different. This is the **XOR** function.
 $s = x'y + xy' = x ⊕ y$
 
-**Carry bit $c$:**
+**Carry bit ($c$):**
 The carry is $1$ only if both inputs are $1$. This is the **AND** function.
 $c = xy$
+
+</div>
+</div>
+
+<style>
+/* Target the table on this specific slide */
+table {
+  border-collapse: collapse; /* Merges adjacent borders */
+}
+
+/* Add a right border to all table headers and data cells */
+/* The value '1px solid #AC3520' uses your KMUTNB red color */
+th, td {
+  border-right: 1px solid #CCC; 
+}
+
+/* Optional: Remove the border from the very last column */
+th:last-child, td:last-child {
+  border-right: none;
+}
+</style>
 
 ---
 layout: two-cols
@@ -1111,26 +1140,43 @@ The circuit combines an XOR gate for the sum and an AND gate for the carry.
 <img src="/half_adder.svg" class="rounded-lg bg-white p-4 w-80" alt="Circuit for a Half-Adder">
 
 **Block Diagram**
-<img src="/half_adder_block.svg" class="rounded-lg bg-white p-4 w-56 mt-4" alt="Block Diagram for a Half-Adder">
+<img src="/half_adder_block.svg" class="rounded-lg bg-white p-4 w-70 mt-4" alt="Block Diagram for a Half-Adder">
 
 :: right ::
 
 ### VHDL Implementation
 
-```vhdl
-library ieee;
-use ieee.std_logic_1164.all;
+```vhdl {*}{maxHeight:'430px',lines:true}
+-- Load standard IEEE libraries
+LIBRARY ieee;
+-- Use the package that defines standard logic types (STD_LOGIC)
+USE ieee.std_logic_1164.ALL;
 
-entity half_adder is
-    port ( x, y : in  std_logic;
-           s, c : out std_logic );
-end half_adder;
+---------------------------------------------------------------------
+-- ENTITY: Defines the external interface of the half adder
+---------------------------------------------------------------------
+ENTITY half_adder IS
+    -- Define the ports (inputs and outputs) of the circuit
+    PORT ( 
+        x, y : IN  STD_LOGIC;  -- Two single-bit inputs (augend and addend)
+        s, c : OUT STD_LOGIC   -- Sum (s) and Carry-out (c) single-bit outputs
+    );
+END ENTITY half_adder;
 
-architecture dataflow of half_adder is
-begin
-    s <= x xor y;
-    c <= x and y;
-end dataflow;
+---------------------------------------------------------------------
+-- ARCHITECTURE: Defines the internal behavior and logic
+---------------------------------------------------------------------
+-- The 'dataflow' architecture uses concurrent signal assignments
+ARCHITECTURE dataflow OF half_adder IS
+BEGIN
+    -- Sum output: Calculated using the Exclusive OR (XOR) function
+    -- S = X XOR Y
+    s <= x XOR y;
+    
+    -- Carry output: Calculated using the AND function
+    -- C = X AND Y
+    c <= x AND y;
+END ARCHITECTURE dataflow;
 ```
 
 ---
