@@ -652,6 +652,55 @@ The simplified form $x1' + x2$ requires far fewer gates.
 <img src="/simplified.png" class="rounded-lg bg-white p-2 mt-4 w-70" alt="Simple circuit for simplified function">
 
 :: right ::
+### VHDL Implementation
+```vhdl {*}{maxHeight:'240px',lines:true}
+-- Standard Libraries
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+
+---------------------------------------------------------------------
+-- ENTITY: Defines the external interface (x1, x2 inputs, f output)
+---------------------------------------------------------------------
+ENTITY Logic_Function IS
+    PORT (
+        x1 : IN  STD_LOGIC;
+        x2 : IN  STD_LOGIC;
+        f  : OUT STD_LOGIC
+    );
+END ENTITY Logic_Function;
+
+---------------------------------------------------------------------
+-- ARCHITECTURE 1: Implementation using the Canonical Sum-of-Products
+-- F = x1'x2' + x1'x2 + x1x2  (The unsimplified form)
+---------------------------------------------------------------------
+ARCHITECTURE RTL_Canonical OF Logic_Function IS
+BEGIN
+    -- Concurrent signal assignment using Boolean operators
+    f <= (NOT x1 AND NOT x2) OR 
+         (NOT x1 AND x2)     OR 
+         (x1 AND x2);
+         
+END ARCHITECTURE RTL_Canonical;
+
+---------------------------------------------------------------------
+-- ARCHITECTURE 2: Implementation using the Simplified Form
+-- F = x1' + x2
+---------------------------------------------------------------------
+ARCHITECTURE RTL_Simplified OF Logic_Function IS
+BEGIN
+    -- Concurrent signal assignment using the minimal Boolean expression
+    f <= NOT x1 OR x2;
+    
+END ARCHITECTURE RTL_Simplified;
+```
+
+To use a specific architecture in a top-level design, you would employ a **Configuration** statement or use **direct entity instantiation** by specifying the architecture name:
+
+```vhdl {*}{maxHeight:'250px',lines:true}
+-- Example of Direct Instantiation:
+UUT : ENTITY work.Logic_Function(RTL_Simplified)
+    PORT MAP (x1 => sig_a, x2 => sig_b, f => sig_out);
+```
 
 ---
 layout: iframe
@@ -773,18 +822,18 @@ end Arch_Simplified;
 
 <div>
 
-**fun_tb.vhd**
+**three_way_light_tb.vhd**
 ```vhdl {*}{lines:'true',maxHeight:'380px'}
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-entity func_tb is
+entity three_way_light_tb is
 -- Testbenches do not have ports
-end func_tb;
+end three_way_light_tb;
 
 architecture behavior of func_tb is
     -- Component Declaration
-    component func_implementation
+    component three_way_light
     Port(
         x1 : in STD_LOGIC;
         x2 : in STD_LOGIC;
@@ -803,7 +852,7 @@ architecture behavior of func_tb is
 
 begin
     -- Instantiate the Unit Under Test (UUT)
-    uut: func_implementation port map (
+    uut: ENTITY work.three_way_light(Arch_Simplified) port map (
         x1 => x1,
         x2 => x2,
         x3 => x3,
