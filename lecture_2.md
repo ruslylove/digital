@@ -1204,3 +1204,44 @@ This chapter covered the bridge from theory to practice in digital logic design.
 *   **Canonical Forms:** We can represent any function as a Sum-of-Products (from minterms) or a Product-of-Sums (from maxterms).
 *   **Simplification:** Reducing complex expressions leads to simpler, faster, and more efficient circuits.
 *   **Design Process:** We can systematically move from a problem statement to a truth table, to a Boolean expression, and finally to a logic circuit.
+---
+layout: default
+---
+
+## Exercise 1: Majority Function
+
+A majority function is a Boolean function that is true when more than half of its inputs are true. Design a logic circuit for a 3-input majority function.
+
+1.  **Truth Table:** Create a truth table for a 3-input function `f(x, y, z)` that outputs `1` when two or more inputs are `1`.
+2.  **SOP Expression:** Write the canonical Sum-of-Products (SOP) expression from the truth table.
+3.  **Simplification:** Simplify the SOP expression using Boolean algebra.
+4.  **Circuit Diagram:** Draw the logic circuit for the simplified expression using AND, OR, and NOT gates.
+5.  **Simulation:** Implement your simplified circuit or write VHDL code in a simulator (e.g, Quartus or Logisim), apply all 8 input combinations, and show the simulation waveform confirming your truth table.
+
+---
+
+## Exercise 2: Simple Home Alarm System
+
+Design a simplified home alarm system with the following behavior:
+
+The alarm `A` should sound (`A=1`) if the system is armed (`S=1`) **AND** either the front door is opened (`D=1`) **OR** the window is opened (`W=1`). The system should not sound if it is not armed.
+
+1.  **Truth Table:** Construct a truth table for the alarm function `A(S, D, W)`.
+2.  **Boolean Expression:** Write the Boolean expression for the function `A`.
+3.  **Circuit Diagram:** Draw the logic circuit that implements this expression.
+4.  **Simulation:** Use a simulator to build and test your circuit (Schematic or VHDL code). Provide a screenshot of your working simulation for the case where the system is armed and the front door is opened.
+
+
+---
+hide: true
+---
+
+## Exercise 3: Product-of-Sums (POS) Design
+
+Consider the same 3-input majority function from Exercise 1.
+
+1.  **POS Expression:** From the truth table you created for the majority function, derive the canonical Product-of-Sums (POS) expression. (Hint: Focus on the rows where the output is `0`).
+2.  **Simplification:** Simplify the POS expression using Boolean algebra (e.g., using the distributive property or consensus theorem).
+3.  **Circuit Diagram:** Draw the logic circuit for the simplified POS expression. Your circuit should primarily use OR gates followed by an AND gate.
+4.  **Verification:** Explain how you would verify that your simplified POS circuit is equivalent to the simplified SOP circuit from Exercise 1. A truth table comparison or algebraic manipulation are valid methods.
+
