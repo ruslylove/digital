@@ -58,7 +58,7 @@ The theoretical foundation of all modern digital computing was laid by George Bo
 <img src="https://upload.wikimedia.org/wikipedia/commons/9/98/C.E._Shannon._Tekniska_museet_43069_%28cropped%29.jpg" style="float: left; margin-right: 35px; width: 150px;" class="rounded-lg w-40 mt-2" alt="Claude Shannon">
 
 *   In his 1938 Master's thesis, he showed how Boolean algebra could be applied to switch-based circuits.
-*   He demonstrated that an "on" switch could be treated as `1` (true) and an "off" switch as `0` (false).
+*   He demonstrated that an "on" switch could be treated as $1$ (true) and an "off" switch as $0$ (false).
 *   This insight proved that **we can build digital circuits by doing math**.
 
 ---
@@ -372,8 +372,8 @@ $(x+y)·(y+z)·(x'+z) = (x+y)·(x'+z)$
 The principle of **duality** is a powerful concept in Boolean algebra. Given any true statement (theorem or expression), its dual is also true.
 
 To form the dual of an expression:
-1.  Replace all **AND** operators (`·`) with **OR** operators (`+`).
-2.  Replace all **OR** operators (`+`) with **AND** operators (`·`).
+1.  Replace all **AND** operators ($·$) with **OR** operators ($+$).
+2.  Replace all **OR** operators ($+$) with **AND** operators ($·$).
 3.  Replace all **0s** with **1s**.
 4.  Replace all **1s** with **0s**.
 
@@ -453,7 +453,7 @@ The resulting area is identical, proving the equivalence.
 
 *   **Goal:** Create a circuit that correctly implements the function.
 *   **Secondary Goal:** Optimize the circuit to be simpler, faster, smaller, or use less power.
-*   We can synthesize a function by focusing on either the rows where the output is `1` or the rows where the output is `0`.
+*   We can synthesize a function by focusing on either the rows where the output is $1$ or the rows where the output is $0$.
 
 This leads to two standard forms:
 1.  **Sum-of-Products (SOP)**
@@ -464,11 +464,11 @@ layout: two-cols
 ---
 
 ## Sum-of-Products (SOP) using Minterms
-A **minterm** is a product (AND) term that includes every input variable, either in its true or complemented form. Each minterm corresponds to a single row in a truth table where the output is `1`.
+A **minterm** is a product (AND) term that includes every input variable, either in its true or complemented form. Each minterm corresponds to a single row in a truth table where the output is $1$.
 
 ### Synthesis Steps
 1.  Identify all rows in the truth table where the function's output $f$ is **1**.
-2.  For each of these rows, write a **minterm** product term. A variable is complemented if its value in the row is `0`, and true if its value is `1`.
+2.  For each of these rows, write a **minterm** product term. A variable is complemented if its value in the row is $0$, and true if its value is $1$.
 3.  The final expression is the **sum (OR)** of all the minterms.
 
 <div class="text-sm">
@@ -538,7 +538,7 @@ A **maxterm** is a sum (OR) term that includes every input variable, either in i
 
 ### Synthesis Steps
 1.  Identify all rows in the truth table where the function's output $f$ is **0**.
-2.  For each of these rows, write a **maxterm** sum term. A variable is true if its value in the row is `0`, and complemented if its value is `1`.
+2.  For each of these rows, write a **maxterm** sum term. A variable is true if its value in the row is $0$, and complemented if its value is $1$.
 3.  The final expression is the **product (AND)** of all the maxterms.
 
 <div class="text-sm">
@@ -993,16 +993,15 @@ layout: two-cols
 
 ---
 
-
 ## Design Example: Car Safety Alarm
 
 <div class="grid grid-cols-2 gap-4">
 
 <div>
 
-**Problem:** Design a car safety alarm `A` that sounds if:
-1.  The key is in (`K=1`) and the door is not closed (`D=0`), OR
-2.  The door is closed (`D=1`), the key is in (`K=1`), the driver is in the seat (`S=1`), and the seat belt is not closed (`B=0`).
+**Problem:** Design a car safety alarm $A$ that sounds if:
+1.  The key is in ($K=1$) and the door is not closed ($D=0$), OR
+2.  The door is closed ($D=1$), the key is in ($K=1$), the driver is in the seat ($S=1$), and the seat belt is not closed ($B=0$).
 
 <img src="/car.png" class="w-90 rounded-lg bg-white p-4"/>
 
@@ -1014,41 +1013,43 @@ layout: two-cols
 
 Translating the conditions into a Boolean expression:
 
-*   Condition 1: `K · D'`
-*   Condition 2: `D · K · S · B'`
+*   Condition 1: $K · D'$
+*   Condition 2: $D · K · S · B'$
 
-The final alarm function `A` is the OR of these two conditions:
-`A = K·D' + D·K·S·B'`
+The final alarm function $A$ is the OR of these two conditions:
+$A = K·D' + D·K·S·B'$
 
-This can be simplified slightly by factoring out `K`:
-`A = K · (D' + D·S·B')`
+This can be simplified slightly by factoring out $K$:
+$A = K · (D' + D·S·B')$
 
-Using the property `X + X'Y = X + Y`:
-Let `X = D'`, then `X' = D`.
-`D' + D·S·B' = D' + S·B'`
+Using the property $X + X'Y = X + Y$:
+Let $X = D'$, then $X' = D$.
+$D' + D·S·B' = D' + S·B'$
 
 So, the final simplified expression is:
 
-`A = K · (D' + S·B')`
+$A = K · (D' + S·B')$
 
 </div>
 </div>
 
+---
+layout: two-cols
 ---
 
 ### Circuit Implementation
 
-The circuit is built from the simplified expression `A = K · (D' + S·B')`, which is much simpler than a circuit for the original expression.
+The circuit is built from the simplified expression $A = K · (D' + S·B')$, which is much simpler than a circuit for the original expression.
 
 <img src="/car_alarm.svg" class="rounded-lg bg-white p-2" alt="Circuit for Car Safety Alarm">
 
----
+:: right ::
 
 ### VHDL Implementation
 
 This difference is also clear when implemented in VHDL.
 
-**Unsimplified Expression:** `A = K·D' + D·K·S·B'`
+**Unsimplified Expression:** $A = K·D' + D·K·S·B'$
 ```vhdl
 -- Unsimplified architecture
 architecture unsimplified of car_alarm is
@@ -1057,7 +1058,7 @@ begin
 end unsimplified;
 ```
 
-**Simplified Expression:** `A = K · (D' + S·B')`
+**Simplified Expression:** $A = K · (D' + S·B')$
 ```vhdl
 -- Simplified architecture
 architecture simplified of car_alarm is
@@ -1073,7 +1074,7 @@ layout: two-cols-header
 
 ## Design Example: Half-Adder
 
-**Problem:** Design a circuit that adds two single bits, `x` and `y`, and produces two outputs: a **sum** bit `s` and a **carry** bit `c`. This is a fundamental arithmetic circuit.
+**Problem:** Design a circuit that adds two single bits, $x$ and $y$, and produces two outputs: a **sum** bit $s$ and a **carry** bit $c$. This is a fundamental arithmetic circuit.
 
 ::left::
 
@@ -1090,13 +1091,13 @@ We can define the behavior for both outputs in a single truth table.
 
 ::right::
 
-**Sum bit `s`:**
-The sum is `1` only if the inputs are different. This is the **XOR** function.
-`s = x'y + xy' = x ⊕ y`
+**Sum bit $s$:**
+The sum is $1$ only if the inputs are different. This is the **XOR** function.
+$s = x'y + xy' = x ⊕ y$
 
-**Carry bit `c`:**
-The carry is `1` only if both inputs are `1`. This is the **AND** function.
-`c = xy`
+**Carry bit $c$:**
+The carry is $1$ only if both inputs are $1$. This is the **AND** function.
+$c = xy$
 
 ---
 layout: two-cols
