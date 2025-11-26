@@ -1,0 +1,54 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+
+\begin{document}
+\begin{circuitikz}
+
+    % --- Define Coordinates for Inputs ---
+    \coordinate (A) at (0, 3);
+    \coordinate (B) at (0, 1.5);
+    \coordinate (Cin) at (0, 0);
+
+    % --- Input Labels ---
+    \draw (A) node[anchor=east] {$A$};
+    \draw (B) node[anchor=east] {$B$};
+    \draw (Cin) node[anchor=east] {$C_{in}$};
+
+    % --- Level 1 Gates: XOR and AND for S and C_out ---
+
+    % 1. First XOR Gate (A XOR B)
+    \coordinate (X1_out) at (3, 2.25);
+    \draw (1, 3) node[xor port, anchor=in1](X1){};
+    \draw (A) -- (X1.in1);
+    \draw (B) -- (X1.in2);
+
+    % 2. First AND Gate (A AND B) for Carry Generator 1
+    \coordinate (A1_out) at (3, 0.75);
+    \draw (1, 0.75) node[and port, anchor=in1](A1){};
+    % Need to route A and B to A1
+    \draw (A) |- (A1.in1); 
+    \draw (B) -- (A1.in2);
+
+    % --- Level 2 Gates: Final S and C_out ---
+
+    % 3. Second XOR Gate ((A XOR B) XOR C_in) -> SUM (S)
+    \draw (X1.out) -- (4, 2.25) node[xor port, anchor=in1](X2){};
+    \draw (Cin) -- (4, 0) |- (X2.in2);
+    
+    % --- Output S ---
+    \draw (X2.out) -- (6, 1.5) node[anchor=west] {$S$};
+
+    % 4. Second AND Gate ((A XOR B) AND C_in) for Carry Generator 2
+    \draw (X1.out) -- (4, 3.75) |- (5, 3.75) node[and port, anchor=in1](A2){};
+    % Route Cin to A2
+    \draw (Cin) |- (A2.in2);
+    
+    % 5. Final OR Gate (A1 OR A2) -> CARRY OUT (C_out)
+    \draw (A1.out) -- (6.5, 0.75) node[or port, anchor=in1](O1){};
+    \draw (A2.out) |- (O1.in2);
+    
+    % --- Output C_out ---
+    \draw (O1.out) -- (8.5, 1.5) node[anchor=west] {$C_{out}$};
+
+\end{circuitikz}
+\end{document}

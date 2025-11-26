@@ -34,6 +34,7 @@ layout: two-cols
 
 :: right ::
 <img src="/BCD_adder.png" class="rounded-lg bg-white p-4 w-100 mx-auto" alt="Logic Circuit" />
+<p class="text-sm text-center">Figure 2-1. A BCD adder circuit consisting of adder blocks and logic gates.</p>
 
 
 ---
@@ -46,7 +47,7 @@ The theoretical foundation of all modern digital computing was laid by George Bo
 ### George Boole (1815-1864)
 
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/George_Boole_color.jpg" style="float: left; margin-right: 35px; width: 150px;" class="rounded-lg w-38 mt-2" alt="George Boole">
+<img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/George_Boole_color.jpg" style="float: left; margin-right: 35px; width: 150px;" class="rounded-lg mt-2 h-46" alt="George Boole">
 
 *   Developed **Boolean algebra** in the mid-1800s.
 *   His intent was not to build circuits, but to create an algebraic system to formalize human logic and thought.
@@ -716,18 +717,15 @@ layout: two-cols-header
 
 ## Design Example: Three-Way Light Control
 ::left::
-**Problem:** A room has three doors, each with a switch ($x_1$, $x_2$, $x_3$) to control a single light. The light should toggle its state whenever any switch is flipped. Assume the light is OFF when all switches are open (0).
+**Problem:** A room has three doors, each with a switch <br>($x_1$, $x_2$, $x_3$) to control a single light. The light should toggle its state whenever any switch is flipped. Assume the light is OFF when all switches are open (0).
 
 *   Light is ON if **one** switch is closed.
 *   Light is OFF if **two** switches are closed.
 *   Light is ON if **three** switches are closed.
 
 ::right::
-
-### Truth Table
-
-<div class="text-sm">
-
+**Truth Table:**
+<div class="text-xs">
 
 | $\bm{x_1}$ | $\bm{x_2}$ | $\bm{x_3}$ | $\bm{f}$ |
 |:-:|:-:|:-:|:-:|
@@ -1233,15 +1231,24 @@ The alarm `A` should sound (`A=1`) if the system is armed (`S=1`) **AND** either
 
 
 ---
-hide: true
+layout: two-cols-header 
 ---
 
-## Exercise 3: Product-of-Sums (POS) Design
+## Exercise 3: Line-Following Robot
 
-Consider the same 3-input majority function from Exercise 1.
 
-1.  **POS Expression:** From the truth table you created for the majority function, derive the canonical Product-of-Sums (POS) expression. (Hint: Focus on the rows where the output is `0`).
-2.  **Simplification:** Simplify the POS expression using Boolean algebra (e.g., using the distributive property or consensus theorem).
-3.  **Circuit Diagram:** Draw the logic circuit for the simplified POS expression. Your circuit should primarily use OR gates followed by an AND gate.
-4.  **Verification:** Explain how you would verify that your simplified POS circuit is equivalent to the simplified SOP circuit from Exercise 1. A truth table comparison or algebraic manipulation are valid methods.
+A robot uses three sensors (`L`, `C`, `R`) to follow a black line (`sensor=0`) on a white surface (`sensor=1`). It has two motors, `ML` (Left) and `MR` (Right).
 
+:: left ::
+
+*   **Go Forward (`ML=1, MR=1`):** When the robot is centered (`L=1, C=0, R=1`).
+*   **Turn Right (`ML=1, MR=0`):** When it drifts left (`L=1, C=1, R=0`).
+*   **Turn Left (`ML=0, MR=1`):** When it drifts right (`L=0, C=1, R=1`).
+*   **Stop (`ML=0, MR=0`):** For all other cases, including being completely off the line (`L=1, C=1, R=1`).
+
+:: right ::
+
+1.  **Truth Table:** Create a truth table with inputs `L`, `C`, `R` and outputs `ML` and `MR`.
+2.  **Boolean Expressions:** Write the Sum-of-Products (SOP) expressions for `ML` and `MR`.
+3.  **Circuit Diagram:** Draw the two logic circuits for the simplified `ML` and `MR` expressions.
+4.  **Simulation:** Use a simulator to build and test your circuit (Schematic or VHDL code). Provide a screenshot of your working simulation for the case where the robot is to go forward, turn right, turn left and stop.
