@@ -88,7 +88,7 @@ The light $L$ is ON ($1$) only if **both** switch $x1$ AND switch $x2$ are close
 $L(x1, x2) = x1 · x2$
 
 <img src="/AND.png" class="rounded-lg bg-white p-4 mt-4 w-90" alt="AND function with series switches">
-
+<p class="text-sm text-center">Figure 2-2. Switching circuit as AND function.</p>
 ::right::
 
 ### OR Function (Parallel)
@@ -96,7 +96,8 @@ The light $L$ is ON ($1$) if switch $x1$ OR switch $x2$ (or both) are closed ($1
 
 $L(x1, x2) = x1 + x2$
 
-<img src="/OR.png" class="rounded-lg bg-white p-4 mt-4 w-90" alt="OR function with parallel switches">
+<img src="/OR.png" class="rounded-lg bg-white p-1 mt-1 w-83" alt="OR function with parallel switches">
+<p class="text-sm text-center">Figure 2-3. Switching circuit as OR function.</p>
 
 ---
 layout: two-cols-header
@@ -117,6 +118,7 @@ What if we want an action to occur when a switch is *opened* instead of closed? 
 ::right::
 
 <img src="/NOT.png" class="rounded-lg bg-white p-4 w-90 mx-auto" alt="NOT function with a switch">
+<p class="text-sm text-center">Figure 2-4. Switching circuit as NOT function.</p>
 
 ---
 
@@ -274,11 +276,16 @@ Each basic logic operation (AND, OR, NOT) is implemented by a physical circuit e
 
 ::right::
 
-<img src="/logic_network.png" class="rounded-lg bg-white p-2" alt="Logic Network Diagram">
+<img src="/logic_network.png" class="rounded-lg bg-white" alt="Logic Network Diagram">
+<div class="text-sm text-center">
 
-<div class="p-2">
+Figure 2-5. A logic gate network of $f=(x_1+x_2) \cdot x_3$.
 
-```vhdl
+</div> 
+
+<div class="pl-2">
+
+```vhdl {4-12}{maxHeight:'190px',lines:true}
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
@@ -377,16 +384,11 @@ To form the dual of an expression:
 2.  Replace all **OR** operators ($+$) with **AND** operators ($·$).
 3.  Replace all **0s** with **1s**.
 4.  Replace all **1s** with **0s**.
-
 <br>
-
 **Example:**
-
-The expression: $x + 0 = x$
-
-Its dual is: $x · 1 = x$
-
-Notice how the theorems on the previous slides are often listed in dual pairs.
+* The expression: $x + 0 = x$
+* Its dual is: $x · 1 = x$
+* Notice how the theorems on the previous slides are often listed in dual pairs.
 
 ---
 layout: two-cols-header
@@ -1206,7 +1208,9 @@ This chapter covered the bridge from theory to practice in digital logic design.
 layout: default
 ---
 
-## Exercise 1: Majority Function
+## Exercises
+
+### Exercise 2-1: Majority Function
 
 A majority function is a Boolean function that is true when more than half of its inputs are true. Design a logic circuit for a 3-input majority function.
 
@@ -1218,7 +1222,7 @@ A majority function is a Boolean function that is true when more than half of it
 
 ---
 
-## Exercise 2: Simple Home Alarm System
+### Exercise 2-2: Simple Home Alarm System
 
 Design a simplified home alarm system with the following behavior:
 
@@ -1234,7 +1238,7 @@ The alarm `A` should sound (`A=1`) if the system is armed (`S=1`) **AND** either
 layout: two-cols-header 
 ---
 
-## Exercise 3: Line-Following Robot
+### Exercise 2-3: Line-Following Robot
 
 
 A robot uses three sensors (`L`, `C`, `R`) to follow a black line (`sensor=0`) on a white surface (`sensor=1`). It has two motors, `ML` (Left) and `MR` (Right).
