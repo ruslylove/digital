@@ -1,0 +1,38 @@
+digraph RoomLayout {
+    // General setup
+    graph [rankdir=TB, splines=line, nodesep=0.5, ranksep=0.7];
+    node [shape=box, style="rounded, filled", fillcolor=lightgray];
+
+    // --- Room Node (The main container) ---
+    Room [label="The Room", shape=record, style="rounded, filled, dashed", fillcolor=gray90, height=3, width=5];
+
+    // --- Switches/Inputs (x1, x2, x3) ---
+    node [shape=circle, fillcolor=greenyellow, width=0.6];
+    X1 [label="x1\n(Door 1)"];
+    X2 [label="x2\n(Door 2)"];
+    X3 [label="x3\n(Door 3)"];
+
+    // --- Output (Light L) ---
+    node [shape=star, fillcolor=yellow, width=0.8];
+    Light [label="Light\n(L)"];
+
+    // --- Placement and Structure (using hidden edges or subgraphs for positioning) ---
+    
+    // Position the switches roughly around the room
+    {rank=same; X1 -> Light [style=invis]; X3}
+    
+    // Define the logical XOR connection (Toggle Logic)
+    // The edges represent the control signal: L = x1 XOR x2 XOR x3
+    
+    // Define the relationship: All switches influence the Light
+    X1 -> Light [color=blue, label="Toggle Control", arrowhead=dot];
+    X2 -> Light [color=blue, label="Toggle Control", arrowhead=dot];
+    X3 -> Light [color=blue, label="Toggle Control", arrowhead=dot];
+    
+    // Optional: Show the Room contains the elements (using a subgraph won't work perfectly for this visual style)
+    // We just show the logical flow instead.
+
+    // A note about the logic
+    LogicNote [label="Logic: L = x1 \u2295 x2 \u2295 x3", shape=note, fillcolor=white];
+    {rank=sink; LogicNote}
+}
