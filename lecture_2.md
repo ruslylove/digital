@@ -217,7 +217,8 @@ th:last-child, td:last-child {
 
 De Morgan's law can be visualized using Venn diagrams. The shaded area represents the result of the expression.
 
-<img src="/venn.svg" class=""/>
+<img src="/venn.svg" class="mx-auto"/>
+<p class="text-sm text-center">Figure 2-2. De Morgan's law is proved by Venn diagrams.</p>
 
 The resulting area is identical, proving the equivalence.
 
@@ -238,7 +239,7 @@ The light $L$ is ON ($1$) only if **both** switch $x1$ AND switch $x2$ are close
 $L(x1, x2) = x1 · x2$
 
 <img src="/AND.png" class="rounded-lg bg-white p-4 mt-4 w-90 mx-auto" alt="AND function with series switches">
-<p class="text-sm text-center">Figure 2-2. Switching circuit as AND function.</p>
+<p class="text-sm text-center">Figure 2-3. Switching circuit as AND function.</p>
 ::right::
 
 ### OR Function (Parallel)
@@ -247,7 +248,7 @@ The light $L$ is ON ($1$) if switch $x1$ OR switch $x2$ (or both) are closed ($1
 $L(x1, x2) = x1 + x2$
 
 <img src="/OR.png" class="rounded-lg bg-white p-1 mt-1 w-83 mx-auto" alt="OR function with parallel switches">
-<p class="text-sm text-center">Figure 2-3. Switching circuit as OR function.</p>
+<p class="text-sm text-center">Figure 2-4. Switching circuit as OR function.</p>
 
 ---
 layout: two-cols-header
@@ -268,7 +269,7 @@ What if we want an action to occur when a switch is *opened* instead of closed? 
 ::right::
 
 <img src="/NOT.png" class="rounded-lg bg-white p-4 w-90 mx-auto" alt="NOT function with a switch">
-<p class="text-sm text-center">Figure 2-4. Switching circuit as NOT function.</p>
+<p class="text-sm text-center">Figure 2-5. Switching circuit as NOT function.</p>
 
 ---
 
@@ -429,7 +430,7 @@ Each basic logic operation (AND, OR, NOT) is implemented by a physical circuit e
 <img src="/logic_network.png" class="rounded-lg bg-white mx-auto" alt="Logic Network Diagram">
 <div class="text-sm text-center">
 
-Figure 2-5. A logic gate network of $f=(x_1+x_2) \cdot x_3$.
+Figure 2-6. A logic gate network of $f=(x_1+x_2) \cdot x_3$.
 
 </div> 
 
@@ -674,12 +675,12 @@ The simplified form $x1' + x2$ requires far fewer gates.
 <img src="/sop.png" class="rounded-lg bg-white p-2 w-80" alt="Complex circuit for unsimplified function">
 <p class="text-sm text-center">
 
-Figure 2-6. Original circuit. 
+Figure 2-7. Original circuit. 
 </p>
 
 **Simplified Circuit for $x1' + x2$**
 <img src="/simplified.png" class="rounded-lg bg-white p-2 mt-4 w-70" alt="Simple circuit for simplified function">
-<p class="text-sm text-center">Figure 2-7. Simplified circuit.</p>
+<p class="text-sm text-center">Figure 2-8. Simplified circuit.</p>
 
 :: right ::
 ### VHDL Implementation
@@ -737,7 +738,7 @@ UUT : ENTITY work.Logic_Function(RTL_Simplified)
 ### Logisim Simulation
 
 <img src="/logisim_result.png" class="w-170 mx-auto pt-4"/>
-<p class="text-sm text-center">Figure 2-8. Timing Simulation result in Logisim Evolution.</p>
+<p class="text-sm text-center">Figure 2-9. Timing Simulation result in Logisim Evolution.</p>
 
 
 
@@ -804,7 +805,7 @@ This is the simplest SOP form for this function (also known as the XOR function)
 ### Circuit Implementation
 
 <img src="/three_way_light.png" class="mt-4 w-90"/>
-<p class="text-sm text-center">Figure 2-9. Three-way light control logic circuit.</p>
+<p class="text-sm text-center">Figure 2-10. Three-way light control logic circuit.</p>
 
 :: right ::
 **CircuitVerse Simulation**
@@ -935,7 +936,7 @@ end behavior;
 ### Questa Simulation Result
 
 <img src="/three_way_light_sim.png" class="w-180 pt-4 mx-auto" />
-<p class="text-sm text-center">Figure 2-10. Timing Simulation result in Intel (Altera) Questa.</p>
+<p class="text-sm text-center">Figure 2-11. Timing Simulation result in Intel (Altera) Questa.</p>
 
 
 ---
@@ -1017,11 +1018,11 @@ layout: two-cols
 
 **Circuit for $f = s'x_1 + sx_2$**
 <img src="/mux_circuit.png" class="rounded-lg bg-white w-70 mx-auto" alt="Circuit for 2-to-1 Multiplexer">
-<p class="text-sm text-center">Figure 2-11. Multiplexter 2-to-1 circuit.</p>
+<p class="text-sm text-center">Figure 2-12. Multiplexter 2-to-1 circuit.</p>
 
 **Graphical Symbol**
 <img src="/mux_symbol.png" class="rounded-lg bg-white w-35 mx-auto" alt="Symbol for 2-to-1 Multiplexer">
-<p class="text-sm text-center">Figure 2-12. Multiplexer 2-to-1 symbol.</p>
+<p class="text-sm text-center">Figure 2-13. Multiplexer 2-to-1 symbol.</p>
 
 :: right ::
 **CircuitVerse Simulation**
@@ -1080,7 +1081,7 @@ layout: two-cols
 The circuit is built from the simplified expression $A = K · (D' + S·B')$, which is much simpler than a circuit for the original expression.
 
 <img src="/car_alarm.svg" class="rounded-lg bg-white p-2" alt="Circuit for Car Safety Alarm">
-<p class="text-sm text-center">Figure 2-13. Circuit for Car Safety Alarm.</p>
+<p class="text-sm text-center">Figure 2-14. Circuit for Car Safety Alarm.</p>
 
 :: right ::
 
@@ -1179,11 +1180,11 @@ The circuit combines an XOR gate for the sum and an AND gate for the carry.
 
 **Circuit Implementation**
 <img src="/half_adder.svg" class="rounded-lg bg-white w-70 mx-auto mt-2" alt="Circuit for a Half-Adder">
-<p class="text-sm text-center">Figure 2-14. Circuit for a Half-Adder.</p>
+<p class="text-sm text-center">Figure 2-15. Circuit for a Half-Adder.</p>
 
 **Block Diagram**
 <img src="/half_adder_block.svg" class="rounded-lg bg-white w-60 mx-auto mt-2" alt="Block Diagram for a Half-Adder">
-<p class="text-sm text-center">Figure 2-15. Block Diagram for a Half-Adder.</p>
+<p class="text-sm text-center">Figure 2-16. Block Diagram for a Half-Adder.</p>
 
 :: right ::
 
