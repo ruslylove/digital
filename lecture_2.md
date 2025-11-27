@@ -706,11 +706,12 @@ UUT : ENTITY work.Logic_Function(RTL_Simplified)
 ```
 
 ---
-layout: iframe
-url: https://circuitverse.org/simulator/embed/minimal?theme=&display_title=false&clock_time=false&fullscreen=true&zoom_in_out=true
----
 
-<iframe src="https://circuitverse.org/simulator/embed/minimal?theme=&display_title=false&clock_time=false&fullscreen=true&zoom_in_out=true" style="border-width:; border-style: solid; border-color:;" name="myiframe" id="projectPreview" scrolling="no" frameborder="1" marginheight="0px" marginwidth="0px" height="400" width="500" allowFullScreen></iframe>
+### Logisim Simulation
+
+<img src="/logisim_result.png" class="w-180"/>
+
+
 
 
 ---
@@ -777,7 +778,11 @@ This is the simplest SOP form for this function (also known as the XOR function)
 <img src="/three_way_light.png" class="mt-4 w-100"/>
 
 :: right ::
-<<iframe src="https://circuitverse.org/simulator/embed/three-way-light-control?theme=default&display_title=false&clock_time=false&fullscreen=true&zoom_in_out=true" style="border-width:; border-style: hidden; border-color:;" name="myiframe" id="projectPreview" scrolling="no" frameborder="1" marginheight="0px" marginwidth="0px" height="400" width="500" allowFullScreen></iframe>
+**CircuitVerse Simulation**
+<a href="https://circuitverse.org/simulator/embed/three-way-light-control?theme=&display_title=false&clock_time=true&fullscreen=true&zoom_in_out=true" target="_blank" style="border-width:; border-style: ; border-color:;" name="myiframe" id="projectPreview" scrolling="no" frameborder="1" marginheight="0px" marginwidth="0px" height="450" width="400" allowFullScreen>
+  <img src="/Main.png" alt="Click to view full image" style="width: 400px; cursor: pointer;">
+</a>
+
 
 ---
 
@@ -986,8 +991,10 @@ layout: two-cols
 <img src="/mux_symbol.png" class="rounded-lg bg-white p-4 w-48 mt-4" alt="Symbol for 2-to-1 Multiplexer">
 
 :: right ::
-
-<iframe src="https://circuitverse.org/simulator/embed/mux_2_to_1?theme=&display_title=false&clock_time=false&fullscreen=true&zoom_in_out=false" style="border-width:; border-style: ; border-color:;" name="myiframe" id="projectPreview" scrolling="no" frameborder="1" marginheight="0px" marginwidth="0px" height="450" width="400" allowFullScreen></iframe>
+**CircuitVerse Simulation**
+<a href="https://circuitverse.org/simulator/embed/mux_2_to_1?theme=&display_title=false&clock_time=false&fullscreen=true&zoom_in_out=false" target="_blank" style="border-width:; border-style: ; border-color:;" name="myiframe" id="projectPreview" scrolling="no" frameborder="1" marginheight="0px" marginwidth="0px" height="450" width="400" allowFullScreen>
+  <img src="/mux_2_to_1_cv.png" alt="Click to view full image" style="width: 400px; cursor: pointer;">
+</a>
 
 ---
 
