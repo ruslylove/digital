@@ -62,6 +62,12 @@ The theoretical foundation of all modern digital computing was laid by George Bo
 *   He demonstrated that an "on" switch could be treated as $1$ (true) and an "off" switch as $0$ (false).
 *   This insight proved that **we can build digital circuits by doing math**.
 
+<style>
+.two-cols-header {
+  column-gap: 50px; /* Adjust the gap size as needed */
+}
+</style>
+
 ---
 
 ## Boolean Algebra
@@ -453,6 +459,12 @@ end Behavioral;
 
 </div>
 
+<style>
+.two-cols-header {
+  column-gap: 40px; /* Adjust the gap size as needed */
+}
+</style>
+
 ---
 
 ## Logic Synthesis
@@ -534,6 +546,7 @@ th, td {
 th:last-child, td:last-child {
   border-right: none;
 }
+
 </style>
 
 ---
@@ -749,7 +762,7 @@ layout: two-cols-header
 
 ## Design Example: Three-Way Light Control
 ::left::
-**Problem:** A room has three doors, each with a switch <br>($x_1$, $x_2$, $x_3$) to control a single light. The light should toggle its state whenever any switch is flipped. Assume the light is OFF when all switches are open (0).
+**Problem:** A room has three doors, each with a switch ($x_1$, $x_2$, $x_3$) to control a single light. The light should toggle its state whenever any switch is flipped. Assume the light is OFF when all switches are open (0).
 
 *   Light is ON if **one** switch is closed.
 *   Light is OFF if **two** switches are closed.
@@ -790,6 +803,12 @@ th:last-child, td:last-child {
 }
 </style>
 
+<style>
+.two-cols-header {
+  column-gap: 50px; /* Adjust the gap size as needed */
+}
+</style>
+
 ---
 layout: two-cols
 ---
@@ -817,7 +836,7 @@ This is the simplest SOP form for this function (also known as the XOR function)
 ---
 
 ### VHDL implementation
-<div class="grid grid-cols-2 gap-2" >
+<div class="grid grid-cols-2 gap-8" >
 <div>
 
 **three_way_light.vhd**
@@ -1034,7 +1053,7 @@ layout: two-cols
 
 ## Design Example: Car Safety Alarm
 
-<div class="grid grid-cols-2 gap-4">
+<div class="grid grid-cols-2 gap-5">
 
 <div>
 
@@ -1248,6 +1267,12 @@ This chapter covered the bridge from theory to practice in digital logic design.
 *   **Canonical Forms:** We can represent any function as a Sum-of-Products (from minterms) or a Product-of-Sums (from maxterms).
 *   **Simplification:** Reducing complex expressions leads to simpler, faster, and more efficient circuits.
 *   **Design Process:** We can systematically move from a problem statement to a truth table, to a Boolean expression, and finally to a logic circuit.
+
+<style>
+.two-cols-header {
+  column-gap: 50px; /* Adjust the gap size as needed */
+}
+</style>
 ---
 layout: section
 ---
@@ -1302,3 +1327,9 @@ A robot uses three sensors (`L`, `C`, `R`) to follow a black line (`sensor=0`) o
 2.  **Boolean Expressions:** Write the Sum-of-Products (SOP) expressions for `ML` and `MR`.
 3.  **Circuit Diagram:** Draw the two logic circuits for the simplified `ML` and `MR` expressions.
 4.  **Simulation:** Use a simulator to build and test your circuit (Schematic or VHDL code). Provide a screenshot of your working simulation for the case where the robot is to go forward, turn right, turn left and stop.
+
+<style>
+.two-cols-header {
+  column-gap: 30px; /* Adjust the gap size as needed */
+}
+</style>
