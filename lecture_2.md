@@ -34,7 +34,7 @@ layout: two-cols
 
 :: right ::
 <img src="/BCD_adder.png" class="rounded-lg bg-white p-4 w-100 mx-auto" alt="Logic Circuit" />
-<p class="text-sm text-center">Figure 2-1. A BCD adder circuit consisting of adder blocks and logic gates.</p>
+<p class="text-sm text-center">Figure 2-1. A BCD adder circuit consisting of adders and logic gates.</p>
 
 
 ---
@@ -66,251 +66,21 @@ The theoretical foundation of all modern digital computing was laid by George Bo
 
 ## Boolean Algebra
 
-*   Provides the mathematical foundation for designing and analyzing digital logic circuits.
-*   It's a 2-valued algebra that works with devices that have two states (e.g., on/off, high/low).
-*   We use **Boolean variables** (like $A$, $B$, $x$, $y$) to represent the inputs and outputs of a circuit.
-*   A variable can only take one of two values: $\bm{0}$ or $\bm{1}$.
-*   These symbols represent the two possible states of the variable, not numerical values. They commonly refer to low or high voltage levels in a circuit.
+<div class="grid grid-cols-8 gap-6">
 
----
-layout: two-cols-header
----
+<div class="col-span-4">
 
-## Switches to Logic Functions
+* Provides the mathematical foundation for designing and analyzing digital logic circuits.
+* It's a 2-valued algebra that works with devices that have two states (e.g., on/off, high/low).
+* We use **Boolean variables** (like $A$, $B$, $x$, $y$) to represent the inputs and outputs of a circuit.
+* A variable can only take one of two values: $\bm{0}$ or $\bm{1}$.
+* These symbols represent the two possible states of the variable, not numerical values. They commonly refer to low or high voltage levels in a circuit.
+* Boolean algebra is based on a set of axioms (basic assumptions) from which we can derive many useful theorems.
 
-The simplest binary element is a switch. We can combine switches to create basic logic functions.
-
-::left::
-
-### AND Function (Series)
-The light $L$ is ON ($1$) only if **both** switch $x1$ AND switch $x2$ are closed ($1$).
-
-$L(x1, x2) = x1 · x2$
-
-<img src="/AND.png" class="rounded-lg bg-white p-4 mt-4 w-90" alt="AND function with series switches">
-<p class="text-sm text-center">Figure 2-2. Switching circuit as AND function.</p>
-::right::
-
-### OR Function (Parallel)
-The light $L$ is ON ($1$) if switch $x1$ OR switch $x2$ (or both) are closed ($1$).
-
-$L(x1, x2) = x1 + x2$
-
-<img src="/OR.png" class="rounded-lg bg-white p-1 mt-1 w-83" alt="OR function with parallel switches">
-<p class="text-sm text-center">Figure 2-3. Switching circuit as OR function.</p>
-
----
-layout: two-cols-header
----
-
-## The NOT Function (Inversion)
-
-What if we want an action to occur when a switch is *opened* instead of closed? This is called inversion or the NOT function.
-
-::left::
-
-*   The output $L$ is the **inverse** (or complement) of the input $x$.
-*   If $x = 0$ (open), then $L = 1$ (on).
-*   If $x = 1$ (closed), then $L = 0$ (off).
-*   This is written as $L(x) = x'$ or $L(x) = \bar{x}$.
-*   The circuit on the right implements a logical NOT function. When the switch $S$ is open ($x=0$), current flows through the resistor $R$ to the light $L$. When $S$ is closed ($x=1$), it creates a short circuit to ground, diverting current away from $L$.
-
-::right::
-
-<img src="/NOT.png" class="rounded-lg bg-white p-4 w-90 mx-auto" alt="NOT function with a switch">
-<p class="text-sm text-center">Figure 2-4. Switching circuit as NOT function.</p>
-
----
-
-## Truth Tables
-
-A **truth table** is a tabular listing that fully describes a logic function by showing the output value for all possible input combinations.
-
-<div class="grid grid-cols-3 gap-8 text-center">
-<div>
-
-### AND
-
-
-| $x1$ | $x2$ | $x1·x2$ |
-|:--:|:--:|:-----:|
-| 0  | 0  |   0   |
-| 0  | 1  |   0   |
-| 1  | 0  |   0   |
-| 1  | 1  |   1   |
-
-</div>
-<div>
-
-### OR
-
-| $x1$ | $x2$ | $x1+x2$ |
-|:--:|:--:|:-----:|
-| 0  | 0  |   0   |
-| 0  | 1  |   1   |
-| 1  | 0  |   1   |
-| 1  | 1  |   1   |
-
-</div>
-<div>
-
-### NOT
-
-| $x1$ | $x1'$ |
-|:--:|:---:|
-| 0  |  1  |
-| 1  |  0  |
-
-</div>
-</div>
-
-<style>
-/* Target the table on this specific slide */
-table {
-  border-collapse: collapse; /* Merges adjacent borders */
-}
-
-/* Add a right border to all table headers and data cells */
-/* The value '1px solid #AAA' uses your KMUTNB red color */
-th, td {
-  border-right: 1px solid #AAA; 
-}
-
-/* Optional: Remove the border from the very last column */
-th:last-child, td:last-child {
-  border-right: none;
-}
-
-</style>
----
-
-## Basic Logic Gates
-
-These are the standard symbols for the fundamental logic gates.
-
-<div class="grid grid-cols-3 gap-8">
-
-<div>
-
-### AND Gate
-
-<img src="/and_symbol.svg" class="rounded-lg bg-white p-4 w-100" alt="AND Gate Symbol"/>
-
-```vhdl
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-
-entity and_gate is
-    Port ( x1, x2 : in  STD_LOGIC;
-           Y    : out STD_LOGIC);
-end and_gate;
-
-architecture Behavioral of and_gate is
-begin
-    Y <= x1 AND x2;
-end Behavioral;
-```
-</div>
-
-<div>
-
-### OR Gate
-
-<img src="/or_symbol.svg" class="rounded-lg bg-white p-4 w-100" alt="OR Gate Symbol"/>
-
-```vhdl
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-
-entity or_gate is
-    Port ( x1, x2 : in  STD_LOGIC;
-           Y    : out STD_LOGIC);
-end or_gate;
-
-architecture Behavioral of or_gate is
-begin
-    Y <= x1 OR x2;
-end Behavioral;
-```
 
 </div>
 
-<div>
-
-### NOT Gate (Inverter)
-
-<img src="/not_symbol.svg" class="rounded-lg bg-white p-3 w-100 mx-auto" alt="NOT Gate Symbol"/>
-
-```vhdl
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-
-entity not_gate is
-    Port ( x : in  STD_LOGIC;
-           Y : out STD_LOGIC);
-end not_gate;
-
-architecture Behavioral of not_gate is
-begin
-    Y <= NOT x;
-end Behavioral;
-```
-
-</div>
-
-</div>
-
----
-layout: two-cols-header
----
-
-## Logic Gates and Networks
-
-Each basic logic operation (AND, OR, NOT) is implemented by a physical circuit element called a **logic gate**.
-
-::left::
-
-*   A logic gate has one or more inputs and a single output.
-*   Larger, more complex circuits are built by connecting multiple gates together into a **logic network**.
-*   The diagram shows how the Boolean expression $f = (x1 + x2) · x3$ is implemented as a network of an OR gate and an AND gate.
-
-::right::
-
-<img src="/logic_network.png" class="rounded-lg bg-white" alt="Logic Network Diagram">
-<div class="text-sm text-center">
-
-Figure 2-5. A logic gate network of $f=(x_1+x_2) \cdot x_3$.
-
-</div> 
-
-<div class="pl-2">
-
-```vhdl {4-12}{maxHeight:'190px',lines:true}
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-
-entity logic_function is
-    Port ( x1,x2,x3 : in  STD_LOGIC;
-           f        : out STD_LOGIC);
-end logic_function;
-
-architecture Behavioral of logic_function is
-begin
-    f <= (x1 OR x2) AND x3;
-end Behavioral;
-```
-
-</div>
-
----
-layout: two-cols-header
----
-
-## Boolean Algebra: Axioms & Theorems
-
-Boolean algebra is based on a set of axioms (basic assumptions) from which we can derive many useful theorems.
-
-::left::
+<div class="col-span-2">
 
 ### Axioms
 
@@ -322,8 +92,8 @@ Boolean algebra is based on a set of axioms (basic assumptions) from which we ca
 *   $1 + 0 = 0 + 1 = 1$
 *   If $x = 0$, then $x' = 1$
 *   If $x = 1$, then $x' = 0$
-
-::right::
+</div>
+<div class="col-span-2">
 
 ### Single-Variable Theorems
 
@@ -336,6 +106,9 @@ Boolean algebra is based on a set of axioms (basic assumptions) from which we ca
 *   $x · x' = 0$
 *   $x + x' = 1$
 *   $(x')' = x$
+
+</div>
+</div>
 
 ---
 layout: two-cols-header
@@ -447,6 +220,237 @@ De Morgan's law can be visualized using Venn diagrams. The shaded area represent
 <img src="/venn.svg" class=""/>
 
 The resulting area is identical, proving the equivalence.
+
+
+---
+layout: two-cols-header
+---
+
+## Switches to Logic Functions
+
+The simplest binary element is a switch. We can combine switches to create basic logic functions.
+
+::left::
+
+### AND Function (Series)
+The light $L$ is ON ($1$) only if **both** switch $x1$ AND switch $x2$ are closed ($1$).
+
+$L(x1, x2) = x1 · x2$
+
+<img src="/AND.png" class="rounded-lg bg-white p-4 mt-4 w-90 mx-auto" alt="AND function with series switches">
+<p class="text-sm text-center">Figure 2-2. Switching circuit as AND function.</p>
+::right::
+
+### OR Function (Parallel)
+The light $L$ is ON ($1$) if switch $x1$ OR switch $x2$ (or both) are closed ($1$).
+
+$L(x1, x2) = x1 + x2$
+
+<img src="/OR.png" class="rounded-lg bg-white p-1 mt-1 w-83 mx-auto" alt="OR function with parallel switches">
+<p class="text-sm text-center">Figure 2-3. Switching circuit as OR function.</p>
+
+---
+layout: two-cols-header
+---
+
+## The NOT Function (Inversion)
+
+What if we want an action to occur when a switch is *opened* instead of closed? This is called inversion or the NOT function.
+
+::left::
+
+*   The output $L$ is the **inverse** (or complement) of the input $x$.
+*   If $x = 0$ (open), then $L = 1$ (on).
+*   If $x = 1$ (closed), then $L = 0$ (off).
+*   This is written as $L(x) = x'$ or $L(x) = \bar{x}$.
+*   The circuit on the right implements a logical NOT function. When the switch $S$ is open ($x=0$), current flows through the resistor $R$ to the light $L$. When $S$ is closed ($x=1$), it creates a short circuit to ground, diverting current away from $L$.
+
+::right::
+
+<img src="/NOT.png" class="rounded-lg bg-white p-4 w-90 mx-auto" alt="NOT function with a switch">
+<p class="text-sm text-center">Figure 2-4. Switching circuit as NOT function.</p>
+
+---
+
+## Truth Tables
+
+A **truth table** is a tabular listing that fully describes a logic function by showing the output value for all possible input combinations.
+
+<div class="grid grid-cols-3 gap-8 text-center">
+<div>
+
+### AND
+
+
+| $x1$ | $x2$ | $x1·x2$ |
+|:--:|:--:|:-----:|
+| 0  | 0  |   0   |
+| 0  | 1  |   0   |
+| 1  | 0  |   0   |
+| 1  | 1  |   1   |
+
+</div>
+<div>
+
+### OR
+
+| $x1$ | $x2$ | $x1+x2$ |
+|:--:|:--:|:-----:|
+| 0  | 0  |   0   |
+| 0  | 1  |   1   |
+| 1  | 0  |   1   |
+| 1  | 1  |   1   |
+
+</div>
+<div>
+
+### NOT
+
+| $x1$ | $x1'$ |
+|:--:|:---:|
+| 0  |  1  |
+| 1  |  0  |
+
+</div>
+</div>
+
+<style>
+/* Target the table on this specific slide */
+table {
+  border-collapse: collapse; /* Merges adjacent borders */
+}
+
+/* Add a right border to all table headers and data cells */
+/* The value '1px solid #AAA' uses your KMUTNB red color */
+th, td {
+  border-right: 1px solid #AAA; 
+}
+
+/* Optional: Remove the border from the very last column */
+th:last-child, td:last-child {
+  border-right: none;
+}
+
+</style>
+---
+
+## Basic Logic Gates
+
+These are the standard symbols for the fundamental logic gates.
+
+<div class="grid grid-cols-3 gap-8">
+
+<div>
+
+### AND Gate
+
+<img src="/and_symbol.svg" class="rounded-lg bg-white p-4 w-80" alt="AND Gate Symbol"/>
+
+```vhdl
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity and_gate is
+    Port ( x1, x2 : in  STD_LOGIC;
+           Y    : out STD_LOGIC);
+end and_gate;
+
+architecture Behavioral of and_gate is
+begin
+    Y <= x1 AND x2;
+end Behavioral;
+```
+</div>
+
+<div>
+
+### OR Gate
+
+<img src="/or_symbol.svg" class="rounded-lg bg-white p-4 w-100" alt="OR Gate Symbol"/>
+
+```vhdl
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity or_gate is
+    Port ( x1, x2 : in  STD_LOGIC;
+           Y    : out STD_LOGIC);
+end or_gate;
+
+architecture Behavioral of or_gate is
+begin
+    Y <= x1 OR x2;
+end Behavioral;
+```
+
+</div>
+
+<div>
+
+### NOT Gate (Inverter)
+
+<img src="/not_symbol.svg" class="rounded-lg bg-white p-3 w-100 mx-auto" alt="NOT Gate Symbol"/>
+
+```vhdl
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity not_gate is
+    Port ( x : in  STD_LOGIC;
+           Y : out STD_LOGIC);
+end not_gate;
+
+architecture Behavioral of not_gate is
+begin
+    Y <= NOT x;
+end Behavioral;
+```
+
+</div>
+
+</div>
+
+---
+layout: two-cols-header
+---
+
+## Logic Gates and Networks
+
+Each basic logic operation (AND, OR, NOT) is implemented by a physical circuit element called a **logic gate**.
+
+::left::
+
+*   A logic gate has one or more inputs and a single output.
+*   Larger, more complex circuits are built by connecting multiple gates together into a **logic network**.
+*   The diagram shows how the Boolean expression $f = (x1 + x2) · x3$ is implemented as a network of an OR gate and an AND gate.
+
+::right::
+
+<img src="/logic_network.png" class="rounded-lg bg-white mx-auto" alt="Logic Network Diagram">
+<div class="text-sm text-center">
+
+Figure 2-5. A logic gate network of $f=(x_1+x_2) \cdot x_3$.
+
+</div> 
+
+<div class="pl-2">
+
+```vhdl {4-12}{maxHeight:'190px',lines:true}
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity logic_function is
+    Port ( x1,x2,x3 : in  STD_LOGIC;
+           f        : out STD_LOGIC);
+end logic_function;
+
+architecture Behavioral of logic_function is
+begin
+    f <= (x1 OR x2) AND x3;
+end Behavioral;
+```
+
+</div>
 
 ---
 
@@ -642,6 +646,24 @@ $f(x1,x2) = x1'x2' + x1'x2 + x1x2$
 </div>
 </div>
 
+<style>
+/* Target the table on this specific slide */
+table {
+  border-collapse: collapse; /* Merges adjacent borders */
+}
+
+/* Add a right border to all table headers and data cells */
+/* The value '1px solid #AC3520' uses your KMUTNB red color */
+th, td {
+  border-right: 1px solid #AAA; 
+}
+
+/* Optional: Remove the border from the very last column */
+th:last-child, td:last-child {
+  border-right: none;
+}
+</style>
+
 ---
 layout: two-cols
 ---
@@ -650,9 +672,14 @@ The simplified form $x1' + x2$ requires far fewer gates.
 
 **Original Circuit for $x1'x2' + x1'x2 + x1x2$**
 <img src="/sop.png" class="rounded-lg bg-white p-2 w-80" alt="Complex circuit for unsimplified function">
+<p class="text-sm text-center">
+
+Figure 2-6. Original circuit. 
+</p>
 
 **Simplified Circuit for $x1' + x2$**
 <img src="/simplified.png" class="rounded-lg bg-white p-2 mt-4 w-70" alt="Simple circuit for simplified function">
+<p class="text-sm text-center">Figure 2-7. Simplified circuit.</p>
 
 :: right ::
 ### VHDL Implementation
@@ -709,7 +736,8 @@ UUT : ENTITY work.Logic_Function(RTL_Simplified)
 
 ### Logisim Simulation
 
-<img src="/logisim_result.png" class="w-180"/>
+<img src="/logisim_result.png" class="w-170 mx-auto pt-4"/>
+<p class="text-sm text-center">Figure 2-8. Timing Simulation result in Logisim Evolution.</p>
 
 
 
@@ -775,7 +803,8 @@ This is the simplest SOP form for this function (also known as the XOR function)
 
 ### Circuit Implementation
 
-<img src="/three_way_light.png" class="mt-4 w-100"/>
+<img src="/three_way_light.png" class="mt-4 w-90"/>
+<p class="text-sm text-center">Figure 2-9. Three-way light control logic circuit.</p>
 
 :: right ::
 **CircuitVerse Simulation**
@@ -905,7 +934,9 @@ end behavior;
 
 ### Questa Simulation Result
 
-<img src="/three_way_light_sim.png" class="w-200 pt-4" />
+<img src="/three_way_light_sim.png" class="w-180 pt-4 mx-auto" />
+<p class="text-sm text-center">Figure 2-10. Timing Simulation result in Intel (Altera) Questa.</p>
+
 
 ---
 layout: two-cols-header
@@ -985,10 +1016,12 @@ layout: two-cols
 ### Circuit and Symbol
 
 **Circuit for $f = s'x_1 + sx_2$**
-<img src="/mux_circuit.png" class="rounded-lg bg-white p-4 w-80" alt="Circuit for 2-to-1 Multiplexer">
+<img src="/mux_circuit.png" class="rounded-lg bg-white w-70 mx-auto" alt="Circuit for 2-to-1 Multiplexer">
+<p class="text-sm text-center">Figure 2-11. Multiplexter 2-to-1 circuit.</p>
 
 **Graphical Symbol**
-<img src="/mux_symbol.png" class="rounded-lg bg-white p-4 w-48 mt-4" alt="Symbol for 2-to-1 Multiplexer">
+<img src="/mux_symbol.png" class="rounded-lg bg-white w-35 mx-auto" alt="Symbol for 2-to-1 Multiplexer">
+<p class="text-sm text-center">Figure 2-12. Multiplexer 2-to-1 symbol.</p>
 
 :: right ::
 **CircuitVerse Simulation**
@@ -1047,6 +1080,7 @@ layout: two-cols
 The circuit is built from the simplified expression $A = K · (D' + S·B')$, which is much simpler than a circuit for the original expression.
 
 <img src="/car_alarm.svg" class="rounded-lg bg-white p-2" alt="Circuit for Car Safety Alarm">
+<p class="text-sm text-center">Figure 2-13. Circuit for Car Safety Alarm.</p>
 
 :: right ::
 
@@ -1144,10 +1178,12 @@ layout: two-cols
 The circuit combines an XOR gate for the sum and an AND gate for the carry.
 
 **Circuit Implementation**
-<img src="/half_adder.svg" class="rounded-lg bg-white p-4 w-80" alt="Circuit for a Half-Adder">
+<img src="/half_adder.svg" class="rounded-lg bg-white w-70 mx-auto mt-2" alt="Circuit for a Half-Adder">
+<p class="text-sm text-center">Figure 2-14. Circuit for a Half-Adder.</p>
 
 **Block Diagram**
-<img src="/half_adder_block.svg" class="rounded-lg bg-white p-4 w-70 mt-4" alt="Block Diagram for a Half-Adder">
+<img src="/half_adder_block.svg" class="rounded-lg bg-white w-60 mx-auto mt-2" alt="Block Diagram for a Half-Adder">
+<p class="text-sm text-center">Figure 2-15. Block Diagram for a Half-Adder.</p>
 
 :: right ::
 
@@ -1212,10 +1248,12 @@ This chapter covered the bridge from theory to practice in digital logic design.
 *   **Simplification:** Reducing complex expressions leads to simpler, faster, and more efficient circuits.
 *   **Design Process:** We can systematically move from a problem statement to a truth table, to a Boolean expression, and finally to a logic circuit.
 ---
-layout: default
+layout: section
 ---
 
-## Exercises
+## Lecture 2 Exercises
+
+---
 
 ### Exercise 2-1: Majority Function
 
