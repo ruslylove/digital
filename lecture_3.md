@@ -144,7 +144,7 @@ Each group corresponds to one product term in the simplified expression.
 layout: two-cols-header
 ---
 
-## Example 1: `F(x,y,z) = Σ(2,3,4,5)`
+## Example 1: $F(x,y,z) = Σ(2,3,4,5)$
 
 Let's simplify the function `F(x,y,z) = x'yz' + x'yz + xy'z' + xy'z`.
 
@@ -168,7 +168,7 @@ This is the XOR function, `x ⊕ y`.
 layout: two-cols-header
 ---
 
-## Example 2: `F(x,y,z) = Σm(3,4,6,7)`
+## Example 2: $F(x,y,z) = Σm(3,4,6,7)$
 
 Let's simplify this function.
 
@@ -222,7 +222,7 @@ A group of four adjacent `1s` eliminates **two** variables.
 layout: two-cols-header
 ---
 
-## Example 4: `F(x,y,z) = Σm(0,2,4,5,6)`
+## Example 4: $F(x,y,z) = Σm(0,2,4,5,6)$
 
 This example shows how groups can overlap.
 
@@ -760,10 +760,15 @@ This chapter introduced powerful graphical and procedural methods for logic opti
 
 </div>
 ---
-layout: default
+layout: section
 ---
 
-## Exercise 1: 3-Variable Function Simplification (SOP)
+## Lecture 3 Exercises
+
+
+---
+
+### Exercise 3-1: 3-Variable Function Simplification (SOP)
 
 Simplify the following Boolean function using a 3-variable Karnaugh Map.
 
@@ -776,7 +781,7 @@ $F(A,B,C) = \Sigma m(0,2,3,4,6)$
 
 ---
 
-## Exercise 2: 4-Variable Function with Don't Cares (SOP)
+### Exercise 3-2: 4-Variable Function with Don't Cares (SOP)
 
 Simplify the following Boolean function using a 4-variable Karnaugh Map, taking advantage of don't-care conditions.
 
@@ -789,7 +794,7 @@ $d(w,x,y,z) = \Sigma d(5,13)$
 
 ---
 
-## Exercise 3: 3-Variable Function Simplification (POS)
+### Exercise 3-3: 3-Variable Function Simplification (POS)
 
 Simplify the following Boolean function using a 3-variable Karnaugh Map to obtain a minimal **Product-of-Sums (POS)** expression.
 
