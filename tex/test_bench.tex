@@ -1,12 +1,10 @@
-\documentclass{article}
+\documentclass[tikz,border=5pt]{standalone}
 \usepackage{amsmath, amssymb}
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, positioning}
 
 \begin{document}
 
-\begin{figure}[h!]
-    \centering
     \begin{tikzpicture}[
         TB/.style={rectangle, draw=black, fill=yellow!30, minimum width=6cm, minimum height=3.5cm, align=center, thick},
         UUT/.style={rectangle, draw=black, fill=blue!20, minimum width=4cm, minimum height=3cm, align=center, thick},
@@ -55,7 +53,5 @@
     \node[align=center, text width=3cm] at (UUT.center) {Architecture Logic \\ ($x_1$ xor $x_2$ xor $x_3$)};
 
     \end{tikzpicture}
-
-\end{figure}
 
 \end{document}

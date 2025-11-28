@@ -12,7 +12,7 @@
     
     % --- Draw the Body (Trapezoid) ---
     % Coordinates calculated based on center at (0,0)
-    \draw[thick, fill=white] 
+    \draw[ultra thick, fill=white] 
         (-\width/2, \heightL/2) coordinate (TopLeft) -- 
         (\width/2, \heightR/2) coordinate (TopRight) -- 
         (\width/2, -\heightR/2) coordinate (BotRight) -- 
@@ -36,8 +36,8 @@
     \draw[thick] (0, -1.15) -- ++(0,-1) node[anchor=north] {$s$};
     
     % Optional: Add port numbers inside (0, 1)
-    \node[font=\tiny] at (-\width/2 + 0.3, \heightL/4) {0};
-    \node[font=\tiny] at (-\width/2 + 0.3, -\heightL/4) {1};
+    \node at (-\width/2 + 0.3, \heightL/4) {0};
+    \node at (-\width/2 + 0.3, -\heightL/4) {1};
 
 \end{tikzpicture}
 

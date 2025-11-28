@@ -947,7 +947,7 @@ end behavior;
 </div>
 
 ---
-hide: true
+hide: false
 ---
 
 ## The VHDL Testbench
@@ -965,8 +965,8 @@ A **testbench** is a VHDL entity used to simulate and verify the correctness of 
 4.  **Verify Correctness:** You check the waveforms to ensure the outputs are correct. For automated checking, VHDL's `assert` statement can be used to report errors if an output does not match its expected value.
 </div>
 <div>
-<img src="/test_bench.svg" />
-<div class="text-sm text-center">Figure 2-8. Tthe relationship between the Entity and its Testbench.</div>
+<img src="/test_bench.svg" class="w-100 mx-auto"/>
+<p class="text-sm text-center">Figure 2-11. Tthe relationship between the Entity and its Testbench.</p>
 
 </div>
 </div>
@@ -977,7 +977,7 @@ A **testbench** is a VHDL entity used to simulate and verify the correctness of 
 ### Questa Simulation Result
 
 <img src="/three_way_light_sim.png" class="w-180 pt-4 mx-auto" />
-<p class="text-sm text-center">Figure 2-11. Timing Simulation result in Intel (Altera) Questa.</p>
+<p class="text-sm text-center">Figure 2-12. Timing Simulation result in Intel (Altera) Questa.</p>
 
 
 ---
@@ -1059,11 +1059,11 @@ layout: two-cols
 
 **Circuit for $f = s'x_1 + sx_2$**
 <img src="/mux_circuit.png" class="rounded-lg bg-white w-70 mx-auto" alt="Circuit for 2-to-1 Multiplexer">
-<p class="text-sm text-center">Figure 2-12. Multiplexter 2-to-1 circuit.</p>
+<p class="text-sm text-center">Figure 2-13. Multiplexter 2-to-1 circuit.</p>
 
 **Graphical Symbol**
 <img src="/mux_symbol.png" class="rounded-lg bg-white w-35 mx-auto" alt="Symbol for 2-to-1 Multiplexer">
-<p class="text-sm text-center">Figure 2-13. Multiplexer 2-to-1 symbol.</p>
+<p class="text-sm text-center">Figure 2-14. Multiplexer 2-to-1 symbol.</p>
 
 :: right ::
 **CircuitVerse Simulation**
@@ -1122,7 +1122,7 @@ layout: two-cols
 The circuit is built from the simplified expression $A = K · (D' + S·B')$, which is much simpler than a circuit for the original expression.
 
 <img src="/car_alarm.svg" class="rounded-lg bg-white p-2" alt="Circuit for Car Safety Alarm">
-<p class="text-sm text-center">Figure 2-14. Circuit for Car Safety Alarm.</p>
+<p class="text-sm text-center">Figure 2-15. Circuit for Car Safety Alarm.</p>
 
 :: right ::
 
@@ -1221,11 +1221,11 @@ The circuit combines an XOR gate for the sum and an AND gate for the carry.
 
 **Circuit Implementation**
 <img src="/half_adder.svg" class="rounded-lg bg-white w-70 mx-auto mt-2" alt="Circuit for a Half-Adder">
-<p class="text-sm text-center">Figure 2-15. Circuit for a Half-Adder.</p>
+<p class="text-sm text-center">Figure 2-16. Circuit for a Half-Adder.</p>
 
 **Block Diagram**
 <img src="/half_adder_block.svg" class="rounded-lg bg-white w-60 mx-auto mt-2" alt="Block Diagram for a Half-Adder">
-<p class="text-sm text-center">Figure 2-16. Block Diagram for a Half-Adder.</p>
+<p class="text-sm text-center">Figure 2-17. Block Diagram for a Half-Adder.</p>
 
 :: right ::
 
