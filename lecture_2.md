@@ -686,14 +686,11 @@ The simplified form $x1' + x2$ requires far fewer gates.
 
 **Original Circuit for $x1'x2' + x1'x2 + x1x2$**
 <img src="/sop.png" class="rounded-lg bg-white p-2 w-80" alt="Complex circuit for unsimplified function">
-<p class="text-sm text-center">
-
-Figure 2-7. Original circuit. 
-</p>
+<div class="text-sm text-center">Figure 2-7. Original circuit. </div>
 
 **Simplified Circuit for $x1' + x2$**
 <img src="/simplified.png" class="rounded-lg bg-white p-2 mt-4 w-70" alt="Simple circuit for simplified function">
-<p class="text-sm text-center">Figure 2-8. Simplified circuit.</p>
+<div class="text-sm text-center">Figure 2-8. Simplified circuit.</div>
 
 :: right ::
 ### VHDL Implementation
@@ -946,6 +943,31 @@ begin
 
 end behavior;
 ```
+</div>
+</div>
+
+---
+hide: true
+---
+
+## The VHDL Testbench
+
+A **testbench** is a VHDL entity used to simulate and verify the correctness of another VHDL entity, known as the **Unit Under Test (UUT)**. It's a crucial part of the design process, allowing you to test your logic in a simulated environment before programming it onto actual hardware.
+
+<div class="grid grid-cols-2 gap-8">
+<div class="text-sm">
+
+### The Process
+
+1.  **Instantiate the UUT:** The testbench declares the design you want to test as a `component` and creates an instance of it.
+2.  **Generate Stimulus:** Internal signals are created to connect to the UUT's ports. A `process` is written to change the values of the input signals over time, simulating real-world scenarios.
+3.  **Observe Outputs:** You run the simulation in a tool like Questa or GHDL. The tool generates waveforms showing how the UUT's output signals respond to the input stimulus.
+4.  **Verify Correctness:** You check the waveforms to ensure the outputs are correct. For automated checking, VHDL's `assert` statement can be used to report errors if an output does not match its expected value.
+</div>
+<div>
+<img src="/test_bench.svg" />
+<div class="text-sm text-center">Figure 2-8. Tthe relationship between the Entity and its Testbench.</div>
+
 </div>
 </div>
 
