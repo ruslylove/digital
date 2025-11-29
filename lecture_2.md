@@ -89,6 +89,7 @@ The theoretical foundation of all modern digital computing was laid by George Bo
 <div class="col-span-2">
 
 ### Axioms
+<div class="p-4 border-1 border-solid border-black rounded-lg">
 
 *   $0 · 0 = 0$
 *   $1 + 1 = 1$
@@ -99,9 +100,11 @@ The theoretical foundation of all modern digital computing was laid by George Bo
 *   If $x = 0$, then $x' = 1$
 *   If $x = 1$, then $x' = 0$
 </div>
+</div>
 <div class="col-span-2">
 
 ### Single-Variable Theorems
+<div class="p-4 border-1 border-solid border-black rounded-lg">
 
 *   $x · 0 = 0$
 *   $x + 1 = 1$
@@ -112,7 +115,7 @@ The theoretical foundation of all modern digital computing was laid by George Bo
 *   $x · x' = 0$
 *   $x + x' = 1$
 *   $(x')' = x$
-
+</div>
 </div>
 </div>
 
