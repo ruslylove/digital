@@ -1,0 +1,34 @@
+\documentclass[tikz,border=10pt]{standalone}
+\usepackage{array} % For better column definitions
+
+\begin{document}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Decimal} & \textbf{\begin{tabular}{@{}c@{}}Sign Magnitude \\ (4-bit)\end{tabular}} & \textbf{\begin{tabular}{@{}c@{}}One's Complement \\ (4-bit)\end{tabular}} \\
+\hline
++7 & 0111 & 0111 \\
++6 & 0110 & 0110 \\
++5 & 0101 & 0101 \\
++4 & 0100 & 0100 \\
++3 & 0011 & 0011 \\
++2 & 0010 & 0010 \\
++1 & 0001 & 0001 \\
++0 & 0000 & 0000 \\
+\hline % Separating positive/zero from negative/zero
+-0 & 1000 & 1111 \\
+-1 & 1001 & 1110 \\
+-2 & 1010 & 1101 \\
+-3 & 1011 & 1100 \\
+-4 & 1100 & 1011 \\
+-5 & 1101 & 1010 \\
+-6 & 1110 & 1001 \\
+-7 & 1111 & 1000 \\
+\hline
+\end{tabular}
+\label{tab:sign_ones_complement}
+\end{table}
+
+\end{document}

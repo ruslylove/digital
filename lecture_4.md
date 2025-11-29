@@ -75,32 +75,40 @@ title: Lecture 4 - Number Representation & Arithmetic Circuits
     *   Roughly half are positive, half are negative.
 
 ---
+layout: two-cols-header
+---
 
 ## Sign Magnitude/One's Complement Representation
 
+:: left ::
 *   High order bit is sign: 0 = positive (or zero), 1 = negative.
 *   The other bits represent the magnitude.
     *   e.g., for 4 bits, 3 bits for magnitude: 0 (000) thru 7 (111).
-*   Number range for n bits = `+/-(2^(n-1) - 1)`.
+*   Number range for n bits = $\pm(2^{(n-1)} - 1)$.
 *   Two representations for 0 (+0 and -0).
 *   Cumbersome addition/subtraction.
 *   Must compare magnitudes to determine the sign of the result.
 
-**Example:**
-`0100` = +4
-`1100` = -4
+:: right ::
 
+<img src="/table_sm_oc.svg" class="p-4 w-120" alt="Sign Magnitude Representation"/>
+
+
+---
+layout: two-cols-header
 ---
 
 ## Two's Complement Representation
 
-*   Like 1's complement, but shifted one position clockwise.
-*   Only one representation for 0.
-*   The number of positives equals the number of negatives (note: there is one more negative number).
+:: left ::
+*   Has only one representation for 0 (`0000`), unlike One's Complement which has two (`0000` and `1111`).
+*   The range of numbers is not symmetric. For n bits, the range is from $-2^{(n-1)}$ to $+2^{(n-1)} - 1$.
+*   For 4 bits, this means the range is from -8 to +7. There is one more negative number than positive numbers.
 
-**Example:**
-`0100` = +4
-`1100` = -4
+:: right ::
+
+<img src="/table_oc_tc.svg" class="p-4 w-120" alt="Sign Magnitude Representation"/>
+
 
 ---
 
@@ -135,6 +143,18 @@ Two's complement = bitwise complement + 1
 *   **When signs differ**, the operation is subtraction. The sign of the result depends on the sign of the number with the larger magnitude.
     *   `4 - 3 = 1` -> `0100 - 0011 = 0001`
     *   `-4 + 3 = -1` -> `1100 + 0011 = 1001`
+
+---
+
+### One's Complement
+
+*   **Addition Rule:** Add the numbers. If there is a carry out of the most significant bit (an "end-around carry"), add it to the result.
+    *   `4 + 3 = 7` -> `0100 + 0011 = 0111`
+    *   `-4 + (-3) = -7` -> `1011 + 1100 = 10111`. Add end-around carry: `0111 + 1 = 1000` (-7).
+*   **Subtraction** is performed by adding the one's complement of the subtrahend.
+    *   `4 - 3 = 1` -> `4 + (-3)` -> `0100 + 1100 = 10000`. Add end-around carry: `0000 + 1 = 0001` (1).
+    *   `-4 + 3 = -1` -> `1011 + 0011 = 1110` (-1).
+*   The need for the end-around carry makes the hardware more complex than Two's Complement.
 
 ---
 
