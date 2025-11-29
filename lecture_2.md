@@ -1351,7 +1351,43 @@ A robot uses three sensors (`L`, `C`, `R`) to follow a black line (`sensor=0`) o
 4.  **Simulation:** Use a simulator to build and test your circuit (Schematic or VHDL code). Provide a screenshot of your working simulation for the case where the robot is to go forward, turn right, turn left and stop.
 
 <style>
+
 .two-cols-header {
+
   column-gap: 30px; /* Adjust the gap size as needed */
+
 }
+
 </style>
+
+
+
+---
+
+
+### Exercise 2-4: Binary to 7-Segment Display
+
+<div class="grid grid-cols-2 gap-8">
+
+<div class="text-sm pt-5">
+A 7-segment display is a common device for displaying decimal digits. It consists of seven LEDs (segments) arranged in a figure-eight pattern. Each segment can be individually turned on or off to form different characters.
+
+
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/7_Segment_Display_with_Labeled_Segments.svg/150px-7_Segment_Display_with_Labeled_Segments.svg.png" class="mx-auto w-25" />
+<p class="text-sm text-center">Figure 2-18. A Seven Segment LEDs.</p>
+
+Your task is to design a decoder that takes a 4-bit binary-coded decimal (BCD) input (`b3`, `b2`, `b1`, `b0`) and outputs the signals to control the seven segments (`a`, `b`, `c`, `d`, `e`, `f`, `g`) to display the corresponding decimal digit (0-9). For this exercise, assume the display is **common anode**, meaning a segment lights up when its control signal is **LOW (0)**.
+</div>
+
+<div class="text-sm">
+
+1.  **Truth Table:** Create a truth table with the 4-bit BCD input and the 7-segment outputs. For BCD values from 10 to 15, the outputs can be treated as "don't cares" (X).
+
+2.  **Boolean Expressions:** Write the simplified Sum-of-Products (SOP) Boolean expression for the seven segments: segment **`a`** to segment **`g`**. You will need to use Karnaugh maps (K-maps) to simplify these expressions.<br> *Hint: Using don't cares will significantly simplify your logic.*
+
+3.  **Circuit Diagram:** Draw the logic circuit for just the **`a`** segment based on your simplified expression.
+
+4.  **Simulation:** Implement your circuit for the **`a`** segment to **`g`** segment in a simulator. Provide a screenshot showing that the circuit correctly outputs the digit `0` to `9`.
+</div>
+</div>
