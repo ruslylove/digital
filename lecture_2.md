@@ -507,14 +507,14 @@ This is also known as the **canonical sum-of-products** form.
 
 | $a$ | $b$ | $c$ | $f$ | $\text{Minterm}$ |
 |:-:|:-:|:-:|:-:|:--------|
-| 0 | 0 | 0 | 0 |         |
-| 0 | 0 | 1 | **1** | $a'b'c$   |
-| 0 | 1 | 0 | 0 |         |
-| 0 | 1 | 1 | **1** | $a'bc$    |
-| 1 | 0 | 0 | 0 |         |
-| 1 | 0 | 1 | **1** | $ab'c$    |
-| 1 | 1 | 0 | 0 |         |
-| 1 | 1 | 1 | **1** | $abc$     |
+| 0 | 0 | 0 | 0 | $m_0: a'b'c'$ |
+| 0 | 0 | 1 | **1** | $\bm{m_1: a'b'c}$   |
+| 0 | 1 | 0 | 0 | $m_2: a'bc'$       |
+| 0 | 1 | 1 | **1** | $\bm{m_3: a'bc}$    |
+| 1 | 0 | 0 | 0 | $m_4: ab'c'$       |
+| 1 | 0 | 1 | **1** | $\bm{m_5: ab'c}$    |
+| 1 | 1 | 0 | 0 | $m_6: abc'$       |
+| 1 | 1 | 1 | **1** | $\bm{m_7: abc}$     |
 </div>
 
 <div>
@@ -573,30 +573,30 @@ This is also known as the **canonical product-of-sums** form.
 
 ### Example
 
-<div class="grid grid-cols-2 gap-1">
+<div class="grid grid-cols-2 gap-16">
 <div class="text-sm">
 
 | $a$ | $b$ | $c$ | $f$ | $\text{Maxterm}$ |
 |:-:|:-:|:-:|:-:|:--------|
-| 0 | 0 | 0 | **0** | $a+b+c$   |
-| 0 | 0 | 1 | 1 |         |
-| 0 | 1 | 0 | **0** | $a+b'+c$  |
-| 0 | 1 | 1 | 1 |         |
-| 1 | 0 | 0 | **0** | $a'+b+c$  |
-| 1 | 0 | 1 | 1 |         |
-| 1 | 1 | 0 | **0** | $a'+b'+c$ |
-| 1 | 1 | 1 | 1 |         |
+| 0 | 0 | 0 | **0** | $\bm{M_0:a+b+c}$   |
+| 0 | 0 | 1 | 1 | $M_1:a+b+c'$        |
+| 0 | 1 | 0 | **0** | $\bm{M_2:a+b'+c}$  |
+| 0 | 1 | 1 | 1 | $M_3:a+b'+c'$       |
+| 1 | 0 | 0 | **0** | $\bm{M_4:a'+b+c}$  |
+| 1 | 0 | 1 | 1 | $M_5: a'+b+c'$      |
+| 1 | 1 | 0 | **0** | $\bm{M_6:a'+b'+c}$ |
+| 1 | 1 | 1 | 1 | $M_7: a'+b'+c'$     |
 </div>
 
 <div>
-<div class="p-4 border-1 border-solid border-black rounded-lg">
+<div class="p-2 border-1 border-solid border-black rounded-lg">
 
 $f(a,b,c) = (a+b+c)·(a+b'+c)·(a'+b+c)·(a'+b'+c)$
 </div>
 
 This can also be written using $M$ notation:
 
-<div class="p-4 border-1 border-solid border-black rounded-lg">
+<div class="p-2 border-1 border-solid border-black rounded-lg">
 
 $f(a,b,c) = M₀ · M₂ · M₄ · M₆ = ΠM(0,2,4,6)$
 </div>
