@@ -22,8 +22,7 @@ hideInToc: false
 <toc mode="onlySiblings" minDepth="2" columns="2"/>
 
 ---
-layout: two-cols
----
+
 
 ## Logic Circuits
 
@@ -32,9 +31,9 @@ layout: two-cols
 *   In **binary logic circuits**, there are only two values: **0** and **1**.
 *   The general form of a logic circuit is a **switching network**, which takes a set of discrete inputs and produces a set of discrete outputs.
 
-:: right ::
-<img src="/BCD_adder.png" class="rounded-lg bg-white p-4 w-100 mx-auto" alt="Logic Circuit" />
-<p class="text-sm text-center">Figure 2-1. A BCD adder circuit consisting of adders and logic gates.</p>
+
+<img src="/switching_network.svg" class="rounded-lg bg-white pt-8 w-100 mx-auto" alt="Logic Circuit" />
+<p class="text-sm text-center">Figure 2-1. Diagram of a Switching Network.</p>
 
 
 ---
@@ -768,6 +767,8 @@ layout: two-cols-header
 *   Light is OFF if **two** switches are closed.
 *   Light is ON if **three** switches are closed.
 
+<img src="/doors.svg" class="w-60 mx-auto pt-5"/>
+
 ::right::
 **Truth Table:**
 <div class="text-xs">
@@ -1085,8 +1086,9 @@ layout: two-cols
 **Problem:** Design a car safety alarm $A$ that sounds if:
 1.  The key is in ($K=1$) and the door is not closed ($D=0$), OR
 2.  The door is closed ($D=1$), the key is in ($K=1$), the driver is in the seat ($S=1$), and the seat belt is not closed ($B=0$).
+<img src="/car_alarm_sketch.svg" class="w-55 mx-auto"/>
+<p class="text-sm text-center">Figure 2-15. A Car Alarm System.</p>
 
-<img src="/car_alarm_truthtable.svg" class="w-100  bg-white pt-4"/>
 
 </div>
 
@@ -1125,7 +1127,7 @@ layout: two-cols
 The circuit is built from the simplified expression $A = K · (D' + S·B')$, which is much simpler than a circuit for the original expression.
 
 <img src="/car_alarm.svg" class="rounded-lg bg-white p-2" alt="Circuit for Car Safety Alarm">
-<p class="text-sm text-center">Figure 2-15. Circuit for Car Safety Alarm.</p>
+<p class="text-sm text-center">Figure 2-16. Circuit for Car Safety Alarm.</p>
 
 :: right ::
 
@@ -1224,11 +1226,11 @@ The circuit combines an XOR gate for the sum and an AND gate for the carry.
 
 **Circuit Implementation**
 <img src="/half_adder.svg" class="rounded-lg bg-white w-70 mx-auto mt-2" alt="Circuit for a Half-Adder">
-<p class="text-sm text-center">Figure 2-16. Circuit for a Half-Adder.</p>
+<p class="text-sm text-center">Figure 2-17. Circuit for a Half-Adder.</p>
 
 **Block Diagram**
 <img src="/half_adder_block.svg" class="rounded-lg bg-white w-60 mx-auto mt-2" alt="Block Diagram for a Half-Adder">
-<p class="text-sm text-center">Figure 2-17. Block Diagram for a Half-Adder.</p>
+<p class="text-sm text-center">Figure 2-18. Block Diagram for a Half-Adder.</p>
 
 :: right ::
 
@@ -1378,7 +1380,7 @@ A 7-segment display is a common device for displaying decimal digits. It consist
 
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/7_Segment_Display_with_Labeled_Segments.svg/150px-7_Segment_Display_with_Labeled_Segments.svg.png" class="mx-auto w-25" />
-<p class="text-sm text-center">Figure 2-18. A Seven Segment LEDs.</p>
+<p class="text-sm text-center">Figure 2-19. A Seven Segment LEDs.</p>
 
 Your task is to design a decoder that takes a 4-bit binary-coded decimal (BCD) input (`b3`, `b2`, `b1`, `b0`) and outputs the signals to control the seven segments (`a`, `b`, `c`, `d`, `e`, `f`, `g`) to display the corresponding decimal digit (0-9). For this exercise, assume the display is **common anode**, meaning a segment lights up when its control signal is **LOW (0)**.
 </div>
