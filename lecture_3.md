@@ -279,6 +279,7 @@ A four-variable map contains 2⁴ = 16 squares. The structure is extended from t
 
 <img src="/kmap_4x4_structure.svg" class="rounded-lg bg-white p-1 mt-2 w-80 mx-auto" alt="4-variable K-map layout">
 
+
 ---
 layout: two-cols-header
 ---
@@ -412,6 +413,48 @@ $F = yz + w'x'$
 <img src="/kmap_dontcare.svg" class="rounded-lg bg-white p-2 mx-auto" alt="K-map with Don't Cares">
 
 ---
+layout: two-cols-header
+---
+
+## Five and Six-Variable K-Maps
+
+For functions with more than four variables, the K-map method becomes more complex but is still manageable.
+
+::left::
+
+### Five-Variable Map $(a, b, c, d, e)$
+
+*   A 5-variable map consists of **two** 4-variable maps.
+*   One map is for the first variable being `0`($a=0$), and the other is for it being `1` ($a=1$).
+*   The maps are imagined to be stacked on top of each other.
+*   **Adjacency:** Squares are adjacent if they are adjacent in one of the 4-variable maps, OR if they are in the same position but on different maps.
+*   This means you can form groups of `1`s between the two maps.
+
+:: right ::
+
+**Example:** A group of 4 `1`s in the same position on both maps (e.g., $m₀, m₁₆$ and $m₁, m₁₇$) would eliminate the variable `a` and `e`.
+
+<img src="/kmap_5var.svg" class="rounded-lg bg-white p-4 w-100"/>
+
+---
+layout: two-cols-header
+---
+
+### Six-Variable Map $(a, b, c, d, e, f)$
+:: left ::
+*   A 6-variable map consists of **four** 4-variable maps.
+*   The maps are arranged in a 2x2 grid, corresponding to the first two variables (e.g., $ab=00, 01, 11, 10$).
+*   **Adjacency:** Adjacency applies within each map and between adjacent maps in the 2x2 grid (including wrap-around).
+
+**Complexity:**
+*   Visualizing adjacencies in 3D (for 5 variables) or 4D (for 6 variables) becomes very difficult.
+*   For more than 6 variables, tabular methods like the **Quine-McCluskey algorithm** are preferred as they are more systematic and can be automated.
+
+:: right ::
+
+<img src="/kmap_6var.svg" class="rounded-lg bg-white p-4 w-100 mx-auto" alt="6-variable K-map layout">
+
+---
 
 
 ## Product-of-Sums (POS) Simplification
@@ -423,8 +466,6 @@ K-maps can also be used to find a minimal Product-of-Sums expression. The key is
 <div>
 
 ### Method 1: Simplify F' then apply De Morgan's
-
-
 1.  On the K-map, group the **0s** to find the minimal SOP expression for the complement function, `F'`.
 2.  Apply De Morgan's theorem to the result to find `F`.
     *   `F = (F')'`
@@ -437,7 +478,7 @@ K-maps can also be used to find a minimal Product-of-Sums expression. The key is
 ### Method 2: Direct POS from grouping 0s
 1.  Group the **0s** on the map.
 2.  For each group, write a **sum term** (maxterm) using the following rules (dual of SOP):
-    *   If a variable is **0** in the group, use its **true** form (e.g., `A`).
+    *   If a variable is **0** in the group, use its **true** form.
     *   If a variable is **1** in the group, use its **complemented** form (e.g., `A'`).
     *   If a variable changes within the group, it is eliminated.
 3.  The final expression is the **product (AND)** of all the sum terms.

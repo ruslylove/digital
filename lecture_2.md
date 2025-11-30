@@ -970,7 +970,7 @@ A **testbench** is a VHDL entity used to simulate and verify the correctness of 
 </div>
 <div>
 <img src="/test_bench.svg" class="w-100 mx-auto"/>
-<p class="text-sm text-center">Figure 2-11. Tthe relationship between the Entity and its Testbench.</p>
+<p class="text-sm text-center">Figure 2-11. The relationship between the Entity and its Testbench.</p>
 
 </div>
 </div>
