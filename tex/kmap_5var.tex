@@ -1,0 +1,19 @@
+\documentclass{standalone}
+\usepackage{karnaugh-map}
+
+\begin{document}
+
+% This is a 6-variable Karnaugh map.
+% The variables are a, b, c, d, e, f.
+% The map is divided into four 4x4 grids.
+% The top-left grid is for a=0, b=0.
+% The top-right grid is for a=0, b=1.
+% The bottom-left grid is for a=1, b=0.
+% The bottom-right grid is for a=1, b=1.
+
+\begin{karnaugh-map}[4][4][2][$de$][$bc$][$a$]
+\minterms{0,16,1,17}
+\implicant{0}{1}[0,1]
+\end{karnaugh-map}
+
+\end{document}
