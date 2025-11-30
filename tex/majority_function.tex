@@ -1,0 +1,87 @@
+\documentclass{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{circuitikz}
+\usepackage{listings}
+
+\title{3-Input Majority Function}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Problem Description}
+A majority function is a Boolean function that is true when more than half of its inputs are true. This document illustrates the design of a 3-input majority function.
+
+\section*{1. Truth Table}
+
+\begin{center}
+\begin{tabular}{|c|c|c||c|}
+\hline
+\multicolumn{3}{|c||}{Inputs} & Output \\
+\hline
+\textit{x} & \textit{y} & \textit{z} & \textit{f} \\
+\hline
+0 & 0 & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 1 & 0 & 0 \\
+0 & 1 & 1 & 1 \\
+1 & 0 & 0 & 0 \\
+1 & 0 & 1 & 1 \\
+1 & 1 & 0 & 1 \\
+1 & 1 & 1 & 1 \\
+\hline
+\end{tabular}
+\end{center}
+
+\section*{2. Boolean Expression}
+
+The Sum-of-Products (SOP) expression derived from the truth table is:
+$f = x'yz + xy'z + xyz' + xyz$
+
+This can be simplified using Boolean algebra:
+$f = yz(x' + x) + xz(y' + y) + xy(z' + z)$
+$f = yz + xz + xy$
+
+The simplified expression is:
+$f = xy + yz + xz$
+
+\section*{3. Circuit Diagram}
+
+The logic circuit for the simplified expression $f = xy + yz + xz$.
+
+\begin{figure}[h!]
+\centering
+\begin{circuitikz}
+    \draw
+    (0,4) node[and port] (and1) {}
+    (0,2) node[and port] (and2) {}
+    (0,0) node[and port] (and3) {}
+    (2,2) node[or port, number of inputs=3] (or1) {}
+    (and1.out) -- (or1.in 1)
+    (and2.out) -- (or1.in 2)
+    (and3.out) -- (or1.in 3)
+    (or1.out) -- (3,2) node[right] {$f$};
+
+    \node at (-2,4.25) (x1) {x};
+    \node at (-2,3.75) (y1) {y};
+    \draw (x1) -- (and1.in 1);
+    \draw (y1) -- (and1.in 2);
+
+    \node at (-2,2.25) (y2) {y};
+    \node at (-2,1.75) (z1) {z};
+    \draw (y2) -- (and2.in 1);
+    \draw (z1) -- (and2.in 2);
+
+    \node at (-2,0.25) (x2) {x};
+    \node at (-2,-0.25) (z2) {z};
+    \draw (x2) -- (and3.in 1);
+    \draw (z2) -- (and3.in 2);
+\end{circuitikz}
+\caption{Circuit for the 3-input majority function.}
+\end{figure}
+
+\end{document}

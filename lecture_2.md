@@ -1312,6 +1312,7 @@ layout: section
 
 A majority function is a Boolean function that is true when more than half of its inputs are true. Design a logic circuit for a 3-input majority function.
 
+#### **Tasks:**
 1.  **Truth Table:** Create a truth table for a 3-input function `f(x, y, z)` that outputs `1` when two or more inputs are `1`.
 2.  **SOP Expression:** Write the canonical Sum-of-Products (SOP) expression from the truth table.
 3.  **Simplification:** Simplify the SOP expression using Boolean algebra.
@@ -1326,6 +1327,7 @@ Design a simplified home alarm system with the following behavior:
 
 The alarm `A` should sound (`A=1`) if the system is armed (`S=1`) **AND** either the front door is opened (`D=1`) **OR** the window is opened (`W=1`). The system should not sound if it is not armed.
 
+#### **Tasks:**
 1.  **Truth Table:** Construct a truth table for the alarm function `A(S, D, W)`.
 2.  **Boolean Expression:** Write the Boolean expression for the function `A`.
 3.  **Circuit Diagram:** Draw the logic circuit that implements this expression.
@@ -1333,27 +1335,35 @@ The alarm `A` should sound (`A=1`) if the system is armed (`S=1`) **AND** either
 
 
 ---
-layout: two-cols-header 
----
+
 
 ### Exercise 2-3: Line-Following Robot
 
 
-A robot uses three sensors (`L`, `C`, `R`) to follow a black line (`sensor=0`) on a white surface (`sensor=1`). It has two motors, `ML` (Left) and `MR` (Right).
+<div>
 
-:: left ::
+A robot uses three sensors (`L`, `C`, `R`) to follow a black line (`sensor=0`) on a white surface (`sensor=1`). It has two motors, `ML` (Left) and `MR` (Right).
+<div class="grid grid-cols-7 gap-4">
+<div class="text-sm col-span-4">
+<img src="/line_following_robot.svg" class="w-45 mx-auto" />
+<p class="text-sm text-center">Figure 2-19. A Line-Following Robot.</p>
 
 *   **Go Forward (`ML=1, MR=1`):** When the robot is centered (`L=1, C=0, R=1`).
 *   **Turn Right (`ML=1, MR=0`):** When it drifts left (`L=1, C=1, R=0`).
 *   **Turn Left (`ML=0, MR=1`):** When it drifts right (`L=0, C=1, R=1`).
 *   **Stop (`ML=0, MR=0`):** For all other cases, including being completely off the line (`L=1, C=1, R=1`).
+</div>
 
-:: right ::
+<div class="text-sm col-span-3">
 
+#### **Tasks:**
 1.  **Truth Table:** Create a truth table with inputs `L`, `C`, `R` and outputs `ML` and `MR`.
 2.  **Boolean Expressions:** Write the Sum-of-Products (SOP) expressions for `ML` and `MR`.
 3.  **Circuit Diagram:** Draw the two logic circuits for the simplified `ML` and `MR` expressions.
 4.  **Simulation:** Use a simulator to build and test your circuit (Schematic or VHDL code). Provide a screenshot of your working simulation for the case where the robot is to go forward, turn right, turn left and stop.
+</div>
+</div>
+</div>
 
 <style>
 
@@ -1380,19 +1390,17 @@ A 7-segment display is a common device for displaying decimal digits. It consist
 
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/7_Segment_Display_with_Labeled_Segments.svg/150px-7_Segment_Display_with_Labeled_Segments.svg.png" class="mx-auto w-25" />
-<p class="text-sm text-center">Figure 2-19. A Seven Segment LEDs.</p>
+<p class="text-sm text-center">Figure 2-20. A Seven Segment LEDs.</p>
 
 Your task is to design a decoder that takes a 4-bit binary-coded decimal (BCD) input (`b3`, `b2`, `b1`, `b0`) and outputs the signals to control the seven segments (`a`, `b`, `c`, `d`, `e`, `f`, `g`) to display the corresponding decimal digit (0-9). For this exercise, assume the display is **common anode**, meaning a segment lights up when its control signal is **LOW (0)**.
 </div>
 
-<div class="text-sm">
+<div class="text-sm pt-4">
 
+#### **Tasks:**
 1.  **Truth Table:** Create a truth table with the 4-bit BCD input and the 7-segment outputs. For BCD values from 10 to 15, the outputs can be treated as "don't cares" (X).
-
 2.  **Boolean Expressions:** Write the simplified Sum-of-Products (SOP) Boolean expression for the seven segments: segment **`a`** to segment **`g`**. You will need to use Karnaugh maps (K-maps) to simplify these expressions.<br> *Hint: Using don't cares will significantly simplify your logic.*
-
 3.  **Circuit Diagram:** Draw the logic circuit for just the **`a`** segment based on your simplified expression.
-
 4.  **Simulation:** Implement your circuit for the **`a`** segment to **`g`** segment in a simulator. Provide a screenshot showing that the circuit correctly outputs the digit `0` to `9`.
 </div>
 </div>
