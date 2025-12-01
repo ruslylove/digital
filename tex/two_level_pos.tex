@@ -14,12 +14,12 @@ logic ports/scale=0.7,
     % ============================
     
     % Top OR Gate (A+B)
-    \draw (0, 4) node[or port] (OR_AB) {};
+    \draw (0, 3.5) node[or port] (OR_AB) {};
     \draw (OR_AB.in 1) -- ++(-1, 0) node[left] {$A$};
     \draw (OR_AB.in 2) -- ++(-1, 0) node[left] {$B$};
 
     % Bottom OR Gate (C+D)
-    \draw (0, 0) node[or port] (OR_CD) {};
+    \draw (0, 0.5) node[or port] (OR_CD) {};
     \draw (OR_CD.in 1) -- ++(-1, 0) node[left] {$C$};
     \draw (OR_CD.in 2) -- ++(-1, 0) node[left] {$D$};
 

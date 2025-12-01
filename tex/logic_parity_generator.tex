@@ -4,7 +4,7 @@
 
 \ctikzset{
 logic ports=ieee,
-logic ports/scale=0.7,
+logic ports/scale=1,
 }
 
 \begin{document}
@@ -41,7 +41,8 @@ logic ports/scale=0.7,
     % Input z:
     % It runs below the first gate and connects to the bottom input of XOR2.
     % We start it aligned with the other inputs, but lower at y=0.
-    \draw (0,0) node[left] {$z$} -- ++(3,0) |- (XOR2.in 2);
+    \draw (XOR2.in 2) -- ++(-5.5, 0) node[left] {$z$} ;
+
 
 
     % ============================

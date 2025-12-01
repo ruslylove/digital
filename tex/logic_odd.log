@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=latex 2025.11.22)  23 NOV 2025 21:26
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=latex 2025.11.22)  1 DEC 2025 19:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -493,12 +493,12 @@ L3 programming layer <2025-01-18>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 30447 strings out of 473191
- 807490 string characters out of 5715825
- 1441143 words of memory out of 5000000
- 53455 multiletter control sequences out of 15000+600000
+ 30448 strings out of 473191
+ 807535 string characters out of 5715825
+ 1441141 words of memory out of 5000000
+ 53456 multiletter control sequences out of 15000+600000
  558837 words of font info for 36 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  117i,5n,121p,412b,808s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on logic_odd.dvi (1 page, 13400 bytes).
+Output written on logic_odd.dvi (1 page, 13424 bytes).
