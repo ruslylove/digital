@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=latex 2025.11.22)  23 NOV 2025 21:38
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=latex 2025.11.22)  1 DEC 2025 19:57
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -493,12 +493,12 @@ L3 programming layer <2025-01-18>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 30455 strings out of 473191
- 807659 string characters out of 5715825
- 1452176 words of memory out of 5000000
- 53463 multiletter control sequences out of 15000+600000
+ 30459 strings out of 473191
+ 807769 string characters out of 5715825
+ 1452174 words of memory out of 5000000
+ 53467 multiletter control sequences out of 15000+600000
  558837 words of font info for 36 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  117i,5n,121p,423b,819s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on logic_parity_checker.dvi (1 page, 15764 bytes).
+Output written on logic_parity_checker.dvi (1 page, 15772 bytes).
