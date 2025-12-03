@@ -25,56 +25,46 @@ hideInToc: false
 layout: two-cols-header
 ---
 
-## Numbers in Different Radix Systems
+## Numbers Systems
 
 :: left ::
 
-<div class="p-2">
+- **Binary (Base-2):** Uses only two digits, **0** and **1**. Each digit is a **bit**. A group of 8 bits is a **byte**.
 
-$$
-\begin{array}{c|c|c|c}
-\textbf{Decimal} & \textbf{Binary} & \textbf{Octal} & \textbf{Hexadecimal} \\
-\hline
-00 & 00000 & 00 & 00 \\[2pt]
-01 & 00001 & 01 & 01 \\[2pt]
-02 & 00010 & 02 & 02 \\[2pt]
-03 & 00011 & 03 & 03 \\[2pt]
-04 & 00100 & 04 & 04 \\[2pt]
-05 & 00101 & 05 & 05 \\[2pt]
-06 & 00110 & 06 & 06 \\[2pt]
-07 & 00111 & 07 & 07 \\[2pt]
-08 & 01000 & 10 & 08 \\[2pt]
-09 & 01001 & 11 & 09 \\[2pt]
-10 & 01010 & 12 & 0A \\[2pt]
+- **Octal (Base-8):** Uses digits **0-7**. It's a compact way to represent binary numbers, as one octal digit represents 3 bits (e.g., $(7)₈ = (111)₂$).
+- **Hexadecimal (Base-16):** Uses digits **0-9** and letters **A-F**. It is the most common for representing binary in a readable format, as one hex digit represents 4 bits (e.g., $(F)₁₆ = (1111)₂$).
 
 
-\end{array}
-$$
-
-</div>
 
 :: right ::
 
-<div class="p-2">
+<Transform scale="0.9">
+
 $$
 \begin{array}{c|c|c|c}
 \textbf{Decimal} & \textbf{Binary} & \textbf{Octal} & \textbf{Hexadecimal} \\
 \hline
-11 & 01011 & 13 & 0B \\[2pt]
-12 & 01100 & 14 & 0C \\[2pt]
-13 & 01101 & 15 & 0D \\[2pt]
-14 & 01110 & 16 & 0E \\[2pt]
-15 & 01111 & 17 & 0F \\[2pt]
-16 & 10000 & 20 & 10 \\[2pt]
-17 & 10001 & 21 & 11 \\[2pt]
-18 & 10010 & 22 & 12 \\[2pt]
-19 & 10011 & 23 & 13 \\[2pt]
-20 & 10100 & 24 & 14 \\[2pt]
-21 & 10101 & 25 & 15 \\[2pt]   
+00 & 00000 & 00 & 00 \\
+01 & 00001 & 01 & 01 \\
+02 & 00010 & 02 & 02 \\
+03 & 00011 & 03 & 03 \\
+04 & 00100 & 04 & 04 \\
+05 & 00101 & 05 & 05 \\
+06 & 00110 & 06 & 06 \\
+07 & 00111 & 07 & 07 \\
+08 & 01000 & 10 & 08 \\
+09 & 01001 & 11 & 09 \\
+10 & 01010 & 12 & 0A \\
+11 & 01011 & 13 & 0B \\
+12 & 01100 & 14 & 0C \\
+13 & 01101 & 15 & 0D \\
+14 & 01110 & 16 & 0E \\
+15 & 01111 & 17 & 0F \\
+16 & 10000 & 20 & 10 \\
 \end{array}
 $$
-</div>
 
+</Transform>
 ---
 
 ## Review of Number Systems
@@ -93,17 +83,58 @@ $$
 layout: two-cols-header
 ---
 
-## Sign Magnitude/One's Complement Representation
+## Sign Magnitude 
 
 :: left ::
 
-*   High order bit is sign: 0 = positive (or zero), 1 = negative.
-*   The other bits represent the magnitude.
-    *   e.g., for 4 bits, 3 bits for magnitude: 0 (000) thru 7 (111).
-*   Number range for n bits = $\pm(2^{(n-1)} - 1)$.
-*   Two representations for 0 (+0 and -0).
-*   Cumbersome addition/subtraction.
-*   Must compare magnitudes to determine the sign of the result.
+*   **Representation:** The most significant bit (MSB) is the sign (0 for positive, 1 for negative). The remaining bits represent the magnitude.
+*   **Range:** For n bits, the range is $\pm(2^{(n-1)} - 1)$.
+*   **Zero:** Has two representations for zero: `0000` (+0) and `1000` (-0).
+
+*   **Arithmetic:** Complex, as it requires comparing signs and magnitudes.
+
+:: right ::
+
+<Transform scale="0.9">
+
+$$
+\begin{array}{c|c}
+\textbf{Decimal} & \textbf{Sign Magnitude} \\
+\hline
++7 & 0111 \\
++6 & 0110 \\
++5 & 0101 \\
++4 & 0100 \\
++3 & 0011 \\
++2 & 0010 \\
++1 & 0001 \\
++0 & 0000 \\
+-0 & 1000 \\
+-1 & 1001 \\
+-2 & 1010 \\
+-3 & 1011 \\
+-4 & 1100 \\
+-5 & 1101 \\
+-6 & 1110 \\
+-7 & 1111 \\
+\end{array}
+$$
+
+</Transform>
+
+---
+layout: two-cols-header
+---
+
+## One's Complement
+
+:: left ::
+
+*   **Representation:** Positive numbers are represented the same way as in sign magnitude. Negative numbers are obtained by inverting all the bits of the corresponding positive number.
+*   **Example:** For +5 (`0101`), -5 is `1010`.
+*   **Zero:** Also has two representations for zero: `0000` (+0) and `1111` (-0).
+
+*   **Arithmetic:** Simpler than sign magnitude, but addition may require an "end-around carry" (adding the carry-out from the MSB back to the result).
 
 :: right ::
 
@@ -138,12 +169,18 @@ $$
 layout: two-cols-header
 ---
 
-## Two's Complement Representation
+## Two's Complement
 
 :: left ::
-*   Has only one representation for 0 (`0000`), unlike One's Complement which has two (`0000` and `1111`).
-*   The range of numbers is not symmetric. For n bits, the range is from $-2^{(n-1)}$ to $+2^{(n-1)} - 1$.
-*   For 4 bits, this means the range is from -8 to +7. There is one more negative number than positive numbers.
+
+*   **Representation:** Positive numbers are the same as sign magnitude. To get a negative number, take the two's complement of its positive counterpart.
+*   **Negation (Invert and Add 1):**
+    1.  Invert all the bits.
+    2.  Add 1 to the result.
+    *   *Example: To get -5, start with +5 (`0101`), invert it (`1010`), and add 1 (`1011`).*
+*   **Range:** Asymmetric. For n bits, the range is from $-2^{(n-1)}$ to $2^{(n-1)} - 1$.
+*   **Zero:** Only one representation: `0000`.
+*   **Arithmetic:** Simple. Subtraction is performed by adding the two's complement of the subtrahend.
 
 :: right ::
 
@@ -178,41 +215,7 @@ $$
 
 ---
 
-## Two's Complement Negation
-
-Two's complement is the most common method for representing signed integers. Negating a number (finding its opposite, e.g., 7 -> -7) is done by taking its two's complement.
-
-<div class="grid grid-cols-2 gap-8">
-<div>
-
-#### Shortcut Method (Invert and Add 1)
-The simplest way to find the two's complement is to invert all the bits and add 1.
-
-*   **Negating +7 (0111):**
-    1. Invert bits: `1000`
-    2. Add 1: `1001` (which is -7)
-*   **Negating -7 (1001):**
-    1. Invert bits: `0110`
-    2. Add 1: `0111` (which is +7)
-
-</div>
-<div>
-
-#### Formal Definition
-For an n-bit number N, its negative counterpart $N^*$ can be found with the formula:
-$N^* = 2^n - N$
-
-*   **Negating +7 (0111) for n=4:**
-    - `2⁴ - 7 = 16 - 7 = 9`
-    - `10000₂ - 0111₂ = 1001₂` (-7)
-
-</div>
-</div>
-
-
----
-
-## Arithmetic: Addition 
+## Arithmetic
 
 Let's calculate **`4 + (-3) = 1`**. In binary, `+4` is `0100`.
 
@@ -255,50 +258,7 @@ Let's calculate **`4 + (-3) = 1`**. In binary, `+4` is `0100`.
 
 **Result:** `0001` (+1)
 
-</div>
-</div>
-
----
-
-## Arithmetic: A Comparison
-
-The primary advantage of Two's Complement is the simplicity of its arithmetic, which leads to simpler and faster hardware.
-
-<div class="grid grid-cols-3 gap-4 text-sm">
-<div>
-
-### Sign Magnitude
-
-**Process is complex:**
-1.  Check signs of operands.
-2.  If same, add magnitudes.
-3.  If different, subtract smaller magnitude from larger.
-4.  Determine the sign of the result based on the sign of the larger operand.
-
-**Drawback:** Requires complex hardware (adder, subtractor, and a comparator).
-
-</div>
-<div>
-
-### One's Complement
-
-**Process has an extra step:**
-1.  Add numbers (including sign bits).
-2.  If a carry-out from the sign bit occurs, it must be added back to the result (**end-around carry**).
-
-**Drawback:** The end-around carry requires extra hardware and adds a delay. Still has two zeros.
-
-</div>
-<div>
-
-### Two's Complement 🏆
-
-**Process is simple:**
-1.  Add numbers (including sign bits).
-2.  Discard any carry-out from the sign bit.
-3.  Subtraction is just addition: `A - B` becomes `A + (-B)`.
-
-**Advantage:** A single, simple adder circuit handles both addition and subtraction. **This is why it's used everywhere.**
+⭐️**Advantage:** A single, simple adder circuit handles both addition and subtraction. **This is why it's used everywhere.**
 
 </div>
 </div>
@@ -320,10 +280,10 @@ layout: two-cols
 
 For 4-bit numbers, there are 3 significant bits and the sign bit.
 
-*   `(+7) + (+2) = +9` -> `0111 + 0010 = 1001` (Incorrect, looks like -7)
-    *   $c_4=0$, $c_3=1$ -> **Overflow**
-*   `(-7) + (-2) = -9` -> `1001 + 1110 = 10111` (Incorrect, looks like +7)
-    *   $c_4=1$, $c_3=0$ -> **Overflow**
+*   `(+7) + (+2) = +9` &rarr; `0111 + 0010 = 1001` (Incorrect, looks like -7)
+    *   $c_4=0$, $c_3=1$ &rarr; **Overflow**
+*   `(-7) + (-2) = -9` &rarr; `1001 + 1110 = 10111` (Incorrect, looks like +7)
+    *   $c_4=1$, $c_3=0$ &rarr; **Overflow**
 
 **Rule:** Overflow occurs if the carry into the sign bit ($c_{n-1}$) is not equal to the carry out of the sign bit ($c_n$).
 - $\text{overflow} = c_{n-1} \oplus c_n$
@@ -516,6 +476,7 @@ To add multi-bit numbers, we can cascade full-adders. The carry-out ($C_{out}$) 
 
 *   This creates a **4-bit ripple-carry adder**.
 *   The initial carry-in, $C_0$, is typically set to 0 for standard addition.
+
 *   The main drawback is the delay; the sum bit $S_3$ is not valid until the carry has propagated through all previous stages.
 :: right ::
 <img src="/ripple_adder.svg" class="w-100 mx-auto" alt="4-bit Ripple-Carry Adder"/>
@@ -642,7 +603,7 @@ $A - B = A + (-B) = A + B' + 1$
 layout: two-cols-header
 ---
 
-## The Problem with Ripple-Carry: Delay
+## Carry Lookahead Adder
 
 The critical path (worst-case delay) in a ripple-carry adder occurs when a carry signal must propagate, or "ripple," through every full-adder in the chain.
 :: left ::
@@ -653,38 +614,36 @@ The critical path (worst-case delay) in a ripple-carry adder occurs when a carry
 :: right ::
 <div class="p-1">
 
-### The Solution: Carry Lookahead
-
 * A **Carry Lookahead Adder (CLA)** solves this by computing all the carry signals in parallel, directly from the input bits. This breaks the dependency chain and makes the adder significantly faster.
 
 <img src="" class="w-120 mx-auto" alt="Carry Lookahead Adder Block Diagram"/>
 
 </div>
 ---
+layout: two-cols-header
+---
 
 ## Carry Lookahead Logic
-
+:: left ::
 Sum and Carry can be re-expressed in terms of **generate/propagate**:
 
-*   **Carry Generate (Gi) = Ai ⋅ Bi**
-    *   A carry is generated when both Ai and Bi are 1.
-*   **Carry Propagate (Pi) = Ai ⊕ Bi**
+*   **Carry Generate $\bm{(G_i) = A_i ⋅ B_i}$**
+    *   A carry is generated when both $A_i$ and $B_i$ are 1.
+*   **Carry Propagate $\bm{(P_i) = A_i ⊕ B_i}$**
     *   A carry-in will be propagated to the carry-out.
 
 The equations become:
-*   **Si = Pi ⊕ Ci**
-*   **Ci+1 = Gi + Pi ⋅ Ci**
+*   $S_i = P_i ⊕ C_i$
+*   $C_{i+1} = G_i + P_i ⋅ C_i$
 
----
-
-## Carry Lookahead Logic (Expanded)
+:: right ::
 
 We can re-express the carry logic to depend only on the inputs (A, B) and the initial carry `C0`.
 
-*   `C1 = G0 + P0⋅C0`
-*   `C2 = G1 + P1⋅C1 = G1 + P1⋅G0 + P1⋅P0⋅C0`
-*   `C3 = G2 + P2⋅C2 = G2 + P2⋅G1 + P2⋅P1⋅G0 + P2⋅P1⋅P0⋅C0`
-*   `C4 = G3 + P3⋅C3 = G3 + P3⋅G2 + P3⋅P2⋅G1 + P3⋅P2⋅P1⋅G0 + P3⋅P2⋅P1⋅P0⋅C0`
+*   $C_1 = G_0 + P_0⋅C_0$
+*   $C_2 = G_1 + P_1⋅C_1 \\ C_2 = G_1 + P_1⋅G_0 + P_1⋅P_0⋅C_0$
+*   $C_3 = G_2 + P_2⋅C_2 \\ C_3 = G_2 + P_2⋅G_1 + P_2⋅P_1⋅G_0 + P_2⋅P_1⋅P_0⋅C_0$
+*   $C_4 = G_3 + P_3⋅C_3 \\ C_4 = G_3 + P_3⋅G_2 + P_3⋅P_2⋅G_1 + P_3⋅P_2⋅P_1⋅G_0 + P_3⋅P_2⋅P_1⋅P_0⋅C_0$
 
 Each of these carry equations can be implemented in a two-level logic network.
 
