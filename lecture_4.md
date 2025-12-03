@@ -25,7 +25,7 @@ hideInToc: false
 layout: two-cols-header
 ---
 
-## Numbers Systems
+## Numbers Systems (Unsigned)
 
 :: left ::
 
@@ -67,7 +67,7 @@ $$
 </Transform>
 ---
 
-## Review of Number Systems
+## Signed Number Systems
 
 *   **Differences in negative numbers**
     *   Three major schemes:
@@ -267,7 +267,7 @@ Let's calculate **`4 + (-3) = 1`**. In binary, `+4` is `0100`.
 layout: two-cols
 ---
 
-## Arithmetic Overflow
+## Overflow
 
 *   The result of addition or subtraction is supposed to fit within the significant bits used to represent the numbers.
 *   If *n* bits are used for signed numbers, the result must be in the range $-2^{(n-1)}$ to $+2^{(n-1)} - 1$.
@@ -623,7 +623,7 @@ The critical path (worst-case delay) in a ripple-carry adder occurs when a carry
 layout: two-cols-header
 ---
 
-## Carry Lookahead Logic
+### Carry Lookahead Logic
 :: left ::
 Sum and Carry can be re-expressed in terms of **generate/propagate**:
 
@@ -648,26 +648,56 @@ We can re-express the carry logic to depend only on the inputs (A, B) and the in
 Each of these carry equations can be implemented in a two-level logic network.
 
 ---
-
-## Cascaded Carry Lookahead
-
-*   We can build larger adders (e.g., 16-bit) using smaller carry-lookahead adders (e.g., 4-bit).
-*   A second-level carry lookahead unit takes the `P` (propagate) and `G` (generate) signals from each 4-bit block to quickly compute the carries between the blocks.
-*   This extends the lookahead principle to a larger number of bits.
-
+layout: two-cols
 ---
 
-## Delay Analysis of Carry Lookahead
+### Hierarchical Carry Lookahead
 
-*   Consider a 16-bit adder implemented with four stages of 4-bit adders using carry lookahead.
-*   Carry-in to the highest stage is available after **5 gate delays**.
-*   Sum from the highest stage is available at **8 gate delays**.
-*   This is a significant improvement over the **32 gate delays** for a 16-bit ripple-carry adder.
+A single-level carry-lookahead unit for a large adder (e.g., 16-bit) is impractical due to the massive fan-in required for the gates. The solution is a **hierarchical** or **cascaded** approach. We can build a 16-bit adder by connecting four 4-bit CLA adders.
+
+A second-level Carry Lookahead Unit computes carries *between* the blocks. It uses "super" Propagate ($P^*$) and Generate ($G^*$) signals from each 4-bit block.
+
+
+::right::
+
+<div class="text-center">
+
+**16-bit Adder with Cascaded CLAs**
+
+<img src="" class="w-110 mx-auto" alt="Placeholder: 16-bit Cascaded Carry Lookahead Adder diagram"/>
+
+<p class="text-sm mt-2">A second-level CLA unit uses the P* and G* signals from each 4-bit block to generate the carries between them ($C_4, C_8, C_{12}$) in parallel.</p>
+
+</div>
 
 ---
+layout: default
+---
 
-## Theory of Multiplication
+### Delay Analysis: Ripple vs. Hierarchical CLA
 
+Let's compare a 16-bit adder, assuming 1 gate delay is `t`.
+
+*   **16-bit Ripple-Carry Adder:**
+    *   The carry must ripple through 15 full adders after the first. Each FA has a 2-gate delay for carry.
+    *   Total Delay for $C_{16}$: $\approx 16 \times 2t = \textbf{32t}$.
+
+*   **16-bit Hierarchical CLA (Two Levels):**
+    1.  **1t:** Calculate all $P_i$ and $G_i$ signals in parallel.
+    2.  **2t:** Calculate block $P^*$ and $G^*$ signals for all blocks.
+    3.  **2t:** The second-level CLA calculates the block carries ($C_4, C_8, C_{12}$).
+    4.  **2t:** The carries *within* each block (e.g., $C_1, C_2, C_3$) are calculated.
+    5.  **1t:** The final sum bits ($S_i = P_i \oplus C_i$) are calculated.
+    *   Total Delay for the final sum bit: $1t+2t+2t+2t+1t = \textbf{8t}$.
+
+The hierarchical CLA is significantly faster, showing a **4x improvement** in this case.
+
+---
+layout: two-cols-header
+---
+
+## Multiplication
+:: left ::
 **Basic Concept:** Multiplication is a process of adding partial products.
 
 ```
@@ -684,9 +714,9 @@ Each of these carry equations can be implemented in a two-level logic network.
 
 The product of two 4-bit numbers is an 8-bit number.
 
----
+:: right ::
 
-## Combinational Multiplier
+### Combinational Multiplier
 
 A combinational multiplier can be built using an array of AND gates to form the partial products and an array of adders to sum them up.
 
@@ -707,8 +737,12 @@ A combinational multiplier can be built using an array of AND gates to form the 
 *   **ASCII:** Represents characters (letters, numbers, symbols) as numbers.
 
 ---
+layout: two-cols-header
+---
 
 ## Floating-Point Numbers (IEEE 754 Single Precision)
+
+:: left ::
 
 A 32-bit format for floating-point values.
 
@@ -721,9 +755,7 @@ A 32-bit format for floating-point values.
 
 The standard calls for a normalized mantissa, where the most significant bit is always 1. This "hidden bit" is not stored, providing an extra bit of precision.
 
----
-
-## Floating-Point Example
+:: right ::
 
 **Convert (3.5)₁₀ to IEEE 754 single precision.**
 
