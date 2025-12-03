@@ -1,0 +1,56 @@
+\documentclass[border=10pt]{standalone}
+\usepackage[american]{circuitikz}
+
+% Define a style for buses (thicker lines)
+\tikzset{bus/.style={line width=1.2pt}}
+
+% Define a 4-bit adder block
+\tikzset{
+    fourbitadder/.style={
+        draw,
+        rectangle,
+        minimum width=6cm,
+        minimum height=2cm,
+        label=center:{\begin{tabular}{c}4-bit\\Adder\end{tabular}},
+        anchor=center,
+    }
+}
+
+\begin{document}
+\begin{circuitikz}
+    \ctikzset{logic ports=ieee}
+
+    % --- Place the main blocks ---
+    \node[fourbitadder] (ADDER) at (4,0) {};
+    \node[xor port, scale=1, rotate=270] (XOR_ARRAY) at (5, 2.5) {};
+    \node at (XOR_ARRAY) [xshift=0.9cm, yshift=0.2cm] {$\times 4$};
+
+    % --- Draw Inputs ---
+    % A input
+    \draw[bus] (ADDER.north) ++(-0.8, 0) -- ++(0, 1) node[above] {$A_{3..0}$};
+    \node at (ADDER.north) [xshift=-0.8cm, yshift=+0.3cm] {/};
+    \node at (ADDER.north) [xshift=-1cm, yshift=+0.4cm] {4};
+
+    % B input to XOR array
+    \draw[bus] (XOR_ARRAY.in 2) -- ++(-1,0) node[left] {$B_{3..0}$};
+    \node at (XOR_ARRAY.in 2) [xshift=-0.3cm] {/};
+    \node at (XOR_ARRAY.in 2) [xshift=-0.1cm, yshift=0.2cm] {4};
+
+    % Control signal
+    \draw (XOR_ARRAY.in 1) -- ++(+3,0) node[right] (ctrl) {$\overline{Add}/Sub$} coordinate[pos=0.8] (ctrl2);
+    \draw (ctrl2) to[short, *-] (ctrl2 |- ADDER.east) -- (ADDER.east) node[right, yshift=-0.2cm] {$C_{in}$};
+
+    % --- Connect XOR to Adder ---
+    \draw[bus] (XOR_ARRAY.out) -- (ADDER.north |- XOR_ARRAY.out) -- (ADDER.north) ++(0.8, 0);
+    \node at (ADDER.north) [xshift=0.7cm, yshift=0.4cm] {/};
+    \node at (ADDER.north) [xshift=0.6cm, yshift=0.6cm] {4};
+
+    % --- Draw Outputs ---
+    \draw[bus] (ADDER.south) -- ++(0,-1) node[below] {$S_{3..0}$};
+    \node at (ADDER.south) [yshift=-0.3cm] {/};
+    \node at (ADDER.south) [xshift=0.2cm, yshift=-0.4cm] {4};
+
+    \draw (ADDER.west) -- ++(-1,0) node[left] {$C_{out}$};
+
+\end{circuitikz}
+\end{document}
