@@ -1,0 +1,56 @@
+\documentclass[border=10pt]{standalone}
+\usepackage[american]{circuitikz}
+
+% Define a new component style for the Half-Adder (HA) block
+\tikzset{
+    halfadder/.style={
+        draw,
+        rectangle,
+        minimum width=1.5cm,
+        minimum height=2cm,
+        label=center:HA, 
+        anchor=center, % This is important for positioning
+        append after command={
+            \pgfextra{\let\mainnode=\tikzlastnode}
+            node at (\mainnode.north west) [yshift=-0.4cm] (A){}
+            node at (\mainnode.south west) [yshift=0.4cm] (B){}
+            node at (\mainnode.north east) [yshift=-0.4cm] (S){}
+            node at (\mainnode.south east) [yshift=0.4cm] (C){}
+        }
+    }
+}
+
+\begin{document}
+\begin{circuitikz}[]
+    \ctikzset{logic ports=ieee} % Use IEEE standard symbols
+
+    % --- Place the components ---
+    % First Half-Adder
+    \node[halfadder] (HA1) at (2, 1.5) {};
+    % Second Half-Adder
+    \node[halfadder] (HA2) at (5, 1.5) {};
+    % OR gate for the final carry
+    \node[or port] (OR1) at (8, 0) {};
+
+    % --- Connect inputs ---
+    \draw (HA1.west |- A) -- ++(-1,0) node[left] {$A$};
+    \draw (HA1.west |- B) -- ++(-1,0) node[left] {$B$};
+    \draw (HA2.west |- B) -- ++(-1,0) node[left] {};
+
+    % --- Connect HA1 to HA2 ---
+    % Sum of HA1 goes to input A of HA2
+    \draw (HA1.east |- S) -- (HA2.west |- A);
+    \draw (HA1.east |- C) -- (HA2.west |- B) coordinate[pos=0.3] (pointB);;
+
+    % --- Connect carry logic ---
+    % Carry of HA1 goes to the OR gate
+    \draw (pointB) to[short, *-] (pointB |- OR1.in 2) |- (OR1.in 2);
+    % Carry of HA2 goes to the OR gate
+    \draw (HA2.east |- C) -| (OR1.in 1);
+
+    % --- Connect outputs ---
+    \draw (HA2.east |- S) -- ++(4,0) node[right] {Sum ($S$)};
+    \draw (OR1.out) -- ++(0.6,0) node[right] {Carry Out ($C_{out}$)};
+
+\end{circuitikz}
+\end{document}
