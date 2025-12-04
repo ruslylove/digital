@@ -616,7 +616,7 @@ The critical path (worst-case delay) in a ripple-carry adder occurs when a carry
 
 * A **Carry Lookahead Adder (CLA)** solves this by computing all the carry signals in parallel, directly from the input bits. This breaks the dependency chain and makes the adder significantly faster.
 
-<img src="" class="w-120 mx-auto" alt="Carry Lookahead Adder Block Diagram"/>
+<img src="/cla_4bit.svg" class="w-120 mx-auto pt-4" alt="Carry Lookahead Adder Block Diagram"/>
 
 </div>
 ---
