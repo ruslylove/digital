@@ -1,8 +1,8 @@
-PWD /Users/rus/Development/slidev/digital/tex
+PWD /Users/rus/development/digital/tex
 INPUT /usr/local/texlive/2025/texmf.cnf
 INPUT /usr/local/texlive/2025/texmf-dist/web2c/texmf.cnf
 INPUT /usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt
-INPUT /Users/rus/Development/slidev/digital/tex/16-bit_cla.tex
+INPUT /Users/rus/development/digital/tex/16-bit_cla.tex
 OUTPUT 16-bit_cla.log
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/standalone/standalone.cls
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/standalone/standalone.cls
@@ -225,3 +225,4 @@ INPUT /usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.p
 INPUT /usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb
 INPUT /usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb
 INPUT /usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb
+INPUT /usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb

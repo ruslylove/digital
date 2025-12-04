@@ -894,10 +894,13 @@ layout: two-cols
 
 ### Hierarchical Carry Lookahead
 
-A single-level carry-lookahead unit for a large adder (e.g., 16-bit) is impractical due to the massive fan-in required for the gates. The solution is a **hierarchical** or **cascaded** approach. We can build a 16-bit adder by connecting four 4-bit CLA adders.
+<div class="text-base">
 
-A second-level Carry Lookahead Unit computes carries *between* the blocks. It uses "super" Propagate ($P^*$) and Generate ($G^*$) signals from each 4-bit block.
-<div class="text-xs">
+* A single-level carry-lookahead unit for a large adder (e.g., 16-bit) is impractical due to the massive fan-in required for the gates. The solution is a **hierarchical** or **cascaded** approach. We can build a 16-bit adder by connecting four 4-bit CLA adders.
+* A second-level Carry Lookahead Unit computes carries *between* the blocks. It uses "super" Propagate ($P^*$) and Generate ($G^*$) signals from each 4-bit block.
+
+
+<div class="text-xs mt-2">
 
 * $P_0^* = P_3 \cdot P_2 \cdot P_1 \cdot P_0$
 * $P_1^* = P_7 \cdot P_6 \cdot P_5 \cdot P_4$
@@ -907,6 +910,9 @@ A second-level Carry Lookahead Unit computes carries *between* the blocks. It us
 * $G_1^* = G_7 + (P_7 \cdot G_6) + (P_7 \cdot P_6 \cdot G_5) + (P_7 \cdot P_6 \cdot P_5 \cdot G_4)$
 * $G_2^* = G_{11} + (P_{11} \cdot G_{10}) + (P_{11} \cdot P_{10} \cdot G_9) + (P_{11} \cdot P_{10} \cdot P_9 \cdot G_8)$
 * $G_3^* = G_{15} + (P_{15} \cdot G_{14}) + (P_{15} \cdot P_{14} \cdot G_{13}) + (P_{15} \cdot P_{14} \cdot P_{13} \cdot G_{12})$
+
+</div>
+
 </div>
 
 ::right::
@@ -915,9 +921,13 @@ A second-level Carry Lookahead Unit computes carries *between* the blocks. It us
 
 **16-bit Adder with Cascaded CLAs**
 
-<img src="/16bit_cla.jpg" class="w-110 mx-auto" alt="Placeholder: 16-bit Cascaded Carry Lookahead Adder diagram"/>
+<img src="/16-bit_cla.svg" class="w-fullf mx-auto" alt="Placeholder: 16-bit Cascaded Carry Lookahead Adder diagram"/>
 
-<div class="text-sm mt-2">A second-level CLA unit uses the P* and G* signals from each 4-bit block to generate the carries between them ($C_4, C_8, C_{12}$) in parallel.</div>
+<div class="text-sm mt-2">
+
+A second-level CLA unit uses the P* and G* signals from each 4-bit block to generate the carries between them ($C_4, C_8, C_{12}$) in parallel.
+
+</div>
 
 <div class="text-xs mt-2">
 

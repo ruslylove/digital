@@ -7,80 +7,109 @@
 
     % Define block dimensions and spacing
     \def\CLAwidth{2.8}
-    \def\CLAheight{2.5}
+    \def\CLAheight{1.5}
     \def\CLAsep{3.5} % Horizontal separation
 
     % --- Define Coordinates for Blocks and I/O ---
-    \coordinate (Cin) at (-0.5, 0); % Global C0
+    %\coordinate (Cin) at (-1, \CLAheight/2); % Global C0
 
     % --- CLA Blocks (B0, B1, B2, B3) ---
     % Block 0 (Bits 0-3)
     \draw (0, 0) node[draw, minimum width=\CLAwidth cm, minimum height=\CLAheight cm, anchor=south west] (B0) {
         \textbf{CLA} ($B_{0}$)
     };
-    \draw (0, 3) node[anchor=south east] {$A_{3..0}/B_{3..0}$};
-    \draw (B0.north west) -- (0, 2.5);
+    %\draw (\CLAwidth/2, 2) node[anchor=south] {$A_{3..0}/B_{3..0}$};
+    %\draw (B0.north) -- ++(0, 0.9);
+    \node at (B0.north) [xshift=-0.5cm] (AB0) {};
+    \draw (B0.north -| AB0) -- ++(0, 0.5) node[anchor=south] {$A_{3..0}$};
+    \node at (B0.north) [xshift=+0.5cm] (BB0) {};
+    \draw (B0.north -| BB0) -- ++(0, 0.5) node[anchor=south] {$B_{3..0}$};
+
 
     % Block 1 (Bits 4-7)
     \draw (\CLAsep, 0) node[draw, minimum width=\CLAwidth cm, minimum height=\CLAheight cm, anchor=south west] (B1) {
         \textbf{CLA} ($B_{1}$)
     };
-    \draw (\CLAsep, 3) node[anchor=south east] {$A_{7..4}/B_{7..4}$};
-    \draw (B1.north west) -- (\CLAsep, 2.5);
+    \node at (B1.north) [xshift=-0.5cm] (AB1) {};
+    \draw (B1.north -| AB1) -- ++(0, 0.5) node[anchor=south] {$A_{7..4}$};
+    \node at (B1.north) [xshift=+0.5cm] (BB1) {};
+    \draw (B1.north -| BB1) -- ++(0, 0.5) node[anchor=south] {$B_{7..4}$};
 
     % Block 2 (Bits 8-11)
     \draw (2*\CLAsep, 0) node[draw, minimum width=\CLAwidth cm, minimum height=\CLAheight cm, anchor=south west] (B2) {
         \textbf{CLA} ($B_{2}$)
     };
-    \draw (2*\CLAsep, 3) node[anchor=south east] {$A_{11..8}/B_{11..8}$};
-    \draw (B2.north west) -- (2*\CLAsep, 2.5);
+    \node at (B2.north) [xshift=-0.5cm] (AB2) {};
+    \draw (B2.north -| AB2) -- ++(0, 0.5) node[anchor=south] {$A_{11..8}$};
+    \node at (B2.north) [xshift=+0.5cm] (BB2) {};
+    \draw (B2.north -| BB2) -- ++(0, 0.5) node[anchor=south] {$B_{11..8}$};
+
 
     % Block 3 (Bits 12-15)
     \draw (3*\CLAsep, 0) node[draw, minimum width=\CLAwidth cm, minimum height=\CLAheight cm, anchor=south west] (B3) {
         \textbf{CLA} ($B_{3}$)
     };
-    \draw (3*\CLAsep, 3) node[anchor=south east] {$A_{15..12}/B_{15..12}$};
-    \draw (B3.north west) -- (3*\CLAsep, 2.5);
+    \node at (B3.north) [xshift=-0.5cm] (AB3) {};
+    \draw (B3.north -| AB3) -- ++(0, 0.5) node[anchor=south] {$A_{15..12}$};
+    \node at (B3.north) [xshift=+0.5cm] (BB3) {};
+    \draw (B3.north -| BB3) -- ++(0, 0.5) node[anchor=south] {$B_{15..12}$};
+
+        % --- Connect Global Cin (C0) to B0 --- 
+    \draw[<-, red] (B0.west) -- ++(-1.0,0) node[anchor=east] {$C_0$};
+    %\draw (Cin) node[anchor=east] {$C_0$};
+
 
     % --- Group Carry Lookahead (GCLA) Unit ---
-    \coordinate (GCLA_center) at (1.75*\CLAsep, 5.5);
-    \draw (GCLA_center) node[draw, fill=gray!20, minimum width=1.5*\CLAsep cm, minimum height=1.5cm] (GCLA) {
+    \coordinate (GCLA_center) at (1.75*\CLAsep, -1.5);
+    \draw (GCLA_center) node[draw, fill=gray!20, minimum width=5*\CLAsep cm, minimum height=1.5cm] (GCLA) {
         \textbf{Group Carry Lookahead Unit} (GCLA)
     };
+    \node at (B1.south) [xshift=-1.0cm] (GCLA_in1) {};
+    \node at (B2.south) [xshift=-1cm] (GCLA_in2) {};
+    \node at (B3.south) [xshift=-1.0cm] (GCLA_in3) {};
+
+
+
 
     % --- GCLA Inputs (P^G and G^G) ---
-    \draw[->, dashed] (B0.north) -- (B0.north) node[anchor=south] {$P_0^G, G_0^G$} |- (GCLA.west);
-    \draw[->, dashed] (B1.north) -- (B1.north) node[anchor=south] {$P_1^G, G_1^G$} |- (GCLA.west);
-    \draw[->, dashed] (B2.north) -- (B2.north) node[anchor=south] {$P_2^G, G_2^G$} |- (GCLA.east);
-    \draw[->, dashed] (B3.north) -- (B3.north) node[anchor=south] {$P_3^G, G_3^G$} |- (GCLA.east);
+    \draw[->, dashed] (B0.south) -- ++(0,-1) node[anchor=north west] {$P_1^*, G_1^*$} ;
+    \draw[->, dashed] (B1.south) -- ++(0,-1) node[anchor=north west] {$P_2^*, G_2^*$} ;
+    \draw[->, dashed] (B2.south) -- ++(0,-1) node[anchor=north west] {$P_3^*, G_3^*$} ;
+    \draw[->, dashed] (B3.south) -- ++(0,-1) node[anchor=north west] {$P_4^*, G_4^*$} ;
+
+    %\draw[->, dashed] (B1.south) -- (B1.south) node[anchor=south] {$P_1^*, G_1^*$} |- (GCLA.north);
+    %\draw[->, dashed] (B2.south) -- (B2.south) node[anchor=south] {$P_2^*, G_2^*$} |- (GCLA.north);
+    %\draw[->, dashed] (B3.north) -- (B3.north) node[anchor=south] {$P_3^*, G_3^*$} |- (GCLA.east);
 
     % Connect Global Cin (C0) to GCLA
-    \draw[->, red] (Cin) -- (0, 0) |- (GCLA.south west);
-    \draw (Cin) node[anchor=south] {$C_0$};
+ %   \draw[->, red] (Cin) -- (0, 0) |- (GCLA.south west);
+ %   \draw (Cin) node[anchor=south] {$C_0$};
 
     % --- GCLA Outputs (Block Carries) ---
     
     % C4
-    \draw[->, red] (GCLA.south) -- (GCLA.south) node[anchor=south, pos=0.8] {$C_4$}
-        |- (B1.south west) -- (B1.south west);
+    \draw[<-, red] (B1.south -| GCLA_in1) -- ++(0,-1) node[anchor=west, pos=0.5] {$C_4$};
+   
     
     % C8
-    \draw[->, red] (GCLA.south) -- (GCLA.south) node[anchor=south, pos=0.5] {$C_8$}
-        |- (B2.south west) -- (B2.south west);
+       \draw[<-, red] (B2.south -| GCLA_in2) -- ++(0,-1) node[anchor=west, pos=0.5] {$C_8$};
 
     % C12
-    \draw[->, red] (GCLA.south) -- (GCLA.south) node[anchor=south, pos=0.2] {$C_{12}$}
-        |- (B3.south west) -- (B3.south west);
+    \draw[<-, red] (B3.south -| GCLA_in3) -- ++(0,-1) node[anchor=west, pos=0.5] {$C_{12}$};
 
     % Final C_out (C16)
-    \draw[->, red] (GCLA.north) -- (GCLA.north) node[anchor=south, pos=0.2] {$C_{16}$}
-        -- (GCLA.north) node[anchor=south] {$C_{out}$};
+    \draw[->, red] (GCLA.south) -- ++(0,-0.4) node[anchor=south, pos=0] {$C_{16}$};
+        
 
     % --- Sum Outputs (S[15:0]) ---
-    \draw (B0.east) -- (\CLAwidth + 0.5, 0.5) node[anchor=west] {$S_{3..0}$};
-    \draw (B1.east) -- (\CLAwidth + \CLAsep + 0.5, 0.5) node[anchor=west] {$S_{7..4}$};
-    \draw (B2.east) -- (\CLAwidth + 2*\CLAsep + 0.5, 0.5) node[anchor=west] {$S_{11..8}$};
-    \draw (B3.east) -- (\CLAwidth + 3*\CLAsep + 0.5, 0.5) node[anchor=west] {$S_{15..12}$};
+    \draw (B0.east) -- ++(\CLAwidth/4, 0) node[anchor=west] {$S_{3..0}$};
+    \draw (B1.east) -- ++(\CLAwidth/4, 0) node[anchor=west] {$S_{7..4}$};
+    \draw (B2.east) -- ++(\CLAwidth/4, 0) node[anchor=west] {$S_{11..8}$};
+    \draw (B3.east) -- ++(\CLAwidth/4, 0) node[anchor=west] {$S_{15..12}$};
+
+
+    \node at (B0.west) [xshift=-1cm,yshift=0.15cm] (CoCon) {};
+    \draw[->, red] (CoCon) |- (GCLA.west);
 
 \end{circuitikz}
 \end{document}
