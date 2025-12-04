@@ -44,7 +44,9 @@ graph LR
 *   **How?** While algebraic manipulation works, it can be cumbersome and doesn't follow specific rules. The **Karnaugh Map** provides a systematic, graphical method for simplification.
 
 ---
-
+layout: image-right
+image: /complex_circuit.png
+---
 ## The Map Method (Karnaugh Map)
 
 The Karnaugh map (or K-map) is a graphical method for simplifying Boolean expressions.
