@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1764866096.43029 "/Users/rus/development/digital/tex/16-bit_cla.tex" "16-bit_cla.pdf" "16-bit_cla" 1764866097.86477 0
-  "/Users/rus/development/digital/tex/16-bit_cla.tex" 1764866095.94995 4673 7b8d2304ca3fa5ff5282b5b90c959cf2 ""
+["pdflatex"] 1764866220.45286 "/Users/rus/development/digital/tex/16-bit_cla.tex" "16-bit_cla.pdf" "16-bit_cla" 1764866221.90099 0
+  "/Users/rus/development/digital/tex/16-bit_cla.tex" 1764866220.21052 4672 f6b6eb0a206e3e078c80d3273414d0b5 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm" 1136768653 1328 c834bbb027764024c09d3d2bf908b5f0 ""
@@ -135,8 +135,8 @@
   "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1763819811 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
   "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1763819727 3345735 98e8d6ce829fe76d41a990640e1359a8 ""
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
-  "16-bit_cla.aux" 1764866097.76726 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
-  "16-bit_cla.tex" 1764866095.94995 4673 7b8d2304ca3fa5ff5282b5b90c959cf2 ""
+  "16-bit_cla.aux" 1764866221.80264 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "16-bit_cla.tex" 1764866220.21052 4672 f6b6eb0a206e3e078c80d3273414d0b5 ""
   (generated)
   "16-bit_cla.aux"
   "16-bit_cla.log"
