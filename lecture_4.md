@@ -66,6 +66,9 @@ $$
 
 </Transform>
 ---
+layout: image-right
+image: /signed_numbers.png
+---
 
 ## Signed Number Systems
 
@@ -648,6 +651,181 @@ We can re-express the carry logic to depend only on the inputs (A, B) and the in
 Each of these carry equations can be implemented in a two-level logic network.
 
 ---
+
+### VHDL Implementation
+
+<div class="grid grid-cols-2 gap-4">
+<div>
+
+**1. Propagate and Generate Logic Unit (pg_unit.vhd)**
+```vhdl
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+
+ENTITY pg_unit IS
+    PORT (
+        A, B : IN  STD_LOGIC;
+        P_out, G_out : OUT STD_LOGIC
+    );
+END ENTITY pg_unit;
+
+ARCHITECTURE dataflow OF pg_unit IS
+BEGIN
+    -- G_out: Generate signal (G = A AND B)
+    G_out <= A AND B;
+    
+    -- P_out: Propagate signal (P = A XOR B)
+    P_out <= A XOR B;
+END ARCHITECTURE dataflow;
+```
+</div>
+<div>
+
+**2. Carry Lookahead Logic Block (cla_logic.vhd)**
+
+
+```vhdl {*}{maxHeight:'365px', lines:true}
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+
+ENTITY cla_logic IS
+    PORT (
+        P_in, G_in : IN  STD_LOGIC_VECTOR(3 DOWNTO 0); -- P and G vectors (P0-P3, G0-G3)
+        C0         : IN  STD_LOGIC;                    -- Global Carry-in
+        C_out      : OUT STD_LOGIC_VECTOR(4 DOWNTO 1)  -- Calculated Carries (C1-C4)
+    );
+END ENTITY cla_logic;
+
+ARCHITECTURE dataflow OF cla_logic IS
+BEGIN
+    -- C1 = G0 + P0 * C0
+    C_out(1) <= G_in(0) OR (P_in(0) AND C0);
+    
+    -- C2 = G1 + P1*G0 + P1*P0*C0
+    C_out(2) <= G_in(1) OR (P_in(1) AND G_in(0)) OR (P_in(1) AND P_in(0) AND C0);
+
+    -- C3 = G2 + P2*G1 + P2*P1*G0 + P2*P1*P0*C0
+    C_out(3) <= G_in(2) OR (P_in(2) AND G_in(1)) OR (P_in(2) AND P_in(1) AND G_in(0)) OR 
+                (P_in(2) AND P_in(1) AND P_in(0) AND C0);
+
+    -- C4 = G3 + P3*G2 + P3*P2*G1 + P3*P2*P1*G0 + P3*P2*P1*P0*C0 (Final Carry-out of the 4-bit block)
+    C_out(4) <= G_in(3) OR (P_in(3) AND G_in(2)) OR (P_in(3) AND P_in(2) AND G_in(1)) OR 
+                (P_in(3) AND P_in(2) AND P_in(1) AND G_in(0)) OR 
+                (P_in(3) AND P_in(2) AND P_in(1) AND P_in(0) AND C0);
+
+END ARCHITECTURE dataflow;
+```
+</div>
+</div>
+
+---
+
+<div class="grid grid-cols-2 gap-4">
+<div>
+
+**3. Sum Logic Unit (sum_logic.vhd)**
+```vhdl {*}{lines:true}
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+
+ENTITY sum_logic IS
+    PORT (
+        P_in, C_in : IN  STD_LOGIC;
+        S_out      : OUT STD_LOGIC
+    );
+END ENTITY sum_logic;
+
+ARCHITECTURE dataflow OF sum_logic IS
+BEGIN
+    -- S_out: Sum bit (S = P XOR C)
+    S_out <= P_in XOR C_in;
+END ARCHITECTURE dataflow;
+```
+</div>
+<div>
+
+**4. Top-Level 4-bit CLA Adder (cla_4bit_adder.vhd)**
+```vhdl {*}{maxHeight:'385px', lines:true}
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+
+ENTITY cla_4bit_adder IS
+    PORT (
+        A, B    : IN  STD_LOGIC_VECTOR(3 DOWNTO 0); -- 4-bit inputs
+        Cin     : IN  STD_LOGIC;                    -- Global Carry-in (C0)
+        S       : OUT STD_LOGIC_VECTOR(3 DOWNTO 0); -- 4-bit Sum output
+        Cout    : OUT STD_LOGIC                     -- Final Carry-out (C4)
+    );
+END ENTITY cla_4bit_adder;
+
+ARCHITECTURE structural OF cla_4bit_adder IS
+
+    -- Declare all necessary components
+    COMPONENT pg_unit
+        PORT ( A, B : IN STD_LOGIC; P_out, G_out : OUT STD_LOGIC );
+    END COMPONENT;
+
+    COMPONENT cla_logic
+        PORT ( P_in, G_in : IN STD_LOGIC_VECTOR(3 DOWNTO 0); C0 : IN STD_LOGIC; C_out : OUT STD_LOGIC_VECTOR(4 DOWNTO 1) );
+    END COMPONENT;
+
+    COMPONENT sum_logic
+        PORT ( P_in, C_in : IN STD_LOGIC; S_out : OUT STD_LOGIC );
+    END COMPONENT;
+
+    -- Internal Signals for P and G vectors
+    SIGNAL P_vec : STD_LOGIC_VECTOR(3 DOWNTO 0);
+    SIGNAL G_vec : STD_LOGIC_VECTOR(3 DOWNTO 0);
+
+    -- Internal Signals for the Carries (C1, C2, C3, C4)
+    SIGNAL C_vec : STD_LOGIC_VECTOR(4 DOWNTO 1); 
+
+BEGIN
+
+    -- 1. Generate P and G Signals (4 instances of PG_Unit)
+    -- Generates P(i) and G(i) for each bit i=0 to 3
+    PG_GEN: FOR i IN 0 TO 3 GENERATE
+        PG_I: pg_unit
+            PORT MAP (
+                A => A(i),
+                B => B(i),
+                P_out => P_vec(i),
+                G_out => G_vec(i)
+            );
+    END GENERATE;
+
+    -- 2. CLA Logic Block (1 instance)
+    -- Calculates all internal carries C1, C2, C3, C4 in parallel
+    CLA_BLOCK: cla_logic
+        PORT MAP (
+            P_in => P_vec,
+            G_in => G_vec,
+            C0   => Cin,
+            C_out => C_vec
+        );
+
+    -- Map the final calculated carry C4 to the entity's Cout
+    Cout <= C_vec(4);
+
+    -- 3. Sum Logic (4 instances of Sum_Logic)
+    -- Calculates the final sum S(i) using P(i) and the calculated carry C(i)
+    SUM_GEN: FOR i IN 0 TO 3 GENERATE
+        SUM_I: sum_logic
+            PORT MAP (
+                P_in => P_vec(i),
+                -- Note: The carry input for Sum_Logic(i) is C_vec(i) for i=1 to 3, 
+                -- but for i=0, it is the global Cin (C0).
+                -- We use the entity input Cin directly for the LSB (i=0).
+                C_in => C_vec(i) WHEN i > 0 ELSE Cin,
+                S_out => S(i)
+            );
+    END GENERATE;
+
+END ARCHITECTURE structural;
+```
+</div>
+</div>
+---
 layout: two-cols
 ---
 
@@ -656,49 +834,342 @@ layout: two-cols
 A single-level carry-lookahead unit for a large adder (e.g., 16-bit) is impractical due to the massive fan-in required for the gates. The solution is a **hierarchical** or **cascaded** approach. We can build a 16-bit adder by connecting four 4-bit CLA adders.
 
 A second-level Carry Lookahead Unit computes carries *between* the blocks. It uses "super" Propagate ($P^*$) and Generate ($G^*$) signals from each 4-bit block.
+<div class="text-xs">
 
+* $P_0^* = P_3 \cdot P_2 \cdot P_1 \cdot P_0$
+* $P_1^* = P_7 \cdot P_6 \cdot P_5 \cdot P_4$
+* $P_2^* = P_{11} \cdot P_{10} \cdot P_9 \cdot P_8$
+* $P_3^* = P_{15} \cdot P_{14} \cdot P_{13} \cdot P_{12}$
+* $G_0^* = G_3 + (P_3 \cdot G_2) + (P_3 \cdot P_2 \cdot G_1) + (P_3 \cdot P_2 \cdot P_1 \cdot G_0)$
+* $G_1^* = G_7 + (P_7 \cdot G_6) + (P_7 \cdot P_6 \cdot G_5) + (P_7 \cdot P_6 \cdot P_5 \cdot G_4)$
+* $G_2^* = G_{11} + (P_{11} \cdot G_{10}) + (P_{11} \cdot P_{10} \cdot G_9) + (P_{11} \cdot P_{10} \cdot P_9 \cdot G_8)$
+* $G_3^* = G_{15} + (P_{15} \cdot G_{14}) + (P_{15} \cdot P_{14} \cdot G_{13}) + (P_{15} \cdot P_{14} \cdot P_{13} \cdot G_{12})$
+</div>
 
 ::right::
 
-<div class="text-center">
+<div class="p-4">
 
 **16-bit Adder with Cascaded CLAs**
 
-<img src="" class="w-110 mx-auto" alt="Placeholder: 16-bit Cascaded Carry Lookahead Adder diagram"/>
+<img src="/16bit_cla.jpg" class="w-110 mx-auto" alt="Placeholder: 16-bit Cascaded Carry Lookahead Adder diagram"/>
 
-<p class="text-sm mt-2">A second-level CLA unit uses the P* and G* signals from each 4-bit block to generate the carries between them ($C_4, C_8, C_{12}$) in parallel.</p>
+<div class="text-sm mt-2">A second-level CLA unit uses the P* and G* signals from each 4-bit block to generate the carries between them ($C_4, C_8, C_{12}$) in parallel.</div>
+
+<div class="text-xs mt-2">
+
+* $c_4 = G_0^* + P_0^* \cdot c_0$
+* $c_8 = G_1^* + P_1^* \cdot G_0^* + P_1^* \cdot P_0^* \cdot c_0$
+* $c_{12} = G_2^* + P_2^* \cdot G_1^* + P_2^* \cdot P_1^* \cdot G_0^* + P_2^* \cdot P_1^* \cdot P_0^* \cdot c_0$
+
+</div>
+
 
 </div>
 
 ---
-layout: default
+
+### VHDL Implementation
+This code relies on the three component files defined previously (**pg_unit.vhd**, **cla_logic.vhd**, and **sum_logic.vhd**).
+
+**1. cla_4bit_block.vhd (The 4-bit Building Block)**
+
+```vhdl {*}{maxHeight:'320px', lines:true}
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+
+ENTITY cla_4bit_block IS
+    PORT (
+        A, B    : IN  STD_LOGIC_VECTOR(3 DOWNTO 0);
+        Cin     : IN  STD_LOGIC;
+        S       : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        Pg_out  : OUT STD_LOGIC; -- Group Propagate (P^G)
+        Gg_out  : OUT STD_LOGIC; -- Group Generate (G^G)
+        Cout    : OUT STD_LOGIC  -- Local Cout (C4)
+    );
+END ENTITY cla_4bit_block;
+
+ARCHITECTURE structural OF cla_4bit_block IS
+
+    -- Component Declarations (Assuming these are defined externally)
+    COMPONENT pg_unit PORT ( A, B : IN STD_LOGIC; P_out, G_out : OUT STD_LOGIC ); END COMPONENT;
+    COMPONENT cla_logic PORT ( P_in, G_in : IN STD_LOGIC_VECTOR(3 DOWNTO 0); C0 : IN STD_LOGIC; C_out : OUT STD_LOGIC_VECTOR(4 DOWNTO 1) ); END COMPONENT;
+    COMPONENT sum_logic PORT ( P_in, C_in : IN STD_LOGIC; S_out : OUT STD_LOGIC ); END COMPONENT;
+
+    -- Internal Signals
+    SIGNAL P_vec, G_vec : STD_LOGIC_VECTOR(3 DOWNTO 0);
+    SIGNAL C_local : STD_LOGIC_VECTOR(4 DOWNTO 1); -- C1, C2, C3, C4
+
+BEGIN
+
+    -- 1. Instantiate 4x P/G Units
+    PG_GEN: FOR i IN 0 TO 3 GENERATE
+        PG_I: pg_unit PORT MAP (A => A(i), B => B(i), P_out => P_vec(i), G_out => G_vec(i));
+    END GENERATE;
+
+    -- 2. Instantiate 1x Local CLA Logic
+    CLA_LOCAL: cla_logic
+        PORT MAP (
+            P_in  => P_vec,
+            G_in  => G_vec,
+            C0    => Cin,
+            C_out => C_local
+        );
+
+    -- 3. Calculate Group Signals (P^G and G^G)
+    
+    -- P^G = P3 AND P2 AND P1 AND P0
+    Pg_out <= P_vec(3) AND P_vec(2) AND P_vec(1) AND P_vec(0); 
+
+    -- G^G: This logic is identical to C4 in cla_logic, but without the C0 term.
+    Gg_out <= G_vec(3) OR (P_vec(3) AND G_vec(2)) OR (P_vec(3) AND P_vec(2) AND G_vec(1)) OR 
+              (P_vec(3) AND P_vec(2) AND P_vec(1) AND G_vec(0));
+
+
+    -- 4. Instantiate 4x Sum Logic Units
+    SUM_GEN: FOR i IN 0 TO 3 GENERATE
+        SUM_I: sum_logic
+            PORT MAP (
+                P_in  => P_vec(i),
+                -- Cin for bit 0 is the block's Cin; Cin for bits 1-3 is C_local(i)
+                C_in  => C_local(i) WHEN i > 0 ELSE Cin,
+                S_out => S(i)
+            );
+    END GENERATE;
+    
+    -- 5. Map Local Cout
+    Cout <= C_local(4);
+
+END ARCHITECTURE structural;
+```
+
+
+---
+layout: two-cols
+---
+
+**2. gcla_logic.vhd (Global Carry Lookahead)**
+
+* This block calculates the block-level carries ($C_4, C_8, C_{12}, C_{16}$)
+
+<div class="p-4">
+
+```vhdl{*}{maxHeight:'335px', lines:true}
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+
+ENTITY gcla_logic IS
+    PORT (
+        Pg_in, Gg_in : IN  STD_LOGIC_VECTOR(3 DOWNTO 0); -- P^G and G^G vectors
+        C0           : IN  STD_LOGIC;                    -- Global Cin
+        C_block_out  : OUT STD_LOGIC_VECTOR(4 DOWNTO 1)  -- Block Carries (C4, C8, C12, C16)
+    );
+END ENTITY gcla_logic;
+
+ARCHITECTURE dataflow OF gcla_logic IS
+BEGIN
+    -- C4 (Block 1 Cin) = Gg0 + Pg0 * C0
+    C_block_out(1) <= Gg_in(0) OR (Pg_in(0) AND C0);
+    
+    -- C8 (Block 2 Cin) = Gg1 + Pg1*Gg0 + Pg1*Pg0*C0
+    C_block_out(2) <= Gg_in(1) OR (Pg_in(1) AND Gg_in(0)) OR (Pg_in(1) AND Pg_in(0) AND C0);
+
+    -- C12 (Block 3 Cin) = Gg2 + Pg2*Gg1 + Pg2*Pg1*Gg0 + Pg2*Pg1*Pg0*C0
+    C_block_out(3) <= Gg_in(2) OR (Pg_in(2) AND Gg_in(1)) OR (Pg_in(2) AND Pg_in(1) AND Gg_in(0)) OR 
+                      (Pg_in(2) AND Pg_in(1) AND Pg_in(0) AND C0);
+
+    -- C16 (Final Cout) = Gg3 + ... + Pg3*Pg2*Pg1*Pg0*C0
+    C_block_out(4) <= Gg_in(3) OR (Pg_in(3) AND Gg_in(2)) OR (Pg_in(3) AND Pg_in(2) AND Gg_in(1)) OR 
+                      (Pg_in(3) AND Pg_in(2) AND Pg_in(1) AND Gg_in(0)) OR 
+                      (Pg_in(3) AND Pg_in(2) AND Pg_in(1) AND Pg_in(0) AND C0);
+
+END ARCHITECTURE dataflow;
+```
+</div>
+
+:: right ::
+
+**3. cla_adder_16bit.vhd**
+* This is the top-level VHDL code for the 16-bit Carry Lookahead Adder (CLA)
+
+```vhdl {*}{maxHeight:'350px', lines:true}
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+
+---------------------------------------------------------------------
+-- ENTITY: 16-bit CLA Adder Interface
+---------------------------------------------------------------------
+ENTITY cla_adder_16bit IS
+    PORT (
+        A, B    : IN  STD_LOGIC_VECTOR(15 DOWNTO 0); -- Two 16-bit inputs
+        Cin     : IN  STD_LOGIC;                    -- Global Carry-in (C0)
+        S       : OUT STD_LOGIC_VECTOR(15 DOWNTO 0); -- 16-bit Sum output
+        Cout    : OUT STD_LOGIC                     -- Final Carry-out (C16)
+    );
+END ENTITY cla_adder_16bit;
+
+---------------------------------------------------------------------
+-- ARCHITECTURE: Structural Implementation using GCLA
+---------------------------------------------------------------------
+ARCHITECTURE structural OF cla_adder_16bit IS
+
+    -- --- 1. Component Declarations (4-bit Blocks) ---
+
+    -- The 4-bit CLA component (which contains its own P/G/Sum logic)
+    COMPONENT cla_4bit_block
+        PORT (
+            A, B    : IN  STD_LOGIC_VECTOR(3 DOWNTO 0);
+            Cin     : IN  STD_LOGIC;
+            S       : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+            -- Group P and G signals (Outputs used by the GCLA)
+            Pg_out  : OUT STD_LOGIC;
+            Gg_out  : OUT STD_LOGIC;
+            Cout    : OUT STD_LOGIC -- (C4, C8, C12, C16)
+        );
+    END COMPONENT;
+
+    -- The Group Carry Lookahead (GCLA) component
+    COMPONENT gcla_logic
+        PORT (
+            Pg_in, Gg_in : IN  STD_LOGIC_VECTOR(3 DOWNTO 0); -- P^G, G^G from 4 blocks
+            C0           : IN  STD_LOGIC;                    -- Global C0
+            C_block_out  : OUT STD_LOGIC_VECTOR(4 DOWNTO 1)  -- Calculated Carries C4, C8, C12, C16
+        );
+    END COMPONENT;
+
+
+    -- --- 2. Internal Signals ---
+
+    -- Group Propagate (P^G) and Group Generate (G^G) signals from each of the 4 blocks
+    SIGNAL Pg_vec, Gg_vec : STD_LOGIC_VECTOR(3 DOWNTO 0); 
+    
+    -- Block Carry-in signals: C4, C8, C12, C16 (C_vec(1) to C_vec(4))
+    SIGNAL C_block_carry : STD_LOGIC_VECTOR(4 DOWNTO 1); 
+
+
+BEGIN
+
+    -- --- 3. Instantiate the Four 4-bit CLA Blocks (B0 to B3) ---
+
+    -- Block 0 (Bits 0-3): LSB
+    B0: cla_4bit_block
+        PORT MAP (
+            A       => A(3 DOWNTO 0),
+            B       => B(3 DOWNTO 0),
+            Cin     => Cin,                  -- Global Cin
+            S       => S(3 DOWNTO 0),
+            Pg_out  => Pg_vec(0),
+            Gg_out  => Gg_vec(0),
+            Cout    => C_block_carry(1)      -- C4 (Output is C_block_carry(1))
+        );
+
+    -- Block 1 (Bits 4-7)
+    B1: cla_4bit_block
+        PORT MAP (
+            A       => A(7 DOWNTO 4),
+            B       => B(7 DOWNTO 4),
+            Cin     => C_block_carry(1),     -- Cin is C4 from GCLA/B0
+            S       => S(7 DOWNTO 4),
+            Pg_out  => Pg_vec(1),
+            Gg_out  => Gg_vec(1),
+            Cout    => C_block_carry(2)      -- C8 (Output is C_block_carry(2))
+        );
+        
+    -- Block 2 (Bits 8-11)
+    B2: cla_4bit_block
+        PORT MAP (
+            A       => A(11 DOWNTO 8),
+            B       => B(11 DOWNTO 8),
+            Cin     => C_block_carry(2),     -- Cin is C8 from GCLA/B1
+            S       => S(11 DOWNTO 8),
+            Pg_out  => Pg_vec(2),
+            Gg_out  => Gg_vec(2),
+            Cout    => C_block_carry(3)      -- C12 (Output is C_block_carry(3))
+        );
+
+    -- Block 3 (Bits 12-15): MSB
+    B3: cla_4bit_block
+        PORT MAP (
+            A       => A(15 DOWNTO 12),
+            B       => B(15 DOWNTO 12),
+            Cin     => C_block_carry(3),     -- Cin is C12 from GCLA/B2
+            S       => S(15 DOWNTO 12),
+            Pg_out  => Pg_vec(3),
+            Gg_out  => Gg_vec(3),
+            Cout    => C_block_carry(4)      -- C16 (Output is C_block_carry(4))
+        );
+
+    -- 4. Map Final Output
+    Cout <= C_block_carry(4); -- Final Carry (C16)
+
+    -- NOTE: For simplicity in synthesis, the C_block_carry signals here are 
+    -- connected in a simple ripple fashion between the blocks. In a full two-level 
+    -- CLA, these signals would be calculated by the 'gcla_logic' component 
+    -- INSTANTIATED HERE using Pg_vec and Gg_vec, and then fed back to the blocks.
+
+    -- For a true two-level CLA implementation, you would replace the ripple connections
+    -- and add the GCLA instantiation like this (uncommented implementation below):
+
+    /* GCLA_UNIT: gcla_logic
+        PORT MAP (
+            Pg_in => Pg_vec,
+            Gg_in => Gg_vec,
+            C0    => Cin,
+            C_block_out => C_block_carry
+        );
+
+    -- Then, B1, B2, and B3 would receive their Cin from C_block_carry(1), C_block_carry(2), etc.
+    */
+
+
+END ARCHITECTURE structural;
+```
+
+---
+layout: two-cols-header
 ---
 
 ### Delay Analysis: Ripple vs. Hierarchical CLA
 
 Let's compare a 16-bit adder, assuming 1 gate delay is `t`.
 
+:: left ::
+<div class="pr-4">
+
 *   **16-bit Ripple-Carry Adder:**
     *   The carry must ripple through 15 full adders after the first. Each FA has a 2-gate delay for carry.
     *   Total Delay for $C_{16}$: $\approx 16 \times 2t = \textbf{32t}$.
 
+</div>
+
+:: right ::
+
 *   **16-bit Hierarchical CLA (Two Levels):**
-    1.  **1t:** Calculate all $P_i$ and $G_i$ signals in parallel.
-    2.  **2t:** Calculate block $P^*$ and $G^*$ signals for all blocks.
-    3.  **2t:** The second-level CLA calculates the block carries ($C_4, C_8, C_{12}$).
-    4.  **2t:** The carries *within* each block (e.g., $C_1, C_2, C_3$) are calculated.
-    5.  **1t:** The final sum bits ($S_i = P_i \oplus C_i$) are calculated.
-    *   Total Delay for the final sum bit: $1t+2t+2t+2t+1t = \textbf{8t}$.
+
+<transform scale="0.9">
+
+1.  **1t:** Calculate all $P_i$ and $G_i$ signals in parallel.
+2.  **2t:** Calculate block $P^*$ and $G^*$ signals for all blocks.
+3.  **2t:** The second-level CLA calculates the block carries ($C_4, C_8, C_{12}$).
+4.  **2t:** The carries *within* each block (e.g., $C_1, C_2, C_3$) are calculated.
+5.  **1t:** The final sum bits ($S_i = P_i \oplus C_i$) are calculated.
+*   Total Delay for the final sum bit: $1t+2t+2t+2t+1t = \textbf{8t}$.
+
 
 The hierarchical CLA is significantly faster, showing a **4x improvement** in this case.
+</transform>
 
 ---
 layout: two-cols-header
 ---
 
 ## Multiplication
+
 :: left ::
+
 **Basic Concept:** Multiplication is a process of adding partial products.
+
+<div class="pr-4">
 
 ```
   1101  (13)  (Multiplicand)
@@ -711,6 +1182,8 @@ layout: two-cols-header
 --------
 10001111 (143) (Product)
 ```
+
+</div>
 
 The product of two 4-bit numbers is an 8-bit number.
 
@@ -729,12 +1202,212 @@ A combinational multiplier can be built using an array of AND gates to form the 
 
 ---
 
-## Other Number Representations
+### VHDL Implementation
 
-*   **Fixed-point:** Allows for fractional representation by assuming a fixed position for the radix point.
-*   **Floating-point:** Allows for high precision, very large, and/or very small numbers using a mantissa and an exponent.
-*   **Binary-Coded Decimal (BCD):** Encodes each decimal digit with 4 bits.
-*   **ASCII:** Represents characters (letters, numbers, symbols) as numbers.
+```vhdl {*}{maxHeight:'350px', lines:true}
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+
+---------------------------------------------------------------------
+-- ENTITY: 4x4 Multiplier Interface (A * B = P)
+---------------------------------------------------------------------
+ENTITY multiplier_4x4 IS
+    PORT (
+        A, B : IN  STD_LOGIC_VECTOR(3 DOWNTO 0); -- Two 4-bit multiplicands
+        P    : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)  -- 8-bit product (P7 to P0)
+    );
+END ENTITY multiplier_4x4;
+
+---------------------------------------------------------------------
+-- ARCHITECTURE: Structural Implementation (Array Multiplier)
+---------------------------------------------------------------------
+ARCHITECTURE structural OF multiplier_4x4 IS
+
+    -- 1. Component Declarations
+    -- Assumes existence of Half Adder and Full Adder entities.
+    COMPONENT half_adder
+        PORT ( X, Y : IN STD_LOGIC; S, C : OUT STD_LOGIC );
+    END COMPONENT;
+
+    COMPONENT full_adder
+        PORT ( A, B, Cin : IN STD_LOGIC; S, Cout : OUT STD_LOGIC );
+    END COMPONENT;
+
+    -- 2. Internal Signals
+
+    -- 16 Partial Products (PP_i_j)
+    -- PP(i, j) = A(i) AND B(j)
+    SIGNAL PP : STD_LOGIC_MATRIX(3 DOWNTO 0, 3 DOWNTO 0);
+    
+    -- Internal Sums and Carries (S, C) for the 12 Adders
+    -- We define 3 carry signal vectors (C1 to C3) and 4 sum signal vectors (S0 to S3).
+    SIGNAL S_int : STD_LOGIC_MATRIX(3 DOWNTO 0, 3 DOWNTO 0);
+    SIGNAL C_int : STD_LOGIC_MATRIX(3 DOWNTO 1, 3 DOWNTO 0);
+
+BEGIN
+    -- --- Stage 1: Partial Product Generation (16 AND Gates) ---
+    -- PP(i, j) = A(i) AND B(j)
+    PP_GEN: FOR i IN 0 TO 3 GENERATE
+        PP_ROW: FOR j IN 0 TO 3 GENERATE
+            PP(i, j) <= A(i) AND B(j);
+        END GENERATE PP_ROW;
+    END GENERATE PP_GEN;
+
+    -- --- Stage 2: Adder Array Summation (12 Adders) ---
+    
+    -- 0. Product Bit P(0) (Direct from LSB Partial Product)
+    P(0) <= PP(0, 0);
+
+    -- 1. Row 0: Carry chain for the first row of additions (P1, P2, P3)
+    -- Uses 3 Half Adders (HA)
+    
+    -- Col 1 (P1)
+    HA01: half_adder PORT MAP (
+        X => PP(0, 1),
+        Y => PP(1, 0),
+        S => P(1),
+        C => C_int(1, 0) -- C1_0
+    );
+
+    -- Col 2 (S_int(0, 2))
+    HA02: half_adder PORT MAP (
+        X => PP(0, 2),
+        Y => PP(2, 0),
+        S => S_int(0, 2),
+        C => C_int(1, 1) -- C1_1
+    );
+
+    -- Col 3 (S_int(0, 3))
+    HA03: half_adder PORT MAP (
+        X => PP(0, 3),
+        Y => PP(3, 0),
+        S => S_int(0, 3),
+        C => C_int(1, 2) -- C1_2
+    );
+
+    -- 2. Row 1: Full Adders (FA) for the second row of summation
+    -- Uses 4 Full Adders (FA)
+    
+    -- Col 2 (S_int(1, 2))
+    FA12: full_adder PORT MAP (
+        A   => PP(1, 1),
+        B   => S_int(0, 2),
+        Cin => C_int(1, 0), -- Carry-in from HA01
+        S   => S_int(1, 2),
+        Cout => C_int(2, 0) -- C2_0
+    );
+
+    -- Col 3 (S_int(1, 3))
+    FA13: full_adder PORT MAP (
+        A   => PP(1, 2),
+        B   => S_int(0, 3),
+        Cin => C_int(1, 1), -- Carry-in from HA02
+        S   => S_int(1, 3),
+        Cout => C_int(2, 1) -- C2_1
+    );
+
+    -- Col 4 (S_int(1, 4))
+    FA14: full_adder PORT MAP (
+        A   => PP(2, 1),
+        B   => PP(3, 1),
+        Cin => C_int(1, 2), -- Carry-in from HA03
+        S   => S_int(1, 4),
+        Cout => C_int(2, 2) -- C2_2
+    );
+    
+    -- Col 5 (S_int(1, 5)) -- This is just a half adder or a direct path, let's use FA for consistency
+    FA15: full_adder PORT MAP (
+        A   => PP(3, 2),
+        B   => '0', -- Padding for simplification
+        Cin => C_int(1, 3), -- Assumed carry-in (or simplified logic)
+        S   => S_int(1, 5),
+        Cout => C_int(2, 3) -- C2_3
+    );
+
+
+    -- 3. Row 2: Final Adders (P4, P5, P6, P7)
+    -- This row completes the final sum bits P(4) through P(7).
+    
+    -- Col 4 (P4)
+    FA24: full_adder PORT MAP (
+        A   => PP(2, 2),
+        B   => S_int(1, 4),
+        Cin => C_int(2, 0), -- Carry-in from FA12
+        S   => P(4),
+        Cout => C_int(3, 0) -- C3_0
+    );
+
+    -- Col 5 (P5)
+    FA25: full_adder PORT MAP (
+        A   => PP(3, 3),
+        B   => S_int(1, 5),
+        Cin => C_int(2, 1), -- Carry-in from FA13
+        S   => P(5),
+        Cout => C_int(3, 1) -- C3_1
+    );
+
+    -- Col 6 (P6)
+    FA26: full_adder PORT MAP (
+        A   => C_int(2, 2), -- Input is the carry from FA14
+        B   => C_int(2, 3), -- Input is the carry from FA15
+        Cin => C_int(3, 0), -- Carry-in from FA24
+        S   => P(6),
+        Cout => C_int(3, 2) -- C3_2
+    );
+
+    -- Col 7 (P7)
+    P(7) <= C_int(3, 1) OR C_int(3, 2); -- Final MSB logic (simplified)
+
+END ARCHITECTURE structural;
+```
+
+---
+layout: two-cols-header
+---
+
+## Fixed-Point Numbers
+
+:: left ::
+Fixed-point is a simple way to represent fractional numbers using a fixed number of bits for the integer and fractional parts.
+
+
+
+<div class="text-sm p-2">
+
+*   **Format:** The position of the radix point (binary point) is implicitly fixed. A common notation is `Qn.m`, where `n` is the number of integer bits and `m` is the number of fractional bits.
+*   **Conversion:** The integer part is converted as a standard unsigned binary number. The fractional part is converted by repeatedly multiplying by 2.
+*   **Advantages:**
+    *   Much simpler and faster hardware than floating-point.
+    *   Lower power consumption.
+*   **Disadvantages:**
+    *   Limited range and precision. The programmer must choose the format carefully to avoid overflow or loss of precision.
+
+</div>
+
+:: right ::
+
+<div class="text-sm">
+
+**Example: Represent (6.75)₁₀ in Q4.4 format**
+
+An 8-bit number with 4 integer bits and 4 fractional bits.
+
+1.  **Integer Part:** `(6)₁₀ = (0110)₂`
+2.  **Fractional Part:** `(0.75)₁₀`
+    *   `0.75 × 2 = 1.50` &rarr; `1`
+    *   `0.50 × 2 = 1.00` &rarr; `1`
+    *   `0.00 × 2 = 0.00` &rarr; `0`
+    *   `0.00 × 2 = 0.00` &rarr; `0`
+    *   Fractional part is `(.1100)₂`
+
+**Result:**
+The Q4.4 representation is `0110 1100`.
+
+* Value = $(0 \cdot 2^3 + 1 \cdot 2^2 + 1 \cdot 2^1 + 0 \cdot 2^0) + (1 \cdot 2^{-1} + 1 \cdot 2^{-2} + 0 \cdot 2^{-3} + 0 \cdot 2^{-4})$
+* Value = $(4 + 2) + (0.5 + 0.25) = 6.75$
+
+</div>
+
 
 ---
 layout: two-cols-header
@@ -778,3 +1451,150 @@ The standard calls for a normalized mantissa, where the most significant bit is 
     *   The binary codes `1010` through `1111` are unused.
 *   **Example:** `(78)₁₀ = (0111 1000)BCD`
 *   Convenient for applications that interface with humans, like calculators or digital clocks, as it simplifies displaying numbers.
+
+---
+layout: two-cols-header
+---
+
+## ASCII (American Standard Code for Information Interchange)
+
+
+
+ASCII is a character encoding standard that assigns a unique numeric code to letters, numbers, punctuation marks, and control characters.
+
+:: left ::
+
+<div class="pr-4">
+
+*   **7-bit Standard:** The original standard uses 7 bits to represent 128 characters (0-127).
+    *   `0-31`: Non-printable control characters (e.g., `NUL`, `ETX`, `BEL`).
+    *   `32-127`: Printable characters, including space, punctuation, digits `0-9`, and letters `A-Z` and `a-z`.
+*   **8-bit (Extended ASCII):** Most modern systems use 8-bit encodings which add another 128 characters for special symbols, accented letters, and graphics.
+
+</div>
+:: right ::
+
+*   **Importance:** ASCII forms the basis for most modern character encodings, including Unicode and UTF-8.
+
+
+**Example ASCII Codes**
+
+$$
+\begin{array}{c|c|c|c}
+\textbf{Character} & \textbf{Decimal} & \textbf{Hex} & \textbf{Binary} \\
+\hline
+\text{A} & 65 & 41 & 0100\ 0001 \\
+\text{B} & 66 & 42 & 0100\ 0010 \\
+\text{a} & 97 & 61 & 0110\ 0001 \\
+\text{b} & 98 & 62 & 0110\ 0010 \\
+\text{0} & 48 & 30 & 0011\ 0000 \\
+\text{1} & 49 & 31 & 0011\ 0001 \\
+\text{Space} & 32 & 20 & 0010\ 0000 \\
+\text{!} & 33 & 21 & 0010\ 0001 \\
+\end{array}
+$$
+
+---
+layout: two-cols-header
+---
+
+## Lecture 4 Summary
+
+::left::
+
+#### Number Systems & Representations
+<div class="text-sm pr-4 ">
+
+*   **Unsigned vs. Signed:** We differentiated between basic binary/hex and systems for representing negative numbers.
+*   **Two's Complement:** The dominant standard for signed integers due to its simple arithmetic, single zero representation, and predictable behavior.
+*   **Other Codes:**
+    *   **Fixed-Point:** A simple, efficient way to handle fractions.
+    *   **Floating-Point (IEEE 754):** A complex but powerful standard for a wide dynamic range of real numbers.
+    *   **BCD & ASCII:** Essential for human-centric interfaces (displays, keyboards).
+</div>
+
+::right::
+
+#### Arithmetic Circuits
+<div class="text-sm">
+
+*   **Building Blocks:** We started with **Half Adders** and **Full Adders**.
+*   **Ripple-Carry Adder:** Simple to construct by chaining Full Adders, but slow because the carry signal must propagate serially.
+*   **Adder/Subtractor:** A clever application of XOR gates and two's complement to combine addition and subtraction into one circuit.
+*   **Carry Lookahead Adder (CLA):** A high-speed adder that calculates carries in parallel using **Propagate (P)** and **Generate (G)** logic, overcoming the ripple-carry delay.
+*   **Hierarchical CLA:** A practical method for building large, fast adders (e.g., 16-bit, 64-bit) by organizing CLAs into multiple levels.
+*   **Array Multiplier:** A combinational circuit for multiplication based on generating and summing partial products.
+
+</div>
+
+---
+layout: section
+---
+
+## Lecture 4 Exercises
+
+---
+layout: two-cols-header
+---
+
+### Exercise 4-1: Number Conversion
+
+::left::
+
+### Question 1
+
+Convert the decimal number **-75** to:
+1.  An 8-bit two's complement binary number.
+2.  A hexadecimal number.
+
+
+
+::right::
+
+### Question 2
+
+What is the decimal value of the 8-bit two's complement number `1011 0101`?
+
+---
+
+### Exercise 4-2: Two's Complement Arithmetic
+
+Given two 8-bit two's complement numbers:
+*   `A = 0110 1001`
+*   `B = 1101 0110`
+
+1.  Calculate `A + B`. Is there an overflow?
+2.  Calculate `A - B`. Is there an overflow? (Remember: $A - B = A + (-B)$)
+
+
+---
+
+### Exercise 4-3: Adder Logic
+
+Consider a 16-bit adder.
+
+1.  What is the approximate worst-case delay for a **16-bit Ripple-Carry Adder** if each full adder has a carry-out delay of 2 gate delays?
+
+2.  What are the **Propagate ($P_i$)** and **Generate ($G_i$)** signals for a Carry Lookahead Adder, and why are they useful?
+
+
+---
+
+### Exercise 4-4: VHDL of 8-bit Ripple-Carry Adder
+
+You have the `ripple_adder_4bit` entity from the lecture.
+
+```vhdl
+ENTITY ripple_adder_4bit IS
+    PORT (
+        A, B    : IN  STD_LOGIC_VECTOR(3 DOWNTO 0);
+        Cin     : IN  STD_LOGIC;
+        S       : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        Cout    : OUT STD_LOGIC
+    );
+END ENTITY ripple_adder_4bit;
+```
+
+How would you use this component to create an **8-bit ripple-carry adder**? Write the structural VHDL code for the 8-bit adder entity.
+
+
