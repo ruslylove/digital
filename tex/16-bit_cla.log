@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.11.28)  4 DEC 2025 14:00
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.11.22)  4 DEC 2025 23:34
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**/Users/rus/Development/slidev/digital/tex/16-bit_cla.tex
-(/Users/rus/Development/slidev/digital/tex/16-bit_cla.tex
+**/Users/rus/development/digital/tex/16-bit_cla.tex
+(/Users/rus/development/digital/tex/16-bit_cla.tex
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
 (/usr/local/texlive/2025/texmf-dist/tex/latex/standalone/standalone.cls
@@ -432,7 +432,7 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 
 
 Non-PDF special ignored!
-<special> papersize=658.09267pt,280.9166pt
+<special> papersize=640.38725pt,197.63959pt
 {/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (./16-bit_cla.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
@@ -440,18 +440,18 @@ L3 programming layer <2025-01-18>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 31767 strings out of 473190
- 824267 string characters out of 5715799
- 1443797 words of memory out of 5000000
- 54714 multiletter control sequences out of 15000+600000
+ 31836 strings out of 473190
+ 825221 string characters out of 5715799
+ 1449797 words of memory out of 5000000
+ 54783 multiletter control sequences out of 15000+600000
  559599 words of font info for 39 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 117i,7n,121p,475b,660s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb>
-Output written on 16-bit_cla.pdf (1 page, 53598 bytes).
+ 117i,7n,121p,468b,660s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
+Output written on 16-bit_cla.pdf (1 page, 61005 bytes).
 PDF statistics:
- 36 PDF objects out of 1000 (max. 8388607)
- 22 compressed objects within 1 object stream
+ 41 PDF objects out of 1000 (max. 8388607)
+ 25 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 

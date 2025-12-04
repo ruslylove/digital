@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1764831612.52833 "/Users/rus/Development/slidev/digital/tex/16-bit_cla.tex" "16-bit_cla.pdf" "16-bit_cla" 1764831613.48059 0
-  "/Users/rus/Development/slidev/digital/tex/16-bit_cla.tex" 1764831612.3057 3527 36c70496855a07e2952d6c28c81cccc2 ""
+["pdflatex"] 1764866096.43029 "/Users/rus/development/digital/tex/16-bit_cla.tex" "16-bit_cla.pdf" "16-bit_cla" 1764866097.86477 0
+  "/Users/rus/development/digital/tex/16-bit_cla.tex" 1764866095.94995 4673 7b8d2304ca3fa5ff5282b5b90c959cf2 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm" 1136768653 1328 c834bbb027764024c09d3d2bf908b5f0 ""
@@ -9,6 +9,7 @@
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb" 1248133631 36281 c355509802a035cadc5f15869451dcee ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1248133631 35752 024fb6c41858982481f6968b5fc26508 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb" 1248133631 32762 224316ccc9ad3ca0423a14971cfa7fc1 ""
+  "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb" 1248133631 32716 08e384dc442464e7285e891af9f45947 ""
   "/usr/local/texlive/2025/texmf-dist/tex/context/base/mkii/supp-pdf.mkii" 1461363279 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "/usr/local/texlive/2025/texmf-dist/tex/generic/circuitikz/pgfcirc.defines.tex" 1736550187 46557 9adcccd6eb69fb5553fe8449b51f7543 ""
   "/usr/local/texlive/2025/texmf-dist/tex/generic/circuitikz/pgfcircbipoles.tex" 1736550187 313284 6adca7701e0659dde0293b21114e4157 ""
@@ -131,11 +132,11 @@
   "/usr/local/texlive/2025/texmf-dist/tex/latex/xcolor/xcolor.sty" 1727642399 55384 b454dec21c2d9f45ec0b793f0995b992 ""
   "/usr/local/texlive/2025/texmf-dist/tex/latex/xkeyval/xkeyval.sty" 1655411236 4937 4ce600ce9bd4ec84d0250eb6892fcf4f ""
   "/usr/local/texlive/2025/texmf-dist/web2c/texmf.cnf" 1739380943 42148 61becc7c670cd061bb319c643c27fdd4 ""
-  "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1764314756 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
-  "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1764314698 3345742 bbccbb8f48738580c120d7e243c4d5b7 ""
+  "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1763819811 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
+  "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1763819727 3345735 98e8d6ce829fe76d41a990640e1359a8 ""
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
-  "16-bit_cla.aux" 1764831613.43216 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
-  "16-bit_cla.tex" 1764831612.3057 3527 36c70496855a07e2952d6c28c81cccc2 ""
+  "16-bit_cla.aux" 1764866097.76726 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "16-bit_cla.tex" 1764866095.94995 4673 7b8d2304ca3fa5ff5282b5b90c959cf2 ""
   (generated)
   "16-bit_cla.aux"
   "16-bit_cla.log"
