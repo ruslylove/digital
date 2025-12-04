@@ -1,0 +1,86 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+\usepackage{amsmath}
+
+\begin{document}
+\begin{circuitikz}[scale=1.4, very thick]
+
+    % Define block dimensions and spacing
+    \def\CLAwidth{2.8}
+    \def\CLAheight{2.5}
+    \def\CLAsep{3.5} % Horizontal separation
+
+    % --- Define Coordinates for Blocks and I/O ---
+    \coordinate (Cin) at (-0.5, 0); % Global C0
+
+    % --- CLA Blocks (B0, B1, B2, B3) ---
+    % Block 0 (Bits 0-3)
+    \draw (0, 0) node[draw, minimum width=\CLAwidth cm, minimum height=\CLAheight cm, anchor=south west] (B0) {
+        \textbf{CLA} ($B_{0}$)
+    };
+    \draw (0, 3) node[anchor=south east] {$A_{3..0}/B_{3..0}$};
+    \draw (B0.north west) -- (0, 2.5);
+
+    % Block 1 (Bits 4-7)
+    \draw (\CLAsep, 0) node[draw, minimum width=\CLAwidth cm, minimum height=\CLAheight cm, anchor=south west] (B1) {
+        \textbf{CLA} ($B_{1}$)
+    };
+    \draw (\CLAsep, 3) node[anchor=south east] {$A_{7..4}/B_{7..4}$};
+    \draw (B1.north west) -- (\CLAsep, 2.5);
+
+    % Block 2 (Bits 8-11)
+    \draw (2*\CLAsep, 0) node[draw, minimum width=\CLAwidth cm, minimum height=\CLAheight cm, anchor=south west] (B2) {
+        \textbf{CLA} ($B_{2}$)
+    };
+    \draw (2*\CLAsep, 3) node[anchor=south east] {$A_{11..8}/B_{11..8}$};
+    \draw (B2.north west) -- (2*\CLAsep, 2.5);
+
+    % Block 3 (Bits 12-15)
+    \draw (3*\CLAsep, 0) node[draw, minimum width=\CLAwidth cm, minimum height=\CLAheight cm, anchor=south west] (B3) {
+        \textbf{CLA} ($B_{3}$)
+    };
+    \draw (3*\CLAsep, 3) node[anchor=south east] {$A_{15..12}/B_{15..12}$};
+    \draw (B3.north west) -- (3*\CLAsep, 2.5);
+
+    % --- Group Carry Lookahead (GCLA) Unit ---
+    \coordinate (GCLA_center) at (1.75*\CLAsep, 5.5);
+    \draw (GCLA_center) node[draw, fill=gray!20, minimum width=1.5*\CLAsep cm, minimum height=1.5cm] (GCLA) {
+        \textbf{Group Carry Lookahead Unit} (GCLA)
+    };
+
+    % --- GCLA Inputs (P^G and G^G) ---
+    \draw[->, dashed] (B0.north) -- (B0.north) node[anchor=south] {$P_0^G, G_0^G$} |- (GCLA.west);
+    \draw[->, dashed] (B1.north) -- (B1.north) node[anchor=south] {$P_1^G, G_1^G$} |- (GCLA.west);
+    \draw[->, dashed] (B2.north) -- (B2.north) node[anchor=south] {$P_2^G, G_2^G$} |- (GCLA.east);
+    \draw[->, dashed] (B3.north) -- (B3.north) node[anchor=south] {$P_3^G, G_3^G$} |- (GCLA.east);
+
+    % Connect Global Cin (C0) to GCLA
+    \draw[->, red] (Cin) -- (0, 0) |- (GCLA.south west);
+    \draw (Cin) node[anchor=south] {$C_0$};
+
+    % --- GCLA Outputs (Block Carries) ---
+    
+    % C4
+    \draw[->, red] (GCLA.south) -- (GCLA.south) node[anchor=south, pos=0.8] {$C_4$}
+        |- (B1.south west) -- (B1.south west);
+    
+    % C8
+    \draw[->, red] (GCLA.south) -- (GCLA.south) node[anchor=south, pos=0.5] {$C_8$}
+        |- (B2.south west) -- (B2.south west);
+
+    % C12
+    \draw[->, red] (GCLA.south) -- (GCLA.south) node[anchor=south, pos=0.2] {$C_{12}$}
+        |- (B3.south west) -- (B3.south west);
+
+    % Final C_out (C16)
+    \draw[->, red] (GCLA.north) -- (GCLA.north) node[anchor=south, pos=0.2] {$C_{16}$}
+        -- (GCLA.north) node[anchor=south] {$C_{out}$};
+
+    % --- Sum Outputs (S[15:0]) ---
+    \draw (B0.east) -- (\CLAwidth + 0.5, 0.5) node[anchor=west] {$S_{3..0}$};
+    \draw (B1.east) -- (\CLAwidth + \CLAsep + 0.5, 0.5) node[anchor=west] {$S_{7..4}$};
+    \draw (B2.east) -- (\CLAwidth + 2*\CLAsep + 0.5, 0.5) node[anchor=west] {$S_{11..8}$};
+    \draw (B3.east) -- (\CLAwidth + 3*\CLAsep + 0.5, 0.5) node[anchor=west] {$S_{15..12}$};
+
+\end{circuitikz}
+\end{document}
