@@ -1,0 +1,54 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        // --- Sub-Task 1: Run LaTeX (Closes on finish) ---
+        {
+            "label": "Run LaTeX",
+            "type": "shell",
+            "options": { "cwd": "${fileDirname}" },
+            "command": "latex ${fileBasename}",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "new",
+                "close": true
+            }
+        },
+        // --- Sub-Task 2: Run dvisvgm (Closes on finish) ---
+        {
+            "label": "Run dvisvgm",
+            "type": "shell",
+            "options": { "cwd": "${fileDirname}" },
+            "command": "dvisvgm",
+            "args": [
+                "--no-fonts",
+                "${fileBasenameNoExtension}.dvi",
+                "-o",
+                "../public/${fileBasenameNoExtension}.svg"
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "silent", 
+                "close": true
+            }
+        },
+        // --- Composite Task (The one you run: Ctrl+Shift+B) ---
+        {
+            "label": "Build LaTeX and Generate SVG (Sequential)",
+            "dependsOn": [
+                "Run LaTeX",
+                "Run dvisvgm"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            // CHANGE: Use 'true' (a harmless, instant command) instead of ""
+            "command": "true", 
+            "presentation": {
+                "reveal": "never",
+                "close": true       // This should now reliably close the composite terminal.
+            }
+        }
+    ]
+}

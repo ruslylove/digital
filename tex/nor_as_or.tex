@@ -20,7 +20,8 @@ logic ports/scale=0.7,
     \draw (NOR1.in 2) -- ++(-1,0) node[left] {$B$};
 
     % Connect output of first gate to BOTH inputs of the second gate
-    \draw (NOR1.out) |- coordinate[pos=0.0](split) (INV.in 1);
+    \draw (NOR1.out) -| ++(0.5,0) coordinate[pos=1](split) -- (INV.in 1);
+    %\draw (NOR1.out) -- coordinate[pos=0.0](split) (INV.in 1);
     \draw (split) node[circ]{} |- (INV.in 2);
 
     % Output

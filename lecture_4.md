@@ -65,22 +65,25 @@ $$
 $$
 
 </Transform>
+
 ---
-layout: image-right
-image: /signed_numbers.png
----
+
 
 ## Signed Number Systems
 
-*   **Differences in negative numbers**
-    *   Three major schemes:
-        *   Sign Magnitude
-        *   One's Complement
-        *   Two's Complement
-*   **Assumptions:**
-    *   We'll assume a 4-bit machine word.
-    *   16 different values can be represented.
-    *   Roughly half are positive, half are negative.
+
+
+To represent both positive and negative values in binary, we need a system to encode the sign. The most common approach is to use the **Most Significant Bit (MSB)** as a **sign bit**.
+
+*   An MSB of **0** indicates a **positive** number.
+*   An MSB of **1** indicates a **negative** number.
+
+There are three primary schemes for this, each with different ways of handling negative values:
+
+1.  **Sign-Magnitude**
+2.  **One's Complement**
+3.  **Two's Complement**
+
 
 ---
 layout: two-cols-header
@@ -169,12 +172,11 @@ $$
 </Transform>
 
 ---
-layout: two-cols-header
----
 
 ## Two's Complement
 
-:: left ::
+<div class="grid grid-cols-2 gap-4">
+<div>
 
 *   **Representation:** Positive numbers are the same as sign magnitude. To get a negative number, take the two's complement of its positive counterpart.
 *   **Negation (Invert and Add 1):**
@@ -185,37 +187,37 @@ layout: two-cols-header
 *   **Zero:** Only one representation: `0000`.
 *   **Arithmetic:** Simple. Subtraction is performed by adding the two's complement of the subtrahend.
 
-:: right ::
+</div>
 
-
-<Transform scale="0.9">
+<Transform scale="0.92">
 
 $$
-\begin{array}{c|c|c}
-\textbf{Decimal} & \textbf{One's Comp.} & \textbf{Two's Comp.} \\
+\begin{array}{c|c|c|c}
+\textbf{Dec} & \textbf{Signed Mg.} & \textbf{1's Comp.} & \textbf{2's Comp.} \\
 \hline
-+7 & 0111 & 0111 \\
-+6 & 0110 & 0110 \\
-+5 & 0101 & 0101 \\
-+4 & 0100 & 0100 \\
-+3 & 0011 & 0011 \\
-+2 & 0010 & 0010 \\
-+1 & 0001 & 0001 \\
-+0 & 0000 & 0000 \\
--1 & 1110 & 1111 \\
--2 & 1101 & 1110 \\
--3 & 1100 & 1101 \\
--4 & 1011 & 1100 \\
--5 & 1010 & 1011 \\
--6 & 1001 & 1010 \\
--7 & 1000 & 1001 \\
--8 & \text{---} & 1000 \\
++7 & 0111 & 0111 & 0111 \\
++6 & 0110 & 0110 & 0110 \\
++5 & 0101 & 0101 & 0101 \\
++4 & 0100 & 0100 & 0100 \\
++3 & 0011 & 0011 & 0011 \\
++2 & 0010 & 0010 & 0010 \\
++1 & 0001 & 0001 & 0001 \\
++0 & 0000 & 0000 & 0000 \\
+-0 & 1000 & 1111 & \text{---} \\
+-1 & 1001 & 1110 & 1111 \\
+-2 & 1010 & 1101 & 1110 \\
+-3 & 1011 & 1100 & 1101 \\
+-4 & 1100 & 1011 & 1100 \\
+-5 & 1101 & 1010 & 1011 \\
+-6 & 1110 & 1001 & 1010 \\
+-7 & 1111 & 1000 & 1001 \\
+-8 & \text{---} & \text{---} & 1000 \\
 \end{array}
 $$
 
 </Transform>
 
-
+</div>
 ---
 
 ## Arithmetic
@@ -279,7 +281,7 @@ layout: two-cols
 
 :: right ::
 
-### Arithmetic Overflow Detection
+### Overflow Detection
 
 For 4-bit numbers, there are 3 significant bits and the sign bit.
 
@@ -369,7 +371,7 @@ $$
 A full-adder can be constructed from two half-adders and an OR gate.
 
 <img src="/full_adder.svg" class="pt-4 w-100 mx-auto" alt="Full Adder Circuit"/>
-<img src="/full_adder_from_ha.svg" class="pt-4 w-90 mx-auto pt-5" alt="HA"/>
+<img src="/full_adder_from_ha.svg" class="pt-4 w-100 mx-auto pt-5" alt="HA"/>
 
 </div>
 
@@ -380,7 +382,7 @@ layout: two-cols
 ### VHDL Implementation of Full Adder
 <div class="pr-2">
 
-The design requires two `VHDL` files or entities: **half_adder** (the component) and **full_adder_struct** (the structural design).
+The design requires two `VHDL` files or entities: **half_adder** (the component) and **full_adder** (the structural design).
 
 **half_adder.vhd**
 ```vhdl {*}{maxHeight:'380px',lines:true}
@@ -404,7 +406,7 @@ END ARCHITECTURE dataflow;
 </div>
 
 :: right ::
-**full_adder_struct.vhd**
+**full_adder.vhd**
 
 This file connects two instances of the `half_adder` and one `OR` operation.
 ```vhdl {*}{maxHeight:'345px',lines:true}
@@ -414,17 +416,17 @@ USE ieee.std_logic_1164.ALL;
 ---------------------------------------------------------------------
 -- ENTITY: Full Adder Interface
 ---------------------------------------------------------------------
-ENTITY full_adder_struct IS
+ENTITY full_adder IS
     PORT (
         A, B, Cin : IN  STD_LOGIC;  -- Three inputs
         S, Cout   : OUT STD_LOGIC   -- Two outputs
     );
-END ENTITY full_adder_struct;
+END ENTITY full_adder;
 
 ---------------------------------------------------------------------
 -- ARCHITECTURE: Structural Implementation
 ---------------------------------------------------------------------
-ARCHITECTURE structural OF full_adder_struct IS
+ARCHITECTURE structural OF full_adder IS
 
     -- 1. Declare the component used (Half Adder)
     COMPONENT half_adder
@@ -603,6 +605,67 @@ $A - B = A + (-B) = A + B' + 1$
 <img src="/adder_subtractor.svg" class="w-120 mx-auto" alt="Adder/Subtractor Circuit"/>
 
 ---
+
+### VHDL Implementation
+
+**adder_subtractor_4bit.vhd**
+```vhdl {*}{maxHeight:'360px',lines:true}
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all; 
+
+-- Top-Level Entity
+entity adder_subtractor_4bit is
+    port (
+        A       : in  std_logic_vector(3 downto 0); -- Input operand A
+        B       : in  std_logic_vector(3 downto 0); -- Input operand B
+        add_sub : in  std_logic;                    -- Mode control: '0' = Add, '1' = Subtract
+        S       : out std_logic_vector(3 downto 0); -- Sum / Difference output
+        Cout    : out std_logic                     -- Carry out / Borrow out
+    );
+end entity adder_subtractor_4bit;
+
+architecture structural of adder_subtractor_4bit is
+
+    -- 1. Component Declaration (Matches ripple_adder_4bit port list)
+    component ripple_adder_4bit
+        port (
+            A       : in  std_logic_vector(3 downto 0);
+            B       : in  std_logic_vector(3 downto 0);
+            Cin     : in  std_logic;
+            S       : out std_logic_vector(3 downto 0);
+            Cout    : out std_logic
+        );
+    end component;
+
+    -- 2. Internal Signals
+    -- Signal to hold the modified B input (B XOR add_sub)
+    signal B_comp : std_logic_vector(3 downto 0);
+
+begin
+    -- ** Logic for Subtraction (2's Complement) **
+    
+    -- 1. Bitwise XOR Operation (Equivalent to 4 XOR gates)
+    -- add_sub='0' -> B_comp = B (Addition)
+    -- add_sub='1' -> B_comp = not B (1's Complement)
+    B_comp <= B xor (add_sub & add_sub & add_sub & add_sub); 
+
+    -- ** Component Instantiation **
+    
+    -- 2. Instantiate the 4-bit Ripple Adder
+    Adder_Instance : ripple_adder_4bit
+        port map (
+            A    => A,
+            B    => B_comp,        -- Connect the (possibly inverted) B
+            Cin  => add_sub,       -- Connect 'add_sub' to Carry_in (for the +1 in 2's complement)
+            S    => S,             -- Connect the adder's sum output to the main output
+            Cout => Cout           -- Connect the adder's carry-out to the main output
+        );
+
+end architecture structural;
+```
+
+---
 layout: two-cols-header
 ---
 
@@ -658,7 +721,7 @@ Each of these carry equations can be implemented in a two-level logic network.
 <div>
 
 **1. Propagate and Generate Logic Unit (pg_unit.vhd)**
-```vhdl
+```vhdl{*}{lines:true}
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 
@@ -1193,7 +1256,7 @@ The product of two 4-bit numbers is an 8-bit number.
 
 A combinational multiplier can be built using an array of AND gates to form the partial products and an array of adders to sum them up.
 
-*   The partial products are `Ai ⋅ Bj`.
+*   The partial products are $A_i \cdot B_j$.
 *   These products are then added together, shifted according to their bit position.
 *   This can be implemented with an array of full adders and half adders.
 *   For a 4x4 multiplier:
@@ -1424,7 +1487,7 @@ A 32-bit format for floating-point values.
     *   True exponent = E - 127.
 *   **Mantissa (M):** 23 bits.
 
-**Value = (-1)^S × (1.M) × 2^(E-127)**
+**Value = $\bm{(-1)^S × (1.M) × 2^{(E-127)}}$**
 
 The standard calls for a normalized mantissa, where the most significant bit is always 1. This "hidden bit" is not stored, providing an extra bit of precision.
 
@@ -1502,8 +1565,8 @@ layout: two-cols-header
 
 ::left::
 
-#### Number Systems & Representations
-<div class="text-sm pr-4 ">
+### Number Systems & Representations
+<div class="text-base">
 
 *   **Unsigned vs. Signed:** We differentiated between basic binary/hex and systems for representing negative numbers.
 *   **Two's Complement:** The dominant standard for signed integers due to its simple arithmetic, single zero representation, and predictable behavior.
@@ -1516,7 +1579,8 @@ layout: two-cols-header
 ::right::
 
 #### Arithmetic Circuits
-<div class="text-sm">
+
+<div class="text-[14.5px]">
 
 *   **Building Blocks:** We started with **Half Adders** and **Full Adders**.
 *   **Ripple-Carry Adder:** Simple to construct by chaining Full Adders, but slow because the carry signal must propagate serially.

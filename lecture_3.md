@@ -44,12 +44,16 @@ graph LR
 *   **How?** While algebraic manipulation works, it can be cumbersome and doesn't follow specific rules. The **Karnaugh Map** provides a systematic, graphical method for simplification.
 
 ---
-layout: image-right
-image: /complex_circuit.png
+layout: two-cols-header
 ---
+
 ## The Map Method (Karnaugh Map)
 
+
+
 The Karnaugh map (or K-map) is a graphical method for simplifying Boolean expressions.
+
+:: left ::
 
 *   It's a pictorial representation of a truth table.
 *   It provides a simple, straightforward procedure for minimization.
@@ -57,6 +61,15 @@ The Karnaugh map (or K-map) is a graphical method for simplifying Boolean expres
 *   The map is a diagram made of squares, where **each square represents one minterm** of the function.
 
 The key idea is to leverage the human brain's pattern-recognition ability to simplify expressions.
+
+
+
+:: right ::
+
+<img src="/kmap_example.svg" class="w-full bg-white p-2 mx-auto"/>
+
+
+
 
 ---
 layout: two-cols-header
@@ -73,14 +86,14 @@ A two-variable map contains 2² = 4 squares, one for each possible minterm.
 *   To plot a function, you place a $1$ in the square for each minterm that is part of the function.
 
 **Example: $f = xy$**
-This corresponds to minterm $m₃$.
+* This corresponds to minterm $m₃$.
 
 **Example: $f = x + y$**
-This corresponds to $m₁ + m₂ + m₃$.
+* This corresponds to $m₁ + m₂ + m₃$.
 
 ::right::
 
-<div class="grid grid-cols-2 gap-1 text-center">
+<div class="grid grid-cols-2 gap-1 text-center text-sm">
 <div>
 
 **Minterm Layout**
@@ -158,7 +171,11 @@ Let's simplify the function $F(x,y,z) = x'yz' + x'yz + xy'z' + xy'z$.
     *   We can form another group of two with $m₄$ and $m₅$ ($xy'z'$ and $xy'z$). This simplifies to $xy'$.
 3.  **Write the Expression:** The simplified function is the OR of the terms from each group.
 
+<div class="text-center">
+
 $F = x'y + xy'$
+
+</div>
 
 This is the XOR function, $x ⊕ y$.
 
@@ -175,6 +192,7 @@ layout: two-cols-header
 Let's simplify this function.
 
 ::left::
+<div class="text-base">
 
 1.  **Plot the 1s:** Place $1$s for minterms 3, 4, 6, and 7.
 2.  **Identify Groups:**
@@ -182,10 +200,14 @@ Let's simplify this function.
     *   Group $m₄$ and $m₆$ ($xy'z'$ and $xyz'$). This simplifies to $xz'$.
 3.  **Write the Expression:** The final simplified expression is:
 
+<div class="text-center">
+
 $F = yz + xz'$
 
-Note that $m₄$ could also be grouped with $m₅$ if there was a $1$ there, but $m₄$ and $m₆$ is a valid grouping due to wrap-around adjacency.
+</div>
 
+Note that $m₄$ could also be grouped with $m₅$ if there was a $1$ there, but $m₄$ and $m₆$ is a valid grouping due to wrap-around adjacency.
+</div>
 ::right::
 
 <img src="/kmap_3var_ex2.svg" class="rounded-lg bg-white p-4 w-100" alt="K-map for F(x,y,z) = Σm(3,4,6,7)">
@@ -202,7 +224,7 @@ A group of four adjacent $1s$ eliminates **two** variables.
 
 ::left::
 
-<div class="text-sm">
+<div class="text-[15.5px]">
 
 1.  **Plot the 1s:** Place $1$s for minterms 0, 2, 4, and 6.
 2.  **Identify Groups:** All four $1$s can be combined into a single large group.
@@ -212,7 +234,10 @@ A group of four adjacent $1s$ eliminates **two** variables.
     *   $z$ is $0$ for all four minterms. So, $z'$ remains.
 3.  **Write the Expression:** The entire function simplifies to a single term.
 
-$F = z'$
+<div class="text-center"> 
+
+$F = z'$ 
+</div>
 
 </div>
 
@@ -230,15 +255,17 @@ This example shows how groups can overlap.
 
 ::left::
 
-<div class="text-sm">
+<div class="text-base">
 
 1.  **Plot the 1s:** Place $1$s for minterms 0, 2, 4, 5, and 6.
 2.  **Identify Groups:**
     *   First, find the largest groups. We can create a group of four with $m₀, m₂, m₄, m₆$. This gives the term $z'$.
     *   The $1$ at $m₅$ is still not covered. We can cover it by making the largest possible group, which is a group of two with $m₄$. This group ($m₄, m₅$) gives the term $xy'$.
 3.  **Write the Expression:** The final expression is the sum of the terms from all groups.
+<div class="text-center">
 
 $F = z' + xy'$
+</div>
 
 Even though $m₄$ is used in two groups, this is allowed and results in the simplest expression.
 
@@ -295,25 +322,32 @@ layout: two-cols-header
 
 1.  **Plot the 1s:** Place a $1$ in each square corresponding to the function's minterms.
 2.  **Identify Groups:** Look for the largest possible groups of 1s.
-    *   **Group 1 (Red):** A group of 8 covering the two columns where $y=0$ ($y'$). This group covers $m₀, m₁, m₄, m₅, m₈, m₉, m₁₂, m₁₃$. The term is $y'$.
-    *   **Group 2 (Green):** A group of 4 using wrap-around adjacency. This covers $m₀, m₂, m₄, m₆$. The term is $w'z'$.
-    *   **Group 3 (Yellow):** A group of 4 using wrap-around adjacency. This covers $m₄, m₆, m₁₂, m₁₄$. The term is $xz'$.
+    *   **Group 1 (Red):** A group of 8 covering the two columns where $y=0$. This group covers $m₀, m₁, m₄, m₅, m₈, m₉, m₁₂, m₁₃$. The term is $\bm{y'}$.
+    *   **Group 2 (Green):** A group of 4 using wrap-around adjacency. This covers $m₀, m₂, m₄, m₆$. The term is $\bm{w'z'}$.
+    *   **Group 3 (Yellow):** A group of 4 using wrap-around adjacency. This covers $m₄, m₆, m₁₂, m₁₄$. The term is $\bm{xz'}$. 
+
+
+<div class="p-5">
+
+>Note that all $1$s are covered. The minterms covered by $y'$ are essential. The remaining $1$s ($m₂, m₆, m₁₄$) are covered by the other two groups.
+
+</div>
+</div>
+
+::right::
+<div class="text-sm">
+
 3.  **Write the Expression:** The simplified function is the sum of the terms for the essential prime implicants.
 <div class="text-center">
 
 $F = y' + w'z' + xz'$
 </div>
-</div>
-
-::right::
-
-<img src="/kmap_4x4_ex5.svg" class="rounded-lg bg-white p-4 w-80 mx-auto" alt="K-map for F(w,x,y,z) = Σ(0,1,2,4,5,6,8,9,12,13,14)">
-
-<div class="text-xs">
-
-Note that all $1$s are covered. The minterms covered by $y'$ are essential. The remaining $1$s ($m₂, m₆, m₁₄$) are covered by the other two groups.
 
 </div>
+
+<img src="/kmap_4x4_ex5.svg" class="w-60 mx-auto" alt="K-map for F(w,x,y,z) = Σ(0,1,2,4,5,6,8,9,12,13,14)">
+
+
 
 
 
@@ -651,7 +685,7 @@ The XOR and XNOR functions are fundamental in arithmetic and comparison circuits
 
 ### Logic Symbols & Truth Tables
 
-<div class="grid grid-cols-2 gap-4">
+<div class="grid grid-cols-2 gap-4 pt-4">
 
 **XOR Gate**
 <img src="/xor_symbol.svg" class="rounded-lg bg-white p-4 w-100" alt="XOR Gate Symbol">
@@ -701,11 +735,15 @@ XOR gates are ideal for error detection circuits. **Parity** is an extra bit add
 
 ### Even Parity Generator
 
+<div class="pr-4">
+
 This circuit generates a parity bit $P$ for a 3-bit message ($x,y,z$). The output $P$ is chosen so that the total number of $1$s in the 4-bit message ($x,y,z,P$) is even.
 
 - $P = x ⊕ y ⊕ z$
 
 <img src="/logic_parity_generator.svg" class="rounded-lg bg-white pt-5 w-100" alt="3-bit even parity generator">
+
+</div>
 
 ::right::
 
@@ -789,7 +827,7 @@ This chapter introduced powerful graphical and procedural methods for logic opti
 ::left::
 
 ### Core Concepts & Methods
-<div class="text-sm">
+<div class="text-base pr-4">
 
 *   **Karnaugh Maps:** A graphical method to simplify Boolean expressions by visually grouping adjacent minterms ($1$s) or maxterms ($0$s).
 *   **Grouping Rules:** Create the largest possible rectangular groups of $1$s or $0$s (in powers of 2), using wrap-around and overlapping to minimize terms.
@@ -799,7 +837,7 @@ This chapter introduced powerful graphical and procedural methods for logic opti
 ::right::
 
 ### Implementation Strategies
-<div class="text-sm">
+<div class="text-base pr-4">
 
 *   **SOP & POS:** K-maps can produce minimal Sum-of-Products (by grouping $1$s) or Product-of-Sums (by grouping $0$s).
 *   **Universal Gates:** Any logic function can be implemented using only **NAND** gates or only **NOR** gates.
