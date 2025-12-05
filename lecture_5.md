@@ -54,20 +54,30 @@ Logic circuits for digital systems can be classified into two types:
 </div>
 
 ---
+layout: two-cols-header
+---
 
 ## Combinational Logic Circuit
+
 
 *   A combinational circuit consists of logic gates whose outputs at any time are determined directly from the present combination of inputs without regard to previous inputs.
 *   For *n* input variables, there are **2ⁿ** possible combinations of input values.
 
-<div class="text-center">
-<img src="https://i.imgur.com/u5vV39l.png" class="rounded-lg bg-white p-4 w-2/3" alt="Combinational Logic Circuit Diagram">
-</div>
+::left::
+
 
 ### Common Functions
 *   Adders, Subtractors, Comparators
 *   Decoders, Encoders, Multiplexers
 *   These are often available as Medium-Scale Integration (MSI) circuits or standard cells in design libraries.
+
+::right::
+
+<div class="text-center">
+<img src="/combinational_logic_circuit.svg" class="rounded-lg bg-white p-4 w-full" alt="Combinational Logic Circuit Diagram">
+</div>
+
+
 
 ---
 
@@ -92,54 +102,84 @@ layout: two-cols-header
 
 ## Analysis Example
 
-Let's analyze the circuit below to find the functions for `F₁` and `F₂`.
-
 ::left::
 
-<img src="https://i.imgur.com/g8V5G43.png" class="rounded-lg bg-white p-4" alt="Circuit for Analysis Example">
+<div class="pr-2">
+
+### Step 1: Ensure the circuit is combinational.
+
+Let's analyze the circuit below to find the functions for $F₁$ and $F₂$.
+
+
+
+<img src="/analysis_example_circuit.svg" class="rounded-lg bg-white p-2" alt="Circuit for Analysis Example">
+
+</div>
 
 ::right::
 
-### Deriving Expressions
+### Step 2: Deriving Expressions
 
-1.  `F₂ = AB + AC + BC` (This is the carry-out of a full adder)
-2.  `T₁ = A + B + C`
-3.  `T₂ = ABC`
-4.  `T₃ = F₂' · T₁`
-5.  `F₁ = T₃ + T₂`
+<div class="text-sm pt-5">
 
-Substituting to get `F₁` in terms of A, B, C:
+1.  $F_2 = AB + AC + BC$
+2.  $T_1 = A + B + C$
+3.  $T_2 = ABC$
+4.  $T_3 = F_2' \cdot T_1$
+5.  $F_1 = T_3 + T_2$
 
-`F₁ = (F₂' · T₁) + T₂`
-`F₁ = (AB + AC + BC)' · (A + B + C) + ABC`
+Substituting to get $F_1$ in terms of A, B, C:
+
+* $F_1 = (F_2' \cdot T_1) + T_2$
+* $F_1 = (AB + AC + BC)' \cdot (A + B + C) + ABC$
 
 After simplification (using De Morgan's theorem and algebraic manipulation), this becomes:
 
-`F₁ = A'B'C + A'BC' + AB'C' + ABC`
+* $F_1 = A'B'C + A'BC' + AB'C' + ABC$
 
-This is the sum output of a full adder: `F₁ = A ⊕ B ⊕ C`
+This is the sum output of a full adder: $F_1 = A \oplus B \oplus C$
 
+
+
+</div>
 ---
 
-## Analysis Example: Truth Table
+<div class="grid grid-cols-2 gap-8">
+<div>
 
-By creating a truth table, we can verify the functions and understand the circuit's behavior. This circuit is a **Full Adder**.
+### Step 3: Truth Table
 
-*   **Inputs:** `A`, `B`, `C` (where C can be considered Carry-in)
-*   **Output `F₁`:** The Sum bit (`A ⊕ B ⊕ C`)
-*   **Output `F₂`:** The Carry-out bit
+By creating a truth table, we can verify the functions and understand the circuit's behavior.
 
-| A | B | C | F₂ (Carry) | F₁ (Sum) |
-|:-:|:-:|:-:|:----------:|:--------:|
-| 0 | 0 | 0 |     0      |    0     |
-| 0 | 0 | 1 |     0      |    1     |
-| 0 | 1 | 0 |     0      |    1     |
-| 0 | 1 | 1 |     1      |    0     |
-| 1 | 0 | 0 |     0      |    1     |
-| 1 | 0 | 1 |     1      |    0     |
-| 1 | 1 | 0 |     1      |    0     |
-| 1 | 1 | 1 |     1      |    1     |
+$$
+\begin{array}{|c|c|c|c|c|}
+\hline
+A & B & C & F_2 (\text{Carry}) & F_1 (\text{Sum}) \\
+\hline
+0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 1 & 0 & 1 \\
+0 & 1 & 0 & 0 & 1 \\
+0 & 1 & 1 & 1 & 0 \\
+1 & 0 & 0 & 0 & 1 \\
+1 & 0 & 1 & 1 & 0 \\
+1 & 1 & 0 & 1 & 0 \\
+1 & 1 & 1 & 1 & 1 \\
+\hline
+\end{array}
+$$
 
+</div>
+<div>
+
+### Step 4: Explain its function.
+This circuit is a **Full Adder**.
+
+*   **Inputs:** $A$, $B$, $C$ (where $C$ can be considered Carry-in)
+*   **Output $F_1$:** The Sum bit ($F_1 = A \oplus B \oplus C$)
+*   **Output $F_2$:** The Carry-out bit ($F_2 = AB + AC + BC$)
+
+</div>
+</div>
 ---
 
 ## Design Procedure
@@ -149,51 +189,69 @@ Design is the process of creating a circuit that meets a given set of specificat
 1.  **State the problem (System Spec).**
     *   Understand the requirements and desired behavior.
 2.  **Determine the number of inputs and outputs.**
-3.  **Assign symbols** to the input and output variables (e.g., A, B, C for inputs; X, Y, Z for outputs).
+    *   The inputs determine the size of the truth table ($2^n$ rows).
+3.  **Assign symbols** to the input and output variables.
+    *   Typical inputs: $A, B, C, \dots$ or $x, y, z, \dots$
+    *   Typical outputs: $F_1, F_2, \dots$ or $F, G, \dots$
 4.  **Derive the truth table** that defines the required relationship between inputs and outputs.
-5.  **Derive the simplified Boolean functions** for each output (e.g., using K-maps).
+5.  **Derive the simplified Boolean functions** for each output.
+    *   Use **K-maps** or **Boolean algebra** to minimize the logic.
 6.  **Draw the logic diagram** and verify its correctness.
+    *   Implement using standard gates (AND, OR, NOT, NAND, NOR, etc.).
 
 ---
 
 ## Design Example: BCD to Excess-3 Code Converter
 
+<div class="grid grid-cols-2 gap-8">
+<div class="text-base pt-2">
+
 1.  **Problem:** Design a circuit that converts a 4-bit Binary-Coded Decimal (BCD) digit to a 4-bit Excess-3 code.
 2.  **Inputs/Outputs:** 4 input lines (for BCD) and 4 output lines (for Excess-3).
-3.  **Symbols:** Inputs `A, B, C, D`; Outputs `w, x, y, z`.
+3.  **Symbols:** Inputs $A, B, C, D$; Outputs $w, x, y, z$.
+<img src="/bcd_to_excess3_block.svg" class="rounded-lg bg-white p-4 w-60 mx-auto" alt="BCD to Excess-3 Block Diagram">
 4.  **Truth Table:** Excess-3 code is found by adding 3 to the BCD value. BCD inputs from 10 to 15 are "don't care" conditions as they are not valid BCD digits.
+</div>
+<div>
 
-| Decimal | BCD (ABCD) | Excess-3 (wxyz) |
-|:-------:|:----------:|:---------------:|
-| 0       | 0000       | 0011            |
-| 1       | 0001       | 0100            |
-| 2       | 0010       | 0101            |
-| 3       | 0011       | 0110            |
-| 4       | 0100       | 0111            |
-| 5       | 0101       | 1000            |
-| 6       | 0110       | 1001            |
-| 7       | 0111       | 1010            |
-| 8       | 1000       | 1011            |
-| 9       | 1001       | 1100            |
-| 10-15   | 1010-1111  | xxxx            |
+$$
+\begin{array}{|c|c|c|}
+\hline
+\text{Decimal} & \text{BCD (ABCD)} & \text{Excess-3 (wxyz)} \\
+\hline
+0 & 0000 & 0011 \\
+1 & 0001 & 0100 \\
+2 & 0010 & 0101 \\
+3 & 0011 & 0110 \\
+4 & 0100 & 0111 \\
+5 & 0101 & 1000 \\
+6 & 0110 & 1001 \\
+7 & 0111 & 1010 \\
+8 & 1000 & 1011 \\
+9 & 1001 & 1100 \\
+10-15 & 1010-1111 & \text{xxxx} \\
+\hline
+\end{array}
+$$
+
+</div>
+</div>
 
 ---
 
-## BCD to Excess-3: K-Maps & Simplification
+5.  **Simplified Functions:** We create K-maps for each output $w, x, y, z$ using the truth table and "don't care" conditions to find the simplest expressions.
 
-5.  **Simplified Functions:** We create K-maps for each output `w, x, y, z` using the truth table and "don't care" conditions to find the simplest expressions.
+<div class="grid grid-cols-2 pb-4">
 
-<div class="grid grid-cols-2 gap-4">
-
-<img src="https://i.imgur.com/k6v853g.png" class="rounded-lg bg-white p-2" alt="K-Maps for w and x">
-<img src="https://i.imgur.com/9029t3o.png" class="rounded-lg bg-white p-2" alt="K-Maps for y and z">
+<img src="/bcd_kmaps_wx.svg" class="rounded-lg bg-white p-2" alt="K-Maps for w and x">
+<img src="/bcd_kmaps_yz.svg" class="rounded-lg bg-white p-2 w-104" alt="K-Maps for y and z">
 
 </div>
 
-*   `z = D'`
-*   `y = CD + C'D' = C ⊕ D`
-*   `x = B'C + B'D + BC'D' = B'(C+D) + B(C+D)'`
-*   `w = A + BC + BD = A + B(C+D)`
+*   $w = A + BC + BD = A + B(C+D)$
+*   $x = B'C + B'D + BC'D' = B'(C+D) + B(C+D)'$
+*   $y = CD + C'D' = C \oplus D$
+*   $z = D'$
 
 ---
 
@@ -201,7 +259,9 @@ Design is the process of creating a circuit that meets a given set of specificat
 
 6.  **Draw the Logic Diagram:** The circuit is implemented based on the simplified Boolean functions.
 
-<img src="https://i.imgur.com/8354c5y.png" class="rounded-lg bg-white p-4" alt="Logic Diagram for BCD to Excess-3 Converter">
+<img src="/bcd_to_excess3_circuit.svg" class="rounded-lg bg-white p-4" alt="Logic Diagram for BCD to Excess-3 Converter">
+
+---
 
 ### VHDL Implementation
 
