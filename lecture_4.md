@@ -473,6 +473,24 @@ END ARCHITECTURE structural;
 layout: two-cols-header
 ---
 
+### RTL Viewer in Quartus(r)
+
+:: left ::
+<img src="/rtl_view_FA.png"/>
+
+
+:: right ::
+
+<img src="/rtl_view_HA.png"/>
+
+
+
+
+
+---
+layout: two-cols-header
+---
+
 ## Ripple-Carry Adder
 
 To add multi-bit numbers, we can cascade full-adders. The carry-out ($C_{out}$) from one stage "ripples" to become the carry-in ($C_{in}$) of the next stage.
