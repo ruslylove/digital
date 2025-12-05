@@ -1,0 +1,79 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+
+\ctikzset{
+logic ports=ieee,
+logic ports/scale=0.8,
+}
+
+\begin{document}
+
+\begin{circuitikz}[]
+
+    % ============================
+    % 1. Parity Generator (Sender)
+    % ============================
+    % Inputs x, y, z
+    \node (x) at (0, 4) {$x$};
+    \node (y) at (0, 3) {$y$};
+    \node (z) at (0, 2) {$z$};
+
+    % XOR1: x XOR y
+    \draw (2, 3.5) node[xor port] (GEN_XOR1) {};
+    \draw (x) -| (GEN_XOR1.in 1);
+    \draw (y) -| (GEN_XOR1.in 2);
+
+    % XOR2: (x XOR y) XOR z -> P_gen
+    \draw (4, 2.5) node[xor port] (GEN_XOR2) {};
+    \draw (GEN_XOR1.out) -| (GEN_XOR2.in 1);
+    \draw (z) -| (GEN_XOR2.in 2);
+
+    \node at (4, 4.5) {\textbf{Parity Generator}};
+
+    % ============================
+    % 2. Channel & Error Injection
+    % ============================
+    % Error Signal
+    \node (err_sig) at (5, 1) {Error};
+
+    % Error Injection XOR
+    \draw (6, 2.5) node[xor port, color=red] (ERR_XOR) {};
+    \draw (GEN_XOR2.out) -- (ERR_XOR.in 1);
+    \draw (err_sig) -| (ERR_XOR.in 2);
+
+    \node[color=red] at (6, 3.5) {\textbf{Channel}};
+
+    % ============================
+    % 3. Parity Checker (Receiver)
+    % ============================
+    
+    % We need to XOR x, y, z, and P_rx
+    
+    % Re-use x, y, z wires (conceptually transmitted)
+    % XOR3: x XOR y (Receiver side re-calculation)
+    \draw (9, 3.5) node[xor port] (CHK_XOR1) {};
+    % Connect x, y from source (passing through "channel")
+    \draw (x) -- ++(1,0) -- ++(0, 0.5) -- ++(7, 0) -| (CHK_XOR1.in 1);
+    \draw (y) -- ++(1.5,0) -- ++(0, 0.5) -- ++(6.5, 0) -| (CHK_XOR1.in 2);
+
+    % XOR4: (x XOR y) XOR z
+    \draw (11, 2.5) node[xor port] (CHK_XOR2) {};
+    \draw (CHK_XOR1.out) -| (CHK_XOR2.in 1);
+    % Connect z
+    \draw (z) -- ++(2,0) -- ++(0, -0.5) -- ++(8, 0) -| (CHK_XOR2.in 2);
+
+    % XOR5: Final Check (Data_Parity XOR Received_Parity)
+    \draw (13, 2.5) node[xor port] (CHK_XOR3) {};
+    \draw (CHK_XOR2.out) -- (CHK_XOR3.in 1);
+    \draw (ERR_XOR.out) -- (CHK_XOR3.in 2) node[midway, above] {$P_{rx}$};
+
+    \draw (CHK_XOR3.out) -- ++(1, 0) node[right] {Error Flag};
+
+    \node at (11, 4.5) {\textbf{Parity Checker}};
+
+    % Dashed box for system boundary
+    \draw[dashed, gray] (-1, 0.5) rectangle (15, 5);
+
+\end{circuitikz}
+
+\end{document}
