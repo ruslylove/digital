@@ -250,21 +250,20 @@ $$
 
 *   $w = A + BC + BD = A + B(C+D)$
 *   $x = B'C + B'D + BC'D' = B'(C+D) + B(C+D)'$
-*   $y = CD + C'D' = C \oplus D$
+*   $y = CD + C'D' = (C \oplus D)'$
 *   $z = D'$
 
 ---
 
-## BCD to Excess-3: Logic Diagram
-
 6.  **Draw the Logic Diagram:** The circuit is implemented based on the simplified Boolean functions.
 
-<img src="/bcd_to_excess3_circuit.svg" class="rounded-lg bg-white p-4" alt="Logic Diagram for BCD to Excess-3 Converter">
+<div class="grid grid-cols-2 gap-4">
 
----
+<img src="/bcd_to_excess3_circuit.svg" class="rounded-lg bg-white p-5" alt="Logic Diagram for BCD to Excess-3 Converter">
 
-### VHDL Implementation
+<div>
 
+**bcd_to_excess3.vhd**  
 ```vhdl
 library ieee;
 use ieee.std_logic_1164.all;
@@ -277,37 +276,75 @@ end bcd_to_excess3;
 architecture dataflow of bcd_to_excess3 is
 begin
     z <= not D;
-    y <= C xor D;
-    x <= (not B and (C or D)) or (B and not C and not D);
+    y <= C xnor D;
+    x <= B xor (C or D);
     w <= A or (B and (C or D));
 end dataflow;
 ```
+</div>
 
+</div>
+
+---
+layout: two-cols-header
 ---
 
 ## Decoders
 
 A **decoder** is a combinational circuit that converts binary information from *n* input lines to a maximum of **2ⁿ** unique output lines.
 
+:: left ::
+
 *   For any given input combination, only **one** output is active (e.g., HIGH), while all others are inactive (e.g., LOW).
 *   Decoders are often called *n-to-m-line* decoders, where *m ≤ 2ⁿ*.
 
+<img src="/decoder_3to8_block.svg" class="rounded-lg bg-white p-3 w-60 mx-auto" alt="Block Diagram of 3-to-8 Decoder">
+
+:: right ::
+
+<div class="pl-4">
+
 ### 3-to-8 Line Decoder
 
-| x | y | z | D₀ | D₁ | D₂ | D₃ | D₄ | D₅ | D₆ | D₇ |
-|:-:|:-:|:-:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
-| 0 | 0 | 0 | **1**| 0  | 0  | 0  | 0  | 0  | 0  | 0  |
-| 0 | 0 | 1 | 0  | **1**| 0  | 0  | 0  | 0  | 0  | 0  |
-| 0 | 1 | 0 | 0  | 0  | **1**| 0  | 0  | 0  | 0  | 0  |
-| 0 | 1 | 1 | 0  | 0  | 0  | **1**| 0  | 0  | 0  | 0  |
-| 1 | 0 | 0 | 0  | 0  | 0  | 0  | **1**| 0  | 0  | 0  |
-| 1 | 0 | 1 | 0  | 0  | 0  | 0  | 0  | **1**| 0  | 0  |
-| 1 | 1 | 0 | 0  | 0  | 0  | 0  | 0  | 0  | **1**| 0  |
-| 1 | 1 | 1 | 0  | 0  | 0  | 0  | 0  | 0  | 0  | **1**|
+
+
+$$
+\begin{array}{|c|c|c||c|c|c|c|c|c|c|c|}
+\hline
+x & y & z & D_0 & D_1 & D_2 & D_3 & D_4 & D_5 & D_6 & D_7 \\
+\hline
+0 & 0 & 0 & \mathbf{1} & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 1 & 0 & \mathbf{1} & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 & 0 & \mathbf{1} & 0 & 0 & 0 & 0 & 0 \\
+0 & 1 & 1 & 0 & 0 & 0 & \mathbf{1} & 0 & 0 & 0 & 0 \\
+1 & 0 & 0 & 0 & 0 & 0 & 0 & \mathbf{1} & 0 & 0 & 0 \\
+1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \mathbf{1} & 0 & 0 \\
+1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \mathbf{1} & 0 \\
+1 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \mathbf{1} \\
+\hline
+\end{array}
+$$
+
+</div>
+
+---
+
+<div class="grid grid-cols-2 gap-4">
+
+<div>
+
+### Logic Diagram
+
+<img src="/decoder_3to8_circuit.svg" class="rounded-lg bg-white p-3 w-60" alt="Logic Diagram of 3-to-8 Decoder">
+
+</div>
+
+<div>
 
 ### VHDL Implementation
 
-```vhdl
+**decoder_3to8.vhd**
+```vhdl {*}{lines:true}
 library ieee;
 use ieee.std_logic_1164.all;
 
@@ -316,54 +353,118 @@ entity decoder_3to8 is
            D : out std_logic_vector(7 downto 0) );
 end decoder_3to8;
 
-architecture behavioral of decoder_3to8 is
+architecture dataflow of decoder_3to8 is
 begin
-    process(I)
-    begin
-        D <= (others => '0');
-        D(to_integer(unsigned(I))) <= '1';
-    end process;
-end behavioral;
+    D(0) <= not I(2) and not I(1) and not I(0);
+    D(1) <= not I(2) and not I(1) and     I(0);
+    D(2) <= not I(2) and     I(1) and not I(0);
+    D(3) <= not I(2) and     I(1) and     I(0);
+    D(4) <=     I(2) and not I(1) and not I(0);
+    D(5) <=     I(2) and not I(1) and     I(0);
+    D(6) <=     I(2) and     I(1) and not I(0);
+    D(7) <=     I(2) and     I(1) and     I(0);
+end dataflow;
 ```
+
+</div>
+
+</div>
+
 
 ---
 
 ## Decoder with Enable Input
+<div class="grid grid-cols-2 gap-4">
+
+<div class="text-base">
 
 Decoders often include an **Enable** input (`E`) to control the circuit's operation.
 
 *   If `E = 0` (for active-low enable), the decoder functions normally.
 *   If `E = 1`, all outputs are disabled (e.g., all forced to 0 or 1, depending on the design).
 
-This allows us to cascade decoders to build larger ones. For example, two 3-to-8 decoders with an enable input can be used to create a 4-to-16 decoder.
+$$
+\small
+\begin{array}{|c|ccc|cccccccc|}
+\hline
+E & x & y & z & D_0 & D_1 & D_2 & D_3 & D_4 & D_5 & D_6 & D_7 \\
+\hline
+1 & X & X & X & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 \\
+0 & 0 & 0 & 0 & \mathbf{0} & 1 & 1 & 1 & 1 & 1 & 1 & 1 \\
+0 & 0 & 0 & 1 & 1 & \mathbf{0} & 1 & 1 & 1 & 1 & 1 & 1 \\
+0 & 0 & 1 & 0 & 1 & 1 & \mathbf{0} & 1 & 1 & 1 & 1 & 1 \\
+0 & 0 & 1 & 1 & 1 & 1 & 1 & \mathbf{0} & 1 & 1 & 1 & 1 \\
+0 & 1 & 0 & 0 & 1 & 1 & 1 & 1 & \mathbf{0} & 1 & 1 & 1 \\
+0 & 1 & 0 & 1 & 1 & 1 & 1 & 1 & 1 & \mathbf{0} & 1 & 1 \\
+0 & 1 & 1 & 0 & 1 & 1 & 1 & 1 & 1 & 1 & \mathbf{0} & 1 \\
+0 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & \mathbf{0} \\
+\hline
+\end{array}
+$$
+</div>
 
-<img src="https://i.imgur.com/uN9Xk9r.png" class="rounded-lg bg-white p-4 w-2/3" alt="4-to-16 Decoder from two 3-to-8 Decoders">
+<div>
+<img src="/decoder_3to8_enable_circuit.svg" class="rounded-lg bg-white p-4 w-60 mx-auto" alt="3-to-8 Decoder with Enable Input Logic Diagram">
+</div>
+
+</div>
 
 ---
 
-## Encoders
+This allows us to cascade decoders to build larger ones. For example, two 3-to-8 decoders with an enable input can be used to create a 4-to-16 decoder.
 
+<img src="/decoder_4to16_block.svg" class="rounded-lg bg-white p-4 w-70 mx-auto" alt="4-to-16 Decoder using two 3-to-8 Decoders">
+
+
+
+---
+layout: two-cols-header
+---
+
+## Encoders
 An **encoder** performs the inverse operation of a decoder.
+:: left ::
+
+<div class="text-sm">
 
 *   It has **2ⁿ** (or fewer) input lines and *n* output lines.
 *   It converts a single active input line into its corresponding binary code on the output lines.
 *   It is assumed that only **one** input line is active at a time.
 
-### Octal-to-Binary Encoder (8-to-3)
+**Octal-to-Binary Encoder (8-to-3)**
+$$
+\small
+\begin{array}{|cccccccc|ccc|}
+\hline
+D_7 & D_6 & D_5 & D_4 & D_3 & D_2 & D_1 & D_0 & x & y & z \\
+\hline
+0 & 0 & 0 & 0 & 0 & 0 & 0 & \mathbf{1} & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & \mathbf{1} & 0 & 0 & 0 & 1 \\
+0 & 0 & 0 & 0 & 0 & \mathbf{1} & 0 & 0 & 0 & 1 & 0 \\
+\vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+\mathbf{1} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 1 & 1 \\
+\hline
+\end{array}
+$$
 
-| D₇ | D₆ | D₅ | D₄ | D₃ | D₂ | D₁ | D₀ | x | y | z |
-|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:-:|:-:|:-:|
-| 0  | 0  | 0  | 0  | 0  | 0  | 0  | **1**| 0 | 0 | 0 |
-| 0  | 0  | 0  | 0  | 0  | 0  | **1**| 0  | 0 | 0 | 1 |
-| 0  | 0  | 0  | 0  | 0  | **1**| 0  | 0  | 0 | 1 | 0 |
-| ...|... |... |... |... |... |... |... |...|...|...|
-| **1**| 0  | 0  | 0  | 0  | 0  | 0  | 0  | 1 | 1 | 1 |
+* The logic is simple:
+    *   $x = D_4 + D_5 + D_6 + D_7$
+    *   $y = D_2 + D_3 + D_6 + D_7$
+    *   $z = D_1 + D_3 + D_5 + D_7$
 
-The logic is simple: `x = D₄+D₅+D₆+D₇`, `y = D₂+D₃+D₆+D₇`, `z = D₁+D₃+D₅+D₇`.
+</div>
 
+:: right ::
+
+<img src="/encoder_8to3_circuit.svg" class="rounded-lg bg-white p-4 mx-auto w-full" alt="Octal-to-Binary Encoder (8-to-3) Logic Diagram">
+
+---
+layout: two-cols
 ---
 
 ## Priority Encoders
+
+<div class="text-sm">
 
 What happens if more than one input to a simple encoder is active? The output is undefined or incorrect.
 
@@ -372,15 +473,32 @@ A **priority encoder** solves this by establishing an importance level (priority
 *   If multiple inputs are active, the encoder outputs the binary code corresponding to the input with the **highest priority**.
 *   They also usually include a "Valid" output (`V`) to indicate if any input is active.
 
-### 4-to-2 Priority Encoder (D₃ is highest priority)
+**4-to-2 Priority Encoder (D₃ is highest priority)**
 
-| D₃ | D₂ | D₁ | D₀ | x | y | V |
-|:--:|:--:|:--:|:--:|:-:|:-:|:-:|
-| 0  | 0  | 0  | 0  | x | x | 0 |
-| 0  | 0  | 0  | 1  | 0 | 0 | 1 |
-| 0  | 0  | 1  | x  | 0 | 1 | 1 |
-| 0  | 1  | x  | x  | 1 | 0 | 1 |
-| 1  | x  | x  | x  | 1 | 1 | 1 |
+
+$$
+\small
+\begin{array}{|cccc|ccc|}
+\hline
+D_3 & D_2 & D_1 & D_0 & x & y & V \\
+\hline
+0 & 0 & 0 & 0 & X & X & 0 \\
+0 & 0 & 0 & 1 & 0 & 0 & 1 \\
+0 & 0 & 1 & X & 0 & 1 & 1 \\
+0 & 1 & X & X & 1 & 0 & 1 \\
+1 & X & X & X & 1 & 1 & 1 \\
+\hline
+\end{array}
+
+$$
+
+</div>
+
+:: right ::
+
+<img src="/priority_encoder_circuit.svg" class="rounded-lg bg-white p-4 mx-auto" alt="4-to-2 Priority Encoder Logic Diagram">
+
+
 
 ---
 
