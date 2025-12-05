@@ -4,52 +4,82 @@
 
 \begin{document}
 \begin{circuitikz}
+    \ctikzset{logic ports=ieee} % Use IEEE standard symbols
 
-    % Inputs
-    \node (A) at (0, 6) {$A$};
-    \node (B) at (0, 4) {$B$};
-    \node (C) at (0, 2) {$C$};
-    \node (D) at (0, 0) {$D$};
+    % --- Place Gates First ---
 
-
+    % z = D'
+    \node[not port, scale=0.7] (INV_z) at (2, 0) {};
     
-    % z
-    \node[not port] (INV_z) at (4, -0.5) {};
-    \draw (D) -- ++(1,0) |- (INV_z.in);
-    \draw (INV_z.out) -- ++(0.5,0) node[right] {$z$};
+    % y = C XNOR D
+    % Place above z
+    \node[xnor port] (XNOR_y) at (2, 2) {};
     
-    % y
-    \node[xnor port] (XNOR_y) at (4, 1.5) {};
-    \draw (C) -- ++(1.5,0) |- (XNOR_y.in 1);
-    \draw (D) -- ++(2,0) |- (XNOR_y.in 2);
-    \draw (XNOR_y.out) -- ++(0.5,0) node[right] {$y$};
-
+    
     % T = C + D
-    \node[or port] (OR_T) at (3, 3) {};
-    \draw (C) -- ++(1.5,0) |- (OR_T.in 2);
-    %\draw (D) -- ++(1,0) |- (OR_T.in 2); % This is messy. Let's assume C and D available.
-    % Actually, let's tap from the lines that go to XNOR?
-    % Hard to draw perfect shared lines without 'short'.
-    \draw (D) -- ++(1,0) |- (OR_T.in 2); % D is lowest
+    % Place roughly above/between? 
+    % Let's place it to the left of x/w logic but accessible from C, D
+    \node[or port] (OR_T) at (2, 4) {};
     
-    % Correction: OR_T takes C and D.
-    % Re-route:
-    \draw (C) -- ++(1.2,0) |- (OR_T.in 1);
-    
-    % x = B xor T
-    \node[xor port] (XOR_x) at (6, 4) {};
-    \draw (B) -- ++(3,0) |- (XOR_x.in 1);
-    \draw (OR_T.out) -- ++(0.5,0) |- (XOR_x.in 2);
-    \draw (XOR_x.out) -- ++(0.5,0) node[right] {$x$};
+    % x = B XOR T
+    \node[xor port] (XOR_x) at (5, 5) {};
     
     % w = A + (B . T)
-    \node[and port] (AND_BT) at (6, 5.5) {};
-    \draw (B) -- ++(2.8,0) |- (AND_BT.in 2);
-    \draw (OR_T.out) -- ++(0.5,0) |- (AND_BT.in 1); % Shared T
+    \node[and port] (AND_BT) at (5, 7) {};
+    \node[or port] (OR_w) at (8, 7.5) {};
+
+    % --- Place Inputs relative to Gate Inputs ---
+    % Align x-coordinate at -1
     
-    \node[or port] (OR_w) at (8, 6) {};
-    \draw (A) -- ++(6,0) |- (OR_w.in 1);
-    \draw (AND_BT.out) |- (OR_w.in 2);
+    % D connects to INV_z (in), XNOR_y (in 2), OR_T (in 2)
+    % Let's align D with INV_z input for straight line
+    \node (D) at (-1, 0|-INV_z.in) {$D$};
+    
+    % C connects to XNOR_y (in 1), OR_T (in 1)
+    % Align C with XNOR_y.in 1
+    \node (C) at (-1, 0|-XNOR_y.in 1) {$C$};
+    
+    % B connects to XOR_x (in 1), AND_BT (in 2)
+    % Align B with XOR_x.in 1
+    \node (B) at (-1, 0|-XOR_x.in 1) {$B$};
+    
+    % A connects to OR_w (in 1)
+    % Align A with OR_w.in 1
+    \node (A) at (-1, 0|-OR_w.in 1) {$A$};
+    
+    
+    % --- Wiring ---
+    
+    % D connections
+    \draw (D) -- (INV_z.in);  
+    \draw (XNOR_y.in 2) to[short,-*] ++(-1,0) coordinate (Dpoint2);
+    \draw (Dpoint2) |- (OR_T.in 1);
+    \draw (Dpoint2 |- D) to[short,*-] (Dpoint2);
+    
+    % C connections
+    \draw (C) -- (XNOR_y.in 1);
+    \draw (C) -- ++(1.5,0) coordinate (Cpoint2);
+    \draw (Cpoint2) to[short,*-] (Cpoint2 |- OR_T.in 2) -- (OR_T.in 2);
+    
+    % B connections
+    \draw (B) -- (XOR_x.in 1);
+    \draw (B) to[short,-*] ++(4,0) |- (AND_BT.in 1);
+    
+    % A connections
+    \draw (A) -- (OR_w.in 1);
+    
+    % T (OR_T output) connections
+    \draw (OR_T.out) -- ++(0.5,0) coordinate (Tpoint2);
+    \draw (Tpoint2) to[short,-*] (Tpoint2 |- XOR_x.in 2) |- (AND_BT.in 2);
+    \draw (Tpoint2 |- XOR_x.in 2) -- (XOR_x.in 2);
+    
+    % AND_BT to OR_w
+    \draw (AND_BT.out) -- ++(0.5,0) |- (OR_w.in 2);
+    
+    % --- Outputs ---
+    \draw (INV_z.out) -- ++(7,0) node[right] {$z$};
+    \draw (XNOR_y.out) -- ++(6.5,0) node[right] {$y$};
+    \draw (XOR_x.out) -- ++(3.5,0) node[right] {$x$};
     \draw (OR_w.out) -- ++(0.5,0) node[right] {$w$};
 
 \end{circuitikz}

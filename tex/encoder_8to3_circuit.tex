@@ -1,0 +1,65 @@
+\documentclass[border=10pt]{standalone}
+\usepackage[american]{circuitikz}
+
+\begin{document}
+\begin{circuitikz}
+    \ctikzset{logic ports=ieee}
+
+    % Layout: 
+    % Inputs D7..D0 at the top, running vertically down (Matrix style).
+    % Gates x, y, z on the right, stacked vertically.
+    
+    % Define Input Nodes at Top
+    % Spacing 1.5cm
+    % logical order D7 (MSB) to D0 (LSB) from Left to Right seems natural for bits,
+    % but often schematic inputs ascend/descend.
+    % Let's do D7 on Left.
+    
+    \foreach \i/\label in {0/D_7, 1/D_6, 2/D_5, 3/D_4, 4/D_3, 5/D_2, 6/D_1, 7/D_0} {
+        \node (in_\i) at (\i*1, 10) {$\label$};
+        % Vertical Rail
+        \draw (\i*1, 9.5) -- (\i*1, 0);
+    }
+    
+    % Logic Gates (3 OR gates)
+    % x = D4+D5+D6+D7
+    % y = D2+D3+D6+D7
+    % z = D1+D3+D5+D7
+    
+    % Place gates on the right
+    % x at top, z at bottom
+    \node[or port, number inputs=4] (or_x) at (10, 8) {};
+    \node[right] at (or_x.out) {$x$};
+    
+    \node[or port, number inputs=4] (or_y) at (10, 5) {};
+    \node[right] at (or_y.out) {$y$};
+    
+    \node[or port, number inputs=4] (or_z) at (10, 2) {};
+    \node[right] at (or_z.out) {$z$};
+    
+    % Connections for x (D7, D6, D5, D4)
+    % Indices: D7=0, D6=1, D5=2, D4=3.
+    % Rails at x = 0, 1.5, 3.0, 4.5
+    \foreach \rail/\pin in {0/1, 1/2, 2/3, 3/4} {
+        \draw (\rail*1, 8.4 - 0.28*\pin + 0.5) coordinate (tap); % Approximate pin height
+        % Actually, let's use the explicit gate anchors.
+        % Gate input anchors are bin 1..4.
+        % We need horizontal lines from the Rail to the Gate Input.
+        \draw (\rail*1, 0 |- or_x.in \pin) node[circ]{} -- (or_x.in \pin);
+    }
+    
+    % Connections for y (D7, D6, D3, D2)
+    % Indices: D7=0, D6=1, D3=4, D2=5
+    % or_y.in 1..4
+    \foreach \rail/\pin in {0/1, 1/2, 4/3, 5/4} {
+        \draw (\rail*1, 0 |- or_y.in \pin) node[circ]{} -- (or_y.in \pin);
+    }
+
+    % Connections for z (D7, D5, D3, D1)
+    % Indices: D7=0, D5=2, D3=4, D1=6
+    \foreach \rail/\pin in {0/1, 2/2, 4/3, 6/4} {
+        \draw (\rail*1, 0 |- or_z.in \pin) node[circ]{} -- (or_z.in \pin);
+    }
+
+\end{circuitikz}
+\end{document}
