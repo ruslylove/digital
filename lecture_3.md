@@ -790,7 +790,7 @@ end Behavioral;
 <div>
 
 **Parity Checker**
-```vhdl {*}{maxHeight:'400px',lines:'true'}
+```vhdl {*}{maxHeight:'380px',lines:'true'}
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 

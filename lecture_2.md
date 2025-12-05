@@ -965,7 +965,7 @@ A **testbench** is a VHDL entity used to simulate and verify the correctness of 
 
 1.  **Instantiate the UUT:** The testbench declares the design you want to test as a `component` and creates an instance of it.
 2.  **Generate Stimulus:** Internal signals are created to connect to the UUT's ports. A `process` is written to change the values of the input signals over time, simulating real-world scenarios.
-3.  **Observe Outputs:** You run the simulation in a tool like Questa or GHDL. The tool generates waveforms showing how the UUT's output signals respond to the input stimulus.
+3.  **Observe Outputs:** You run the simulation in a tool like Questa(r) or GHDL. The tool generates waveforms showing how the UUT's output signals respond to the input stimulus.
 4.  **Verify Correctness:** You check the waveforms to ensure the outputs are correct. For automated checking, VHDL's `assert` statement can be used to report errors if an output does not match its expected value.
 </div>
 <div>
@@ -978,7 +978,7 @@ A **testbench** is a VHDL entity used to simulate and verify the correctness of 
 
 ---
 
-### Questa Simulation Result
+### Questa(r) Simulation Result
 
 <img src="/three_way_light_sim.png" class="w-180 pt-4 mx-auto" />
 <p class="text-sm text-center">Figure 2-12. Timing Simulation result in Intel (Altera) Questa.</p>
