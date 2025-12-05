@@ -1,0 +1,56 @@
+\documentclass[border=10pt]{standalone}
+\usepackage[american]{circuitikz}
+\usetikzlibrary{shapes, arrows, positioning, calc}
+
+\begin{document}
+\begin{circuitikz}
+
+    % Inputs
+    \node (A) at (0, 6) {$A$};
+    \node (B) at (0, 4) {$B$};
+    \node (C) at (0, 2) {$C$};
+    \node (D) at (0, 0) {$D$};
+
+
+    
+    % z
+    \node[not port] (INV_z) at (4, -0.5) {};
+    \draw (D) -- ++(1,0) |- (INV_z.in);
+    \draw (INV_z.out) -- ++(0.5,0) node[right] {$z$};
+    
+    % y
+    \node[xnor port] (XNOR_y) at (4, 1.5) {};
+    \draw (C) -- ++(1.5,0) |- (XNOR_y.in 1);
+    \draw (D) -- ++(2,0) |- (XNOR_y.in 2);
+    \draw (XNOR_y.out) -- ++(0.5,0) node[right] {$y$};
+
+    % T = C + D
+    \node[or port] (OR_T) at (3, 3) {};
+    \draw (C) -- ++(1.5,0) |- (OR_T.in 2);
+    %\draw (D) -- ++(1,0) |- (OR_T.in 2); % This is messy. Let's assume C and D available.
+    % Actually, let's tap from the lines that go to XNOR?
+    % Hard to draw perfect shared lines without 'short'.
+    \draw (D) -- ++(1,0) |- (OR_T.in 2); % D is lowest
+    
+    % Correction: OR_T takes C and D.
+    % Re-route:
+    \draw (C) -- ++(1.2,0) |- (OR_T.in 1);
+    
+    % x = B xor T
+    \node[xor port] (XOR_x) at (6, 4) {};
+    \draw (B) -- ++(3,0) |- (XOR_x.in 1);
+    \draw (OR_T.out) -- ++(0.5,0) |- (XOR_x.in 2);
+    \draw (XOR_x.out) -- ++(0.5,0) node[right] {$x$};
+    
+    % w = A + (B . T)
+    \node[and port] (AND_BT) at (6, 5.5) {};
+    \draw (B) -- ++(2.8,0) |- (AND_BT.in 2);
+    \draw (OR_T.out) -- ++(0.5,0) |- (AND_BT.in 1); % Shared T
+    
+    \node[or port] (OR_w) at (8, 6) {};
+    \draw (A) -- ++(6,0) |- (OR_w.in 1);
+    \draw (AND_BT.out) |- (OR_w.in 2);
+    \draw (OR_w.out) -- ++(0.5,0) node[right] {$w$};
+
+\end{circuitikz}
+\end{document}

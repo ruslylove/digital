@@ -731,11 +731,13 @@ layout: two-cols-header
 
 XOR gates are ideal for error detection circuits. **Parity** is an extra bit added to a binary message to ensure the total number of $1$s is either even (even parity) or odd (odd parity).
 
+<img src="/parity_system.svg" class="rounded-lg bg-white p-2 w-full" alt="Parity System">
+
 ::left::
 
 ### Even Parity Generator
 
-<div class="pr-4">
+<div class="pr-4 text-sm">
 
 This circuit generates a parity bit $P$ for a 3-bit message ($x,y,z$). The output $P$ is chosen so that the total number of $1$s in the 4-bit message ($x,y,z,P$) is even.
 
@@ -748,12 +750,15 @@ This circuit generates a parity bit $P$ for a 3-bit message ($x,y,z$). The outpu
 ::right::
 
 ### Even Parity Checker
+<div class="pr-4 text-sm">
 
 This circuit checks a 4-bit message ($x,y,z,P$) for errors. If the number of $1$s is even, the output $C$ (Check) is $0$. If the number of $1$s is odd, $C$ is $1$, indicating an error.
 
 - $C = x ⊕ y ⊕ z ⊕ P$
 
-<img src="/logic_parity_checker.svg" class="rounded-lg bg-white pt-5 w-120" alt="4-bit even parity checker">
+<img src="/logic_parity_checker.svg" class="rounded-lg bg-white pt-5 w-100" alt="4-bit even parity checker">
+
+</div>
 
 ---
 
