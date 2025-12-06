@@ -1072,10 +1072,17 @@ ARCHITECTURE structural OF cla_4bit_adder IS
     -- Internal Signals for the Carries (C1, C2, C3, C4)
     SIGNAL C_vec : STD_LOGIC_VECTOR(4 DOWNTO 1); 
 
+    -- Internal Signals for correct Carry-in for each bit i=0 to 3 (C0, C1, C2, C3)
+    SIGNAL C_in_sum : STD_LOGIC_VECTOR(3 DOWNTO 0);
+    
 BEGIN
 
+    -- Map C0 (Cin) and C1-C3 (from C_vec) to the correct carry-in signals for the Sum Logic
+    -- C_in_sum(0) must be C0, and C_in_sum(1 to 3) must be C_vec(1 to 3)
+    C_in_sum(0) <= Cin;
+    C_in_sum(3 DOWNTO 1) <= C_vec(3 DOWNTO 1); 
+
     -- 1. Generate P and G Signals (4 instances of PG_Unit)
-    -- Generates P(i) and G(i) for each bit i=0 to 3
     PG_GEN: FOR i IN 0 TO 3 GENERATE
         PG_I: pg_unit
             PORT MAP (
@@ -1087,7 +1094,6 @@ BEGIN
     END GENERATE;
 
     -- 2. CLA Logic Block (1 instance)
-    -- Calculates all internal carries C1, C2, C3, C4 in parallel
     CLA_BLOCK: cla_logic
         PORT MAP (
             P_in => P_vec,
@@ -1100,15 +1106,12 @@ BEGIN
     Cout <= C_vec(4);
 
     -- 3. Sum Logic (4 instances of Sum_Logic)
-    -- Calculates the final sum S(i) using P(i) and the calculated carry C(i)
     SUM_GEN: FOR i IN 0 TO 3 GENERATE
         SUM_I: sum_logic
             PORT MAP (
                 P_in => P_vec(i),
-                -- Note: The carry input for Sum_Logic(i) is C_vec(i) for i=1 to 3, 
-                -- but for i=0, it is the global Cin (C0).
-                -- We use the entity input Cin directly for the LSB (i=0).
-                C_in => C_vec(i) WHEN i > 0 ELSE Cin,
+                -- Use the pre-calculated C_in_sum(i)
+                C_in => C_in_sum(i),
                 S_out => S(i)
             );
     END GENERATE;
@@ -1117,6 +1120,16 @@ END ARCHITECTURE structural;
 ```
 </div>
 </div>
+
+---
+
+
+### RTL Viewer in Quartus(r)
+
+
+<img src="/rtl_viewer_cla_4bit.png" class="p-4 w-full mx-auto"/>
+
+
 ---
 layout: two-cols
 ---
@@ -1181,66 +1194,80 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 
 ENTITY cla_4bit_block IS
-    PORT (
-        A, B    : IN  STD_LOGIC_VECTOR(3 DOWNTO 0);
-        Cin     : IN  STD_LOGIC;
-        S       : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        Pg_out  : OUT STD_LOGIC; -- Group Propagate (P^G)
-        Gg_out  : OUT STD_LOGIC; -- Group Generate (G^G)
-        Cout    : OUT STD_LOGIC  -- Local Cout (C4)
-    );
+PORT (
+    A, B    : IN  STD_LOGIC_VECTOR(3 DOWNTO 0);
+    Cin     : IN  STD_LOGIC;      -- C0
+    S       : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+    Pg_out  : OUT STD_LOGIC;      -- Group Propagate (P^G)
+    Gg_out  : OUT STD_LOGIC;      -- Group Generate (G^G)
+    Cout    : OUT STD_LOGIC       -- Local Cout (C4)
+);
 END ENTITY cla_4bit_block;
 
 ARCHITECTURE structural OF cla_4bit_block IS
 
-    -- Component Declarations (Assuming these are defined externally)
+    -- Component Declarations
     COMPONENT pg_unit PORT ( A, B : IN STD_LOGIC; P_out, G_out : OUT STD_LOGIC ); END COMPONENT;
-    COMPONENT cla_logic PORT ( P_in, G_in : IN STD_LOGIC_VECTOR(3 DOWNTO 0); C0 : IN STD_LOGIC; C_out : OUT STD_LOGIC_VECTOR(4 DOWNTO 1) ); END COMPONENT;
     COMPONENT sum_logic PORT ( P_in, C_in : IN STD_LOGIC; S_out : OUT STD_LOGIC ); END COMPONENT;
 
     -- Internal Signals
-    SIGNAL P_vec, G_vec : STD_LOGIC_VECTOR(3 DOWNTO 0);
-    SIGNAL C_local : STD_LOGIC_VECTOR(4 DOWNTO 1); -- C1, C2, C3, C4
+    SIGNAL P_vec, G_vec : STD_LOGIC_VECTOR(3 DOWNTO 0); -- Individual P and G
+    SIGNAL C_vec : STD_LOGIC_VECTOR(4 DOWNTO 1);        -- C1, C2, C3, C4 (The calculated carries)
+    SIGNAL C_in_sum : STD_LOGIC_VECTOR(3 DOWNTO 0);     -- C0, C1, C2, C3 (Carry inputs for Sum Logic)
 
 BEGIN
 
-    -- 1. Instantiate 4x P/G Units
+    -- 1. Instantiate 4x P/G Units (Calculates Pi and Gi)
     PG_GEN: FOR i IN 0 TO 3 GENERATE
         PG_I: pg_unit PORT MAP (A => A(i), B => B(i), P_out => P_vec(i), G_out => G_vec(i));
     END GENERATE;
 
-    -- 2. Instantiate 1x Local CLA Logic
-    CLA_LOCAL: cla_logic
-        PORT MAP (
-            P_in  => P_vec,
-            G_in  => G_vec,
-            C0    => Cin,
-            C_out => C_local
-        );
+    -- 2. Two-Level Carry Lookahead Logic (Calculates C1, C2, C3, C4 concurrently)
+    -- C1 = G0 + P0*C0
+    C_vec(1) <= G_vec(0) OR (P_vec(0) AND Cin); 
 
-    -- 3. Calculate Group Signals (P^G and G^G)
-    
-    -- P^G = P3 AND P2 AND P1 AND P0
+    -- C2 = G1 + P1*G0 + P1*P0*C0
+    C_vec(2) <= G_vec(1) OR (P_vec(1) AND G_vec(0)) OR (P_vec(1) AND P_vec(0) AND Cin);
+
+    -- C3 = G2 + P2*G1 + P2*P1*G0 + P2*P1*P0*C0
+    C_vec(3) <= G_vec(2) OR 
+                (P_vec(2) AND G_vec(1)) OR 
+                (P_vec(2) AND P_vec(1) AND G_vec(0)) OR 
+                (P_vec(2) AND P_vec(1) AND P_vec(0) AND Cin);
+
+    -- C4 (Group Carry-out) = G3 + P3*G2 + P3*P2*G1 + P3*P2*P1*G0 + P3*P2*P1*P0*C0
+    C_vec(4) <= G_vec(3) OR 
+                (P_vec(3) AND G_vec(2)) OR 
+                (P_vec(3) AND P_vec(2) AND G_vec(1)) OR 
+                (P_vec(3) AND P_vec(2) AND P_vec(1) AND G_vec(0)) OR
+                (P_vec(3) AND P_vec(2) AND P_vec(1) AND P_vec(0) AND Cin);
+
+    -- 3. Group Signals (P^G and G^G)
+    -- Group Propagate (P^G)
     Pg_out <= P_vec(3) AND P_vec(2) AND P_vec(1) AND P_vec(0); 
 
-    -- G^G: This logic is identical to C4 in cla_logic, but without the C0 term.
-    Gg_out <= G_vec(3) OR (P_vec(3) AND G_vec(2)) OR (P_vec(3) AND P_vec(2) AND G_vec(1)) OR 
+    -- Group Generate (G^G) (This is the C4 term without the Cin component)
+    Gg_out <= G_vec(3) OR 
+              (P_vec(3) AND G_vec(2)) OR 
+              (P_vec(3) AND P_vec(2) AND G_vec(1)) OR 
               (P_vec(3) AND P_vec(2) AND P_vec(1) AND G_vec(0));
 
+    -- 4. Map the final C4 to the external Cout
+    Cout <= C_vec(4);
 
-    -- 4. Instantiate 4x Sum Logic Units
+    -- 5. Route Carry Signals for Sum Logic
+    C_in_sum(0) <= Cin;
+    C_in_sum(3 DOWNTO 1) <= C_vec(3 DOWNTO 1); 
+
+    -- 6. Instantiate 4x Sum Logic Units (Calculates Si)
     SUM_GEN: FOR i IN 0 TO 3 GENERATE
         SUM_I: sum_logic
             PORT MAP (
                 P_in  => P_vec(i),
-                -- Cin for bit 0 is the block's Cin; Cin for bits 1-3 is C_local(i)
-                C_in  => C_local(i) WHEN i > 0 ELSE Cin,
+                C_in  => C_in_sum(i),
                 S_out => S(i)
             );
     END GENERATE;
-    
-    -- 5. Map Local Cout
-    Cout <= C_local(4);
 
 END ARCHITECTURE structural;
 ```
@@ -1250,7 +1277,7 @@ END ARCHITECTURE structural;
 layout: two-cols
 ---
 
-**2. gcla_logic.vhd (Global Carry Lookahead)**
+**2. cla_group_logic.vhd (Global Carry Lookahead)**
 
 * This block calculates the block-level carries ($C_4, C_8, C_{12}, C_{16}$)
 
@@ -1260,172 +1287,315 @@ layout: two-cols
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 
-ENTITY gcla_logic IS
+ENTITY cla_group_logic IS
     PORT (
-        Pg_in, Gg_in : IN  STD_LOGIC_VECTOR(3 DOWNTO 0); -- P^G and G^G vectors
-        C0           : IN  STD_LOGIC;                    -- Global Cin
-        C_block_out  : OUT STD_LOGIC_VECTOR(4 DOWNTO 1)  -- Block Carries (C4, C8, C12, C16)
+        Pg_in, Gg_in : IN  STD_LOGIC_VECTOR(3 DOWNTO 0); -- P^G and G^G from 4 groups
+        C0           : IN  STD_LOGIC;                    -- Global Cin (C0)
+        C_out        : OUT STD_LOGIC_VECTOR(3 DOWNTO 1)  -- Group Carries C4, C8, C12
     );
-END ENTITY gcla_logic;
+END ENTITY cla_group_logic;
 
-ARCHITECTURE dataflow OF gcla_logic IS
+ARCHITECTURE two_level_carry OF cla_group_logic IS
+    -- Carries C_out(1) = C4, C_out(2) = C8, C_out(3) = C12
 BEGIN
-    -- C4 (Block 1 Cin) = Gg0 + Pg0 * C0
-    C_block_out(1) <= Gg_in(0) OR (Pg_in(0) AND C0);
-    
-    -- C8 (Block 2 Cin) = Gg1 + Pg1*Gg0 + Pg1*Pg0*C0
-    C_block_out(2) <= Gg_in(1) OR (Pg_in(1) AND Gg_in(0)) OR (Pg_in(1) AND Pg_in(0) AND C0);
+    -- C4 = G^G0 + P^G0 * C0
+    C_out(1) <= Gg_in(0) OR (Pg_in(0) AND C0);
 
-    -- C12 (Block 3 Cin) = Gg2 + Pg2*Gg1 + Pg2*Pg1*Gg0 + Pg2*Pg1*Pg0*C0
-    C_block_out(3) <= Gg_in(2) OR (Pg_in(2) AND Gg_in(1)) OR (Pg_in(2) AND Pg_in(1) AND Gg_in(0)) OR 
-                      (Pg_in(2) AND Pg_in(1) AND Pg_in(0) AND C0);
+    -- C8 = G^G1 + P^G1 * C4
+    C_out(2) <= Gg_in(1) OR 
+                (Pg_in(1) AND Gg_in(0)) OR 
+                (Pg_in(1) AND Pg_in(0) AND C0);
 
-    -- C16 (Final Cout) = Gg3 + ... + Pg3*Pg2*Pg1*Pg0*C0
-    C_block_out(4) <= Gg_in(3) OR (Pg_in(3) AND Gg_in(2)) OR (Pg_in(3) AND Pg_in(2) AND Gg_in(1)) OR 
-                      (Pg_in(3) AND Pg_in(2) AND Pg_in(1) AND Gg_in(0)) OR 
-                      (Pg_in(3) AND Pg_in(2) AND Pg_in(1) AND Pg_in(0) AND C0);
+    -- C12 = G^G2 + P^G2 * C8
+    C_out(3) <= Gg_in(2) OR 
+                (Pg_in(2) AND Gg_in(1)) OR 
+                (Pg_in(2) AND Pg_in(1) AND Gg_in(0)) OR 
+                (Pg_in(2) AND Pg_in(1) AND Pg_in(0) AND C0);
 
-END ARCHITECTURE dataflow;
+END ARCHITECTURE two_level_carry;
 ```
 </div>
 
 :: right ::
 
-**3. cla_adder_16bit.vhd**
+**3. cla_16bit_adder.vhd**
 * This is the top-level VHDL code for the 16-bit Carry Lookahead Adder (CLA)
 
 ```vhdl {*}{maxHeight:'350px', lines:true}
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 
----------------------------------------------------------------------
--- ENTITY: 16-bit CLA Adder Interface
----------------------------------------------------------------------
-ENTITY cla_adder_16bit IS
+ENTITY cla_16bit_adder IS
     PORT (
-        A, B    : IN  STD_LOGIC_VECTOR(15 DOWNTO 0); -- Two 16-bit inputs
+        A, B    : IN  STD_LOGIC_VECTOR(15 DOWNTO 0); -- 16-bit inputs
         Cin     : IN  STD_LOGIC;                    -- Global Carry-in (C0)
-        S       : OUT STD_LOGIC_VECTOR(15 DOWNTO 0); -- 16-bit Sum output
+        S       : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);-- 16-bit Sum output
         Cout    : OUT STD_LOGIC                     -- Final Carry-out (C16)
     );
-END ENTITY cla_adder_16bit;
+END ENTITY cla_16bit_adder;
 
----------------------------------------------------------------------
--- ARCHITECTURE: Structural Implementation using GCLA
----------------------------------------------------------------------
-ARCHITECTURE structural OF cla_adder_16bit IS
+ARCHITECTURE hierarchical OF cla_16bit_adder IS
 
-    -- --- 1. Component Declarations (4-bit Blocks) ---
-
-    -- The 4-bit CLA component (which contains its own P/G/Sum logic)
+    -- Component Declarations
     COMPONENT cla_4bit_block
         PORT (
             A, B    : IN  STD_LOGIC_VECTOR(3 DOWNTO 0);
             Cin     : IN  STD_LOGIC;
             S       : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-            -- Group P and G signals (Outputs used by the GCLA)
-            Pg_out  : OUT STD_LOGIC;
-            Gg_out  : OUT STD_LOGIC;
-            Cout    : OUT STD_LOGIC -- (C4, C8, C12, C16)
+            Pg_out  : OUT STD_LOGIC; -- Group Propagate (P^G)
+            Gg_out  : OUT STD_LOGIC; -- Group Generate (G^G)
+            Cout    : OUT STD_LOGIC  -- Local Cout (C4, C8, C12, C16)
         );
     END COMPONENT;
 
-    -- The Group Carry Lookahead (GCLA) component
-    COMPONENT gcla_logic
+    COMPONENT cla_group_logic
         PORT (
-            Pg_in, Gg_in : IN  STD_LOGIC_VECTOR(3 DOWNTO 0); -- P^G, G^G from 4 blocks
-            C0           : IN  STD_LOGIC;                    -- Global C0
-            C_block_out  : OUT STD_LOGIC_VECTOR(4 DOWNTO 1)  -- Calculated Carries C4, C8, C12, C16
+            Pg_in, Gg_in : IN  STD_LOGIC_VECTOR(3 DOWNTO 0);
+            C0           : IN  STD_LOGIC;
+            C_out        : OUT STD_LOGIC_VECTOR(3 DOWNTO 1) -- Group Carries C4, C8, C12
         );
     END COMPONENT;
 
 
-    -- --- 2. Internal Signals ---
-
-    -- Group Propagate (P^G) and Group Generate (G^G) signals from each of the 4 blocks
-    SIGNAL Pg_vec, Gg_vec : STD_LOGIC_VECTOR(3 DOWNTO 0); 
-    
-    -- Block Carry-in signals: C4, C8, C12, C16 (C_vec(1) to C_vec(4))
-    SIGNAL C_block_carry : STD_LOGIC_VECTOR(4 DOWNTO 1); 
-
+    -- Internal Signals
+    SIGNAL Pg_vec, Gg_vec : STD_LOGIC_VECTOR(3 DOWNTO 0); -- P^G and G^G from 4 blocks
+    SIGNAL C_group : STD_LOGIC_VECTOR(3 DOWNTO 1);        -- Group Carry outputs (C4, C8, C12)
+    SIGNAL C_in_vec : STD_LOGIC_VECTOR(3 DOWNTO 0);       -- Carry-in signals for 4 blocks (C0, C4, C8, C12)
+    SIGNAL C_block_out : STD_LOGIC_VECTOR(3 DOWNTO 0);    -- Carry-out from each 4-bit block
 
 BEGIN
 
-    -- --- 3. Instantiate the Four 4-bit CLA Blocks (B0 to B3) ---
+    -- 1. Route the Carry-in signals to the 4-bit blocks
+    C_in_vec(0) <= Cin;
+    C_in_vec(3 DOWNTO 1) <= C_group(3 DOWNTO 1); -- C_in_vec(1)=C4, C_in_vec(2)=C8, C_in_vec(3)=C12
 
-    -- Block 0 (Bits 0-3): LSB
-    B0: cla_4bit_block
+    -- 2. Instantiate the 4-bit CLA Blocks (4 instances)
+    BLOCK_GEN: FOR i IN 0 TO 3 GENERATE
+        BLOCK_I: cla_4bit_block
+            PORT MAP (
+                A       => A(i*4+3 DOWNTO i*4),
+                B       => B(i*4+3 DOWNTO i*4),
+                Cin     => C_in_vec(i),       -- C0 or group carry
+                S       => S(i*4+3 DOWNTO i*4),
+                Pg_out  => Pg_vec(i),         -- Capture P^G
+                Gg_out  => Gg_vec(i),         -- Capture G^G
+                Cout    => C_block_out(i)     -- Capture C4, C8, C12, C16
+            );
+    END GENERATE;
+
+
+    -- 3. Instantiate the Group Carry-Lookahead Unit (CLU)
+    CLU_BLOCK: cla_group_logic
         PORT MAP (
-            A       => A(3 DOWNTO 0),
-            B       => B(3 DOWNTO 0),
-            Cin     => Cin,                  -- Global Cin
-            S       => S(3 DOWNTO 0),
-            Pg_out  => Pg_vec(0),
-            Gg_out  => Gg_vec(0),
-            Cout    => C_block_carry(1)      -- C4 (Output is C_block_carry(1))
+            Pg_in  => Pg_vec,
+            Gg_in  => Gg_vec,
+            C0     => Cin,
+            C_out  => C_group
         );
 
-    -- Block 1 (Bits 4-7)
-    B1: cla_4bit_block
+
+    -- 4. Map the Final Cout
+    Cout <= C_block_out(3); -- Final Cout is C16
+
+END ARCHITECTURE hierarchical;
+```
+
+
+
+---
+
+**4. tb_cla_16bit_adder.vhd**
+* This is the testbench for the 16-bit Carry Lookahead Adder (CLA)
+```vhdl {*}{maxHeight:'350px', lines:true}
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.numeric_std.ALL; -- For converting STD_LOGIC_VECTOR to integers for verification
+
+ENTITY tb_cla_16bit_adder IS
+END ENTITY tb_cla_16bit_adder;
+
+ARCHITECTURE behavioral OF tb_cla_16bit_adder IS
+
+    -- 1. Component Declaration for the Unit Under Test (UUT)
+    COMPONENT cla_16bit_adder
+        PORT (
+            A, B    : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
+            Cin     : IN  STD_LOGIC;
+            S       : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+            Cout    : OUT STD_LOGIC
+        );
+    END COMPONENT;
+
+    -- 2. Signals for UUT Ports
+    SIGNAL A_in, B_in : STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
+    SIGNAL Cin_in     : STD_LOGIC := '0';
+    SIGNAL S_out      : STD_LOGIC_VECTOR(15 DOWNTO 0);
+    SIGNAL Cout_out   : STD_LOGIC;
+
+    -- 3. Constants and Helpers
+    CONSTANT c_period : TIME := 10 ns;
+
+BEGIN
+
+    -- Instantiate the Unit Under Test (UUT)
+    UUT: cla_16bit_adder
         PORT MAP (
-            A       => A(7 DOWNTO 4),
-            B       => B(7 DOWNTO 4),
-            Cin     => C_block_carry(1),     -- Cin is C4 from GCLA/B0
-            S       => S(7 DOWNTO 4),
-            Pg_out  => Pg_vec(1),
-            Gg_out  => Gg_vec(1),
-            Cout    => C_block_carry(2)      -- C8 (Output is C_block_carry(2))
+            A    => A_in,
+            B    => B_in,
+            Cin  => Cin_in,
+            S    => S_out,
+            Cout => Cout_out
+        );
+
+    -- Test Process
+    PROCESS
+        -- Function to convert standard logic vectors to unsigned integers for easy calculation
+        FUNCTION to_uint(V : STD_LOGIC_VECTOR) RETURN NATURAL IS
+            VARIABLE result : NATURAL := 0;
+        BEGIN
+            FOR i IN V'RANGE LOOP
+                IF V(i) = '1' THEN
+                    result := result + 2**(i);
+                END IF;
+            END LOOP;
+            RETURN result;
+        END FUNCTION to_uint;
+
+        -- Procedure to perform a test and report results
+        PROCEDURE run_test (
+            A_val    : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+            B_val    : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+            Cin_val  : IN STD_LOGIC
+        ) IS
+            VARIABLE expected_sum    : NATURAL;
+            VARIABLE expected_cout   : STD_LOGIC;
+            VARIABLE actual_sum      : NATURAL;
+            VARIABLE actual_cout     : STD_LOGIC;
+            VARIABLE total_sum       : NATURAL;
+            VARIABLE test_passed     : BOOLEAN;
+				VARIABLE Cin_int         : NATURAL;
+        BEGIN
+            -- Apply inputs
+            A_in <= A_val;
+            B_in <= B_val;
+            Cin_in <= Cin_val;
+
+            WAIT FOR c_period; -- Wait for combinational delay
+
+            -- Convert single-bit Cin_val to an integer (0 or 1)
+            IF Cin_val = '1' THEN
+                Cin_int := 1;
+            ELSE
+                Cin_int := 0;
+            END IF;
+
+            -- Calculate expected values (A + B + Cin)
+            -- Use Cin_int (NATURAL) instead of Cin_val (STD_LOGIC)
+            total_sum := to_uint(A_val) + to_uint(B_val) + Cin_int;
+				
+            -- Expected Sum is the lower 16 bits of total_sum
+            expected_sum := total_sum MOD 65536; 
+            
+            -- Expected Cout is '1' if the sum exceeds 16 bits (65535)
+            IF total_sum > 65535 THEN
+                expected_cout := '1';
+            ELSE
+                expected_cout := '0';
+            END IF;
+
+            -- Read actual outputs
+            actual_sum := to_uint(S_out);
+            actual_cout := Cout_out;
+
+           
+            -- Verification
+            test_passed := (actual_sum = expected_sum) AND (actual_cout = expected_cout);
+            
+            IF test_passed THEN
+                REPORT "Result: PASSED" SEVERITY NOTE;
+            ELSE
+                REPORT "Result: FAILED" SEVERITY ERROR;
+            END IF;
+            
+            WAIT FOR c_period;
+
+        END PROCEDURE run_test;
+
+    BEGIN
+        REPORT "Starting 16-bit CLA Testbench..." SEVERITY NOTE;
+
+        -- === Test Cases ===
+
+        -- 1. Simple Addition: 10 + 20 + 0 = 30
+        run_test(
+            A_val   => X"000A", 
+            B_val   => X"0014",
+            Cin_val => '0'
+        );
+
+        -- 2. Basic Carry-in: FFFF + 0 + 1 = 10000 (S=0, Cout=1)
+        run_test(
+            A_val   => X"FFFF", 
+            B_val   => X"0000",
+            Cin_val => '1'
+        );
+
+        -- 3. Half Max Value: 7FFF + 7FFF + 0 = FFFE (65534)
+        run_test(
+            A_val   => X"7FFF", 
+            B_val   => X"7FFF",
+            Cin_val => '0'
         );
         
-    -- Block 2 (Bits 8-11)
-    B2: cla_4bit_block
-        PORT MAP (
-            A       => A(11 DOWNTO 8),
-            B       => B(11 DOWNTO 8),
-            Cin     => C_block_carry(2),     -- Cin is C8 from GCLA/B1
-            S       => S(11 DOWNTO 8),
-            Pg_out  => Pg_vec(2),
-            Gg_out  => Gg_vec(2),
-            Cout    => C_block_carry(3)      -- C12 (Output is C_block_carry(3))
+        -- 4. Maximum Carry-out: FFFF + FFFF + 1 = 1FFFD (S=FFFD, Cout=1)
+        run_test(
+            A_val   => X"FFFF", 
+            B_val   => X"FFFF",
+            Cin_val => '1'
+        );
+        
+        -- 5. Carry Propagation Test (Across a group boundary, e.g., 000F + 0001)
+        run_test(
+            A_val   => X"000F", 
+            B_val   => X"0001",
+            Cin_val => '0'
         );
 
-    -- Block 3 (Bits 12-15): MSB
-    B3: cla_4bit_block
-        PORT MAP (
-            A       => A(15 DOWNTO 12),
-            B       => B(15 DOWNTO 12),
-            Cin     => C_block_carry(3),     -- Cin is C12 from GCLA/B2
-            S       => S(15 DOWNTO 12),
-            Pg_out  => Pg_vec(3),
-            Gg_out  => Gg_vec(3),
-            Cout    => C_block_carry(4)      -- C16 (Output is C_block_carry(4))
+        -- 6. Carry Propagation across all 4 groups (0000 + 0001 propagates)
+        run_test(
+            A_val   => X"0000",
+            B_val   => X"0001",
+            Cin_val => '0'
+        );
+        
+        -- 7. Carry Propagation across all 16 bits (FF00 + 0100 = 0000, Cout=1)
+        run_test(
+            A_val   => X"FF00",
+            B_val   => X"0100",
+            Cin_val => '0'
         );
 
-    -- 4. Map Final Output
-    Cout <= C_block_carry(4); -- Final Carry (C16)
+        REPORT "All tests complete. Simulation halting." SEVERITY NOTE;
+        WAIT; 
 
-    -- NOTE: For simplicity in synthesis, the C_block_carry signals here are 
-    -- connected in a simple ripple fashion between the blocks. In a full two-level 
-    -- CLA, these signals would be calculated by the 'gcla_logic' component 
-    -- INSTANTIATED HERE using Pg_vec and Gg_vec, and then fed back to the blocks.
+    END PROCESS;
 
-    -- For a true two-level CLA implementation, you would replace the ripple connections
-    -- and add the GCLA instantiation like this (uncommented implementation below):
+END ARCHITECTURE behavioral;
 
-    /* GCLA_UNIT: gcla_logic
-        PORT MAP (
-            Pg_in => Pg_vec,
-            Gg_in => Gg_vec,
-            C0    => Cin,
-            C_block_out => C_block_carry
-        );
-
-    -- Then, B1, B2, and B3 would receive their Cin from C_block_carry(1), C_block_carry(2), etc.
-    */
-
-
-END ARCHITECTURE structural;
 ```
+
+---
+
+
+### RTL Viewer in Quartus(r)
+
+
+<img src="/rtl_viewer_cla_16bit.png" class="p-4 w-[600px] mx-auto"/>
+
+
+### Simulation results in ModelSim(r)
+
+<img src="/sim_result_cla_16bit.png" class="p-4 w-[600px] mx-auto"/>
 
 ---
 layout: two-cols-header
