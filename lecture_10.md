@@ -12,6 +12,7 @@ title: "Lecture 10 - Control Unit Design"
 010113025 Digital Circuits and Logic Design
 </div>
 
+{{ $slidev.configs.author }}
 ---
 
 ## Outline

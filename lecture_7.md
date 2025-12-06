@@ -12,6 +12,7 @@ title: Lecture 7 - Registers and Counters
 010113025 Digital Circuits and Logic Design
 </div>
 
+{{ $slidev.configs.author }}
 ---
 
 ## Outline
