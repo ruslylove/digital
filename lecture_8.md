@@ -12,6 +12,7 @@ title: Lecture 8 - Finite State Machine Applications
 010113025 Digital Circuits and Logic Design
 </div>
 
+{{ $slidev.configs.author }}
 ---
 
 ## Outline

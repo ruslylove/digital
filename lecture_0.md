@@ -5,6 +5,7 @@ transition: fade
 
 ## Welcome to 010113025 Digital Circuit & Logic Design
 
+{{ $slidev.configs.author }}
 ---
 layout: intro
 ---
