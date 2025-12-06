@@ -1,8 +1,8 @@
 # Fdb version 4
-["pdflatex"] 1765029767.11661 "/Users/rus/development/digital/tex/tri_state_buffer.tex" "tri_state_buffer.pdf" "tri_state_buffer" 1765029768.52117 0
-  "/Users/rus/development/digital/tex/tri_state_buffer.tex" 1765029766.82616 695 62aa9cee58680d7863674fc6ff429043 ""
+["pdflatex"] 1765037345.69557 "/Users/rus/development/digital/tex/latch_symbols.tex" "latch_symbols.pdf" "latch_symbols" 1765037347.10227 0
+  "/Users/rus/development/digital/tex/latch_symbols.tex" 1765037345.04046 2529 1a1994918ed705a28a799205747b7a4d ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb" 1248133631 36299 5f9df58c2139e7edcf37c8fca4bd384d ""
-  "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1248133631 35752 024fb6c41858982481f6968b5fc26508 ""
+  "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb" 1248133631 32716 08e384dc442464e7285e891af9f45947 ""
   "/usr/local/texlive/2025/texmf-dist/tex/context/base/mkii/supp-pdf.mkii" 1461363279 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "/usr/local/texlive/2025/texmf-dist/tex/generic/circuitikz/pgfcirc.defines.tex" 1736550187 46557 9adcccd6eb69fb5553fe8449b51f7543 ""
   "/usr/local/texlive/2025/texmf-dist/tex/generic/circuitikz/pgfcircbipoles.tex" 1736550187 313284 6adca7701e0659dde0293b21114e4157 ""
@@ -40,6 +40,7 @@
   "/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarybending.code.tex" 1601326656 345 9efe6b557b64ab0401dc06a4ef8ca04c ""
   "/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarycalc.code.tex" 1601326656 15929 463535aa2c4268fead6674a75c0e8266 ""
   "/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryfpu.code.tex" 1601326656 283 0802c14f542ec5204d2d1cc89f08a4d2 ""
+  "/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarypositioning.code.tex" 1601326656 3937 3f208572dd82c71103831da976d74f1a ""
   "/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarytopaths.code.tex" 1608933718 11518 738408f795261b70ce8dd47459171309 ""
   "/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/tikz.code.tex" 1673816307 186782 af500404a9edec4d362912fe762ded92 ""
   "/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/libraries/pgflibraryarrows.meta.code.tex" 1601326656 58801 1e750fb0692eb99aaac45698bbec96b1 ""
@@ -116,10 +117,10 @@
   "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1763819811 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
   "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1763819727 3345735 98e8d6ce829fe76d41a990640e1359a8 ""
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
-  "tri_state_buffer.aux" 1765029768.44267 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
-  "tri_state_buffer.tex" 1765029766.82616 695 62aa9cee58680d7863674fc6ff429043 ""
+  "latch_symbols.aux" 1765037347.01693 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "latch_symbols.tex" 1765037345.04046 2529 1a1994918ed705a28a799205747b7a4d ""
   (generated)
-  "tri_state_buffer.aux"
-  "tri_state_buffer.log"
-  "tri_state_buffer.pdf"
+  "latch_symbols.aux"
+  "latch_symbols.log"
+  "latch_symbols.pdf"
   (rewritten before read)

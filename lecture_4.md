@@ -9,10 +9,6 @@ title: Lecture 4 - Number Representation & Arithmetic Circuits
 # Lecture 4: Number Representation & Arithmetic Circuits
 {{ $slidev.configs.subject }}
 
-<div class="abs-br m-6 flex items-center">
-  <span class="text-xs">ELECTRICAL Engineering KMITNB</span>
-</div>
-
 {{ $slidev.configs.author }}
 ---
 hideInToc: false

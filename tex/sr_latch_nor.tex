@@ -1,0 +1,32 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+\usetikzlibrary{calc}
+
+\begin{document}
+\begin{circuitikz}[american]
+    \ctikzset{logic ports=ieee}
+    % Draw two NOR gates
+    \draw (0,2) node[nor port] (nor1) {};
+    \draw (0,0) node[nor port] (nor2) {};
+
+    % Inputs
+    \draw (nor1.in 1) -- ++(-1,0) node[left] {$R$};
+    \draw (nor2.in 2) -- ++(-1,0) node[left] {$S$};
+
+    % Outputs
+    \draw (nor1.out) -- ++(1,0) node[right] {$Q$};
+    \draw (nor2.out) -- ++(1,0) node[right] {$Q'$};
+
+    % Feedback connections (Cross-coupling)
+    % From Top Output to Bottom Input 1
+    \draw (nor1.out) -- ++(0.2,0) coordinate(feedQ) -- ++(0,-0.5) -- ($(nor2.in 1) + (0,0.5)$) -- (nor2.in 1);
+    
+    % From Bottom Output to Top Input 2
+    \draw (nor2.out) -- ++(0.2,0) coordinate(feedQbar) -- ++(0,0.5) -- ($(nor1.in 2) + (0,-0.5)$) -- (nor1.in 2);
+
+    % Add nodes for clarity if needed (dots at connection points)
+    \node[circ] at (feedQ) {};
+    \node[circ] at (feedQbar) {};
+
+\end{circuitikz}
+\end{document}

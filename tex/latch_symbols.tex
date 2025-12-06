@@ -1,0 +1,87 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+\usetikzlibrary{positioning}
+
+\begin{document}
+\begin{circuitikz}[american]
+    \ctikzset{logic ports=ieee}
+    \tikzset{latch/.style={draw, rectangle, minimum width=2cm, minimum height=2.5cm, thick}}
+
+    % === SR Latch Symbol ===
+    \node[latch] (sr) at (0,0) {};
+    
+    % Inputs
+    \draw (sr.west) ++(0, 0.6) coordinate(S_in);
+    \draw (sr.west) ++(0, -0.6) coordinate(R_in);
+    \draw (S_in) -- ++(-0.5,0);
+    \draw (R_in) -- ++(-0.5,0);
+    \node[right] at (S_in) {$S$};
+    \node[right] at (R_in) {$R$};
+
+
+    % Outputs
+    \draw (sr.east) ++(0, 0.6) coordinate(Q_out);
+    \draw (sr.east) ++(0, -0.6) coordinate(Qp_out);
+    \draw (Q_out) -- ++(0.5,0);
+    \draw (Qp_out) -- ++(0.5,0);
+    \node[left] at (Q_out) {$Q$};
+    \node[left] at (Qp_out) {$Q'$};
+    \draw[fill=white] (Qp_out) circle(0.1);
+
+
+    % === S'R' Latch Symbol ===
+    \node[latch] (srb) at (5,0) {};
+
+    % Inputs (Active Low bubbles)
+    \draw (srb.west) ++(0, 0.6) coordinate(Sb_in);
+    \draw (srb.west) ++(0, -0.6) coordinate(Rb_in);
+    
+    % Bubbles
+    \node[circ, fill=white] (bubS) at (Sb_in) {}; % Hacky bubble? circuitikz has better ways but this works for custom shapes
+    % Actually simpler: draw line to a circle anchor.
+    \draw (Sb_in) -- ++(-0.5,0);
+    \draw (Rb_in) -- ++(-0.5,0);
+    \node[right] at ($(Sb_in)+(0.1,0)$) {$S$};
+    \node[right] at ($(Rb_in)+(0.1,0)$) {$R$};
+    
+    % Bubbles at input pins
+    \draw[fill=white] (Sb_in) circle(0.1);
+    \draw[fill=white] (Rb_in) circle(0.1);
+
+
+    
+    % Outputs
+    \draw (srb.east) ++(0, 0.6) coordinate(Qb_out);
+    \draw (srb.east) ++(0, -0.6) coordinate(Qpb_out);
+    \draw (Qb_out) -- ++(0.5,0);
+    \draw (Qpb_out) -- ++(0.5,0);
+    \node[left] at (Qb_out) {$Q$};
+    \node[left] at (Qpb_out) {$Q'$};
+    \draw[fill=white] (Qpb_out) circle(0.1);
+
+
+    % === D Latch Symbol ===
+    \node[latch] (dl) at (10,0) {};
+
+    % Inputs
+    \draw (dl.west) ++(0, 0.6) coordinate(D_in);
+    \draw (dl.west) ++(0, -0.6) coordinate(C_in);
+    
+    \draw (D_in) -- ++(-0.5,0);
+    \draw (C_in) -- ++(-0.5,0);
+    \node[right] at (D_in) {$D$};
+    \node[right] at (C_in) {$C$};
+
+
+    % Outputs
+    \draw (dl.east) ++(0, 0.6) coordinate(Qd_out);
+    \draw (dl.east) ++(0, -0.6) coordinate(Qpd_out);
+    \draw (Qd_out) -- ++(0.5,0);
+    \draw (Qpd_out) -- ++(0.5,0);
+    \node[left] at (Qd_out) {$Q$};
+    \node[left] at (Qpd_out) {$Q'$};
+    \draw[fill=white] (Qpd_out) circle(0.1);
+
+
+\end{circuitikz}
+\end{document}

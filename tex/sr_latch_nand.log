@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=latex 2025.11.22)  6 DEC 2025 21:03
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=latex 2025.11.22)  6 DEC 2025 22:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**tri_state_buffer.tex
-(./tri_state_buffer.tex
+**sr_latch_nand.tex
+(./sr_latch_nand.tex
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
 (/usr/local/texlive/2025/texmf-dist/tex/latex/standalone/standalone.cls
@@ -461,8 +461,8 @@ File: l3backend-dvips.def 2024-05-08 L3 backend support: dvips
 \g__pdf_backend_link_int=\count300
 \g__pdf_backend_link_sf_int=\count301
 )
-(./tri_state_buffer.aux)
-\openout1 = `tri_state_buffer.aux'.
+No file sr_latch_nand.aux.
+\openout1 = `sr_latch_nand.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 5.
 LaTeX Font Info:    ... okay on input line 5.
@@ -479,26 +479,26 @@ LaTeX Font Info:    ... okay on input line 5.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 5.
 LaTeX Font Info:    ... okay on input line 5.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 11.
+(Font)              <7> on input line 14.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 11.
+(Font)              <5> on input line 14.
 
 
 [1
 
-] (./tri_state_buffer.aux)
+] (./sr_latch_nand.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 30138 strings out of 473191
- 800366 string characters out of 5715825
- 1436239 words of memory out of 5000000
- 53146 multiletter control sequences out of 15000+600000
+ 30245 strings out of 473191
+ 802805 string characters out of 5715825
+ 1440143 words of memory out of 5000000
+ 53255 multiletter control sequences out of 15000+600000
  558837 words of font info for 36 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 117i,5n,121p,446b,632s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 117i,5n,121p,437b,920s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on tri_state_buffer.dvi (1 page, 12424 bytes).
+Output written on sr_latch_nand.dvi (1 page, 17076 bytes).
