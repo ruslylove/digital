@@ -334,6 +334,7 @@ From the truth table, we can derive the logic equations:
 This is implemented with one XOR gate and one AND gate.
 
 <img src="/half_adder.svg" class="h-40 mt-4" alt="Half Adder Circuit"/>
+<p class="text-sm text-center">Figure 4-1. Half Adder Circuit.</p>
 
 ---
 layout: two-cols-header
@@ -371,8 +372,10 @@ $$
 <div class="text-sm">
 A full-adder can be constructed from two half-adders and an OR gate.
 
-<img src="/full_adder.svg" class="pt-4 w-100 mx-auto" alt="Full Adder Circuit"/>
-<img src="/full_adder_from_ha.svg" class="pt-4 w-100 mx-auto pt-5" alt="HA"/>
+<img src="/full_adder.svg" class="p-1 w-90 mx-auto" alt="Full Adder Circuit"/>
+<p class="text-sm text-center">Figure 4-2. Full Adder Circuit.</p>
+<img src="/full_adder_from_ha.svg" class="p-1 w-85 mx-auto" alt="HA"/>
+<p class="text-sm text-center">Figure 4-3. Full Adder from Half Adders.</p>
 
 </div>
 
@@ -476,7 +479,8 @@ END ARCHITECTURE structural;
 ### RTL Viewer in Quartus(r)
 
 
-<img src="/rtl_viewer_FA.png" class="p-4 w-full mx-auto"/>
+<img src="/rtl_viewer_FA.png" class="p-2 w-200 mx-auto"/>
+<p class="text-sm text-center">Figure 4-4. RTL Viewer: Full Adder.</p>
 
 
 
@@ -499,6 +503,7 @@ To add multi-bit numbers, we can cascade full-adders. The carry-out ($C_{out}$) 
 *   The main drawback is the delay; the sum bit $S_3$ is not valid until the carry has propagated through all previous stages.
 :: right ::
 <img src="/ripple_adder.svg" class="w-100 mx-auto" alt="4-bit Ripple-Carry Adder"/>
+<p class="text-sm text-center">Figure 4-5. 4-bit Ripple-Carry Adder.</p>
 
 
 
@@ -697,12 +702,14 @@ END;
 ### RTL Viewer in Quartus(r)
 
 
-<img src="/rtl_viewer_RA.png" class="p-4 w-180 mx-auto"/>
+<img src="/rtl_viewer_RA.png" class="p-1 w-160 mx-auto"/>
+<p class="text-sm text-center">Figure 4-6. RTL Viewer: Ripple Adder.</p>
 
 
 ### Simulation results in ModelSim(r)
 
-<img src="/sim_result_RA.png" class="p-4 w-fit mx-auto"/>
+<img src="/sim_result_RA.png" class="p-1 w-160 mx-auto"/>
+<p class="text-sm text-center">Figure 4-7. Simulation Result: Ripple Adder.</p>
 
 
 ---
@@ -725,6 +732,7 @@ $A - B = A + (-B) = A + B' + 1$
 ::right::
 
 <img src="/adder_subtractor.svg" class="w-120 mx-auto" alt="Adder/Subtractor Circuit"/>
+<p class="text-sm text-center">Figure 4-8. Adder/Subtractor Circuit.</p>
 
 ---
 
@@ -889,12 +897,14 @@ END;
 ### RTL Viewer in Quartus(r)
 
 
-<img src="/rtl_viewer_AS.png" class="p-4 w-full mx-auto"/>
+<img src="/rtl_viewer_AS.png" class="p-1 w-190 mx-auto"/>
+<p class="text-sm text-center">Figure 4-9. RTL Viewer: Adder/Subtractor.</p>
 
 
 ### Simulation results in ModelSim(r)
 
-<img src="/sim_result_AS.png" class="p-4 w-full mx-auto"/>
+<img src="/sim_result_AS.png" class="p-1 w-full mx-auto"/>
+<p class="text-sm text-center">Figure 4-10. Simulation Result: Adder/Subtractor.</p>
 ---
 layout: two-cols-header
 ---
@@ -913,6 +923,7 @@ The critical path (worst-case delay) in a ripple-carry adder occurs when a carry
 * A **Carry Lookahead Adder (CLA)** solves this by computing all the carry signals in parallel, directly from the input bits. This breaks the dependency chain and makes the adder significantly faster.
 
 <img src="/cla_4bit.svg" class="w-120 mx-auto pt-4" alt="Carry Lookahead Adder Block Diagram"/>
+<p class="text-sm text-center">Figure 4-11. Carry Lookahead Adder Block Diagram.</p>
 
 </div>
 ---
@@ -1129,6 +1140,7 @@ END ARCHITECTURE structural;
 
 
 <img src="/rtl_viewer_cla_4bit.png" class="p-4 w-full mx-auto"/>
+<p class="text-sm text-center">Figure 4-12. RTL Viewer: 4-bit CLA.</p>
 
 
 ---
@@ -1165,6 +1177,7 @@ layout: two-cols
 **16-bit Adder with Cascaded CLAs**
 
 <img src="/16-bit_cla.svg" class="w-fullf mx-auto" alt="Placeholder: 16-bit Cascaded Carry Lookahead Adder diagram"/>
+<p class="text-sm text-center">Figure 4-13. 16-bit Cascaded Carry Lookahead Adder.</p>
 
 <div class="text-sm mt-2">
 
@@ -1594,12 +1607,14 @@ END ARCHITECTURE behavioral;
 ### RTL Viewer in Quartus(r)
 
 
-<img src="/rtl_viewer_cla_16bit.png" class="p-4 w-[600px] mx-auto"/>
+<img src="/rtl_viewer_cla_16bit.png" class="p-1 w-120 mx-auto"/>
+<p class="text-sm text-center">Figure 4-14. RTL Viewer: 16-bit CLA.</p>
 
 
 ### Simulation results in ModelSim(r)
 
-<img src="/sim_result_cla_16bit.png" class="p-4 w-[600px] mx-auto"/>
+<img src="/sim_result_cla_16bit.png" class="p-1 w-140 mx-auto"/>
+<p class="text-sm text-center">Figure 4-15. Simulation Result: 16-bit CLA.</p>
 
 ---
 layout: two-cols-header
@@ -1682,6 +1697,7 @@ A combinational multiplier can be built using an array of AND gates to form the 
 *   12 adders (a mix of HA and FA) to sum them.
 
 <img src="/multiplier_4x4.svg" class="p-4 w-[600px] mx-auto"/>
+<p class="text-sm text-center">Figure 4-16. 4x4 Array Multiplier.</p>
 
 
 ---
@@ -1903,12 +1919,14 @@ END ARCHITECTURE behavior;
 ### RTL Viewer in Quartus(r)
 
 
-<img src="/rtl_viewer_mul_4x4.png" class="p-4 w-[800px] mx-auto"/>
+<img src="/rtl_viewer_mul_4x4.png" class="p-2 w-160 mx-auto"/>
+<p class="text-sm text-center">Figure 4-17. RTL Viewer: 4x4 Multiplier.</p>
 
 
 ### Simulation results in ModelSim(r)
 
-<img src="/sim_result_mul_4x4.png" class="p-4 w-[800px] mx-auto"/>
+<img src="/sim_result_mul_4x4.png" class="p-2 w-190 mx-auto"/>
+<p class="text-sm text-center">Figure 4-18. Simulation Result: 4x4 Multiplier.</p>
 
 
 ---
