@@ -1644,15 +1644,16 @@ layout: two-cols-header
 <div class="pr-4">
 
 ```
-  1101  (13)  (Multiplicand)
-* 1011  (11)  (Multiplier)
--------
-  1101  (Partial Product 0)
- 1101   (Partial Product 1)
-0000    (Partial Product 2)
-1101     (Partial Product 3)
---------
-10001111 (143) (Product)
+
+       1101  (13)  (Multiplicand)
+     * 1011  (11)  (Multiplier)
+     -------
+       1101        (Partial Product 0)
+      1101         (Partial Product 1)
+     0000          (Partial Product 2)
+    1101           (Partial Product 3)
+    --------
+    10001111 (143) (Product)
 ```
 
 </div>
@@ -1668,14 +1669,24 @@ A combinational multiplier can be built using an array of AND gates to form the 
 *   The partial products are $A_i \cdot B_j$.
 *   These products are then added together, shifted according to their bit position.
 *   This can be implemented with an array of full adders and half adders.
-*   For a 4x4 multiplier:
-    *   16 AND gates to form partial products.
-    *   12 adders (a mix of HA and FA) to sum them.
 
+
+---
+
+### 4x4 multiplier
+*   16 AND gates to form partial products.
+*   12 adders (a mix of HA and FA) to sum them.
+
+<img src="/multiplier_4x4.svg" class="p-4 w-[600px] mx-auto"/>
+
+
+---
+layout: two-cols
 ---
 
 ### VHDL Implementation
 
+**multiplier_4x4.vhd**
 ```vhdl {*}{maxHeight:'350px', lines:true}
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
@@ -1695,8 +1706,6 @@ END ENTITY multiplier_4x4;
 ---------------------------------------------------------------------
 ARCHITECTURE structural OF multiplier_4x4 IS
 
-    -- 1. Component Declarations
-    -- Assumes existence of Half Adder and Full Adder entities.
     COMPONENT half_adder
         PORT ( X, Y : IN STD_LOGIC; S, C : OUT STD_LOGIC );
     END COMPONENT;
@@ -1705,133 +1714,195 @@ ARCHITECTURE structural OF multiplier_4x4 IS
         PORT ( A, B, Cin : IN STD_LOGIC; S, Cout : OUT STD_LOGIC );
     END COMPONENT;
 
-    -- 2. Internal Signals
+    -- Internal Signals
+    TYPE pp_matrix IS ARRAY (3 DOWNTO 0, 3 DOWNTO 0) OF STD_LOGIC;
+    SIGNAL PP : pp_matrix;
 
-    -- 16 Partial Products (PP_i_j)
-    -- PP(i, j) = A(i) AND B(j)
-    SIGNAL PP : STD_LOGIC_MATRIX(3 DOWNTO 0, 3 DOWNTO 0);
-    
-    -- Internal Sums and Carries (S, C) for the 12 Adders
-    -- We define 3 carry signal vectors (C1 to C3) and 4 sum signal vectors (S0 to S3).
-    SIGNAL S_int : STD_LOGIC_MATRIX(3 DOWNTO 0, 3 DOWNTO 0);
-    SIGNAL C_int : STD_LOGIC_MATRIX(3 DOWNTO 1, 3 DOWNTO 0);
+    -- Row 1 Signals (Sum of A*B0 and A*B1)
+    SIGNAL S1 : STD_LOGIC_VECTOR(3 DOWNTO 0); -- S1(0) is P(1), others pass to Row 2
+    SIGNAL C1 : STD_LOGIC_VECTOR(3 DOWNTO 0);
+
+    -- Row 2 Signals (Sum of Row 1 and A*B2)
+    SIGNAL S2 : STD_LOGIC_VECTOR(3 DOWNTO 0); -- S2(0) is P(2), others pass to Row 3
+    SIGNAL C2 : STD_LOGIC_VECTOR(3 DOWNTO 0);
+
+    -- Row 3 Signals (Sum of Row 2 and A*B3)
+    SIGNAL S3 : STD_LOGIC_VECTOR(3 DOWNTO 0); -- S3(0) is P(3), S3(1) is P(4)...
+    SIGNAL C3 : STD_LOGIC_VECTOR(3 DOWNTO 0); -- Carry out
 
 BEGIN
-    -- --- Stage 1: Partial Product Generation (16 AND Gates) ---
-    -- PP(i, j) = A(i) AND B(j)
+    -- --- Stage 1: Partial Product Generation ---
     PP_GEN: FOR i IN 0 TO 3 GENERATE
         PP_ROW: FOR j IN 0 TO 3 GENERATE
             PP(i, j) <= A(i) AND B(j);
         END GENERATE PP_ROW;
     END GENERATE PP_GEN;
 
-    -- --- Stage 2: Adder Array Summation (12 Adders) ---
-    
-    -- 0. Product Bit P(0) (Direct from LSB Partial Product)
+    -- --- Stage 2: Adder Array ---
+
+    -- P(0)
     P(0) <= PP(0, 0);
 
-    -- 1. Row 0: Carry chain for the first row of additions (P1, P2, P3)
-    -- Uses 3 Half Adders (HA)
+    -- Row 1: Add (A*B0 PPs shifted) and (A*B1 PPs)
+    -- Operands:
+    -- B0: PP(1,0), PP(2,0), PP(3,0), '0'
+    -- B1: PP(0,1), PP(1,1), PP(2,1), PP(3,1)
+
+    -- Adder 1.0 (Bit 1)
+    HA10: half_adder PORT MAP (X => PP(1, 0), Y => PP(0, 1), S => S1(0), C => C1(0));
+    P(1) <= S1(0);
+
+    -- Adder 1.1 (Bit 2)
+    FA11: full_adder PORT MAP (A => PP(2, 0), B => PP(1, 1), Cin => C1(0), S => S1(1), Cout => C1(1));
+
+    -- Adder 1.2 (Bit 3)
+    FA12: full_adder PORT MAP (A => PP(3, 0), B => PP(2, 1), Cin => C1(1), S => S1(2), Cout => C1(2));
+
+    -- Adder 1.3 (Bit 4)
+    FA13: full_adder PORT MAP (A => '0',      B => PP(3, 1), Cin => C1(2), S => S1(3), Cout => C1(3));
+
+
+    -- Row 2: Add Result 1 and (A*B2 PPs)
+    -- Operands:
+    -- Res1: S1(1),   S1(2),   S1(3),   C1(3)
+    -- B2:   PP(0,2), PP(1,2), PP(2,2), PP(3,2)
+
+    -- Adder 2.0 (Bit 2)
+    HA20: half_adder PORT MAP (X => S1(1), Y => PP(0, 2), S => S2(0), C => C2(0));
+    P(2) <= S2(0);
+
+    -- Adder 2.1 (Bit 3)
+    FA21: full_adder PORT MAP (A => S1(2), B => PP(1, 2), Cin => C2(0), S => S2(1), Cout => C2(1));
+
+    -- Adder 2.2 (Bit 4)
+    FA22: full_adder PORT MAP (A => S1(3), B => PP(2, 2), Cin => C2(1), S => S2(2), Cout => C2(2));
+
+    -- Adder 2.3 (Bit 5)
+    FA23: full_adder PORT MAP (A => C1(3), B => PP(3, 2), Cin => C2(2), S => S2(3), Cout => C2(3));
+
+
+    -- Row 3: Add Result 2 and (A*B3 PPs)
+    -- Operands:
+    -- Res2: S2(1),   S2(2),   S2(3),   C2(3)
+    -- B3:   PP(0,3), PP(1,3), PP(2,3), PP(3,3)
+
+    -- Adder 3.0 (Bit 3)
+    HA30: half_adder PORT MAP (X => S2(1), Y => PP(0, 3), S => S3(0), C => C3(0));
+    P(3) <= S3(0);
+
+    -- Adder 3.1 (Bit 4)
+    FA31: full_adder PORT MAP (A => S2(2), B => PP(1, 3), Cin => C3(0), S => S3(1), Cout => C3(1));
+    P(4) <= S3(1);
+
+    -- Adder 3.2 (Bit 5)
+    FA32: full_adder PORT MAP (A => S2(3), B => PP(2, 3), Cin => C3(1), S => S3(2), Cout => C3(2));
+    P(5) <= S3(2);
+
+    -- Adder 3.3 (Bit 6)
+    FA33: full_adder PORT MAP (A => C2(3), B => PP(3, 3), Cin => C3(2), S => S3(3), Cout => C3(3));
+    P(6) <= S3(3);
     
-    -- Col 1 (P1)
-    HA01: half_adder PORT MAP (
-        X => PP(0, 1),
-        Y => PP(1, 0),
-        S => P(1),
-        C => C_int(1, 0) -- C1_0
-    );
-
-    -- Col 2 (S_int(0, 2))
-    HA02: half_adder PORT MAP (
-        X => PP(0, 2),
-        Y => PP(2, 0),
-        S => S_int(0, 2),
-        C => C_int(1, 1) -- C1_1
-    );
-
-    -- Col 3 (S_int(0, 3))
-    HA03: half_adder PORT MAP (
-        X => PP(0, 3),
-        Y => PP(3, 0),
-        S => S_int(0, 3),
-        C => C_int(1, 2) -- C1_2
-    );
-
-    -- 2. Row 1: Full Adders (FA) for the second row of summation
-    -- Uses 4 Full Adders (FA)
-    
-    -- Col 2 (S_int(1, 2))
-    FA12: full_adder PORT MAP (
-        A   => PP(1, 1),
-        B   => S_int(0, 2),
-        Cin => C_int(1, 0), -- Carry-in from HA01
-        S   => S_int(1, 2),
-        Cout => C_int(2, 0) -- C2_0
-    );
-
-    -- Col 3 (S_int(1, 3))
-    FA13: full_adder PORT MAP (
-        A   => PP(1, 2),
-        B   => S_int(0, 3),
-        Cin => C_int(1, 1), -- Carry-in from HA02
-        S   => S_int(1, 3),
-        Cout => C_int(2, 1) -- C2_1
-    );
-
-    -- Col 4 (S_int(1, 4))
-    FA14: full_adder PORT MAP (
-        A   => PP(2, 1),
-        B   => PP(3, 1),
-        Cin => C_int(1, 2), -- Carry-in from HA03
-        S   => S_int(1, 4),
-        Cout => C_int(2, 2) -- C2_2
-    );
-    
-    -- Col 5 (S_int(1, 5)) -- This is just a half adder or a direct path, let's use FA for consistency
-    FA15: full_adder PORT MAP (
-        A   => PP(3, 2),
-        B   => '0', -- Padding for simplification
-        Cin => C_int(1, 3), -- Assumed carry-in (or simplified logic)
-        S   => S_int(1, 5),
-        Cout => C_int(2, 3) -- C2_3
-    );
-
-
-    -- 3. Row 2: Final Adders (P4, P5, P6, P7)
-    -- This row completes the final sum bits P(4) through P(7).
-    
-    -- Col 4 (P4)
-    FA24: full_adder PORT MAP (
-        A   => PP(2, 2),
-        B   => S_int(1, 4),
-        Cin => C_int(2, 0), -- Carry-in from FA12
-        S   => P(4),
-        Cout => C_int(3, 0) -- C3_0
-    );
-
-    -- Col 5 (P5)
-    FA25: full_adder PORT MAP (
-        A   => PP(3, 3),
-        B   => S_int(1, 5),
-        Cin => C_int(2, 1), -- Carry-in from FA13
-        S   => P(5),
-        Cout => C_int(3, 1) -- C3_1
-    );
-
-    -- Col 6 (P6)
-    FA26: full_adder PORT MAP (
-        A   => C_int(2, 2), -- Input is the carry from FA14
-        B   => C_int(2, 3), -- Input is the carry from FA15
-        Cin => C_int(3, 0), -- Carry-in from FA24
-        S   => P(6),
-        Cout => C_int(3, 2) -- C3_2
-    );
-
-    -- Col 7 (P7)
-    P(7) <= C_int(3, 1) OR C_int(3, 2); -- Final MSB logic (simplified)
+    -- P(7) is the final carry out
+    P(7) <= C3(3);
 
 END ARCHITECTURE structural;
+
 ```
+
+:: right ::
+
+**multiplier_4x4_tb.vhd**
+
+```vhdl {*}{maxHeight:'380px', lines:true}
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.numeric_std.ALL;
+
+ENTITY multiplier_4x4_tb IS
+END ENTITY multiplier_4x4_tb;
+
+ARCHITECTURE behavior OF multiplier_4x4_tb IS
+
+    -- Component Declaration for the Unit Under Test (UUT)
+    COMPONENT multiplier_4x4
+        PORT (
+            A, B : IN  STD_LOGIC_VECTOR(3 DOWNTO 0);
+            P    : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
+        );
+    END COMPONENT;
+
+    -- Inputs
+    SIGNAL A_tb : STD_LOGIC_VECTOR(3 DOWNTO 0) := (OTHERS => '0');
+    SIGNAL B_tb : STD_LOGIC_VECTOR(3 DOWNTO 0) := (OTHERS => '0');
+
+    -- Outputs
+    SIGNAL P_tb : STD_LOGIC_VECTOR(7 DOWNTO 0);
+
+BEGIN
+
+    -- Instantiate the Unit Under Test (UUT)
+    uut: multiplier_4x4 PORT MAP (
+        A => A_tb,
+        B => B_tb,
+        P => P_tb
+    );
+
+    -- Stimulus process
+    stim_proc: PROCESS
+    BEGIN
+        -- Test Case 1: 0 * 0
+        A_tb <= "0000"; B_tb <= "0000";
+        WAIT FOR 10 ns;
+        ASSERT (P_tb = "00000000") REPORT "Error: 0*0 failed" SEVERITY ERROR;
+
+        -- Test Case 2: 1 * 1
+        A_tb <= "0001"; B_tb <= "0001";
+        WAIT FOR 10 ns;
+        ASSERT (P_tb = "00000001") REPORT "Error: 1*1 failed" SEVERITY ERROR;
+
+        -- Test Case 3: 15 * 1 (Max 4-bit unsigned * identity)
+        A_tb <= "1111"; B_tb <= "0001";
+        WAIT FOR 10 ns;
+        ASSERT (P_tb = "00001111") REPORT "Error: 15*1 failed" SEVERITY ERROR;
+
+        -- Test Case 4: 15 * 15 (Max * Max)
+        A_tb <= "1111"; B_tb <= "1111";
+        WAIT FOR 10 ns;
+        -- 15 * 15 = 225 = 0xE1 = 11100001
+        ASSERT (P_tb = "11100001") REPORT "Error: 15*15 failed" SEVERITY ERROR;
+
+        -- Test Case 5: 3 * 2
+        A_tb <= "0011"; B_tb <= "0010";
+        WAIT FOR 10 ns;
+        ASSERT (P_tb = "00000110") REPORT "Error: 3*2 failed" SEVERITY ERROR;
+        
+        -- Test Case 6: 7 * 9 (Arbitrary)
+        A_tb <= "0111"; B_tb <= "1001";
+        WAIT FOR 10 ns;
+        -- 7 * 9 = 63 = 00111111
+        ASSERT (P_tb = "00111111") REPORT "Error: 7*9 failed" SEVERITY ERROR;
+
+        REPORT "Simulation Finished Successfully" SEVERITY NOTE;
+        WAIT;
+    END PROCESS;
+
+END ARCHITECTURE behavior;
+
+```
+
+---
+
+
+### RTL Viewer in Quartus(r)
+
+
+<img src="/rtl_viewer_mul_4x4.png" class="p-4 w-[800px] mx-auto"/>
+
+
+### Simulation results in ModelSim(r)
+
+<img src="/sim_result_mul_4x4.png" class="p-4 w-[800px] mx-auto"/>
+
 
 ---
 layout: two-cols-header
