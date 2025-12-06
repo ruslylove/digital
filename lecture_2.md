@@ -761,6 +761,9 @@ layout: two-cols-header
 
 ## Design Example: Three-Way Light Control
 ::left::
+
+<div class="text-base">
+
 **Problem:** A room has three doors, each with a switch ($x_1$, $x_2$, $x_3$) to control a single light. The light should toggle its state whenever any switch is flipped. Assume the light is OFF when all switches are open (0).
 
 *   Light is ON if **one** switch is closed.
@@ -768,6 +771,10 @@ layout: two-cols-header
 *   Light is ON if **three** switches are closed.
 
 <img src="/doors.svg" class="w-60 mx-auto pt-5"/>
+
+<p class="text-sm text-center">Figure 2-10. Three-way light control logic circuit.</p>
+
+</div>
 
 ::right::
 **Truth Table:**
@@ -825,7 +832,7 @@ This is the simplest SOP form for this function (also known as the XOR function)
 ### Circuit Implementation
 
 <img src="/three_way_light.png" class="mt-4 w-90"/>
-<p class="text-sm text-center">Figure 2-10. Three-way light control logic circuit.</p>
+<p class="text-sm text-center">Figure 2-11. Three-way light control logic circuit.</p>
 
 :: right ::
 **CircuitVerse Simulation**
@@ -970,7 +977,7 @@ A **testbench** is a VHDL entity used to simulate and verify the correctness of 
 </div>
 <div>
 <img src="/test_bench.svg" class="w-100 mx-auto"/>
-<p class="text-sm text-center">Figure 2-11. The relationship between the Entity and its Testbench.</p>
+<p class="text-sm text-center">Figure 2-12. The relationship between the Entity and its Testbench.</p>
 
 </div>
 </div>
@@ -981,7 +988,7 @@ A **testbench** is a VHDL entity used to simulate and verify the correctness of 
 ### Questa(r) Simulation Result
 
 <img src="/three_way_light_sim.png" class="w-180 pt-4 mx-auto" />
-<p class="text-sm text-center">Figure 2-12. Timing Simulation result in Intel (Altera) Questa.</p>
+<p class="text-sm text-center">Figure 2-13. Timing Simulation result in Intel (Altera) Questa.</p>
 
 
 ---
@@ -1063,11 +1070,11 @@ layout: two-cols
 
 **Circuit for $f = s'x_1 + sx_2$**
 <img src="/mux_circuit.png" class="rounded-lg bg-white w-70 mx-auto" alt="Circuit for 2-to-1 Multiplexer">
-<p class="text-sm text-center">Figure 2-13. Multiplexter 2-to-1 circuit.</p>
+<p class="text-sm text-center">Figure 2-14. Multiplexter 2-to-1 circuit.</p>
 
 **Graphical Symbol**
 <img src="/mux_symbol.png" class="rounded-lg bg-white w-35 mx-auto" alt="Symbol for 2-to-1 Multiplexer">
-<p class="text-sm text-center">Figure 2-14. Multiplexer 2-to-1 symbol.</p>
+<p class="text-sm text-center">Figure 2-15. Multiplexer 2-to-1 symbol.</p>
 
 :: right ::
 **CircuitVerse Simulation**
@@ -1087,7 +1094,7 @@ layout: two-cols
 1.  The key is in ($K=1$) and the door is not closed ($D=0$), OR
 2.  The door is closed ($D=1$), the key is in ($K=1$), the driver is in the seat ($S=1$), and the seat belt is not closed ($B=0$).
 <img src="/car_alarm_sketch.svg" class="w-55 mx-auto"/>
-<p class="text-sm text-center">Figure 2-15. A Car Alarm System.</p>
+<p class="text-sm text-center">Figure 2-16. A Car Alarm System.</p>
 
 
 </div>
@@ -1127,7 +1134,7 @@ layout: two-cols
 The circuit is built from the simplified expression $A = K · (D' + S·B')$, which is much simpler than a circuit for the original expression.
 
 <img src="/car_alarm.svg" class="rounded-lg bg-white p-2" alt="Circuit for Car Safety Alarm">
-<p class="text-sm text-center">Figure 2-16. Circuit for Car Safety Alarm.</p>
+<p class="text-sm text-center">Figure 2-17. Circuit for Car Safety Alarm.</p>
 
 :: right ::
 
@@ -1226,11 +1233,11 @@ The circuit combines an XOR gate for the sum and an AND gate for the carry.
 
 **Circuit Implementation**
 <img src="/half_adder.svg" class="rounded-lg bg-white w-70 mx-auto mt-2" alt="Circuit for a Half-Adder">
-<p class="text-sm text-center">Figure 2-17. Circuit for a Half-Adder.</p>
+<p class="text-sm text-center">Figure 2-18. Circuit for a Half-Adder.</p>
 
 **Block Diagram**
 <img src="/half_adder_block.svg" class="rounded-lg bg-white w-60 mx-auto mt-2" alt="Block Diagram for a Half-Adder">
-<p class="text-sm text-center">Figure 2-18. Block Diagram for a Half-Adder.</p>
+<p class="text-sm text-center">Figure 2-19. Block Diagram for a Half-Adder.</p>
 
 :: right ::
 
@@ -1346,7 +1353,7 @@ A robot uses three sensors (`L`, `C`, `R`) to follow a black line (`sensor=0`) o
 <div class="grid grid-cols-7 gap-4">
 <div class="text-sm col-span-4">
 <img src="/line_following_robot.svg" class="w-45 mx-auto" />
-<p class="text-sm text-center">Figure 2-19. A Line-Following Robot.</p>
+<p class="text-sm text-center">Figure 2-20. A Line-Following Robot.</p>
 
 *   **Go Forward (`ML=1, MR=1`):** When the robot is centered (`L=1, C=0, R=1`).
 *   **Turn Right (`ML=1, MR=0`):** When it drifts left (`L=1, C=1, R=0`).
@@ -1390,7 +1397,7 @@ A 7-segment display is a common device for displaying decimal digits. It consist
 
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/7_Segment_Display_with_Labeled_Segments.svg/150px-7_Segment_Display_with_Labeled_Segments.svg.png" class="mx-auto w-25" />
-<p class="text-sm text-center">Figure 2-20. A Seven Segment LEDs.</p>
+<p class="text-sm text-center">Figure 2-21. A Seven Segment LEDs.</p>
 
 Your task is to design a decoder that takes a 4-bit binary-coded decimal (BCD) input (`b3`, `b2`, `b1`, `b0`) and outputs the signals to control the seven segments (`a`, `b`, `c`, `d`, `e`, `f`, `g`) to display the corresponding decimal digit (0-9). For this exercise, assume the display is **common anode**, meaning a segment lights up when its control signal is **LOW (0)**.
 </div>

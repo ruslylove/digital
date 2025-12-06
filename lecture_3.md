@@ -37,6 +37,9 @@ graph LR
   style D fill:#f9f,stroke:#333,stroke-width:2px,color:black
 ```
 
+<p class="text-sm text-center">Figure 3-1. Design Flow.</p>
+
+
 *   **Why Optimize?** A simpler expression means a circuit with fewer gates, which is generally cheaper, faster, and consumes less power.
 *   **How?** While algebraic manipulation works, it can be cumbersome and doesn't follow specific rules. The **Karnaugh Map** provides a systematic, graphical method for simplification.
 
@@ -64,6 +67,7 @@ The key idea is to leverage the human brain's pattern-recognition ability to sim
 :: right ::
 
 <img src="/kmap_example.svg" class="w-full bg-white p-2 mx-auto"/>
+<p class="text-sm text-center">Figure 3-2. Karnaugh Map Example.</p>
 
 
 
@@ -136,6 +140,7 @@ A three-variable map contains $2³ = 8$ squares. The columns are arranged in a *
 :: right ::
 
 <img src="/kmap_3var_structure.svg" class="rounded-lg bg-white p-4 mt-4 w-100" alt="3-variable K-map layout">
+<p class="text-sm text-center">Figure 3-3. Three-variable K-map structure.</p>
 
 ---
 
@@ -179,6 +184,7 @@ This is the XOR function, $x ⊕ y$.
 ::right::
 
 <img src="\kmap_3var_ex1.svg" class="rounded-lg bg-white p-4 w-90 mx-auto" alt="K-map for F(x,y,z) = Σ(2,3,4,5)">
+<p class="text-sm text-center">Figure 3-4. K-map from Example 1.</p>
 
 ---
 layout: two-cols-header
@@ -208,6 +214,7 @@ Note that $m₄$ could also be grouped with $m₅$ if there was a $1$ there, but
 ::right::
 
 <img src="/kmap_3var_ex2.svg" class="rounded-lg bg-white p-4 w-100" alt="K-map for F(x,y,z) = Σm(3,4,6,7)">
+<p class="text-sm text-center">Figure 3-5. K-map from Example 2.</p>
 
 ---
 layout: two-cols-header
@@ -241,6 +248,7 @@ $F = z'$
 ::right::
 
 <img src="/kmap_3var_ex3.svg" class="rounded-lg bg-white p-4 w-100" alt="K-map for F(x,y,z) = Σm(0,2,4,6)">
+<p class="text-sm text-center">Figure 3-6. K-map from Example 3.</p>
 
 ---
 layout: two-cols-header
@@ -271,6 +279,7 @@ Even though $m₄$ is used in two groups, this is allowed and results in the sim
 ::right::
 
 <img src="\kmap_3var_ex4.svg" class="rounded-lg bg-white p-4 w-100" alt="K-map for F(x,y,z) = Σm(0,2,4,5,6)">
+<p class="text-sm text-center">Figure 3-7. K-map from Example 4.</p>
 
 ---
 
@@ -304,6 +313,7 @@ A four-variable map contains $2⁴ = 16$ squares. The structure is extended from
 :: right ::
 
 <img src="/kmap_4x4_structure.svg" class="rounded-lg bg-white p-1 mt-2 w-80 mx-auto" alt="4-variable K-map layout">
+<p class="text-sm text-center">Figure 3-8. Four-variable K-map structure.</p>
 
 
 ---
@@ -343,6 +353,7 @@ $F = y' + w'z' + xz'$
 </div>
 
 <img src="/kmap_4x4_ex5.svg" class="w-60 mx-auto" alt="K-map for F(w,x,y,z) = Σ(0,1,2,4,5,6,8,9,12,13,14)">
+<p class="text-sm text-center">Figure 3-9. K-map from Example 5.</p>
 
 
 
@@ -372,7 +383,8 @@ Sometimes, a function can have more than one minimal sum-of-products expression.
 :: right ::
 4.  **Cover Remaining 1s:** The remaining $1$s ($m₁, m₉$) can be covered in two ways, leading to two minimal solutions.
 
-<img src="/kmap_4x4_ex6_1.svg" class="mx-auto w-60 p-2"/>
+<img src="/kmap_4x4_ex6_1.svg" class="mx-auto w-55 p-2"/>
+<p class="text-sm text-center">Figure 3-10. K-map from Example 6.</p>
 
 ---
 
@@ -386,7 +398,8 @@ Group $m₀,m₁,m₈,m₉$ to get $B'C'$.
 
 $F = BD + B'D' + B'C'$
 
-<img src="/kmap_4x4_ex6_sol_1.svg" class="rounded-lg bg-white p-4 w-60 " alt="K-map solution 1">
+<img src="/kmap_4x4_ex6_sol_1.svg" class="rounded-lg bg-white p-4 w-55 " alt="K-map solution 1">
+<p class="text-sm text-center">Figure 3-11. K-map Solution 1.</p>
 
 </div>
 <div>
@@ -397,7 +410,8 @@ Group $m₁,m₅,m₉,m₁₃$ to get $C'D$.
 
 $F = BD + B'D' + C'D$
 
-<img src="/kmap_4x4_ex6_sol_2.svg" class="rounded-lg bg-white p-4 w-60" alt="K-map solution 1">
+<img src="/kmap_4x4_ex6_sol_2.svg" class="rounded-lg bg-white p-4 w-55" alt="K-map solution 1">
+<p class="text-sm text-center">Figure 3-12. K-map Solution 2.</p>
 </div>
 </div>
 
@@ -435,6 +449,10 @@ The goal is to strategically use don't-cares to achieve the simplest possible ex
 
 The $1$s must be covered. The $X$s are optional.
 
+<div class="grid grid-cols-2 gap-4 text-base">
+
+<div>
+
 **Solution 1:** Group $m(3,7,11,15)$ to get $yz$. Then group $m(1,3,5,7)$ to get $w'z$.
 
 $F = yz + w'z$
@@ -443,7 +461,16 @@ $F = yz + w'z$
 
 $F = yz + w'x'$
 
+</div>
+
+<div>
+
 <img src="/kmap_dontcare.svg" class="rounded-lg bg-white p-2 mx-auto" alt="K-map with Don't Cares">
+<p class="text-sm text-center">Figure 3-13. Don't Care condition K-map.</p>
+
+</div>
+
+</div>
 
 ---
 layout: two-cols-header
@@ -468,6 +495,7 @@ For functions with more than four variables, the K-map method becomes more compl
 **Example:** A group of 4 $1$s in the same position on both maps (e.g., $m₀, m₁₆$ and $m₁, m₁₇$) would eliminate the variable $a$ and $e$.
 
 <img src="/kmap_5var.svg" class="rounded-lg bg-white p-4 w-100"/>
+<p class="text-sm text-center">Figure 3-14. Five-variable K-map.</p>
 
 ---
 layout: two-cols-header
@@ -485,7 +513,8 @@ layout: two-cols-header
 
 :: right ::
 
-<img src="/kmap_6var.svg" class="rounded-lg bg-white p-4 w-100 mx-auto" alt="6-variable K-map layout">
+<img src="/kmap_6var.svg" class="rounded-lg bg-white p-4 w-95 mx-auto" alt="6-variable K-map layout">
+<p class="text-sm text-center">Figure 3-15. Six-variable K-map.</p>
 
 ---
 
@@ -537,6 +566,7 @@ $F = (A' + B') · (C' + D') · (B' + D)$
 
 :: right ::
 <img src="/kmap_pos.svg" class="rounded-lg bg-white p-4 w-80 mx-auto" alt="K-map for POS Simplification">
+<p class="text-sm text-center">Figure 3-16. POS Simplification graph.</p>
 
 ---
 layout: two-cols-header
@@ -602,11 +632,11 @@ This is a very common and efficient way to implement logic from a K-map.
 </div>
 <div class="col-span-3">
 
-**AND-OR Circuit**
-<img src="/two_level_sop.svg" class="rounded-lg bg-white w-80 p-1" alt="AND-OR circuit">
+<img src="/two_level_sop.svg" class="rounded-lg bg-white w-75 p-1" alt="AND-OR circuit">
+<p class="text-sm text-center">Figure 3-17. AND-OR Circuit.</p>
 
-**Equivalent NAND-NAND Circuit**
-<img src="/two_level_sop_nand.svg" class="rounded-lg bg-white w-80 p-1" alt="NAND-NAND circuit">
+<img src="/two_level_sop_nand.svg" class="rounded-lg bg-white w-75 p-1" alt="NAND-NAND circuit">
+<p class="text-sm text-center">Figure 3-18. NAND-NAND Circuit.</p>
 
 </div>
 </div>
@@ -636,11 +666,11 @@ This is the standard implementation method when starting from a POS expression (
 </div>
 <div class="col-span-3">
 
-**OR-AND Circuit**
 <img src="/two_level_pos.svg" class="rounded-lg bg-white w-80 p-1" alt="OR-AND circuit">
+<p class="text-sm text-center">Figure 3-19. OR-AND Circuit.</p>
 
-**Equivalent NOR-NOR Circuit**
 <img src="/two_level_pos_nor.svg" class="rounded-lg bg-white w-80 p-1" alt="NOR-NOR circuit">
+<p class="text-sm text-center">Figure 3-20. NOR-NOR Circuit.</p>
 
 </div>
 </div>
@@ -684,12 +714,20 @@ The XOR and XNOR functions are fundamental in arithmetic and comparison circuits
 
 <div class="grid grid-cols-2 gap-4 pt-4">
 
+<div>
+
 **XOR Gate**
 <img src="/xor_symbol.svg" class="rounded-lg bg-white p-4 w-100" alt="XOR Gate Symbol">
+<p class="text-sm text-center">Figure 3-21. XOR Symbol.</p>
+
+</div>
+<div>
 
 **XNOR Gate**
 <img src="/xnor_symbol.svg" class="rounded-lg bg-white p-4 w-100" alt="XNOR Gate Symbol">
+<p class="text-sm text-center">Figure 3-22. XNOR Symbol.</p>
 
+</div>
 </div>
 
 ---
@@ -705,20 +743,22 @@ The checkerboard pattern of XOR/XNOR functions is easy to spot on a K-map.
 ### Odd Function (XOR)
 $F = A ⊕ B ⊕ C = Σm(1,2,4,7)$
 
-<img src="/kmap_odd.svg" class="rounded-lg bg-white p-4" alt="3-variable XOR K-map">
+<img src="/kmap_odd.svg" class="rounded-lg bg-white p-4 w-50" alt="3-variable XOR K-map">
 
 **Logic Diagram**
 <img src="/logic_odd.svg" class="rounded-lg bg-white p-4 w-80" alt="3-input XOR gate">
+<p class="text-sm text-center">Figure 3-23. Odd Function Logic.</p>
 
 ::right::
 
 ### Even Function (XNOR)
 $F = (A ⊕ B ⊕ C)' = Σm(0,3,5,6)$
 
-<img src="/kmap_even.svg" class="rounded-lg bg-white p-4" alt="3-variable XNOR K-map">
+<img src="/kmap_even.svg" class="rounded-lg bg-white p-4 w-50" alt="3-variable XNOR K-map">
 
 **Logic Diagram**
 <img src="/logic_even.svg" class="rounded-lg bg-white p-4 w-80" alt="3-input XNOR gate">
+<p class="text-sm text-center">Figure 3-24. Even Function Logic.</p>
 
 ---
 layout: two-cols-header
@@ -740,7 +780,8 @@ This circuit generates a parity bit $P$ for a 3-bit message ($x,y,z$). The outpu
 
 - $P = x ⊕ y ⊕ z$
 
-<img src="/logic_parity_generator.svg" class="rounded-lg bg-white pt-5 w-100" alt="3-bit even parity generator">
+<img src="/logic_parity_generator.svg" class="rounded-lg bg-white pt-5 w-90 mx-auto" alt="3-bit even parity generator">
+<p class="text-sm text-center">Figure 3-25. Parity Generator.</p>
 
 </div>
 
@@ -753,7 +794,8 @@ This circuit checks a 4-bit message ($x,y,z,P$) for errors. If the number of $1$
 
 - $C = x ⊕ y ⊕ z ⊕ P$
 
-<img src="/logic_parity_checker.svg" class="rounded-lg bg-white pt-5 w-100" alt="4-bit even parity checker">
+<img src="/logic_parity_checker.svg" class="rounded-lg bg-white pt-5 w-80 mx-auto" alt="4-bit even parity checker">
+<p class="text-sm text-center">Figure 3-26. Parity Checker.</p>
 
 </div>
 
