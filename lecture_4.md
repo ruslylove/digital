@@ -1815,6 +1815,8 @@ END ARCHITECTURE structural;
 
 :: right ::
 
+<div class="pl-4">
+
 **multiplier_4x4_tb.vhd**
 
 ```vhdl {*}{maxHeight:'380px', lines:true}
@@ -1893,6 +1895,7 @@ BEGIN
 END ARCHITECTURE behavior;
 
 ```
+</div>
 
 ---
 
