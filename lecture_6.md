@@ -35,12 +35,13 @@ title: Lecture 6 - Sequential Logic
 
 Unlike combinational circuits, **sequential circuits** have memory.
 
-*   They contain **memory elements** that store the circuit's **state**.
-*   The outputs depend on the **current inputs AND the present state** of the memory elements.
-*   The next state of the memory elements also depends on the current inputs and the present state.
-*   This creates a **feedback path** from the memory elements back to the combinational logic.
+*   **Combinational Logic**: Performs logic operations to determine outputs and the next state.
+*   **Memory Elements**: Store the current state (Present State) and are updated by the clock.
+*   **Feedback Loop**: The **Present State** is fed back to the combinational logic to influence future actions.
+*   **Outputs**: Determined by the **Present State** and/or **Inputs** (`Mealy` or `Moore` models).
 
-<img src="https://i.imgur.com/u5vV39l.png" class="rounded-lg bg-white p-4 w-2/3" alt="Sequential Circuit Diagram">
+<img src="/sequential_circuit_block.svg" class="rounded-lg bg-white p-4 mx-auto w-190" alt="Sequential Circuit Diagram">
+<p class="text-sm text-center">Figure 6-1. Sequential Circuit Block Diagram.</p>
 
 ---
 
@@ -56,24 +57,86 @@ Unlike combinational circuits, **sequential circuits** have memory.
     *   State transitions can happen at any time, triggered by changes in the input signals.
     *   The memory elements are often simple **latches**.
 
-<img src="https://i.imgur.com/5l3g20t.png" class="rounded-lg bg-white p-4 w-full" alt="Synchronous Circuit Block Diagram and Clock Pulses">
-
+---
+layout: two-cols-header
 ---
 
-## Latches
+## SR Latch
 
 A **latch** is a basic memory element that can store one bit of information. It is a type of **bistable multivibrator**.
 
 ### Basic SR Latch (NOR Gates)
+
+:: left ::
+
 *   Built from two cross-coupled NOR gates.
-*   `S` stands for Set, `R` stands for Reset.
-*   `(S,R) = (0,0)`: **No change**. The latch holds its current state.
-*   `(S,R) = (1,0)`: **Set**. Forces output `Q` to 1.
-*   `(S,R) = (0,1)`: **Reset**. Forces output `Q` to 0.
-*   `(S,R) = (1,1)`: **Invalid/Indeterminate**. Both `Q` and `Q'` become 0, which violates the `Q' = not(Q)` rule. This state should be avoided.
+*   $S$ stands for Set, $R$ stands for Reset.
+*   $(S,R) = (0,0)$: **No change**. The latch holds its current state.
+*   $(S,R) = (1,0)$: **Set**. Forces output $Q$ to 1.
+*   $(S,R) = (0,1)$: **Reset**. Forces output $Q$ to 0.
+*   $(S,R) = (1,1)$: **Invalid/Indeterminate**. Both $Q$ and $Q'$ become 0, which violates the $Q' = not(Q)$ rule. This state should be avoided.
 
-<img src="https://i.imgur.com/e48q78a.png" class="rounded-lg bg-white p-4 w-2/3" alt="SR Latch with NOR Gates">
+:: right ::
 
+
+<img src="/sr_latch_nor.svg" class="rounded-lg bg-white p-4 w-60 mx-auto" alt="SR Latch with NOR Gates">
+<p class="text-sm text-center">Figure 6-2. SR Latch with NOR Gates.</p>
+
+<div class="mt-4 flex justify-center text-sm">
+
+$$
+\begin{array}{|cc|cc|l|}
+\hline
+S & R & Q_{(t+1)} & Q'_{(t+1)} & \text{State} \\
+\hline
+0 & 0 & Q & Q' & \text{No Change} \\
+0 & 1 & 0 & 1 & \text{Reset} \\
+1 & 0 & 1 & 0 & \text{Set} \\
+1 & 1 & 0 & 0 & \text{Invalid} \\
+\hline
+\end{array}
+$$
+
+</div>
+
+---
+layout: two-cols-header
+---
+
+## $\bar{S}\bar{R}$ Latch (with NAND gates)
+
+The **$\bar{S}\bar{R}$ Latch** uses NAND gates instead of NOR gates. The basic behavior is similar, but the inputs are **active low**.
+:: left ::
+
+### Basic $\bar{S}\bar{R}$ Latch (NAND Gates)
+*   Built from two cross-coupled NAND gates.
+*   Inputs are labeled $\overline{S}$ and $\overline{R}$ (active low).
+*   $(\overline{S},\overline{R}) = (1,1)$: **No Change**. Holds state.
+*   $(\overline{S},\overline{R}) = (0,1)$: **Set**. Forces $Q=1$.
+*   $(\overline{S},\overline{R}) = (1,0)$: **Reset**. Forces $Q=0$.
+*   $(\overline{S},\overline{R}) = (0,0)$: **Invalid**. Both $Q$ and $Q'$ go to 1.
+
+:: right ::
+
+<img src="/sr_latch_nand.svg" class="rounded-lg bg-white p-4 w-60 mx-auto" alt="SR Latch with NAND Gates">
+<p class="text-sm text-center">Figure 6-3. S'R' Latch with NAND Gates.</p>
+
+<div class="mt-4 flex justify-center text-sm">
+
+$$
+\begin{array}{|cc|cc|l|}
+\hline
+\overline{S} & \overline{R} & Q_{(t+1)} & Q'_{(t+1)} & \text{State} \\
+\hline
+0 & 0 & 1 & 1 & \text{Invalid} \\
+0 & 1 & 1 & 0 & \text{Set} \\
+1 & 0 & 0 & 1 & \text{Reset} \\
+1 & 1 & Q & Q' & \text{No Change} \\
+\hline
+\end{array}
+$$
+
+</div>
 ---
 
 ## SR Latch with Control Input (Gated SR Latch)
@@ -84,17 +147,25 @@ An SR latch can be modified to only change state when a control input `C` (or En
 *   When `C = 1`, the latch is enabled and behaves like a normal SR latch.
 
 <div class="grid grid-cols-2 gap-8 items-center">
-
-<img src="https://i.imgur.com/3h73v4e.png" class="rounded-lg bg-white p-4" alt="Gated SR Latch">
-
-| C | S | R | Next State of Q |
-|:-:|:-:|:-:|:----------------|
-| 0 | X | X | No change       |
-| 1 | 0 | 0 | No change       |
-| 1 | 0 | 1 | Q = 0 (Reset)   |
-| 1 | 1 | 0 | Q = 1 (Set)     |
-| 1 | 1 | 1 | Indeterminate   |
-
+<div>
+<img src="/gated_sr_latch.svg" class="rounded-lg bg-white p-4 mx-auto" alt="Gated SR Latch">
+<p class="text-sm text-center">Figure 6-3. Gated SR Latch Logic Diagram.</p>
+</div>
+<div>
+$$
+\begin{array}{|c|cc|l|}
+\hline
+C & S & R & Q_{(t+1)} \\
+\hline
+0 & X & X & \text{No change} \\
+1 & 0 & 0 & \text{No change} \\
+1 & 0 & 1 & Q = 0 \text{ (Reset)} \\
+1 & 1 & 0 & Q = 1 \text{ (Set)} \\
+1 & 1 & 1 & \text{Indeterminate} \\
+\hline
+\end{array}
+$$
+</div>
 </div>
 
 ---
@@ -103,24 +174,42 @@ An SR latch can be modified to only change state when a control input `C` (or En
 
 The D latch (Data latch) eliminates the indeterminate state of the SR latch.
 
-*   It has one data input `D` and a control input `C`.
+*   It has one data input $D$ and a control input $C$.
 *   An inverter ensures that S and R are never equal to 1 at the same time.
-*   When `C = 1`, the output `Q` follows the input `D`. The latch is "transparent".
-*   When `C = 0`, the latch is closed and holds the last value of `D`.
-
-**`Q(next) = D` (when C=1)**
+*   When $C = 1$, the output $Q$ follows the input $D$. The latch is "transparent".
+*   When $C = 0$, the latch is closed and holds the last value of $D$.
+* $Q_{(t+1)} = D$ (when C=1)
 
 <div class="grid grid-cols-2 gap-8 items-center">
 
-<img src="https://i.imgur.com/023zIuC.png" class="rounded-lg bg-white p-4" alt="D Latch">
-
-| C | D | Next State of Q |
-|:-:|:-:|:----------------|
-| 0 | X | No change       |
-| 1 | 0 | Q = 0 (Reset)   |
-| 1 | 1 | Q = 1 (Set)     |
+<div>
+<img src="/d_latch.svg" class="rounded-lg bg-white p-4 mx-auto" alt="D Latch">
+<p class="text-sm text-center">Figure 6-4. D Latch Logic Diagram.</p>
+</div>
+$$
+\begin{array}{|c|c|l|}
+\hline
+C & D & Q_{(t+1)} \\
+\hline
+0 & X & \text{No change} \\
+1 & 0 & Q = 0 \text{ (Reset)} \\
+1 & 1 & Q = 1 \text{ (Set)} \\
+\hline
+\end{array}
+$$
 
 </div>
+
+---
+
+## Latch Symbols
+
+Logic symbols for the various latches discussed:
+
+<img src="/latch_symbols.svg" class="rounded-lg bg-white p-4 mx-auto w-180" alt="Latch Symbols">
+<p class="text-sm text-center">Figure 6-5. Logic Symbols for SR, S'R', and D Latches.</p>
+
+---
 
 ### VHDL Implementation (D Latch)
 
@@ -145,19 +234,27 @@ end behavioral;
 ```
 
 ---
+layout: two-cols-header
+---
+
 
 ## Flip-Flops: Edge-Triggered vs. Level-Triggered
+
+:: left ::
 
 Latches are **level-triggered**: their output can change anytime the control input `C` is high. This can cause instability in synchronous circuits with feedback.
 
 **Flip-flops** are **edge-triggered**: they only change state at a specific point on the clock signal.
 
-*   **Positive-edge triggered:** Changes state on the rising edge of the clock (0 -> 1).
-*   **Negative-edge triggered:** Changes state on the falling edge of the clock (1 -> 0).
+*   **Positive-edge triggered:** Changes state on the rising edge of the clock (0 &rarr; 1).
+*   **Negative-edge triggered:** Changes state on the falling edge of the clock (1 &rarr; 0).
 
 This edge-triggered behavior prevents the multiple-transition problem and ensures all state changes in a system happen simultaneously.
 
-<img src="https://i.imgur.com/1336JtO.png" class="rounded-lg bg-white p-4 w-full" alt="Triggering types">
+:: right ::
+
+<img src="/trigger_types.svg" class="rounded-lg bg-white p-4 mx-auto" alt="Triggering types">
+<p class="text-sm text-center">Figure 6-6. Trigger Signals (Level, Positive Edge, Negative Edge).</p>
 
 ---
 

@@ -72,6 +72,7 @@ layout: two-cols-header
 
 <div class="text-center">
 <img src="/combinational_logic_circuit.svg" class="rounded-lg bg-white p-4 w-full" alt="Combinational Logic Circuit Diagram">
+<p class="text-sm text-center">Figure 5-1. Combinational Logic Circuit Diagram.</p>
 </div>
 
 
@@ -101,7 +102,7 @@ layout: two-cols-header
 
 ::left::
 
-<div class="pr-2">
+<div class="pr-2 text-base">
 
 ### Step 1: Ensure the circuit is combinational.
 
@@ -109,7 +110,8 @@ Let's analyze the circuit below to find the functions for $F₁$ and $F₂$.
 
 
 
-<img src="/analysis_example_circuit.svg" class="rounded-lg bg-white p-2" alt="Circuit for Analysis Example">
+<img src="/analysis_example_circuit.svg" class="rounded-lg bg-white w-92" alt="Circuit for Analysis Example">
+<p class="text-sm text-center">Figure 5-2. Circuit for Analysis Example.</p>
 
 </div>
 
@@ -207,6 +209,8 @@ Design is the process of creating a circuit that meets a given set of specificat
 2.  **Inputs/Outputs:** 4 input lines (for BCD) and 4 output lines (for Excess-3).
 3.  **Symbols:** Inputs $A, B, C, D$; Outputs $w, x, y, z$.
 <img src="/bcd_to_excess3_block.svg" class="rounded-lg bg-white p-4 w-60 mx-auto" alt="BCD to Excess-3 Block Diagram">
+<p class="text-sm text-center">Figure 5-3. BCD to Excess-3 Block Diagram.</p>
+
 4.  **Truth Table:** Excess-3 code is found by adding 3 to the BCD value. BCD inputs from 10 to 15 are "don't care" conditions as they are not valid BCD digits.
 </div>
 <div>
@@ -238,17 +242,26 @@ $$
 
 5.  **Simplified Functions:** We create K-maps for each output $w, x, y, z$ using the truth table and "don't care" conditions to find the simplest expressions.
 
-<div class="grid grid-cols-2 pb-4">
-
+<div class="grid grid-cols-2">
+<div>
 <img src="/bcd_kmaps_wx.svg" class="rounded-lg bg-white p-2" alt="K-Maps for w and x">
+<p class="text-sm text-center">Figure 5-4. K-Maps for w and x.</p>
+</div>
+<div>
 <img src="/bcd_kmaps_yz.svg" class="rounded-lg bg-white p-2 w-104" alt="K-Maps for y and z">
+<p class="text-sm text-center">Figure 5-5. K-Maps for y and z.</p>
 
 </div>
+</div>
+
+<div class="text-sm">
 
 *   $w = A + BC + BD = A + B(C+D)$
 *   $x = B'C + B'D + BC'D' = B'(C+D) + B(C+D)'$
 *   $y = CD + C'D' = (C \oplus D)'$
 *   $z = D'$
+
+</div>
 
 ---
 
@@ -256,12 +269,15 @@ $$
 
 <div class="grid grid-cols-2 gap-4">
 
+<div>
 <img src="/bcd_to_excess3_circuit.svg" class="rounded-lg bg-white p-5" alt="Logic Diagram for BCD to Excess-3 Converter">
+<p class="text-sm text-center">Figure 5-6. Logic Diagram for BCD to Excess-3 Converter.</p>
+</div>
 
 <div>
 
 **bcd_to_excess3.vhd**  
-```vhdl
+```vhdl {*}{maxHeight:'300px',lines:true}
 library ieee;
 use ieee.std_logic_1164.all;
 
@@ -295,11 +311,12 @@ A **decoder** is a combinational circuit that converts binary information from *
 *   For any given input combination, only **one** output is active (e.g., HIGH), while all others are inactive (e.g., LOW).
 *   Decoders are often called *n-to-m-line* decoders, where *m ≤ 2ⁿ*.
 
-<img src="/decoder_3to8_block.svg" class="rounded-lg bg-white p-3 w-60 mx-auto" alt="Block Diagram of 3-to-8 Decoder">
+<img src="/decoder_3to8_block.svg" class="rounded-lg bg-white p-3 w-48 mx-auto" alt="Block Diagram of 3-to-8 Decoder">
+<p class="text-sm text-center">Figure 5-7. Block Diagram of 3-to-8 Decoder.</p>
 
 :: right ::
 
-<div class="pl-4">
+<div class="pl-4 text-base">
 
 ### 3-to-8 Line Decoder
 
@@ -332,7 +349,8 @@ $$
 
 ### Logic Diagram
 
-<img src="/decoder_3to8_circuit.svg" class="rounded-lg bg-white p-3 w-60" alt="Logic Diagram of 3-to-8 Decoder">
+<img src="/decoder_3to8_circuit.svg" class="rounded-lg bg-white p-3 w-56" alt="Logic Diagram of 3-to-8 Decoder">
+<p class="text-sm text-center">Figure 5-8. Logic Diagram of 3-to-8 Decoder.</p>
 
 </div>
 
@@ -401,7 +419,8 @@ $$
 </div>
 
 <div>
-<img src="/decoder_3to8_enable_circuit.svg" class="rounded-lg bg-white p-4 w-60 mx-auto" alt="3-to-8 Decoder with Enable Input Logic Diagram">
+<img src="/decoder_3to8_enable_circuit.svg" class="rounded-lg bg-white p-4 w-55 mx-auto" alt="3-to-8 Decoder with Enable Input Logic Diagram">
+<p class="text-sm text-center">Figure 5-9. 3-to-8 Decoder with Enable Input.</p>
 </div>
 
 </div>
@@ -410,7 +429,8 @@ $$
 
 This allows us to cascade decoders to build larger ones. For example, two 3-to-8 decoders with an enable input can be used to create a 4-to-16 decoder.
 
-<img src="/decoder_4to16_block.svg" class="rounded-lg bg-white p-4 w-70 mx-auto" alt="4-to-16 Decoder using two 3-to-8 Decoders">
+<img src="/decoder_4to16_block.svg" class="rounded-lg bg-white p-4 w-65 mx-auto" alt="4-to-16 Decoder using two 3-to-8 Decoders">
+<p class="text-sm text-center">Figure 5-10. 4-to-16 Decoder using two 3-to-8 Decoders.</p>
 
 
 
@@ -453,7 +473,8 @@ $$
 
 :: right ::
 
-<img src="/encoder_8to3_circuit.svg" class="rounded-lg bg-white p-4 mx-auto w-full" alt="Octal-to-Binary Encoder (8-to-3) Logic Diagram">
+<img src="/encoder_8to3_circuit.svg" class="rounded-lg bg-white p-4 mx-auto w-95" alt="Octal-to-Binary Encoder (8-to-3) Logic Diagram">
+<p class="text-sm text-center">Figure 5-11. Octal-to-Binary Encoder (8-to-3).</p>
 
 ---
 layout: two-cols
@@ -493,7 +514,8 @@ $$
 
 :: right ::
 
-<img src="/priority_encoder_circuit.svg" class="rounded-lg bg-white p-4 mx-auto" alt="4-to-2 Priority Encoder Logic Diagram">
+<img src="/priority_encoder_circuit.svg" class="rounded-lg bg-white p-4 mx-auto w-92" alt="4-to-2 Priority Encoder Logic Diagram">
+<p class="text-sm text-center">Figure 5-12. 4-to-2 Priority Encoder.</p>
 
 
 
@@ -529,10 +551,8 @@ $$
 
 <div>
 
-<img src="/mux_4to1_logic.svg" class="rounded-lg bg-white w-70 mx-auto" alt="4-to-1 MUX Logic Diagram">
-
-
-
+<img src="/mux_4to1_logic.svg" class="rounded-lg bg-white w-62 mx-auto" alt="4-to-1 MUX Logic Diagram">
+<p class="text-sm text-center">Figure 5-13. 4-to-1 MUX Logic Diagram.</p>
 
 
 </div>
@@ -548,7 +568,7 @@ $$
 
 **mux_4to1.vhd (structural)**
 <div class="text-xs text-gray-500 mb-2">Describing the circuit using logic gates and their connections.</div>
-```vhdl
+```vhdl{*}{lines:true}
 library ieee;
 use ieee.std_logic_1164.all;
 
@@ -573,7 +593,7 @@ end structural;
 
 **mux_4to1.vhd (behavioral)**
 <div class="text-xs text-gray-500 mb-2">Describing the circuit's function/algorithm without specifying the internal structure.</div>
-```vhdl
+```vhdl{*}{lines:true}
 library ieee;
 use ieee.std_logic_1164.all;
 
@@ -608,7 +628,8 @@ A **three-state gate** (or tri-state buffer) exhibits three possible output stat
 2.  Logic **1** (HIGH)
 3.  **High-Impedance (Hi-Z)**
 
-<img src="/tri_state_buffer.svg" class="rounded-lg bg-white p-6 w-100" alt="Three-State Buffer">
+<img src="/tri_state_buffer.svg" class="rounded-lg bg-white p-4 w-100" alt="Three-State Buffer">
+<p class="text-sm text-center">Figure 5-14. Three-State Buffer.</p>
 
 :: right ::
 
@@ -626,7 +647,7 @@ A **three-state gate** (or tri-state buffer) exhibits three possible output stat
 
 
 **tri_state_buffer.vhd (behavioral)**
-```vhdl
+```vhdl{*}{lines:true}
 library ieee;
 use ieee.std_logic_1164.all;
 
@@ -641,6 +662,7 @@ begin
     Output <= Input when (Control = '1') else 'Z';
 end behavioral;
 ```
+<br>
 
 > [!NOTE]
 > For the **Three-State Buffer**, only a **behavioral** design is possible. The high-impedance state (`Z`) is a fundamental property of the output driver circuit and cannot be constructed dynamically using standard Boolean logic gates (AND, OR, NOT) in a structural architecture.
@@ -674,7 +696,8 @@ $$
 ---
 
 ### Logic Diagram of 4-bit Magnitude Comparator
-<img src="/magnitude_comparator.svg" class="rounded-lg bg-white p-4 w-160 mx-auto" alt="4-bit Magnitude Comparator Logic Diagram">
+<img src="/magnitude_comparator.svg" class="rounded-lg bg-white p-4 w-150 mx-auto" alt="4-bit Magnitude Comparator Logic Diagram">
+<p class="text-sm text-center">Figure 5-15. 4-bit Magnitude Comparator.</p>
 
 ---
 

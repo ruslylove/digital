@@ -1,0 +1,54 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+\usetikzlibrary{calc}
+
+\begin{document}
+\begin{circuitikz}[american]
+    \ctikzset{logic ports=ieee}
+
+    % NAND Latch part (Fixed positions)
+    \draw (4,2) node[nand port] (nand1) {};
+    \draw (4,0) node[nand port] (nand2) {};
+
+    % Gating NAND gates (Aligned with NAND inputs)
+    % Replaced 'and port' with 'nand port'
+    
+    % Path 1: NAND1 -> NAND1.in 1
+    \draw (nand1.in 1) -- ++(-1,0) node[nand port, anchor=out] (ng1) {};
+    
+    % Path 2: NAND2 -> NAND2.in 2
+    \draw (nand2.in 2) -- ++(-1,0) node[nand port, anchor=out] (ng2) {};
+
+    % Inputs to NAND gates
+    \draw (ng1.in 1) -- ++(-0.5,0) node[left] {$S$};
+    \draw (ng2.in 2) -- ++(-0.5,0) node[left] {$R$};
+    
+    % Control Input (C) - shared
+    \draw (ng1.in 2) -- ++(-0.5,0) coordinate(c_top);
+    \draw (ng2.in 1) -- ++(-0.5,0) coordinate(c_bot);
+    \draw (c_top) -- (c_bot);
+    \draw ($(c_top)!0.5!(c_bot)$) -- ++(-0.5,0) node[left] {$C$};
+    \node[circ] at ($(c_top)!0.5!(c_bot)$) {}; 
+
+    % Connect Gating NAND outputs to Latch NAND inputs
+    \draw (ng1.out) -- (nand1.in 1); 
+    \draw (ng2.out) -- (nand2.in 2); 
+
+    % Feedback Cross-coupling (Standard NAND Latch)
+    % Top Out -> Bot In 1
+    \draw (nand1.out) -- ++(0.5,0) coordinate(Qout);
+    \draw (Qout) -- ++(0, -0.5) -- ($(nand2.in 1) + (0, 0.5)$) -- (nand2.in 1);
+    
+    % Bot Out -> Top In 2
+    \draw (nand2.out) -- ++(0.5,0) coordinate(Qpout);
+    \draw (Qpout) -- ++(0, 0.5) -- ($(nand1.in 2) + (0, -0.5)$) -- (nand1.in 2);
+    
+    % Outputs
+    \draw (Qout) -- ++(1,0) node[right] {$Q$};
+    \draw (Qpout) -- ++(1,0) node[right] {$Q'$};
+    
+    \node[circ] at (Qout) {};
+    \node[circ] at (Qpout) {};
+
+\end{circuitikz}
+\end{document}
