@@ -1278,6 +1278,8 @@ END ARCHITECTURE structural;
 
 :: right ::
 
+<div class="pl-4">
+
 **2. cla_group_logic.vhd (Global Carry Lookahead)**
 
 * This block calculates the block-level carries ($C_4, C_8, C_{12}, C_{16}$)
@@ -1314,13 +1316,10 @@ BEGIN
 
 END ARCHITECTURE two_level_carry;
 ```
-
+</div>
 ---
 layout: two-cols
 ---
-
-
-
 
 **3. cla_16bit_adder.vhd**
 * This is the top-level VHDL code for the 16-bit Carry Lookahead Adder (CLA)
@@ -1405,6 +1404,8 @@ END ARCHITECTURE hierarchical;
 ```
 
 :: right ::
+
+<div class="pl-4">
 
 **4. tb_cla_16bit_adder.vhd**
 * This is the testbench for the 16-bit Carry Lookahead Adder (CLA)
@@ -1585,6 +1586,7 @@ BEGIN
 END ARCHITECTURE behavioral;
 
 ```
+</div>
 
 ---
 
