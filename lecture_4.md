@@ -1183,13 +1183,16 @@ A second-level CLA unit uses the P* and G* signals from each 4-bit block to gene
 </div>
 
 ---
+layout: two-cols
+---
+
 
 ### VHDL Implementation
 This code relies on the three component files defined previously (**pg_unit.vhd**, **cla_logic.vhd**, and **sum_logic.vhd**).
 
 **1. cla_4bit_block.vhd (The 4-bit Building Block)**
 
-```vhdl {*}{maxHeight:'320px', lines:true}
+```vhdl {*}{maxHeight:'300px', lines:true}
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 
@@ -1272,16 +1275,12 @@ BEGIN
 END ARCHITECTURE structural;
 ```
 
-
----
-layout: two-cols
----
+:: right ::
 
 **2. cla_group_logic.vhd (Global Carry Lookahead)**
 
 * This block calculates the block-level carries ($C_4, C_8, C_{12}, C_{16}$)
 
-<div class="p-4">
 
 ```vhdl{*}{maxHeight:'335px', lines:true}
 LIBRARY ieee;
@@ -1314,9 +1313,13 @@ BEGIN
 
 END ARCHITECTURE two_level_carry;
 ```
-</div>
 
-:: right ::
+---
+layout: two-cols
+---
+
+
+
 
 **3. cla_16bit_adder.vhd**
 * This is the top-level VHDL code for the 16-bit Carry Lookahead Adder (CLA)
@@ -1400,9 +1403,7 @@ BEGIN
 END ARCHITECTURE hierarchical;
 ```
 
-
-
----
+:: right ::
 
 **4. tb_cla_16bit_adder.vhd**
 * This is the testbench for the 16-bit Carry Lookahead Adder (CLA)
