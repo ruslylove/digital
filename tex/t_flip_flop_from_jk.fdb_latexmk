@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1765072478.7654 "/Users/rusleesutthaweekul/Development/digital/tex/latch_symbols.tex" "latch_symbols.pdf" "latch_symbols" 1765072479.49116 0
-  "/Users/rusleesutthaweekul/Development/digital/tex/latch_symbols.tex" 1765072478.46001 1653 7a451e30383cafeda724c02381265849 ""
+["pdflatex"] 1765076339.69621 "/Users/rusleesutthaweekul/Development/digital/tex/t_flip_flop_from_jk.tex" "t_flip_flop_from_jk.pdf" "t_flip_flop_from_jk" 1765076340.3669 0
+  "/Users/rusleesutthaweekul/Development/digital/tex/t_flip_flop_from_jk.tex" 1765076339.53155 839 a7c4138047701739a84f784b1a8293f5 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmmi6.tfm" 1136768653 1512 f21f83efb36853c0b70002322c1ab3ad ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmmi9.tfm" 1136768653 1524 d89e2d087a9828407a196f428428ef4a ""
@@ -48,7 +48,6 @@
   "/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarybending.code.tex" 1601326656 345 9efe6b557b64ab0401dc06a4ef8ca04c ""
   "/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarycalc.code.tex" 1601326656 15929 463535aa2c4268fead6674a75c0e8266 ""
   "/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryfpu.code.tex" 1601326656 283 0802c14f542ec5204d2d1cc89f08a4d2 ""
-  "/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarypositioning.code.tex" 1601326656 3937 3f208572dd82c71103831da976d74f1a ""
   "/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarytopaths.code.tex" 1608933718 11518 738408f795261b70ce8dd47459171309 ""
   "/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/tikz.code.tex" 1673816307 186782 af500404a9edec4d362912fe762ded92 ""
   "/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/libraries/pgflibraryarrows.meta.code.tex" 1601326656 58801 1e750fb0692eb99aaac45698bbec96b1 ""
@@ -125,10 +124,10 @@
   "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1764216609 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
   "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1764216530 3345742 bfc9e175fbdb167fd74bb9dc10be6426 ""
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
-  "latch_symbols.aux" 1765072479.46007 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
-  "latch_symbols.tex" 1765072478.46001 1653 7a451e30383cafeda724c02381265849 ""
+  "t_flip_flop_from_jk.aux" 1765076340.33599 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "t_flip_flop_from_jk.tex" 1765076339.53155 839 a7c4138047701739a84f784b1a8293f5 ""
   (generated)
-  "latch_symbols.aux"
-  "latch_symbols.log"
-  "latch_symbols.pdf"
+  "t_flip_flop_from_jk.aux"
+  "t_flip_flop_from_jk.log"
+  "t_flip_flop_from_jk.pdf"
   (rewritten before read)
