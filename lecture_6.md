@@ -343,9 +343,6 @@ JK flip-flop can be constructed from a D flip-flop and external gates.
 <img src="/jk_flip_flop_symbol.svg" class="rounded-lg bg-white p-1 mx-auto w-28" alt="JK Flip-Flop Symbol">
 <p class="text-sm text-center">Figure 6-10. JK Flip-Flop Symbol.</p>
 
-
-
-
 ---
 layout: two-cols-header
 ---
@@ -375,11 +372,6 @@ layout: two-cols-header
 <img src="/t_flip_flop_from_d.svg" class="rounded-lg bg-white p-2 mx-auto w-80" alt="T Flip-Flop from XOR">
 <p class="text-sm text-center">Figure 6-13. T Flip-Flop from D Flip-Flop.</p>
   
-
-
-
-
-
 ---
 
 ## Flip-Flop Characteristic Tables
@@ -454,7 +446,6 @@ J & K & Q_{(t+1)} \\
 $$
 
 </div>
-
 </div>
 
 ---
@@ -466,27 +457,41 @@ Analysis is the process of determining the function of a sequential circuit from
 **Procedure:**
 1.  Determine the **flip-flop input equations** (also called excitation equations) and the **output equations** from the combinational logic part of the circuit.
 2.  Use these equations and the flip-flop characteristic equations to derive the **next state equations**.
-    *   `A(t+1) = Dₐ` for a D flip-flop.
-    *   `A(t+1) = JₐA' + Kₐ'A` for a JK flip-flop.
+    *   $A_{(t+1)} = D_A$ for a D flip-flop.
+    *   $A_{(t+1)} = J_A A' + K_A A$ for a JK flip-flop.
 3.  Construct a **state table** that lists the next state and output for every combination of present state and input.
 4.  (Optional) Draw a **state diagram**, which is a graphical representation of the state table.
 
 ---
 
+
 ## Analysis Example
 
-Let's analyze the following circuit with two D flip-flops (A and B), one input (x), and one output (y).
+Let's analyze the following circuit with two D flip-flops ($A$ and $B$), one input ($x$), and one output ($y$).
 
-<img src="https://i.imgur.com/5u0wJ6v.png" class="rounded-lg bg-white p-4 w-1/2" alt="Sequential Circuit for Analysis">
+<div class="grid grid-cols-3 gap-4">
+
+<div class="col-span-2">
+
+<img src="/sequential_analysis_example.svg" class="mx-auto rounded-lg bg-white p-4 w-130" alt="Sequential Circuit for Analysis">
+<p class="text-sm text-center">Figure 6-14. Sequential Circuit for Analysis.</p>
+
+</div>
+
+<div>
 
 1.  **Flip-Flop Input & Circuit Output Equations:**
-    *   `Dₐ = A(t)x(t) + B(t)x(t)`
-    *   `Dₑ = A'(t)x(t)`
-    *   `y(t) = (A(t) + B(t))x'(t)`
+    *   $D_A = Ax + Bx$
+    *   $D_B = A'x$
+    *   $y = A + Bx'$
 
 2.  **Next State Equations (since they are D flip-flops):**
-    *   `A(t+1) = Ax + Bx`
-    *   `B(t+1) = A'x`
+    *   $A_{(t+1)} = Ax + Bx$
+    *   $B_{(t+1)} = A'x$
+
+</div>
+
+</div>
 
 ---
 
