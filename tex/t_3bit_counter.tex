@@ -1,0 +1,73 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+\usetikzlibrary{calc}
+
+\begin{document}
+\begin{circuitikz}[american, scale=1.0]
+    \ctikzset{logic ports=ieee}
+    
+    % Inputs
+    \node (clk_in) at (-2, -3) {CLK};
+    % Note: A0 is LSB, usually drawn on left for counters, or right?
+    % Convention varies. Usually signal flows left to right.
+    % If we follow "LSB toggles every clock", A0 changes fastest.
+    % The equations say: T(A0) = 1. A0 toggles.
+    % T(A1) = A0. A1 toggles when A0 is 1.
+    % T(A2) = A1A0. A2 toggles when A1A0 is 11.
+    % Let's draw A0, A1, A2 from Left to Right.
+    
+    % Flip-Flops
+    \node[flipflop T] (TF_0) at (0, 0) {};
+    \node[above] at (TF_0.n) {$A_0$};
+    
+    \node[flipflop T] (TF_1) at (5, 0) {};
+    \node[above] at (TF_1.n) {$A_1$};
+    
+    \node[flipflop T] (TF_2) at (10, 0) {};
+    \node[above] at (TF_2.n) {$A_2$};
+
+    % T Inputs
+    % T_A0 = 1
+    \draw (TF_0.pin 1) -- ++(-1, 0) node[vcc, rotate=90] {};
+    %\node[left] at (TF_0.pin 1) {1}; 
+
+    % T_A1 = A0
+    % Connect Q of TF_0 to T of TF_1
+    \draw (TF_0.pin 6) -- (TF_1.pin 1);
+    \node[above right] at (TF_0.pin 6) {$A_0$};
+
+    % T_A2 = A1A0
+    % AND gate for T_A2
+    \path (TF_2.pin 1) -- ++(-2, 0) coordinate (ta2_pos);
+    \node[and port, scale=0.8] (AND_TA2) at (ta2_pos) {};
+    \draw (AND_TA2.out) -- (TF_2.pin 1);
+
+    % Inputs to AND_TA2
+    % Input 1: A1 (from TF_1.Q)
+    \draw (TF_1.pin 6) -- (AND_TA2.in 1);
+    \node[above right] at (TF_1.pin 6) {$A_1$};
+    
+    % Input 2: A0. Need to route A0 all the way from TF_0.Q
+    % Tap off the line between TF_0.Q and TF_1.T
+    \draw (TF_0.pin 6) ++(1.5, 0) node[circ] (A0_tap) {};
+    \draw (A0_tap) -- ++(0, -2) coordinate (A0_bot) -- ++(6, 0) |- (AND_TA2.in 2);
+
+    % Outputs (Q)
+    \draw (TF_2.pin 6) -- ++(1, 0) node[right] {$A_2$};
+
+    % Clock Distribution
+    % Synchronous Counter: Connect all clocks together
+    \draw (TF_0.pin 3) -- ++(-0.5, 0) coordinate (clk_0);
+    \draw (TF_1.pin 3) -- ++(-0.5, 0) coordinate (clk_1);
+    \draw (TF_2.pin 3) -- ++(-0.5, 0) coordinate (clk_2);
+    
+    \draw (clk_in) -| (clk_0) -- (TF_0.pin 3);
+    \draw (clk_0) |- (clk_1) -- (TF_1.pin 3);
+    \draw (clk_1) |- (clk_2) -- (TF_2.pin 3);
+    
+    % Let's clean up clock routing to lower rail
+    %\draw (clk_in) -- ++(10, 0); 
+    % ... this is messy. Let's do common rail below.
+    
+\end{circuitikz}
+\end{document}

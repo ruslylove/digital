@@ -14,21 +14,12 @@ title: Lecture 6 - Sequential Logic
 
 {{ $slidev.configs.author }}
 ---
+hideInToc: false
+---
 
 ## Outline
 
-*   Sequential Circuits
-*   Latches (SR, D)
-*   Flip-Flops (D, JK, T)
-    *   Level vs. Edge Triggering
-    *   Master-Slave Flip-Flops
-*   Characteristic Tables & Equations
-*   Analysis of Clocked Sequential Circuits
-    *   State Equations, State Tables, State Diagrams
-*   Mealy and Moore Models
-*   State Reduction & Assignment
-*   Design of Sequential Circuits
-
+<toc mode="onlySiblings" minDepth="2" columns="3"/>
 ---
 
 ## Sequential Circuits
@@ -295,30 +286,6 @@ The output Q only changes on the **falling edge** of the clock.
 <p class="text-sm text-center">Figure 6-8. D Flip-Flop Negative Edge.</p>
 
 ---
-
-### VHDL Implementation (D Flip-Flop)
-
-```vhdl
-library ieee;
-use ieee.std_logic_1164.all;
-
-entity d_ff is
-    port ( D, CLK : in  std_logic;
-           Q     : out std_logic );
-end d_ff;
-
-architecture behavioral of d_ff is
-begin
-    process(CLK)
-    begin
-        if rising_edge(CLK) then
-            Q <= D;
-        end if;
-    end process;
-end behavioral;
-```
-
----
 layout: two-cols-header
 ---
 
@@ -450,6 +417,102 @@ $$
 
 ---
 
+## VHDL Implementation of Flip-Flops
+
+<div class="grid grid-cols-3 gap-4 text-base">
+
+<div>
+
+**D Flip-Flop**
+
+```vhdl {*}{maxHeight:'350px',lines:true}
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity d_ff is
+    port ( D, CLK : in  std_logic;
+           Q      : out std_logic );
+end d_ff;
+
+architecture behavioral of d_ff is
+begin
+    process(CLK)
+    begin
+        if rising_edge(CLK) then
+            Q <= D;
+        end if;
+    end process;
+end behavioral;
+```
+</div>
+
+<div>
+
+**JK Flip-Flop**
+```vhdl {*}{maxHeight:'350px',lines:true}
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity jk_ff is
+    port ( J, K, CLK : in  std_logic;
+           Q         : out std_logic );
+end jk_ff;
+
+architecture behavioral of jk_ff is
+    signal q_int : std_logic := '0';
+begin
+    process(CLK)
+    begin
+        if rising_edge(CLK) then
+            if (J='0' and K='0') then
+                null; -- No change
+            elsif (J='0' and K='1') then
+                q_int <= '0'; -- Reset
+            elsif (J='1' and K='0') then
+                q_int <= '1'; -- Set
+            elsif (J='1' and K='1') then
+                q_int <= not q_int; -- Toggle
+            end if;
+        end if;
+    end process;
+    Q <= q_int;
+end behavioral;
+```
+</div>
+
+<div>
+
+**T Flip-Flop**
+```vhdl {*}{maxHeight:'350px',lines:true}
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity t_ff is
+    port ( T, CLK : in  std_logic;
+           Q      : out std_logic );
+end t_ff;
+
+architecture behavioral of t_ff is
+    signal q_int : std_logic := '0';
+begin
+    process(CLK)
+    begin
+        if rising_edge(CLK) then
+            if T='1' then
+                 q_int <= not q_int;
+            end if;
+        end if;
+    end process;
+    Q <= q_int;
+end behavioral;
+```
+</div>
+
+</div>
+
+
+---
+
 ## Analysis of Clocked Sequential Circuits
 
 Analysis is the process of determining the function of a sequential circuit from its logic diagram. The goal is to derive a **state table** or **state diagram**.
@@ -495,154 +558,194 @@ Let's analyze the following circuit with two D flip-flops ($A$ and $B$), one inp
 
 ---
 
-## Analysis Example: State Table
+## State Table
 
 3.  **Construct the State Table:** We fill in the table using the next state and output equations for all combinations of present state (A, B) and input (x).
 
-| Present State | Input | Next State | Output |
-|:-------------:|:-----:|:----------:|:------:|
-| **A B**       | **x** | **A B**    | **y**  |
-| 0 0           | 0     | 0 0        | 0      |
-| 0 0           | 1     | 0 1        | 0      |
-| 0 1           | 0     | 0 0        | 1      |
-| 0 1           | 1     | 1 1        | 0      |
-| 1 0           | 0     | 0 0        | 1      |
-| 1 0           | 1     | 1 0        | 0      |
-| 1 1           | 0     | 0 0        | 1      |
-| 1 1           | 1     | 1 0        | 0      |
+$$
+\begin{array}{|c|c|c|c|}
+\hline
+\text{Present State} & \text{Input} & \text{Next State} & \text{Output} \\
+A_{(t)} \quad B_{(t)} & x & A_{(t+1)} \quad B_{(t+1)} & y \\
+\hline
+0 \quad 0 & 0 & 0 \quad 0 & 0 \\
+0 \quad 0 & 1 & 0 \quad 1 & 0 \\
+0 \quad 1 & 0 & 0 \quad 0 & 1 \\
+0 \quad 1 & 1 & 1 \quad 1 & 0 \\
+1 \quad 0 & 0 & 0 \quad 0 & 1 \\
+1 \quad 0 & 1 & 1 \quad 0 & 0 \\
+1 \quad 1 & 0 & 0 \quad 0 & 1 \\
+1 \quad 1 & 1 & 1 \quad 0 & 0 \\
+\hline
+\end{array}
+$$
 
 ---
+layout: two-cols-header
+---
 
-## Analysis Example: State Diagram
+## State Diagram
+
+:: left ::
 
 4.  **Draw the State Diagram:**
     *   Each circle represents a state (the value of the flip-flops, AB).
     *   Each arrow represents a transition between states.
     *   The label on the arrow is in the format `input / output`.
 
-<img src="/fsm_1.svg" class="w-60"/>
-
 This completes the analysis. The state diagram fully describes the circuit's behavior over time.
 
+:: right ::
+
+<img src="/d_state_diagram.svg" class="rounded-lg bg-white p-4 w-90 mx-auto" alt="State Diagram for Analysis Example">
+<p class="text-sm text-center">Figure 6-15. State Diagram.</p>
+
+
+
 ---
-layout: two-cols-header
----
+
 
 ## Analysis with JK Flip-Flops
 
-The procedure is similar, but we use the JK flip-flop's characteristic equation: `Q(t+1) = JQ' + K'Q`.
+The procedure is similar, but we use the JK flip-flop's characteristic equation: $Q(t+1) = JQ' + K'Q$.
 
-::left::
+<div class="grid grid-cols-3 gap-4">
 
-<img src="https://i.imgur.com/j47y0tN.png" class="rounded-lg bg-white p-4" alt="JK Flip-Flop Circuit for Analysis">
+<div class="col-span-2">
+
+<img src="/jk_sequential_analysis.svg" class="rounded-lg bg-white p-4 w-100 mx-auto" alt="JK Flip-Flop Circuit for Analysis">
+<p class="text-sm text-center">Figure 6-16. Logic Diagram of a Sequential Circuit with JK Flip-Flops.</p>
+
+</div>
+
+<div class="">
 
 1.  **Input Equations:**
-    *   `Jₐ = B`
-    *   `Kₐ = Bx'`
-    *   `Jₑ = x'`
-    *   `Kₑ = A'x + Ax' = A ⊕ x`
-
+    *   $J_A = B$
+    *   $K_A = Bx'$
+    *   $J_B = x'$
+    *   $K_B = A'x + Ax' \\= A \oplus x$
 2.  **Next State Equations:**
-    *   `A(t+1) = JₐA' + Kₐ'A = BA' + (Bx')'A`
-    *   `B(t+1) = JₑB' + Kₑ'B = x'B' + (A ⊕ x)'B`
+    *   $A(t+1) = J_A A' + K_A'A \\ = BA' + (Bx')'A$
+    *   $B(t+1) = J_B B' + K_B'B \\ = x'B' + (A \oplus x)'B$
 
-::right::
+</div>
+
+</div>
+
+---
+
+<div class="grid grid-cols-3 gap-4">
+
+<div class="col-span-2">
 
 3.  **State Table:**
 
-| Present State | Input | Next State |
-|:-------------:|:-----:|:----------:|
-| **A B**       | **x** | **A B**    |
-| 0 0           | 0     | 0 1        |
-| 0 0           | 1     | 0 0        |
-| 0 1           | 0     | 1 1        |
-| 0 1           | 1     | 1 0        |
-| 1 0           | 0     | 0 1        |
-| 1 0           | 1     | 1 0        |
-| 1 1           | 0     | 0 0        |
-| 1 1           | 1     | 1 1        |
+$$
+\begin{array}{|c|c|cccc|c|}
+\hline
+\text{PS} & \text{Input} & J_A & K_A & J_B & K_B & \text{NS} \\
+A_{(t)} \quad B_{(t)} & x & & & & & A_{(t+1)} \quad B_{(t+1)} \\
+\hline
+0 \quad 0 & 0 & 0 & 0 & 1 & 0 & 0 \quad 1 \\
+0 \quad 0 & 1 & 0 & 0 & 0 & 1 & 0 \quad 0 \\
+0 \quad 1 & 0 & 1 & 1 & 1 & 0 & 1 \quad 1 \\
+0 \quad 1 & 1 & 1 & 0 & 0 & 1 & 1 \quad 0 \\
+1 \quad 0 & 0 & 0 & 0 & 1 & 1 & 1 \quad 1 \\
+1 \quad 0 & 1 & 0 & 0 & 0 & 0 & 1 \quad 0 \\
+1 \quad 1 & 0 & 1 & 1 & 1 & 1 & 0 \quad 0 \\
+1 \quad 1 & 1 & 1 & 0 & 0 & 0 & 1 \quad 1 \\
+\hline
+\end{array}
+$$
+
+</div>
+
+<div>
 
 4.  **State Diagram:**
 
-```mermaid
-stateDiagram-v2
-    state "00" as s00
-    state "01" as s01
-    state "10" as s10
-    state "11" as s11
+<img src="/jk_state_diagram.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="State Diagram for JK Circuit">
+<p class="text-sm text-center">Figure 6-17. State Diagram.</p>
 
-    s00 --> s01 : 0
-    s00 --> s00 : 1
-    s01 --> s11 : 0
-    s01 --> s10 : 1
-    s10 --> s01 : 0
-    s10 --> s10 : 1
-    s11 --> s00 : 0
-    s11 --> s11 : 1
-```
+</div>
+
+</div>
 
 ---
-layout: two-cols-header
----
+
 
 ## Analysis with T Flip-Flops
 
-Here, we use the T flip-flop's characteristic equation: `Q(t+1) = T ⊕ Q`.
+Here, we use the T flip-flop's characteristic equation: $Q(t+1) = T \oplus Q$.
 
-::left::
+<div class="grid grid-cols-3 gap-4">
 
-<img src="https://i.imgur.com/3q1727x.png" class="rounded-lg bg-white p-4" alt="T Flip-Flop Circuit for Analysis">
+<div class="col-span-2">
+
+<img src="/t_sequential_analysis.svg" class="rounded-lg bg-white p-4 w-full" alt="T Flip-Flop Circuit for Analysis">
+<p class="text-sm text-center">Figure 6-18. Logic Diagram of a Sequential Circuit with T Flip-Flops.</p>
+
+</div>
+
+<div>
 
 1.  **Input & Output Equations:**
-    *   `Tₐ = Bx`
-    *   `Tₑ = x`
-    *   `y = AB`
-
+    *   $T_A  = Bx$
+    *   $T_B = x$
+    *   $y = AB$
 2.  **Next State Equations:**
-    *   `A(t+1) = Tₐ ⊕ A = (Bx) ⊕ A`
-    *   `B(t+1) = Tₑ ⊕ B = x ⊕ B`
+    *   $A(t+1) = T_A \oplus A \\= (Bx) \oplus A$
+    *   $B(t+1) = T_B \oplus B \\= x \oplus B$
 
-::right::
+
+
+</div>
+
+
+</div>
+
+---
+layout: two-cols
+---
 
 3.  **State Table:**
 
-| Present State | Input | Next State | Output |
-|:-------------:|:-----:|:----------:|:------:|
-| **A B**       | **x** | **A B**    | **y**  |
-| 0 0           | 0     | 0 0        | 0      |
-| 0 0           | 1     | 0 1        | 0      |
-| 0 1           | 0     | 0 1        | 0      |
-| 0 1           | 1     | 1 0        | 0      |
-| 1 0           | 0     | 1 0        | 0      |
-| 1 0           | 1     | 1 1        | 0      |
-| 1 1           | 0     | 1 1        | 1      |
-| 1 1           | 1     | 0 0        | 1      |
+$$
+\begin{array}{|c|c|c|c|}
+\hline
+\text{PS} & \text{Input} & \text{NS} & \text{Output} \\
+A_{(t)} \quad B_{(t)} & x & A_{(t+1)} \quad B_{(t+1)} & y \\
+\hline
+0 \quad 0 & 0 & 0 \quad 0 & 0 \\
+0 \quad 0 & 1 & 0 \quad 1 & 0 \\
+0 \quad 1 & 0 & 0 \quad 1 & 0 \\
+0 \quad 1 & 1 & 1 \quad 0 & 0 \\
+1 \quad 0 & 0 & 1 \quad 0 & 0 \\
+1 \quad 0 & 1 & 1 \quad 1 & 0 \\
+1 \quad 1 & 0 & 1 \quad 1 & 1 \\
+1 \quad 1 & 1 & 0 \quad 0 & 1 \\
+\hline
+\end{array}
+$$
+
+:: right ::
 
 4.  **State Diagram (Moore Model):**
 
-```mermaid
-stateDiagram-v2
-    direction LR
-    state "00 / 0" as s00
-    state "01 / 0" as s01
-    state "10 / 0" as s10
-    state "11 / 1" as s11
+<img src="/t_state_diagram.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="State Diagram for T Circuit">
+<p class="text-sm text-center">Figure 6-19. State Diagram.</p>
 
-    s00 --> s00 : 0
-    s00 --> s01 : 1
-    s01 --> s01 : 0
-    s01 --> s10 : 1
-    s10 --> s10 : 0
-    s10 --> s11 : 1
-    s11 --> s11 : 0
-    s11 --> s00 : 1
-```
-
+---
+layout: two-cols-header
 ---
 
 ## Mealy and Moore Models
 
 Sequential circuits are classified into two models based on how their outputs are generated.
+
+:: left ::
+<div class="text-sm">
 
 ### Mealy Model
 *   The outputs are a function of both the **present state AND the current inputs**.
@@ -654,7 +757,11 @@ Sequential circuits are classified into two models based on how their outputs ar
 *   The output value is written inside the state circle (`state / output`).
 *   Outputs are synchronous with the clock; they only change when the state changes.
 
-<img src="https://i.imgur.com/z488Y6J.png" class="rounded-lg bg-white p-4 w-full" alt="Mealy vs Moore Block Diagrams">
+</div>
+:: right ::
+
+<img src="/mealy_moore_block.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Mealy vs Moore Block Diagrams">
+<p class="text-sm text-center">Figure 6-20. Block Diagrams of Mealy and Moore Models.</p>
 
 ---
 
@@ -675,60 +782,160 @@ Design is the reverse of analysis. We start with a specification and end with a 
 
 ## Design Example: Sequence Detector
 
-1.  **Problem & State Diagram:** Design a circuit that outputs `y=1` when it detects the sequence of inputs `101` on input `x`.
+**Problem:** Design a circuit that outputs $y=1$ when it detects the sequence of inputs $101$ on input $x$.
 
-    **State Diagram:** We need states to remember "have seen nothing", "have seen a 1", "have seen 10".
-    *   `S₀`: Initial state (reset).
-    *   `S₁`: Last input was `1`.
-    *   `S₂`: Last two inputs were `10`.
-    *   If in `S₂` and we get a `1`, the sequence is complete, so output `1`.
+1. **State Diagram:** We need states to remember "have seen nothing", "have seen a 1", "have seen 10".
+    *   $S_0$: Initial state (reset).
+    *   $S_1$: Last input was $1$.
+    *   $S_2$: Last two inputs were $10$.
+    *   If in $S_2$ and we get a $1$, the sequence is complete, so output $1$.
 
-```mermaid
-stateDiagram-v2
-    direction LR
-    state "S₀ (Reset)" as S0
-    state "S₁ (Got '1')" as S1
-    state "S₂ (Got '10')" as S2
-
-    [*] --> S0
-    S0 --> S0 : 0/0
-    S0 --> S1 : 1/0
-    S1 --> S2 : 0/0
-    S1 --> S1 : 1/0
-    S2 --> S0 : 0/0
-    S2 --> S1 : 1/1
-```
+<img src="/sequence_detector_state.svg" class="rounded-lg bg-white p-4 w-110 mx-auto" alt="State Diagram for Sequence Detector">
+<p class="text-sm text-center">Figure 6-21. State Diagram for '101' Sequence Detector.</p>
 
 ---
 
 ## Synthesis with D Flip-Flops
 
-2.  **State Reduction:** The diagram has no redundant states. (We will cover this in more detail later).
-3.  **State Assignment:** `S₀=00`, `S₁=01`, `S₂=10`. (We need 2 flip-flops, A and B).
+<div class="text-base">
+
+2.  **State Reduction:** The diagram has no redundant states. (Optional).
+3.  **State Assignment:** $S_0=00$, $S_1=01$, $S_2=10$. (We need 2 flip-flops, A and B).
 4.  **Binary State Table:**
 
-| Present State | Input | Next State | Output |
-|:-------------:|:-----:|:----------:|:------:|
-| **A B**       | **x** | **A B**    | **y**  |
-| 0 0           | 0     | 0 0        | 0      |
-| 0 0           | 1     | 0 1        | 0      |
-| 0 1           | 0     | 1 0        | 0      |
-| 0 1           | 1     | 0 1        | 0      |
-| 1 0           | 0     | 0 0        | 0      |
-| 1 0           | 1     | 0 1        | 1      |
+$$
+\begin{array}{|c|c|c|c|}
+\hline
+\text{PS} & \text{Input} & \text{NS} & \text{Output} \\
+A_{(t)} \quad B_{(t)} & x & A_{(t+1)} \quad B_{(t+1)} & y \\
+\hline
+0 \quad 0 & 0 & 0 \quad 0 & 0 \\
+0 \quad 0 & 1 & 0 \quad 1 & 0 \\
+0 \quad 1 & 0 & 1 \quad 0 & 0 \\
+0 \quad 1 & 1 & 0 \quad 1 & 0 \\
+1 \quad 0 & 0 & 0 \quad 0 & 0 \\
+1 \quad 0 & 1 & 0 \quad 1 & 1 \\
+\hline
+\end{array}
+$$
 
 5.  **Derive Equations (from K-maps):** For D flip-flops, the input equation is simply the next state value.
-    *   `Dₐ = A(t+1) = Bx'`
-    *   `Dₑ = B(t+1) = x`
-    *   `y = Ax`
+    *   $D_A = A(t+1) = Bx'$
+    *   $D_B = B(t+1) = x$
+    *   $y = Ax$
+
+</div>
+
+---
 
 6.  **Draw the Logic Diagram:**
 
-<img src="https://i.imgur.com/643b24t.png" class="rounded-lg bg-white p-4 w-2/3" alt="Final Circuit for Sequence Detector">
+<img src="/sequence_detector_circuit.svg" class="rounded-lg bg-white p-4 w-2/3 mx-auto" alt="Final Circuit for Sequence Detector">
+<p class="text-sm text-center">Figure 6-22. Logic Diagram of '101' Sequence Detector.</p>
 
-### VHDL Implementation
+---
 
-```vhdl
+## Flip-Flop Excitation Tables
+
+For JK and T flip-flops, we need **excitation tables**. They tell us what the flip-flop inputs (J, K, or T) must be to cause a specific state transition from $Q_{(t)}$ to $Q_{(t+1)}$.
+
+<div class="grid grid-cols-2 gap-8">
+
+<div>
+
+### JK Excitation Table
+
+$$
+\begin{array}{|c|c|c|c|}
+\hline
+Q_{(t)} & Q_{(t+1)} & J & K \\
+\hline
+0 & 0 & 0 & X \\
+0 & 1 & 1 & X \\
+1 & 0 & X & 1 \\
+1 & 1 & X & 0 \\
+\hline
+\end{array}
+$$
+
+</div>
+
+<div>
+
+### T Excitation Table
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+Q_{(t)} & Q_{(t+1)} & T \\
+\hline
+0 & 0 & 0 \\
+0 & 1 & 1 \\
+1 & 0 & 1 \\
+1 & 1 & 0 \\
+\hline
+\end{array}
+$$
+
+</div>
+</div>
+
+---
+
+## Synthesis with JK Flip-Flops
+
+Let's synthesize the same sequence detector using JK flip-flops.
+
+1.  **Create the Excitation Table:** We add columns for the JK inputs and fill them in by looking at the state transitions for A and B.
+
+$$
+\begin{array}{|c|c|c|c|c|}
+\hline
+\text{PS} & \text{Input} & \text{NS} & \text{Inputs } A & \text{Inputs } B \\
+A \quad B & x & A \quad B & J_A \quad K_A & J_B \quad K_B \\
+\hline
+0 \quad 0 & 0 & 0 \quad 0 & 0 \quad X & 0 \quad X \\
+0 \quad 0 & 1 & 0 \quad 1 & 0 \quad X & 1 \quad X \\
+0 \quad 1 & 0 & 1 \quad 0 & 1 \quad X & X \quad 1 \\
+0 \quad 1 & 1 & 0 \quad 1 & 0 \quad X & X \quad 0 \\
+1 \quad 0 & 0 & 0 \quad 0 & X \quad 1 & 0 \quad X \\
+1 \quad 0 & 1 & 0 \quad 1 & X \quad 1 & 1 \quad X \\
+\hline
+\end{array}
+$$
+
+---
+
+<div class="grid grid-cols-3 gap-8">
+<div>
+
+2.  **Derive Equations:**
+    *   $J_A = Bx'$
+    *   $K_A = x$
+    *   $J_B = x$
+    *   $K_B = x'$
+    *   $y = Ax$ (same as before)
+
+</div>
+<div class="col-span-2">
+
+3.  **Draw the Logic Diagram:**
+
+<img src="/sequence_detector_jk_circuit.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="JK Circuit for Sequence Detector">
+<p class="text-sm text-center">Figure 6-23. Logic Diagram of Sequence Detector using JK Flip-Flops.</p>
+
+</div>
+</div>
+
+---
+
+## VHDL Implementation of Sequence Detector
+
+* In VHDL, we use an **enumerated type** to define     the states (e.g., `type state_type is (S0, S1, S2);`). 
+*   This improves readability and allows the synthesis tool to automatically select the best state encoding (Binary, One-Hot, etc.).
+
+**sequence_detector.vhd**
+```vhdl {*}{maxHeight:'290px',lines:true}
 library ieee;
 use ieee.std_logic_1164.all;
 
@@ -767,69 +974,9 @@ end fsm;
 
 ---
 
-## Flip-Flop Excitation Tables
 
-For JK and T flip-flops, we need **excitation tables**. They tell us what the flip-flop inputs (J, K, or T) must be to cause a specific state transition from `Q(t)` to `Q(t+1)`.
 
-<div class="grid grid-cols-2 gap-8">
 
-<div>
-
-### JK Excitation Table
-
-| Q(t) | Q(t+1) | J | K |
-|:----:|:------:|:-:|:-:|
-|  0   |    0   | 0 | X |
-|  0   |    1   | 1 | X |
-|  1   |    0   | X | 1 |
-|  1   |    1   | X | 0 |
-
-</div>
-
-<div>
-
-### T Excitation Table
-
-| Q(t) | Q(t+1) | T |
-|:----:|:------:|:-:|
-|  0   |    0   | 0 |
-|  0   |    1   | 1 |
-|  1   |    0   | 1 |
-|  1   |    1   | 0 |
-
-</div>
-</div>
-
----
-
-## Synthesis with JK Flip-Flops
-
-Let's synthesize the same sequence detector using JK flip-flops.
-
-1.  **Create the Excitation Table:** We add columns for the JK inputs and fill them in by looking at the state transitions for A and B.
-
-| PS | Input | NS | Flip-Flop Inputs |
-|:----:|:-----:|:----:|:----------------:|
-| A B  |   x   | A B  | Jₐ Kₐ | Jₑ Kₑ |
-| 0 0  |   0   | 0 0  | 0  X  | 0  X  |
-| 0 0  |   1   | 0 1  | 0  X  | 1  X  |
-| 0 1  |   0   | 1 0  | 1  X  | X  1  |
-| 0 1  |   1   | 0 1  | 0  X  | X  0  |
-| 1 0  |   0   | 0 0  | X  1  | 0  X  |
-| 1 0  |   1   | 0 1  | X  1  | 1  X  |
-
-2.  **Derive Equations (from K-maps):**
-    *   `Jₐ = Bx'`
-    *   `Kₐ = x`
-    *   `Jₑ = x`
-    *   `Kₑ = x'`
-    *   `y = Ax` (same as before)
-
-3.  **Draw the Logic Diagram:**
-
-<img src="https://i.imgur.com/s64052X.png" class="rounded-lg bg-white p-4 w-2/3" alt="JK Circuit for Sequence Detector">
-
----
 
 ## Synthesis with T Flip-Flops: Binary Counter
 
@@ -837,23 +984,116 @@ Let's synthesize the same sequence detector using JK flip-flops.
 
 1.  **State Table & Excitations:**
 
-| Present State | Next State | Flip-Flop Inputs |
-|:-------------:|:----------:|:----------------:|
-| A₂ A₁ A₀      | A₂ A₁ A₀   | Tₐ₂ Tₐ₁ Tₐ₀      |
-| 0  0  0       | 0  0  1    | 0   0   1        |
-| 0  0  1       | 0  1  0    | 0   1   1        |
-| 0  1  0       | 0  1  1    | 0   0   1        |
-| 0  1  1       | 1  0  0    | 1   1   1        |
-| 1  0  0       | 1  0  1    | 0   0   1        |
-| 1  0  1       | 1  1  0    | 0   1   1        |
-| 1  1  0       | 1  1  1    | 0   0   1        |
-| 1  1  1       | 0  0  0    | 1   1   1        |
+$$
+\begin{array}{|c|c|c|}
+\hline
+\text{Present State} & \text{Next State} & \text{Flip-Flop Inputs} \\
+A_2 \quad A_1 \quad A_0 & A_2 \quad A_1 \quad A_0 & T_{A_2} \quad T_{A_1} \quad T_{A_0} \\
+\hline
+0 \quad 0 \quad 0 & 0 \quad 0 \quad 1 & 0 \quad 0 \quad 1 \\
+0 \quad 0 \quad 1 & 0 \quad 1 \quad 0 & 0 \quad 1 \quad 1 \\
+0 \quad 1 \quad 0 & 0 \quad 1 \quad 1 & 0 \quad 0 \quad 1 \\
+0 \quad 1 \quad 1 & 1 \quad 0 \quad 0 & 1 \quad 1 \quad 1 \\
+1 \quad 0 \quad 0 & 1 \quad 0 \quad 1 & 0 \quad 0 \quad 1 \\
+1 \quad 0 \quad 1 & 1 \quad 1 \quad 0 & 0 \quad 1 \quad 1 \\
+1 \quad 1 \quad 0 & 1 \quad 1 \quad 1 & 0 \quad 0 \quad 1 \\
+1 \quad 1 \quad 1 & 0 \quad 0 \quad 0 & 1 \quad 1 \quad 1 \\
+\hline
+\end{array}
+$$
 
-2.  **Derive Equations (from K-maps):**
-    *   `Tₐ₂ = A₁A₀`
-    *   `Tₐ₁ = A₀`
-    *   `Tₐ₀ = 1`
+---
+
+<div class="grid grid-cols-3 gap-8">
+<div>
+
+2.  **Derive Equations:**
+    *   $T_{A_2} = A_1A_0$
+    *   $T_{A_1} = A_0$
+    *   $T_{A_0} = 1$
+
+</div>
+<div class="col-span-2">
 
 3.  **Draw the Logic Diagram:**
 
-<img src="https://i.imgur.com/u389v4s.png" class="rounded-lg bg-white p-4 w-2/3" alt="T Flip-Flop 3-bit Counter Circuit">
+<img src="/t_3bit_counter.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="T Flip-Flop 3-bit Counter Circuit">
+<p class="text-sm text-center">Figure 6-24. Logic Diagram of T Flip-Flop 3-bit Counter.</p>
+
+</div>
+</div>
+
+
+---
+
+# Lecture 6 Summary
+
+*   **Sequential Circuit Analysis:** The process of deriving state tables and state diagrams from logic diagrams to understand circuit behavior.
+*   **State Equations:** $Q(t+1)$ derived from flip-flop input equations and characteristic equations.
+*   **Flip-Flop Characteristics:**
+    *   **D:** $Q(t+1) = D$
+    *   **JK:** $Q(t+1) = JQ' + K'Q$
+    *   **T:** $Q(t+1) = T \oplus Q$
+*   **Mealy vs. Moore Models:**
+    *   **Mealy:** Output depends on both **Present State** and **Input**.
+    *   **Moore:** Output depends only on the **Present State**.
+
+---
+layout: section
+---
+
+## Lecture 6 Exercises
+
+
+---
+
+### Exercise 6-1: Next State Equations
+
+**Problem:**
+A sequential circuit uses two D flip-flops ($A$ and $B$) and one input ($x$).
+The input equations are:
+*   $D_A = Ax + Bx$
+*   $D_B = A'x$
+
+**Task:**
+Determine the **Next State equations** for $A_{(t+1)}$ and $B_{(t+1)}$.
+
+---
+
+### Exercise 6-2: State Diagram Construction
+
+**Problem:**
+A sequential circuit has one T flip-flop and one input $x$.
+The flip-flop input equation is:
+*   $T = A \oplus x$
+
+**Task:**
+Draw the **State Diagram** for this circuit.
+*(Hint: Determine the transitions for Present States $A=0$ and $A=1$ with Inputs $x=0$ and $x=1$).*
+
+---
+
+### Exercise 6-3: JK Flip-Flop Behavior
+
+**Problem:**
+You have a JK flip-flop where both inputs are permanently connected to logic High ($J = 1, K = 1$).
+
+**Task:**
+1.  Describe how the output $Q$ changes on each clock pulse.
+2.  Draw a simple State Diagram for this flip-flop (States: 0 and 1).
+
+---
+
+### Exercise 6-4: Mealy vs. Moore
+
+**Problem:**
+Analyze the following description and determine if it represents a **Mealy** or **Moore** machine.
+
+**Description:**
+"A sequence detector produces an output $y=1$ whenever the internal counter reaches the value '101'. The output remains 1 as long as the counter is in this state, regardless of any external input changes during that clock cycle."
+
+**Task:**
+Classify the machine type and explain your reasoning.
+
+
+

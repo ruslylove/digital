@@ -1,0 +1,106 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+\usetikzlibrary{calc}
+
+\begin{document}
+\begin{circuitikz}[american, scale=1.0]
+    \ctikzset{logic ports=ieee}
+    
+    % Inputs
+    \node (clk_in) at (-2, -6) {CLK};
+    \node (x_in_node) at (-2, 0) {$x$};
+    \draw (x_in_node) -- ++(2,0) coordinate (x_bus_top);
+    \node[circ] at (x_bus_top) {};
+
+    % Inverter for x (to get x')
+    % Place to the right of x_bus_top
+    \node[not port, scale=0.8, rotate=-90] (NOT_x) at (1, -1) {};
+    % Route x to NOT
+    \draw (x_bus_top) -- ++(1, 0) -- (NOT_x.in);
+    
+    % Bus lines
+    \coordinate (x_line_start) at (0, 0);
+    \coordinate (not_x_line_start) at (1, -2); % Output of NOT
+    
+    \draw (x_bus_top) -- ++(0, -8) coordinate (x_bus_bot);
+    \draw (NOT_x.out) -- ++(0, -6) coordinate (not_x_bus_bot);
+
+    % Labels for bus lines
+    \node[above] at (x_bus_top) {$x$};
+    \node[right] at (NOT_x.in) {}; % Just a placeholder
+    \node[below] at (not_x_bus_bot) {$x'$};
+    \node[below] at (x_bus_bot) {$x$};
+
+    % Flip-Flops
+    % JK Flip-Flop A
+    \node[flipflop JK] (JK_A) at (8, 2) {};
+    \node[above] at (JK_A.n) {Flip-Flop A};
+    
+    % JK Flip-Flop B
+    \node[flipflop JK] (JK_B) at (8, -3) {};
+    \node[above] at (JK_B.n) {Flip-Flop B};
+
+    % Logic for JA = Bx'
+    % AND gate (B, x')
+    \path (JK_A.pin 1) -- ++(-3, 0) coordinate (ja_pos);
+    \node[and port] (AND_JA) at (ja_pos) {$Bx'$};
+    \draw (AND_JA.out) -- (JK_A.pin 1);
+
+    % Logic for KA = x
+    \draw (JK_A.pin 3) -- ++(-1, 0) coordinate (ka_in);
+    \draw (x_bus_top |- ka_in) node[circ]{} -- (JK_A.pin 3);
+
+    % Logic for JB = x
+    \draw (JK_B.pin 1) -- ++(-1, 0) coordinate (jb_in);
+    \draw (x_bus_top |- jb_in) node[circ]{} -- (JK_B.pin 1);
+
+    % Logic for KB = x'
+    \draw (JK_B.pin 3) -- ++(-1, 0) coordinate (kb_in);
+    \draw (NOT_x.out |- kb_in) node[circ]{} -- (JK_B.pin 3);
+
+    % Connect inputs to AND_JA
+    % Input 1: B (feedback)
+    % Input 2: x'
+    \draw (NOT_x.out |- AND_JA.in 2) node[circ]{} -- (AND_JA.in 2);
+
+    % Feedback B to AND_JA (input 1)
+    % B is at JK_B.pin 6
+    \draw (JK_B.pin 6) -- ++(1, 0) coordinate (B_out);
+    \node[right] at (B_out) {$B$};
+    \draw (B_out) -- ++(0, 6) coordinate (B_top) -| (AND_JA.in 1);
+
+    % Output Logic y = Ax (Mealy)
+    % AND gate connected to A and x
+    % Place to right of FF A
+    \path (JK_A.pin 6) -- ++(4, -1) coordinate (y_pos);
+    \node[and port] (AND_y) at (y_pos) {$Ax$};
+    
+    % A to AND_y
+    \draw (JK_A.pin 6) -- ++(1, 0) coordinate (A_out);
+    \node[right] at (A_out) {$A$};
+    \draw (A_out) -| (AND_y.in 1);
+
+    % x to AND_y
+    % Route x from bus
+    \draw (x_bus_top |- AND_y.in 2) node[circ]{} -- (AND_y.in 2);
+    % Wait, x bus is at x=0. AND_y.in 2 is far right.
+    % We need to route x to the right.
+    % Let's tap from the x bus at a convenient height, say below everything
+    \draw (x_bus_bot) -- ++(0, -0.5) -- ++(14, 0) |- (AND_y.in 2);
+    
+    % Output y
+    \draw (AND_y.out) -- ++(1, 0) node[right] {$y$};
+
+    % Clock Distribution
+    % JK FF clock is usually pin 2? No, check circuitikz docs. 
+    % JK flipflop anchor 'clock' is usually pin 2 (left side middle).
+    % However, pin 1 is J, pin 3 is K. Clock is pin 2.
+    % Let's verify pin numbers for JK flipflop in circuitikz usually:
+    % 1: J, 2: CLK, 3: K, 4: S (Set), 5: R (Reset), 6: Q, 7: Qn
+    % Actually pin 2 is clock input.
+    \draw (JK_B.pin 2) -- ++(-0.5, 0) coordinate (clk_b_in);
+    \draw (clk_in) -| (clk_b_in) -- (JK_B.pin 2);
+    \draw (clk_b_in) |- (JK_A.pin 2);
+
+\end{circuitikz}
+\end{document}

@@ -1,0 +1,81 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+\usetikzlibrary{calc}
+
+\begin{document}
+\begin{circuitikz}[american, scale=1.0]
+    \ctikzset{logic ports=ieee}
+    
+    % Inputs - Leftmost
+    \node (clk_in) at (-1.5, -6) {CLK};
+    
+    % Flip-Flops - Far Right
+    % Custom T Flip Flop shape isn't standard in basic circuitikz sometimes, 
+    % but we can use generic flipflop or JK shorted. 
+    % Actually circuitikz has nice flipflop wrappers now.
+    % Let's use the standard flipflop node with t labels if needed, or just shape=flipflop T using newer libs.
+    % To match previous style, we use "flipflop T" if available, or generic. Assuming fairly modern circuitikz based on earlier files.
+    % Previous file used "flipflop D" and "flipflop JK".
+    \node[flipflop T] (TFF_A) at (10, 2) {};
+    \node[above] at (TFF_A.n) {Flip-Flop A};
+    \node[flipflop T] (TFF_B) at (10, -3) {};
+    \node[above] at (TFF_B.n) {Flip-Flop B};
+
+    % Input x
+    \node (x_in_node) at (-2, 0) {$x$};
+    \draw (x_in_node) -- ++(2,0) coordinate (x_bus_top);
+    \node[circ] at (x_bus_top) {};
+    
+    % Logic for TA = Bx
+    % AND gate (B, x)
+    \path (TFF_A.pin 1) -- ++(-3, 0) coordinate (ta_pos);
+    \node[and port, anchor=out] (AND_TA) at (ta_pos) {$Bx$};
+    \draw (AND_TA.out) -- (TFF_A.pin 1);
+    
+    % Logic for TB = x
+    % Direct connection from x
+    \draw (TFF_B.pin 1) -- ++(-1, 0) coordinate (TB_in);
+    
+    % Wiring Inputs
+    % TB = x
+    % x_bus is at x=0
+    \draw (x_bus_top) |- (TB_in) -- (TFF_B.pin 1);
+    
+    % Connect x to AND_TA (input 2)
+    \draw (x_bus_top |- AND_TA.in 2) to[short, *-] (AND_TA.in 2);
+    
+    % Feedback Connections
+    % B (TFF_B.pin 6)
+    \draw (TFF_B.pin 6) -- ++(1, 0) coordinate (B_out);
+    \node[right] at (B_out) {$B$};
+    
+    % B to AND_TA (input 1)
+    % Loop UP 
+    \draw (B_out) -- ++(0, 5) coordinate (B_top) -| (AND_TA.in 1);
+    
+    % Output y = AB
+    % AND gate connected to A and B
+    % Place it to the right of FFs
+    \path (TFF_A.pin 6) -- ++(3, -2.5) coordinate (y_pos);
+    \node[and port] (AND_y) at (y_pos) {$AB$};
+    
+    % A (TFF_A.pin 6)
+    \draw (TFF_A.pin 6) -- ++(1, 0) coordinate (A_out);
+    \node[right] at (A_out) {$A$};
+    
+    % Route A to AND_y (input 1)
+    \draw (A_out) -| (AND_y.in 1);
+    
+    % Route B to AND_y (input 2)
+    \draw (B_out) -| (AND_y.in 2);
+    
+    % Draw Output y
+    \draw (AND_y.out) -- ++(1, 0) node[right] {$y$};
+
+    % Clock Distribution
+    \draw (TFF_B.pin 3) -- ++(-0.5, 0) node[circ] (clk_node) {};
+    \draw (clk_in) -| (clk_node);
+    \draw (clk_node) |- (TFF_A.pin 3);
+
+\end{circuitikz}
+\end{document}
