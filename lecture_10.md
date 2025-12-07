@@ -8,9 +8,7 @@ title: "Lecture 10 - Control Unit Design"
 
 # Lecture 10: Control Unit Design
 {{ $slidev.configs.subject }}
-<div class="abs-br m-6 text-sm">
-010113025 Digital Circuits and Logic Design
-</div>
+
 
 {{ $slidev.configs.author }}
 ---

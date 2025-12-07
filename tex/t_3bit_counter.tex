@@ -7,67 +7,71 @@
     \ctikzset{logic ports=ieee}
     
     % Inputs
-    \node (clk_in) at (-2, -3) {CLK};
-    % Note: A0 is LSB, usually drawn on left for counters, or right?
-    % Convention varies. Usually signal flows left to right.
-    % If we follow "LSB toggles every clock", A0 changes fastest.
-    % The equations say: T(A0) = 1. A0 toggles.
-    % T(A1) = A0. A1 toggles when A0 is 1.
-    % T(A2) = A1A0. A2 toggles when A1A0 is 11.
-    % Let's draw A0, A1, A2 from Left to Right.
+    \node (clk_in) at (-0.5, -2) {CLK};
     
-    % Flip-Flops
-    \node[flipflop T] (TF_0) at (0, 0) {};
+    % Flip-Flops A0, A1, A2 from Left to Right
+    
+    % Flip-Flop A0 (LSB)
+    \node[flipflop T] (TF_0) at (2, 0) {};
     \node[above] at (TF_0.n) {$A_0$};
     
-    \node[flipflop T] (TF_1) at (5, 0) {};
+    % Flip-Flop A1
+    \node[flipflop T] (TF_1) at (7, 0) {};
     \node[above] at (TF_1.n) {$A_1$};
     
-    \node[flipflop T] (TF_2) at (10, 0) {};
+    % Flip-Flop A2 (MSB)
+    \node[flipflop T] (TF_2) at (12, 0) {};
     \node[above] at (TF_2.n) {$A_2$};
 
     % T Inputs
+    
     % T_A0 = 1
-    \draw (TF_0.pin 1) -- ++(-1, 0) node[vcc, rotate=90] {};
-    %\node[left] at (TF_0.pin 1) {1}; 
+    \draw (TF_0.pin 1) -- ++(-1, 0) coordinate (logic1);
+    \node[left] at (logic1) {$'1'$}; 
 
     % T_A1 = A0
-    % Connect Q of TF_0 to T of TF_1
-    \draw (TF_0.pin 6) -- (TF_1.pin 1);
-    \node[above right] at (TF_0.pin 6) {$A_0$};
+    % Logic Level above: y = 2.5
+   % \draw (TF_0.pin 6) -- ++(0.5, 0) coordinate (q0_out);
+    
+    % Route Q0 Up and Over to T1
+    %\draw (q0_out) to[short, -*] ++(0, 2.5) coordinate (q0_bus) -- (q0_bus -| TF_1.pin 1) -- (TF_1.pin 1);
+    %\node[above] at (q0_out |- q0_bus) {$A_0$};
 
     % T_A2 = A1A0
-    % AND gate for T_A2
-    \path (TF_2.pin 1) -- ++(-2, 0) coordinate (ta2_pos);
-    \node[and port, scale=0.8] (AND_TA2) at (ta2_pos) {};
-    \draw (AND_TA2.out) -- (TF_2.pin 1);
+    % AND gate for T_A2 placed above TF_2 area, or between TF_1 and TF_2
+    % Let's place it aligned with T input of TF_2 but higher? 
+    % Or simply place it comfortably above.
+    \draw (TF_1.pin 6) -- ++(0.5, 0) node[and port, anchor=in 2, scale=1] (AND_TA2) {$A_1A_0$};
+    
+    % Connect AND output to T_A2
+    \draw (AND_TA2.out) -| (TF_2.pin 1);
+    \draw (TF_0.pin 6) -- (TF_1.pin 1);
 
+    \path (TF_1.pin 1) -- ++(-1.5,0) node[circ] (A0_out){};
+    \draw (AND_TA2.in 1) -- ++(0,0.75) -| (A0_out);
     % Inputs to AND_TA2
+    % Input 2: A0 (from q0_bus)
+    % q0_bus is at y=2.5. AND_TA2 is at y=2.5.
+    %\draw (q0_bus) -- (AND_TA2.in 2);
+    
     % Input 1: A1 (from TF_1.Q)
-    \draw (TF_1.pin 6) -- (AND_TA2.in 1);
-    \node[above right] at (TF_1.pin 6) {$A_1$};
+    %\draw (TF_1.pin 6) -- ++(0.5, 0) coordinate (q1_out);
+    %\draw (q1_out) |- (AND_TA2.in 1);
+    %\node[right] at (q1_out |- AND_TA2.in 1) {$A_1$};
+
+    % Outputs Indication
+   % \draw (TF_0.pin 6) ++(0.5, 0) to[short, *-] ++(0, 1.5) node[above] {};
+   % \draw (TF_1.pin 6) ++(0.5, 0) to[short, *-] ++(0, 1.5) node[above] {};
+   % \draw (TF_2.pin 6) -- ++(1, 0) to[short, -] ++(0, 1.5) node[above, align=center] {$A_2$\\(MSB)};
+   % \node[above, align=center] at (TF_0.pin 6 |- q0_bus) [yshift=1cm] {$A_0$\\(LSB)};
+   % \node[above, align=center] at (TF_1.pin 6 |- q0_bus) [yshift=1cm] {$A_1$};
     
-    % Input 2: A0. Need to route A0 all the way from TF_0.Q
-    % Tap off the line between TF_0.Q and TF_1.T
-    \draw (TF_0.pin 6) ++(1.5, 0) node[circ] (A0_tap) {};
-    \draw (A0_tap) -- ++(0, -2) coordinate (A0_bot) -- ++(6, 0) |- (AND_TA2.in 2);
-
-    % Outputs (Q)
-    \draw (TF_2.pin 6) -- ++(1, 0) node[right] {$A_2$};
-
     % Clock Distribution
-    % Synchronous Counter: Connect all clocks together
-    \draw (TF_0.pin 3) -- ++(-0.5, 0) coordinate (clk_0);
-    \draw (TF_1.pin 3) -- ++(-0.5, 0) coordinate (clk_1);
-    \draw (TF_2.pin 3) -- ++(-0.5, 0) coordinate (clk_2);
+    \draw (clk_in) -- ++(13, 0) coordinate (clk_rail);
     
-    \draw (clk_in) -| (clk_0) -- (TF_0.pin 3);
-    \draw (clk_0) |- (clk_1) -- (TF_1.pin 3);
-    \draw (clk_1) |- (clk_2) -- (TF_2.pin 3);
-    
-    % Let's clean up clock routing to lower rail
-    %\draw (clk_in) -- ++(10, 0); 
-    % ... this is messy. Let's do common rail below.
+    \draw (TF_0.pin 3) -- (TF_0.pin 3 |- clk_rail) node[circ] {};
+    \draw (TF_1.pin 3) -- (TF_1.pin 3 |- clk_rail) node[circ] {};
+    \draw (TF_2.pin 3) -- (TF_2.pin 3 |- clk_rail) node[circ] {};
     
 \end{circuitikz}
 \end{document}

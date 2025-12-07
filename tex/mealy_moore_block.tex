@@ -21,16 +21,17 @@
         % Paths
         \path [line] (input) -- (nextstate);
         \path [line] (nextstate) -- (memory);
-        \path [line] (memory) -- (outputlog);
+        \draw [line] (memory) -- coordinate(mid) (outputlog);
         \path [line] (outputlog) -- (output);
         
         % Feedback
-        \draw [line] (memory.south) -- ++(0,-0.8) -| (nextstate.south);
+        \fill (mid) circle (2pt);
+        \draw [line] (mid) -- ++(0,-1.4) -| (nextstate.south);
         
         % Mealy Feature: Input directly to Output Logic
-        \draw [line] (input.south) -- ++(0,-1.5) -| (outputlog.south);
+        \draw [line][thick, orange] (input.north) -- ++(0,+1.2) -| (outputlog.north);
         
-        \node [above=0.2cm of nextstate, font=\bfseries] {Mealy Model};
+        \node [below=1cm of memory, font=\bfseries\Large, align=center] {Mealy Model};
     \end{scope}
 
     %% MOORE MODEL - Positioned below Mealy
@@ -44,16 +45,17 @@
         % Paths
         \path [line] (minput) -- (mnextstate);
         \path [line] (mnextstate) -- (mmemory);
-        \path [line] (mmemory) -- (moutputlog);
+        \draw [line] (mmemory) -- coordinate(mmid) (moutputlog);
         \path [line] (moutputlog) -- (moutput);
         
         % Feedback
-        \draw [line] (mmemory.south) -- ++(0,-0.8) -| (mnextstate.south);
+        \fill (mmid) circle (2pt);
+        \draw [line] (mmid) -- ++(0,-1.4) -| (mnextstate.south);
         
         % Moore Feature: Output depends ONLY on Memory (No direct input path to output logic)
         % (So we just leave it as is)
         
-        \node [above=0.2cm of mnextstate, font=\bfseries] {Moore Model};
+        \node [below=1cm of mmemory, font=\bfseries\Large, align=center] {Moore Model};
     \end{scope}
 
 \end{tikzpicture}
