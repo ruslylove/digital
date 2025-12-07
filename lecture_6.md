@@ -209,6 +209,8 @@ Logic symbols for the various latches discussed:
 <img src="/latch_symbols.svg" class="rounded-lg bg-white p-4 mx-auto w-180" alt="Latch Symbols">
 <p class="text-sm text-center">Figure 6-5. Logic Symbols for SR, S'R', and D Latches.</p>
 
+
+
 ---
 
 ### VHDL Implementation (D Latch)
@@ -257,12 +259,22 @@ This edge-triggered behavior prevents the multiple-transition problem and ensure
 <p class="text-sm text-center">Figure 6-6. Trigger Signals (Level, Positive Edge, Negative Edge).</p>
 
 ---
+layout: two-cols-header
+---
 
 ## Edge-Triggered D Flip-Flop
 
+<div class="text-base">
+
 The most common and efficient flip-flop. It captures the value of the D input at the active clock edge and stores it in Q.
 
+</div>
+
+:: left ::
+
 ### Master-Slave D Flip-Flop
+
+<div class="text-base">
 
 One way to build an edge-triggered flip-flop is with a master-slave configuration.
 
@@ -272,7 +284,17 @@ One way to build an edge-triggered flip-flop is with a master-slave configuratio
 
 The output Q only changes on the **falling edge** of the clock.
 
-<img src="https://i.imgur.com/mX77f3v.png" class="rounded-lg bg-white p-4 w-2/3" alt="Master-Slave D Flip-Flop">
+</div>
+
+:: right ::
+
+<img src="/master_slave_d_flip_flop.svg" class="rounded-lg bg-white w-90 p-4 mx-auto" alt="Master-Slave D Flip-Flop">
+<p class="text-sm text-center">Figure 6-7. Master-Slave D Flip-Flop.</p>
+
+<img src="/d_flip_flop_neg_edge.svg" class="rounded-lg bg-white w-45 p-4 mx-auto" alt="D Flip-Flop Negative Edge">
+<p class="text-sm text-center">Figure 6-8. D Flip-Flop Negative Edge.</p>
+
+---
 
 ### VHDL Implementation (D Flip-Flop)
 
@@ -297,68 +319,139 @@ end behavioral;
 ```
 
 ---
+layout: two-cols-header
+---
 
-## Other Flip-Flop Types
+## JK Flip-Flop
+JK flip-flop can be constructed from a D flip-flop and external gates.
 
-Other flip-flops can be constructed from a D flip-flop and external gates.
+:: left ::
 
-### JK Flip-Flop
-*   Inputs `J` (like Set) and `K` (like Reset).
-*   `J=0, K=0`: Holds state.
-*   `J=0, K=1`: Resets (Q=0).
-*   `J=1, K=0`: Sets (Q=1).
-*   `J=1, K=1`: **Toggles** the state (Q becomes Q'). This is the key advantage over an SR flip-flop.
-*   **Characteristic Equation:** `Q(t+1) = JQ' + K'Q`
+*   Inputs $J$ (like Set) and $K$ (like Reset).
+*   $J=0, K=0$: Holds state.
+*   $J=0, K=1$: Resets (Q=0).
+*   $J=1, K=0$: Sets (Q=1).
+*   $J=1, K=1$: **Toggles** the state (Q becomes Q'). This is the key advantage over an SR flip-flop.
+*   **Characteristic Equation:** 
+    * $Q(t+1) = JQ' + K'Q$
 
-### T Flip-Flop (Toggle)
+:: right ::
+
+<img src="/jk_flip_flop_from_d.svg" class="rounded-lg bg-white p-1 mx-auto w-100" alt="JK Flip-Flop from D Flip-Flop">
+<p class="text-sm text-center">Figure 6-9. Logic Diagram of a JK Flip-Flop from a D Flip-Flop.</p>
+
+<img src="/jk_flip_flop_symbol.svg" class="rounded-lg bg-white p-1 mx-auto w-28" alt="JK Flip-Flop Symbol">
+<p class="text-sm text-center">Figure 6-10. JK Flip-Flop Symbol.</p>
+
+
+
+
+---
+layout: two-cols-header
+---
+
+## T Flip-Flop (Toggle)
+
+:: left ::
+
 *   Single input `T`.
 *   `T=0`: Holds state.
 *   `T=1`: Toggles the state.
 *   Useful for building counters.
-*   **Characteristic Equation:** `Q(t+1) = T ⊕ Q`
+*   **Characteristic Equation:**  
+    * $Q(t+1) = T \oplus Q$
+
+
+<img src="/t_flip_flop_symbol.svg" class="rounded-lg bg-white p-4 mx-auto w-32 mt-7" alt="T Flip-Flop Symbol">
+<p class="text-sm text-center">Figure 6-11. T Flip-Flop Symbol.</p>
+
+
+:: right ::
+
+<img src="/t_flip_flop_from_jk.svg" class="rounded-lg bg-white p-4 mx-auto w-60" alt="T Flip-Flop from JK">
+<p class="text-sm text-center">Figure 6-12. T Flip-Flop from JK Flip-Flop.</p>
+
+
+<img src="/t_flip_flop_from_d.svg" class="rounded-lg bg-white p-2 mx-auto w-80" alt="T Flip-Flop from XOR">
+<p class="text-sm text-center">Figure 6-13. T Flip-Flop from D Flip-Flop.</p>
+  
+
+
+
+
 
 ---
 
-## Flip-Flop Characteristic Tables & Equations
+## Flip-Flop Characteristic Tables
 
-These define the next state `Q(t+1)` based on the current inputs and current state `Q(t)`.
+These define the next state $Q_{(t+1)}$ based on the current inputs and current state $Q_{(t)}$.
 
-<div class="grid grid-cols-3 gap-8">
+<div class="grid grid-cols-4 gap-4 text-center">
+
+<div>
+
+### SR Flip-Flop
+$Q_{(t+1)} = S + R'Q$
+
+$$
+\begin{array}{cc|c}
+S & R & Q_{(t+1)} \\
+\hline
+0 & 0 & Q_{(t)} \\
+0 & 1 & 0 \\
+1 & 0 & 1 \\
+1 & 1 & ? \\
+\end{array}
+$$
+
+</div>
 
 <div>
 
 ### D Flip-Flop
-`Q(t+1) = D`
+$Q_{(t+1)} = D$
 
-| D | Q(t+1) |
-|:-:|:------:|
-| 0 |   0    |
-| 1 |   1    |
+$$
+\begin{array}{c|c}
+D & Q_{(t+1)} \\
+\hline
+0 & 0 \\
+1 & 1 \\
+\end{array}
+$$
 
 </div>
 <div>
 
 ### T Flip-Flop
-`Q(t+1) = T ⊕ Q`
+$Q_{(t+1)} = T \oplus Q$
 
-| T | Q(t) | Q(t+1) |
-|:-:|:----:|:------:|
-| 0 |  Q   |    Q   |
-| 1 |  Q   |   Q'   |
+$$
+\begin{array}{c|c}
+T & Q_{(t+1)} \\
+\hline
+0 & Q_{(t)} \\
+1 & Q_{(t)}' \\
+\end{array}
+$$
 
 </div>
 
 <div>
 
 ### JK Flip-Flop
-`Q(t+1) = JQ' + K'Q`
+$Q_{(t+1)} = JQ' + K'Q$
 
-| J | K | Q(t+1) |
-|:-:|:-:|:------:|
-| 0 | 0 |  Q(t)  |
-| 0 | 1 |   0    |
-| 1 | 0 |   1    |
-| 1 | 1 |  Q'(t) |
+$$
+\begin{array}{cc|c}
+J & K & Q_{(t+1)} \\
+\hline
+0 & 0 & Q_{(t)} \\
+0 & 1 & 0 \\
+1 & 0 & 1 \\
+1 & 1 & Q_{(t)}' \\
+\end{array}
+$$
 
 </div>
 
