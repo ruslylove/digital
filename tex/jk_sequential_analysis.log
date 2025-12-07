@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=latex 2025.11.27)  7 DEC 2025 13:31
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=latex 2025.11.22)  7 DEC 2025 22:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -461,7 +461,7 @@ File: l3backend-dvips.def 2024-05-08 L3 backend support: dvips
 \g__pdf_backend_link_int=\count300
 \g__pdf_backend_link_sf_int=\count301
 )
-No file jk_sequential_analysis.aux.
+(./jk_sequential_analysis.aux)
 \openout1 = `jk_sequential_analysis.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 5.
@@ -485,7 +485,7 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <5> on input line 13.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 20.
+(Font)              <7> on input line 32.
 
 
 [1
@@ -497,12 +497,12 @@ L3 programming layer <2025-01-18>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 30827 strings out of 473191
- 816013 string characters out of 5715825
- 1459984 words of memory out of 5000000
- 53831 multiletter control sequences out of 15000+600000
+ 30849 strings out of 473191
+ 816957 string characters out of 5715825
+ 1465769 words of memory out of 5000000
+ 53851 multiletter control sequences out of 15000+600000
  560660 words of font info for 42 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  117i,8n,121p,446b,949s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on jk_sequential_analysis.dvi (1 page, 26404 bytes).
+Output written on jk_sequential_analysis.dvi (1 page, 28624 bytes).

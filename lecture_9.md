@@ -3,14 +3,12 @@ theme: seriph
 background: https://cover.sli.dev
 transition: fade
 layout: cover
-title: "Lecture 9 - Dedicated Microprocessors: Datapath" 
+title: "Lecture 9 - Dedicated Microprocessors: Datapath"
 ---
 
 # Lecture 9: Dedicated Microprocessors: Datapath
 {{ $slidev.configs.subject }}
-<div class="abs-br m-6 text-sm">
-010113025 Digital Circuits and Logic Design
-</div>
+
 
 {{ $slidev.configs.author }}
 ---

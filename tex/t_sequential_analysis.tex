@@ -7,7 +7,7 @@
     \ctikzset{logic ports=ieee}
     
     % Inputs - Leftmost
-    \node (clk_in) at (-1.5, -6) {CLK};
+    \node (clk_in) at (0.2, -5) {CLK};
     
     % Flip-Flops - Far Right
     % Custom T Flip Flop shape isn't standard in basic circuitikz sometimes, 
@@ -21,16 +21,19 @@
     \node[flipflop T] (TFF_B) at (10, -3) {};
     \node[above] at (TFF_B.n) {Flip-Flop B};
 
-    % Input x
-    \node (x_in_node) at (-2, 0) {$x$};
-    \draw (x_in_node) -- ++(2,0) coordinate (x_bus_top);
-    \node[circ] at (x_bus_top) {};
+  
     
     % Logic for TA = Bx
     % AND gate (B, x)
     \path (TFF_A.pin 1) -- ++(-3, 0) coordinate (ta_pos);
     \node[and port, anchor=out] (AND_TA) at (ta_pos) {$Bx$};
     \draw (AND_TA.out) -- (TFF_A.pin 1);
+
+  % Input x
+    \draw (AND_TA.in 2) to[short, -*] ++(-2, 0) coordinate (x_bus_top) -- ++(-1,0) node[left] {$x$};
+   % \node (x_in_node) at (-2, 0) {$x$};
+   % \draw (x_in_node) -- ++(2,0) coordinate (x_bus_top);
+    \node[circ] at (x_bus_top) {};
     
     % Logic for TB = x
     % Direct connection from x
@@ -47,21 +50,22 @@
     % Feedback Connections
     % B (TFF_B.pin 6)
     \draw (TFF_B.pin 6) -- ++(1, 0) coordinate (B_out);
-    \node[right] at (B_out) {$B$};
+    \node[above] at (B_out) {$B$};
+    \path (TFF_B.pin 6) -- ++(0.3, 0) coordinate (B_common);
     
     % B to AND_TA (input 1)
     % Loop UP 
-    \draw (B_out) -- ++(0, 5) coordinate (B_top) -| (AND_TA.in 1);
+    \draw (B_common) to[short, *-] ++(0, 6.2) coordinate (B_top) -| (AND_TA.in 1);
     
     % Output y = AB
     % AND gate connected to A and B
     % Place it to the right of FFs
-    \path (TFF_A.pin 6) -- ++(3, -2.5) coordinate (y_pos);
-    \node[and port] (AND_y) at (y_pos) {$AB$};
+    \path (TFF_A.pin 6) -- ++(2, 0) coordinate (y_pos);
+    \node[and port, anchor=in 1] (AND_y) at (y_pos) {$AB$};
     
     % A (TFF_A.pin 6)
     \draw (TFF_A.pin 6) -- ++(1, 0) coordinate (A_out);
-    \node[right] at (A_out) {$A$};
+    \node[above] at (A_out) {$A$};
     
     % Route A to AND_y (input 1)
     \draw (A_out) -| (AND_y.in 1);

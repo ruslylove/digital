@@ -8,9 +8,7 @@ title: Lecture 6 - Sequential Logic
 
 # Lecture 6: Latches, Flip-flops, & Synchronous Sequential Logic
 {{ $slidev.configs.subject }}
-<div class="abs-br m-6 text-sm">
-010113025 Digital Circuits and Logic Design
-</div>
+
 
 {{ $slidev.configs.author }}
 ---
@@ -201,30 +199,6 @@ Logic symbols for the various latches discussed:
 <p class="text-sm text-center">Figure 6-5. Logic Symbols for SR, S'R', and D Latches.</p>
 
 
-
----
-
-### VHDL Implementation (D Latch)
-
-```vhdl
-library ieee;
-use ieee.std_logic_1164.all;
-
-entity d_latch is
-    port ( D, C : in  std_logic;
-           Q    : out std_logic );
-end d_latch;
-
-architecture behavioral of d_latch is
-begin
-    process(C, D)
-    begin
-        if C = '1' then
-            Q <= D;
-        end if;
-    end process;
-end behavioral;
-```
 
 ---
 layout: two-cols-header
@@ -597,7 +571,7 @@ This completes the analysis. The state diagram fully describes the circuit's beh
 
 :: right ::
 
-<img src="/d_state_diagram.svg" class="rounded-lg bg-white p-4 w-90 mx-auto" alt="State Diagram for Analysis Example">
+<img src="/d_state_diagram.svg" class="rounded-lg bg-white p-4 w-75 mx-auto" alt="State Diagram for Analysis Example">
 <p class="text-sm text-center">Figure 6-15. State Diagram.</p>
 
 
@@ -613,7 +587,7 @@ The procedure is similar, but we use the JK flip-flop's characteristic equation:
 
 <div class="col-span-2">
 
-<img src="/jk_sequential_analysis.svg" class="rounded-lg bg-white p-4 w-100 mx-auto" alt="JK Flip-Flop Circuit for Analysis">
+<img src="/jk_sequential_analysis.svg" class="rounded-lg bg-white p-4 w-110 mx-auto" alt="JK Flip-Flop Circuit for Analysis">
 <p class="text-sm text-center">Figure 6-16. Logic Diagram of a Sequential Circuit with JK Flip-Flops.</p>
 
 </div>
@@ -732,9 +706,12 @@ $$
 :: right ::
 
 4.  **State Diagram (Moore Model):**
+    *   In a **Moore Model**, the output depends only on the flip-flop values (the state).
+    *   Nodes contain `State / Output`.
+    *   Edges represent transitions labeled with the `Input`.
 
-<img src="/t_state_diagram.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="State Diagram for T Circuit">
-<p class="text-sm text-center">Figure 6-19. State Diagram.</p>
+<img src="/t_state_diagram.svg" class="rounded-lg bg-white p-4 w-90 mx-auto" alt="State Diagram for T Circuit">
+<p class="text-sm text-center">Figure 6-19. State Diagram (Moore Model).</p>
 
 ---
 layout: two-cols-header
@@ -830,7 +807,7 @@ $$
 
 6.  **Draw the Logic Diagram:**
 
-<img src="/sequence_detector_circuit.svg" class="rounded-lg bg-white p-4 w-2/3 mx-auto" alt="Final Circuit for Sequence Detector">
+<img src="/sequence_detector_circuit.svg" class="rounded-lg bg-white p-4 w-170 mx-auto" alt="Final Circuit for Sequence Detector">
 <p class="text-sm text-center">Figure 6-22. Logic Diagram of '101' Sequence Detector.</p>
 
 ---
@@ -974,10 +951,6 @@ end fsm;
 
 ---
 
-
-
-
-
 ## Synthesis with T Flip-Flops: Binary Counter
 
 **Problem:** Design a 3-bit binary counter. This circuit has no inputs (besides the clock) and cycles through states 000 to 111.
@@ -1026,10 +999,14 @@ $$
 
 ---
 
-# Lecture 6 Summary
+## Lecture 6 Summary
 
-*   **Sequential Circuit Analysis:** The process of deriving state tables and state diagrams from logic diagrams to understand circuit behavior.
-*   **State Equations:** $Q(t+1)$ derived from flip-flop input equations and characteristic equations.
+*   **Latches vs. Flip-Flops:**
+    *   **Latches:** Level-sensitive (transparent). Output changes immediately with input while enabled.
+    *   **Flip-Flops:** Edge-triggered. Output changes only on the clock edge.
+*   **Sequential Circuit Analysis:** The process of deriving state tables and state diagrams from logic diagrams to understand behavior.
+*   **Design Procedure (Synthesis):**
+    *   Specification $\rightarrow$ State Diagram $\rightarrow$ State Table $\rightarrow$ Flip-Flop Input Equations $\rightarrow$ Logic Diagram.
 *   **Flip-Flop Characteristics:**
     *   **D:** $Q(t+1) = D$
     *   **JK:** $Q(t+1) = JQ' + K'Q$

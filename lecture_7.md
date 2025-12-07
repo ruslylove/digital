@@ -8,9 +8,7 @@ title: Lecture 7 - Registers and Counters
 
 # Lecture 7: Registers and Counters
 {{ $slidev.configs.subject }}
-<div class="abs-br m-6 text-sm">
-010113025 Digital Circuits and Logic Design
-</div>
+
 
 {{ $slidev.configs.author }}
 ---

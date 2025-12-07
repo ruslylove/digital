@@ -8,9 +8,7 @@ title: Lecture 5 - Combinational Circuit Building Blocks
 
 # Lecture 5: Combinational Circuit Building Blocks
 {{ $slidev.configs.subject }}
-<div class="abs-br m-6 text-sm">
-010113025 Digital Circuits and Logic Design
-</div>
+
 
 {{ $slidev.configs.author }}
 ---

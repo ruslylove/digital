@@ -8,9 +8,7 @@ title: Lecture 8 - Finite State Machine Applications
 
 # Lecture 8: Finite State Machine Applications
 {{ $slidev.configs.subject }}
-<div class="abs-br m-6 text-sm">
-010113025 Digital Circuits and Logic Design
-</div>
+
 
 {{ $slidev.configs.author }}
 ---
