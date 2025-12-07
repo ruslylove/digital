@@ -1,0 +1,71 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+\usetikzlibrary{calc}
+
+\begin{document}
+\begin{circuitikz}[american, scale=1.0]
+    \ctikzset{logic ports=ieee}
+    
+    % Inputs
+    \node (clk_in) at (-2, -6) {CLK};
+    \node (x_in_node) at (-2, 0) {$x$};
+    \draw (x_in_node) -- ++(2,0) coordinate (x_bus_top);
+    \node[circ] at (x_bus_top) {};
+
+    % Inverter for x (to get x')
+    % Place slightly lower
+    \node[not port, scale=0.8] (NOT_x) at (0, 2) {};
+    % Route x to NOT
+    \draw (x_bus_top) |- (NOT_x.in);
+    
+    % Flip-Flops
+    \node[flipflop D] (DFF_A) at (8, 2) {};
+    \node[above] at (DFF_A.n) {Flip-Flop A};
+    \node[flipflop D] (DFF_B) at (8, -3) {};
+    \node[above] at (DFF_B.n) {Flip-Flop B};
+
+    % Logic for DA = Bx'
+    % AND gate (B, x')
+    \path (DFF_A.pin 1) -- ++(-3, 0) coordinate (da_pos);
+    \node[and port] (AND_DA) at (da_pos) {$Bx'$};
+    \draw (AND_DA.out) -- (DFF_A.pin 1);
+    
+    % Logic for DB = x
+    % Direct connection from x
+    \draw (DFF_B.pin 1) -- ++(-1, 0) coordinate (DB_in);
+    \draw (x_bus_top) |- (DB_in) -- (DFF_B.pin 1);
+
+    % Connect x' to AND_DA (input 2 - bottom)
+    \draw (NOT_x.out) -- ++(0.5,0) |- (AND_DA.in 2);
+
+    % Feedback B to AND_DA (input 1 - top)
+    % B is at DFF_B.pin 6
+    \draw (DFF_B.pin 6) -- ++(1, 0) coordinate (B_out);
+    \node[right] at (B_out) {$B$};
+    \draw (B_out) -- ++(0, 6) coordinate (B_top) -| (AND_DA.in 1);
+
+    % Output Logic y = Ax (Mealy)
+    % AND gate connected to A and x
+    % Place to right of FF A
+    \path (DFF_A.pin 6) -- ++(4, -1) coordinate (y_pos);
+    \node[and port] (AND_y) at (y_pos) {$Ax$};
+    
+    % A to AND_y
+    \draw (DFF_A.pin 6) -- ++(1, 0) coordinate (A_out);
+    \node[right] at (A_out) {$A$};
+    \draw (A_out) -| (AND_y.in 1);
+
+    % x to AND_y
+    % Route x all the way
+    \draw (x_bus_top) -- ++(0, -7) coordinate (x_bus_bot) -- ++(12, 0) coordinate (x_far_right) |- (AND_y.in 2);
+    
+    % Output y
+    \draw (AND_y.out) -- ++(1, 0) node[right] {$y$};
+
+    % Clock Distribution
+    \draw (DFF_B.pin 3) -- ++(-0.5, 0) node[circ] (clk_node) {};
+    \draw (clk_in) -| (clk_node);
+    \draw (clk_node) |- (DFF_A.pin 3);
+
+\end{circuitikz}
+\end{document}
