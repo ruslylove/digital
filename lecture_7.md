@@ -289,7 +289,9 @@ In a **synchronous counter**, all flip-flops are triggered simultaneously by a c
 *   This design avoids the cumulative delay of ripple counters, making them faster and more suitable for high-frequency applications.
 *   The design follows the standard procedure for synchronous sequential circuits.
 
-<img src="https://i.imgur.com/7g9a83B.png" class="rounded-lg bg-white p-4 w-2/3" alt="4-bit Synchronous Binary Counter">
+<img src="/4bit_synchronous_counter.svg" class="rounded-lg bg-white p-4 w-full" alt="4-bit Synchronous Binary Counter">
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-12: 4-Bit Synchronous Binary Counter</div>
+
 
 ---
 
@@ -303,7 +305,9 @@ An up-down counter is capable of counting in both ascending and descending order
     *   **Up-count:** A flip-flop `Aᵢ` toggles if all lower-order bits `Aᵢ₋₁...A₀` are 1.
     *   **Down-count:** A flip-flop `Aᵢ` toggles if all lower-order bits `Aᵢ₋₁...A₀` are 0.
 
-<img src="https://i.imgur.com/j13z98m.png" class="rounded-lg bg-white p-4 w-full" alt="4-bit Up-Down Counter">
+<img src="/4bit_up_down_counter.svg" class="rounded-lg bg-white p-4 w-120" alt="4-bit Up-Down Counter">
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-13: 4-Bit Synchronous Up/Down Binary Counter</div>
+
 
 ---
 
@@ -316,14 +320,36 @@ Counters used in digital systems often require both counting and parallel loadin
 
 ### Function Table
 
-| Clear | CLK | Load | Count | Function                |
-|:-----:|:---:|:----:|:-----:|:------------------------|
-| 0     | X   | X    | X     | Clear to 0              |
-| 1     | ↑   | 1    | X     | Load inputs             |
-| 1     | ↑   | 0    | 1     | Count next binary state |
-| 1     | ↑   | 0    | 0     | No change               |
+<div class="flex justify-center my-4">
+$$
+\begin{array}{|c|c|c|c|l|}
+\hline
+\text{Clear} & \text{CLK} & \text{Load} & \text{Count} & \text{Function} \\
+\hline
+0 & X & X & X & \text{Clear to 0} \\
+1 & \uparrow & 1 & X & \text{Load inputs} \\
+1 & \uparrow & 0 & 1 & \text{Count next binary state} \\
+1 & \uparrow & 0 & 0 & \text{No change} \\
+\hline
+\end{array}
+$$
+</div>
+<div class="text-center text-sm opacity-50 mb-4">Table 7-3: Function Table for 4-Bit Counter with Parallel Load</div>
 
-<img src="https://i.imgur.com/o280i9Q.png" class="rounded-lg bg-white p-4 w-full" alt="4-bit Counter with Parallel Load">
+---
+
+<img src="/counter_parallel_load.svg" class="rounded-lg bg-white p-4 w-full" alt="4-bit Counter with Parallel Load">
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-14: 4-Bit Counter with Parallel Load</div>
+
+---
+
+### BCD Counter from Binary Counter
+
+
+<img src="/sequence_counter_approaches.svg" class="rounded-lg bg-white p-4 w-full" alt="4-bit Any Sequence Counter">
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-15: 4-Bit BCD Counter</div>
+
+---
 
 ### VHDL Implementation
 

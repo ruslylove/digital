@@ -1,0 +1,117 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+\usetikzlibrary{calc}
+
+\begin{document}
+\begin{circuitikz}[american, scale=1.0]
+    \ctikzset{logic ports=ieee}
+    \ctikzset{flipflops/scale=0.85}
+    
+    % Signals
+    \node (clk_in) at (-2, 0) {Clock};
+    \node (logic_1) at (0, 2) {Logic 1};
+    \node (count_en) at (-2, 2) {Count Enable}; % Optional, usually implicit or explicitly logic 1 if just a counter.
+    % Let's use Logic 1 node for simple counter.
+    
+    % Flip-Flops
+    % LSB (A0) on Left -> MSB (A3) on Right
+    
+    \def\ffdist{4.5}
+    \def\gatey{1.5} % Y position for AND gates
+    
+    \foreach \i [count=\n from 0] in {0,1,2,3} {
+        \pgfmathsetmacro{\xpos}{\n*\ffdist}
+        
+        % JK Flip-Flop
+        \node[flipflop JK] (FF\i) at (\xpos, 0) {};
+        
+        % Outputs
+        \node[above] at (FF\i.n) {$FF_\i$};
+        \draw (FF\i.pin 6) -- ++(0.5, 0) coordinate (Q\i_out);
+        \draw (Q\i_out) -- ++(0.5, 0) node[circ, label={above:$A_\i$}] {};
+        
+        % Input Connections (J, K)
+        % Create stubs
+        \draw (FF\i.pin 1) -- ++(-0.5, 0) coordinate (J_stub_\i);
+        \draw (FF\i.pin 3) -- ++(-0.5, 0) coordinate (K_stub_\i);
+        % Connect J and K together
+        \draw (J_stub_\i) -- (K_stub_\i);
+        \coordinate (JK_common_\i) at ($(J_stub_\i)!0.5!(K_stub_\i)$);
+        \node[circ] at (JK_common_\i) {};
+    }
+    
+    % Logic Implementation
+    
+    % FF0: J=K=1
+    \draw (JK_common_0) -- ++(0, 2) coordinate (top_0);
+    \draw (top_0) -- (logic_1);
+    \draw (logic_1) -- (count_en); % Put Logic 1/Enable
+    
+    % FF1: J=K=Q0
+    % Route Q0 to JK_common_1
+    \draw (Q0_out) ++(0.2, 0) coordinate (tap_Q0);
+    \node[circ] at (tap_Q0) {};
+    \draw (tap_Q0) -- ++(0, \gatey) coordinate (bus_Q0);
+    \draw (bus_Q0) -| (JK_common_1);
+    
+    % FF2: J=K=Q0*Q1
+    % AND Gate 1
+    % Inputs: Q1 and previous carry (Q0 or Enable? usually Q0*Enable)
+    % A synchronous counter logic: 
+    % T0 = 1
+    % T1 = Q0
+    % T2 = Q0*Q1
+    % T3 = Q0*Q1*Q2
+    
+    % Place AND gate between FF1 and FF2
+    \node[and port, scale=0.8] (AND1) at ($(FF1)!0.5!(FF2) + (0, \gatey)$) {};
+    
+    % Inputs to AND1: Q1 and Q0 (from logic line feeding FF1? No, from Q0 and Q1 directly)
+    % Connect Q1 to AND1.in 2
+    \draw (Q1_out) ++(0.2, 0) coordinate (tap_Q1);
+    \node[circ] at (tap_Q1) {};
+    \draw (tap_Q1) |- (AND1.in 2);
+    
+    % Connect Q0 (carry) to AND1.in 1
+    % We can tap from the line feeing FF1 inputs? 
+    % The line feeding FF1 inputs comes from Q0.
+    \draw (JK_common_1) ++(0, 0.5) coordinate (tap_carry_1);
+    \node[circ] at (tap_carry_1) {};
+    \draw (tap_carry_1) |- (AND1.in 1);
+    
+    % Output of AND1 to JK_common_2
+    \draw (AND1.out) -| (JK_common_2);
+    
+    % FF3: J=K=Q0*Q1*Q2 = (Q0*Q1) * Q2 = AND1_out * Q2
+    % Place AND gate between FF2 and FF3
+    \node[and port, scale=0.8] (AND2) at ($(FF2)!0.5!(FF3) + (0, \gatey)$) {};
+    
+    % Inputs to AND2: Q2 and AND1_out
+    % Tap AND1 output
+    \draw (AND1.out) ++(0.2, 0) coordinate (tap_carry_2);
+    \node[circ] at (tap_carry_2) {};
+    \draw (tap_carry_2) |- (AND2.in 1); % Top input
+    
+    % Tap Q2
+    \draw (Q2_out) ++(0.2, 0) coordinate (tap_Q2);
+    \node[circ] at (tap_Q2) {};
+    \draw (tap_Q2) |- (AND2.in 2); % Bottom input
+    
+    % Output of AND2 to JK_common_3
+    \draw (AND2.out) -| (JK_common_3);
+    
+    % Clock Distribution (Synchronous)
+    % Common clock line at bottom
+    \coordinate (clk_line_y) at ($(FF0.pin 2) + (0, -1.5)$);
+    \draw (clk_in) |- (clk_line_y);
+    
+    \foreach \i in {0,1,2,3} {
+        \draw (FF\i.pin 2) -- (FF\i.pin 2 |- clk_line_y) node[circ] {};
+    }
+    
+    % Label Clock
+    %\node[left] at (clk_in) {CLK};
+    % Clock symbol (triangle) is inside FF
+    
+\end{circuitikz}
+\end{document}
