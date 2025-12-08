@@ -1,0 +1,108 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+\usetikzlibrary{calc}
+
+\begin{document}
+\begin{circuitikz}[american, scale=1.0]
+    \ctikzset{logic ports=ieee}
+    \ctikzset{flipflops/scale=0.85}
+    
+    % Signals
+    \node (clk_in) at (-2, 0) {Clock};
+    \node (logic_1) at (0, 2) {Logic 1};
+    
+    % Flip-Flops
+    % LSB (A0) on Left -> MSB (A3) on Right
+    % Ripple Counter using JK Flip-Flops:
+    % J=K=1 for toggle.
+    % Output Q connects to Clock of next stage (Negative Edge).
+    
+    \def\ffdist{4.5}
+    
+    \foreach \i [count=\n from 0] in {0,1,2,3} {
+        \pgfmathsetmacro{\xpos}{\n*\ffdist}
+        
+        % JK Flip-Flop
+        \node[flipflop JK] (FF\i) at (\xpos, 0) {};
+        
+        % Outputs
+        \node[above] at (FF\i.n) {$FF_\i$};
+        \draw (FF\i.pin 6) -- ++(0.5, 0) coordinate (Q\i_out);
+        \draw (Q\i_out) -- ++(0.5, 0) node[circ, label={above:$A_\i$}] {};
+        
+        % J, K Input (pin 1, 3) -> Logic 1
+        \draw (FF\i.pin 1) -- ++(-0.5, 0) coordinate (J_stub);
+        \draw (FF\i.pin 3) -- ++(-0.5, 0) coordinate (K_stub);
+        \draw (J_stub) -- (J_stub |- logic_1) node[circ] {};
+        \draw (K_stub) -- (K_stub |- logic_1) node[circ] {};
+        
+        % Reset (Async Clear) - pin `down`
+        \draw (FF\i.down) -- ++(0, -0.3) coordinate (clr_stub_\i);
+    }
+    
+    % Logic 1 Rail
+    \draw (logic_1) -- (logic_1 -| FF3.pin 1);
+    
+    % Clock Connections (Ripple)
+    % A0 Clock -> External Clock
+    \draw (clk_in) -- (FF0.pin 2);
+    
+    % Ripple: Q of previous -> Clock of next
+    \draw (Q0_out) -- ++(0, -1.0) coordinate (rip0);
+    \draw (rip0) -- (rip0 -| FF1.pin 2) -- (FF1.pin 2);
+    
+    \draw (Q1_out) -- ++(0, -1.0) coordinate (rip1);
+    \draw (rip1) -- (rip1 -| FF2.pin 2) -- (FF2.pin 2);
+    
+    \draw (Q2_out) -- ++(0, -1.0) coordinate (rip2);
+    \draw (rip2) -- (rip2 -| FF3.pin 2) -- (FF3.pin 2);
+    
+    % Bubbles on Clock Inputs (Negative Edge)
+    \foreach \i in {0,1,2,3} {
+        \draw ($(FF\i.pin 2)$) circle (0.1);
+    }
+    
+    % BCD Reset Logic
+    % NAND Gate inputs from Q3 and Q1 (1010)
+    % Output to Reset line (Active Low)
+    
+    % Position NAND gate below
+    \node[nand port] (NAND) at ($(FF1)!0.5!(FF2) + (0, -3.5)$) {};
+    
+    % Inputs from Q1 and Q3
+    % Tap Q1
+    \draw (Q1_out) ++(0.2, 0) coordinate (tap_Q1);
+    \node[circ] at (tap_Q1) {};
+    \draw (tap_Q1) -- (tap_Q1 |- NAND.in 2) -- (NAND.in 2);
+    
+    % Tap Q3
+    \draw (Q3_out) ++(0.2, 0) coordinate (tap_Q3);
+    \node[circ] at (tap_Q3) {};
+    \draw (tap_Q3) -- ++(0.5, 0) -- ++(0, -4.5) coordinate (turn_Q3);
+    \draw (turn_Q3) -- (turn_Q3 -| NAND.in 1) -- (NAND.in 1);
+    
+    % NAND Output to Reset Line
+    \draw (NAND.out) -- ++(0.5, 0) -- ++(0, 0.5) coordinate (reset_line_y);
+    % Actually, need to connect to all clear inputs.
+    % Route a reset rail below FFs
+    
+    \coordinate (rail_y_level) at ($(FF0.down) + (0, -0.6)$);
+    \draw (NAND.out) -- ++(0.2, 0) |- (rail_y_level) -- (rail_y_level -| FF0.down) -- ++(-0.5, 0); 
+    
+    % Connect individual resets to rail
+    \foreach \i in {0,1,2,3} {
+        \draw (clr_stub_\i) -- (clr_stub_\i |- rail_y_level) node[circ] {};
+    }
+    
+    % Pull-up resistor symbol or just output? 
+    % NAND output drives reset directly.
+    % Maybe label "To Clear"
+    \node[above, font=\tiny] at (NAND.out) {Reset};
+    
+    % Bubbles on Clear Inputs (Active Low)
+    \foreach \i in {0,1,2,3} {
+        \draw ($(FF\i.down)$) circle (0.05); % Small bubble
+    }
+
+\end{circuitikz}
+\end{document}

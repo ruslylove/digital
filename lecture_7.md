@@ -38,7 +38,8 @@ A **register** is a group of flip-flops, with each flip-flop capable of storing 
 *   An *n-bit* register consists of *n* flip-flops and can store an *n-bit* binary word.
 *   In addition to the flip-flops, registers may have combinational gates that control how and when new information is transferred into the register.
 
-<img src="https://i.imgur.com/kYg3a7y.png" class="rounded-lg bg-white p-4 w-2/3" alt="4-bit Register">
+<img src="/4bit_register_diagram.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="4-bit Register">
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-1: 4-bit Register built from D Flip-Flops</div>
 
 ---
 
@@ -50,7 +51,9 @@ Loading a register means transferring new information into it. If all bits are t
 *   **If `Load = 1`:** The data from the input lines `I₀-I₃` is transferred into the flip-flops on the next clock edge.
 *   **If `Load = 0`:** The inputs are blocked, and the flip-flops retain their current value (feedback path).
 
-<img src="https://i.imgur.com/54y5U8B.png" class="rounded-lg bg-white p-4 w-full" alt="4-bit Register with Parallel Load">
+<img src="/4bit_register_parallel_load.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="4-bit Register with Parallel Load">
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-2: 4-bit Register with Parallel Load</div>
+
 
 ---
 
@@ -62,19 +65,57 @@ A **shift register** is a register capable of shifting its stored binary informa
 *   All flip-flops share a common clock.
 *   On each clock pulse, data is shifted one position down the line.
 
-<img src="https://i.imgur.com/f9m51e2.png" class="rounded-lg bg-white p-4 w-full" alt="4-bit Shift Register">
+<img src="/4bit_shift_register.svg" class="rounded-lg bg-white p-4 w-full" alt="4-bit Shift Register">
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-3: 4-bit Shift Register</div>
+
 
 ---
 
 ## Serial Transfer
+<div class="grid grid-cols-2 gap-8">
+
+<div>
 
 In a **serial transfer**, information is moved one bit at a time.
+
+
 
 *   The source register is shifted to move bits out of its serial output.
 *   The destination register is shifted to accept bits at its serial input.
 *   After *n* clock pulses, the *n-bit* transfer is complete.
 
-<img src="https://i.imgur.com/9y0T68o.png" class="rounded-lg bg-white p-4 w-full" alt="Serial Transfer Example">
+<img src="/serial_transfer.svg" class="rounded-lg bg-white p-4 w-80 mx-auto" alt="Serial Transfer Example">
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-4: Serial Transfer from Register A to Register B</div>
+
+</div>
+
+<div>
+
+<img src="/serial_transfer_timing.svg" class="rounded-lg bg-white p-4 w-full" alt="Timing Diagram">
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-5: Timing Diagram for Serial Transfer</div>
+
+
+<div class="mt-4 text-sm">
+$$
+\begin{array}{|c|c|c|c|}
+\hline
+\text{Timing Pulse} & \text{Serial Output} & \text{Register A} & \text{Register B} \\
+\hline
+\text{Initial} & - & 1011 & 0000 \\
+T_1 & 1 & 1101 & 1000 \\
+T_2 & 1 & 1110 & 1100 \\
+T_3 & 0 & 0111 & 0110 \\
+T_4 & 1 & 1011 & 1011 \\
+\hline
+\end{array}
+$$
+<div class="text-center text-sm opacity-50 mt-1">Table 7-1: Serial Transfer Example (A=1011)</div>
+</div>
+
+
+</div>
+
+</div>
 
 ---
 
@@ -86,7 +127,9 @@ A serial adder is a sequential circuit that adds two binary numbers one bit at a
 *   A single full adder (FA) performs the addition.
 *   A D flip-flop is used to store the carry-out from one bit position and use it as the carry-in for the next.
 
-<img src="https://i.imgur.com/3937Q1y.png" class="rounded-lg bg-white p-4 w-2/3" alt="Serial Adder with D Flip-Flop">
+<img src="/serial_adder.svg" class="rounded-lg bg-white p-4 w-80 mx-auto" alt="Serial Adder with D Flip-Flop">
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-6: Serial Adder using a Full Adder and D Flip-Flop</div>
+
 
 ---
 
@@ -103,11 +146,20 @@ A **universal shift register** is a versatile register with multiple modes of op
 
 A mode control input (e.g., `s₁s₀`) selects the operation.
 
+
+
 ---
 
-## 4-Bit Universal Shift Register
+### 4-Bit Universal Shift Register
 
 The operation is selected by inputs `s₁` and `s₀`. A 4x1 MUX is used for each flip-flop to select the appropriate input for the next state.
+
+
+<img src="/universal_shift_register.svg" class="rounded-lg bg-white p-4 w-full mb-4 col-span-2" alt="4-Bit Universal Shift Register">
+<div class="text-center text-sm opacity-50 mt-2 mb-8 col-span-2">Figure 7-7: 4-Bit Universal Shift Register</div>
+
+
+---
 
 <div class="grid grid-cols-2 gap-8">
 
@@ -115,18 +167,33 @@ The operation is selected by inputs `s₁` and `s₀`. A 4x1 MUX is used for eac
 
 ### Function Table
 
-| s₁ | s₀ | Operation      |
-|:--:|:--:|:---------------|
-| 0  | 0  | No change      |
-| 0  | 1  | Shift Right    |
-| 1  | 0  | Shift Left     |
-| 1  | 1  | Parallel Load  |
+
+<div class="mt-4 text-base">
+$$
+\begin{array}{|cc|l|cccc|}
+\hline
+\textbf{s}_1 & \textbf{s}_0 & \textbf{Operation} & \textbf{A}_3^+ & \textbf{A}_2^+ & \textbf{A}_1^+ & \textbf{A}_0^+ \\
+\hline
+0 & 0 & \text{No Change} & A_3 & A_2 & A_1 & A_0 \\
+0 & 1 & \text{Shift Right} & \text{SIR} & A_3 & A_2 & A_1 \\
+1 & 0 & \text{Shift Left} & A_2 & A_1 & A_0 & \text{SIL} \\
+1 & 1 & \text{Parallel Load} & I_3 & I_2 & I_1 & I_0 \\
+\hline
+\end{array}
+$$
+<div class="text-center text-sm opacity-50 mt-1">Table 7-2: 4-Bit Universal Shift Register Function Table</div>
+</div>
+
 
 </div>
 
-<img src="https://i.imgur.com/a9712qg.png" class="rounded-lg bg-white p-4" alt="4-bit Universal Shift Register Diagram">
+<img src="/universal_shift_register_block.svg" class="rounded-lg bg-white p-4" alt="4-bit Universal Shift Register Diagram">
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-8: Block Diagram of 4-Bit Universal Shift Register</div>
+
 
 </div>
+
+---
 
 ### VHDL Implementation
 
@@ -186,7 +253,9 @@ In a ripple counter, the clock is applied only to the first flip-flop. The outpu
 *   This creates a "rippling" effect as the state change propagates through the chain of flip-flops.
 *   Simple to construct, but slower than synchronous counters due to the cumulative propagation delay.
 
-<img src="https://i.imgur.com/y1q3954.png" class="rounded-lg bg-white p-4 w-2/3" alt="4-bit Ripple Counter">
+<img src="/4bit_ripple_counter.svg" class="rounded-lg bg-white p-4 w-180 mx-auto" alt="4-bit Ripple Counter">
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-9: 4-Bit Binary Ripple Counter</div>
+
 
 ---
 
@@ -197,7 +266,18 @@ A BCD counter counts from 0 to 9 (0000 to 1001) and then resets to 0.
 *   It can be constructed from a 4-bit binary counter by adding logic to force a reset to 0000 after the count of 1001.
 *   When the counter reaches 1010 (decimal 10), the NAND gate output goes low, asynchronously clearing all flip-flops.
 
-<img src="https://i.imgur.com/393kH7J.png" class="rounded-lg bg-white p-4 w-2/3" alt="BCD Ripple Counter Circuit">
+<img src="/bcd_state_diagram.svg" class="rounded-lg bg-white p-4 w-55 mx-auto" alt="State Diagram of BCD Counter">
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-10: State Diagram of BCD Counter</div>
+
+
+
+
+---
+
+<div class="my-8"></div>
+
+<img src="/bcd_ripple_counter.svg" class="rounded-lg bg-white p-4 w-full" alt="BCD Ripple Counter Logic Circuit">
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-11: BCD Ripple Counter Logic Circuit</div>
 
 ---
 

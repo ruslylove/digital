@@ -1,0 +1,127 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+\usetikzlibrary{calc}
+
+\begin{document}
+\begin{circuitikz}[american, scale=1.0]
+    \ctikzset{logic ports=ieee}
+    \ctikzset{flipflops/scale=0.8}
+    
+    % Define register style (reuse from serial_transfer.tex)
+    \tikzset{
+        register/.style={
+            draw, 
+            rectangle, 
+            minimum width=2.5cm, 
+            minimum height=1.5cm, 
+            fill=white,
+            align=center,
+            font=\small
+        }
+    }
+    
+    % Nodes
+    \node[register] (RegA) at (0, 0) {Register A\\(Augend)};
+    \node[register] (RegB) at (0, -3) {Register B\\(Addend)};
+    
+    % Full Adder - using a box or standard shape? 
+    % Standard logic box for FA
+    \node[draw, rectangle, minimum width=1.5cm, minimum height=2.0cm, align=center] (FA) at (5, -1.5) {Full\\Adder};
+    
+    % D Flip-Flop (Carry)
+    \node[flipflop D] (DFF) at (5, -4.5) {};
+    \node[below] at (DFF.s) {Q}; % Q output used as Carry In
+    
+    % Inputs
+    \node (clk_in) at (-3, -5) {Clock};
+    \node (shift_ctrl) at (-3, 2) {Shift Control};
+    \node (clr_in) at (3, -6) {Clear};
+    
+    % Register Pins
+    % Reg A
+    \coordinate (A_SI) at ($(RegA.west) + (0, 0.3)$);
+    \coordinate (A_SO) at ($(RegA.east) + (0, 0.3)$);
+    \coordinate (A_CLK) at ($(RegA.south) + (-0.5, 0)$);
+    \coordinate (A_Shift) at ($(RegA.north) + (0, 0)$);
+    
+    % Reg B
+    \coordinate (B_SI) at ($(RegB.west) + (0, 0.3)$);
+    \coordinate (B_SO) at ($(RegB.east) + (0, 0.3)$);
+    \coordinate (B_CLK) at ($(RegB.south) + (-0.5, 0)$);
+    \coordinate (B_Shift) at ($(RegB.north) + (0, 0)$);
+    
+    % Labels
+    \node[right, font=\tiny] at (A_SI) {SI};
+    \node[left, font=\tiny] at (A_SO) {SO};
+    \node[right, font=\tiny] at (B_SI) {SI}; % Reg B SI loops back usually? Assuming circular or just shift out
+    % Usually Reg B circulates to keep Addend? Or just shifts out. 
+    % Standard Serial Adder usually circulates B to preserve it if needed, or just loses it.
+    % Text says "uses two shift registers". Diagram usually shows B shifting out.
+    % Let's connect B_SO to FA.
+    \node[left, font=\tiny] at (B_SO) {SO};
+
+    % Full Adder Pins
+    % Let's define manual pins on the box
+    \coordinate (FA_x) at ($(FA.west) + (0, 0.5)$);
+    \coordinate (FA_y) at ($(FA.west) + (0, -0.5)$);
+    \coordinate (FA_cin) at ($(FA.south) + (0, 0)$);
+    \coordinate (FA_s) at ($(FA.north) + (0, 0)$);
+    \coordinate (FA_cout) at ($(FA.east) + (0, 0)$);
+    
+    \node[right, font=\tiny] at (FA_x) {x};
+    \node[right, font=\tiny] at (FA_y) {y};
+    \node[above, font=\tiny] at (FA_cin) {$C_{in}$};
+    \node[below, font=\tiny] at (FA_s) {S};
+    \node[left, font=\tiny] at (FA_cout) {$C_{out}$};
+
+    % Connections
+    
+    % Clock
+    \draw (clk_in) -- (clk_in -| A_CLK) -- (A_CLK);
+    \draw (clk_in -| A_CLK) -- (clk_in -| B_CLK) -- (B_CLK);
+    \draw (clk_in -| B_CLK) -- (clk_in -| DFF.pin 3) -- (DFF.pin 3);
+    \node[circ] at (clk_in -| A_CLK) {};
+    \node[circ] at (clk_in -| B_CLK) {};
+    \node[shape=inputarrow, rotate=90, scale=0.5] at (A_CLK) {};
+    \node[shape=inputarrow, rotate=90, scale=0.5] at (B_CLK) {};
+
+    % Shift Control
+    \draw (shift_ctrl) -- (shift_ctrl -| A_Shift) -- (A_Shift);
+    \draw (shift_ctrl -| A_Shift) -- (shift_ctrl -| B_Shift) -- (B_Shift);
+    \node[circ] at (shift_ctrl -| A_Shift) {};
+
+    % Data Paths
+    % Reg A SO -> FA x
+    \draw (A_SO) -- (FA_x |- A_SO) -- (FA_x);
+    
+    % Reg B SO -> FA y
+    \draw (B_SO) -- (FA_y |- B_SO) -- (FA_y);
+    
+    % Reg B SI usually connected to B SO to circulate?
+    % The user image link `https://i.imgur.com/3937Q1y.png` shows B circulates.
+    % Let's look at the implementation - "loop back from Reg A to its input" was previous request.
+    % For Serial Adder, A gets result S. B circulates.
+    \draw (B_SO) ++(0.5, 0) coordinate (tapB);
+    \draw (B_SO) -- (tapB); 
+    \node[circ] at (tapB) {};
+    \draw (tapB) -- ++(0, 1.2) coordinate (turnB1);
+    \draw (turnB1) -- (turnB1 -| B_SI) -- (B_SI);
+    
+    % FA Sum -> Reg A SI
+    \draw (FA_s) -- (FA_s |- A_SI) -- (A_SI);
+    
+    % FA Cout -> DFF D
+    % DFF D is pin 1.
+    \draw (FA_cout) -| (DFF.pin 1);
+    
+    % DFF Q -> FA Cin
+    % DFF Q is pin 6.
+    \draw (DFF.pin 6) -- ++(0.5, 0) -- ++(0, 1) coordinate (turnQ);
+    \draw (turnQ) -| (FA_cin);
+
+    % Clear
+    \draw (clr_in) -| (DFF.pin 4); % Assuming pin 4 is R/Clear on flipflop D (usually pin 4 is R(eset))
+    \node[left, font=\tiny] at (DFF.pin 4) {CLR};
+
+\end{circuitikz}
+\end{document}

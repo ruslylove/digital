@@ -1,0 +1,142 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+\usetikzlibrary{calc}
+
+\begin{document}
+\begin{circuitikz}[american, scale=1.0]
+    \ctikzset{logic ports=ieee}
+    \ctikzset{flipflops/scale=0.8}
+    
+    % Common Signals
+    \node (clk_in) at (-2, -3) {CLK};
+    \node (clr_in) at (-2, -3.5) {Clear};
+    \node (mode_s1) at (-4, -4) {$S_1$};
+    \node (mode_s0) at (-3, -4) {$S_0$};
+    
+    % Serial Inputs
+    \node (sir_in) at (-4, 2) {SIR (Shift Right)};
+    \node (sil_in) at (18, 2) {SIL (Shift Left)}; 
+    
+    % Layout parameters
+    \def\ffdist{5.0}
+    
+    % Draw 4 stages: A3, A2, A1, A0
+    % Order: Left to Right -> A3 ... A0? 
+    % Usually MSB A3 on left, LSB A0 on right for Shift Right (A3 -> A2 -> A1 -> A0).
+    % Let's assume A3 is leftmost.
+    
+    \foreach \i in {3,2,1,0} {
+        \pgfmathsetmacro{\xpos}{(3-\i)*\ffdist}
+        
+        % Flip-Flop
+        \node[flipflop D] (FF\i) at ((\xpos, 0) {};
+        \node[above] at (FF\i.n) {$A_\i$};
+        \draw (FF\i.pin 6) -- ++(0.5, 0) coordinate (Q\i_out) node[right] {};
+        % Output pin
+        \draw (Q\i_out) -- ++(0.2, 0) node[circ, label={above:$A_\i$}] {};
+        
+        % Clock
+        \draw (FF\i.pin 3) -- (FF\i.pin 3 |- clk_in) node[circ] {};
+        % Clear
+        \draw (FF\i.s) -- ++(0,-0.2) coordinate (clr_pt);
+        \draw (clr_pt) -- (clr_pt |- clr_in) node[circ] {};
+        
+        % 4x1 MUX
+        % Using muxdemux
+        % Inputs: 0(Hold), 1(Shift Right), 2(Shift Left), 3(Parallel Load)
+        % Note: Mux select 00 -> input 0? 
+        % Check standard logic: S1 S0. 
+        % 00: No Change (Hold) -> Input 0
+        % 01: Shift Right -> Input 1
+        % 10: Shift Left -> Input 2
+        % 11: Parallel Load -> Input 3
+        
+        \coordinate (mux_pos_\i) at ($(FF\i.pin 1) + (-1.5, 0)$);
+        
+        \node [muxdemux, 
+               muxdemux def={NL=4, NR=1, NB=2, w=1.0, Lh=4, Rh=3},
+               rotate=0, anchor=rpin 1] (MUX\i) at (mux_pos_\i) {};
+        
+        % Connect MUX Output to D input
+        \draw (MUX\i.rpin 1) -- (FF\i.pin 1);
+        
+        % Label inputs
+        \node[right, font=\tiny] at (MUX\i.lpin 1) {3}; % Topmost (usually input 0 or 3 depending on standard? TikZ defines lpin 1 as top)
+        % Let's verify standard 4x1: lpin 1 is top. 
+        % Let's assume we map:
+        % lpin 1 (Top) -> Input 3 (11) -> Parallel Load
+        % lpin 2 -> Input 2 (10) -> Shift Left
+        % lpin 3 -> Input 1 (01) -> Shift Right
+        % lpin 4 (Bottom) -> Input 0 (00) -> Hold
+        
+        \node[right, font=\tiny] at (MUX\i.lpin 1) {3};
+        \node[right, font=\tiny] at (MUX\i.lpin 2) {2};
+        \node[right, font=\tiny] at (MUX\i.lpin 3) {1};
+        \node[right, font=\tiny] at (MUX\i.lpin 4) {0};
+        
+        % Parallel Load (Input 3)
+        \draw (MUX\i.lpin 1) -- ++(-0.5, 0) node[circ, label={left:$I_\i$}] {};
+        
+        % Mode Select (Bottom pins)
+        \draw (MUX\i.bpin 1) -- (MUX\i.bpin 1 |- mode_s1) node[circ] {};
+        \draw (MUX\i.bpin 2) -- (MUX\i.bpin 2 |- mode_s0) node[circ] {};
+        
+        % Hold Connection (Input 0 - lpin 4)
+        % Feedback from Q
+        \coordinate (fb_start) at (MUX\i.lpin 4);
+        \draw (fb_start) -- ++(-0.2, 0) coordinate (fb_turn1);
+        \draw (fb_turn1) -- ++(0, -1.2) coordinate (fb_turn2);
+        
+        % Tap from Q
+        \coordinate (Q_tap) at ($(FF\i.pin 6) + (0.3, 0)$);
+        \draw (Q_tap) -- ++(0, -1.5) coordinate (Q_turn1);
+        \draw (Q_turn1) -- (Q_turn1 -| fb_turn2) -- (fb_turn2);
+        \node[circ] at (Q_tap) {};
+    }
+    
+    % Inter-stage Connections
+    
+    % Shift Right (Input 1 - lpin 3)
+    % A3 (Leftmost): Input from SIR
+    \draw (MUX3.lpin 3) -- (sir_in |- MUX3.lpin 3) -- (sir_in);
+    
+    % A2: Input from A3
+    \draw (MUX2.lpin 3) -- ++(-0.5, 0) coordinate (sr_turn);
+    \draw (sr_turn) -- (sr_turn |- Q3_out) -- (Q3_out);
+    
+    % A1: Input from A2
+    \draw (MUX1.lpin 3) -- ++(-0.5, 0) coordinate (sr_turn);
+    \draw (sr_turn) -- (sr_turn |- Q2_out) -- (Q2_out);
+    
+    % A0: Input from A1
+    \draw (MUX0.lpin 3) -- ++(-0.5, 0) coordinate (sr_turn);
+    \draw (sr_turn) -- (sr_turn |- Q1_out) -- (Q1_out);
+    
+    % Shift Left (Input 2 - lpin 2)
+    % A0 (Rightmost): Input from SIL
+    \draw (MUX0.lpin 2) -- (sil_in |- MUX0.lpin 2) -- (sil_in);
+    
+    % A1: Input from A0
+    \draw (MUX1.lpin 2) -- ++(-0.2, 0) coordinate (sl_turn);
+    \draw (sl_turn) -- ++(0, 0.5) coordinate (sl_up);
+    % Need to connect to Q0. Q0 is to the right.
+    \draw (sl_up) -- (sl_up -| Q0_out) -- (Q0_out);
+    
+    % A2: Input from A1
+    \draw (MUX2.lpin 2) -- ++(-0.2, 0) coordinate (sl_turn);
+    \draw (sl_turn) -- ++(0, 0.5) coordinate (sl_up);
+    \draw (sl_up) -- (sl_up -| Q1_out) -- (Q1_out);
+
+    % A3: Input from A2
+    \draw (MUX3.lpin 2) -- ++(-0.2, 0) coordinate (sl_turn);
+    \draw (sl_turn) -- ++(0, 0.5) coordinate (sl_up);
+    \draw (sl_up) -- (sl_up -| Q2_out) -- (Q2_out);
+    
+    % Common Rails
+    \draw (clk_in) -- (clk_in -| FF0.pin 3);
+    \draw (clr_in) -- (clr_in -| FF0.s);
+    \draw (mode_s1) -- (mode_s1 -| MUX0.bpin 1);
+    \draw (mode_s0) -- (mode_s0 -| MUX0.bpin 2);
+    
+\end{circuitikz}
+\end{document}
