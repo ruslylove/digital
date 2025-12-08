@@ -374,7 +374,7 @@ Sometimes, a function can have more than one minimal sum-of-products expression.
 2.  **Identify Prime Implicants:**
     *   $m₀, m₁, m₈, m₉$ $\rightarrow$ $B'C'$
     *   $m₀, m₂, m₈, m₁₀$ $\rightarrow$ $B'D'$
-    *   $m₅, m₇, m₁₃, m₁₅$ $\rightarrow$ $B'C'$
+    *   $m₅, m₇, m₁₃, m₁₅$ $\rightarrow$ $BD$
     *   $m₁, m₅, m₉, m₁₃$ $\rightarrow$ $C'D$
 3.  **Find Essential PIs:**
     *   $B'D'$ is essential (covers $m₂$, $m₁₀$).
