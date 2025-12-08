@@ -1,8 +1,8 @@
-PWD /Users/rus/development/digital/tex
+PWD /Users/rus/Development/slidev/digital/tex
 INPUT /usr/local/texlive/2025/texmf.cnf
 INPUT /usr/local/texlive/2025/texmf-dist/web2c/texmf.cnf
 INPUT /usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt
-INPUT /Users/rus/development/digital/tex/kmap_x_and_y.tex
+INPUT /Users/rus/Development/slidev/digital/tex/kmap_x_and_y.tex
 OUTPUT kmap_x_and_y.log
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/standalone/standalone.cls
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/standalone/standalone.cls
