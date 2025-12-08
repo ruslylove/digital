@@ -246,7 +246,7 @@ The light $L$ is ON ($1$) only if **both** switch $x1$ AND switch $x2$ are close
 
 $L(x1, x2) = x1 · x2$
 
-<img src="/AND.png" class="rounded-lg bg-white p-4 mt-4 w-90 mx-auto" alt="AND function with series switches">
+<img src="/switching_circuit_and.svg" class="rounded-lg bg-white p-4 mt-4 w-90 mx-auto" alt="AND function with series switches">
 <p class="text-sm text-center">Figure 2-3. Switching circuit as AND function.</p>
 ::right::
 
@@ -255,7 +255,7 @@ The light $L$ is ON ($1$) if switch $x1$ OR switch $x2$ (or both) are closed ($1
 
 $L(x1, x2) = x1 + x2$
 
-<img src="/OR.png" class="rounded-lg bg-white p-1 mt-1 w-83 mx-auto" alt="OR function with parallel switches">
+<img src="/switching_circuit_or.svg" class="rounded-lg bg-white p-1 mt-1 w-83 mx-auto" alt="OR function with parallel switches">
 <p class="text-sm text-center">Figure 2-4. Switching circuit as OR function.</p>
 
 ---
@@ -276,7 +276,7 @@ What if we want an action to occur when a switch is *opened* instead of closed? 
 
 ::right::
 
-<img src="/NOT.png" class="rounded-lg bg-white p-4 w-90 mx-auto" alt="NOT function with a switch">
+<img src="/switching_circuit_not.svg" class="rounded-lg bg-white p-4 w-90 mx-auto" alt="NOT function with a switch">
 <p class="text-sm text-center">Figure 2-5. Switching circuit as NOT function.</p>
 
 ---
@@ -435,7 +435,7 @@ Each basic logic operation (AND, OR, NOT) is implemented by a physical circuit e
 
 ::right::
 
-<img src="/logic_network.png" class="rounded-lg bg-white mx-auto" alt="Logic Network Diagram">
+<img src="/logic_network.svg" class="rounded-lg bg-white mx-auto" alt="Logic Network Diagram">
 <div class="text-sm text-center">
 
 Figure 2-6. A logic gate network of $f=(x_1+x_2) \cdot x_3$.
@@ -444,7 +444,8 @@ Figure 2-6. A logic gate network of $f=(x_1+x_2) \cdot x_3$.
 
 <div class="pl-2">
 
-```vhdl {4-12}{maxHeight:'190px',lines:true}
+**logic_function.vhd**
+```vhdl {*}{maxHeight:'200px',lines:true}
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
@@ -501,35 +502,40 @@ This is also known as the **canonical sum-of-products** form.
 ::right::
 
 ### Example
-<div class="grid grid-cols-2 gap-2">
 
-<div class="text-sm">
 
-| $a$ | $b$ | $c$ | $f$ | $\text{Minterm}$ |
-|:-:|:-:|:-:|:-:|:--------|
-| 0 | 0 | 0 | 0 | $m_0: a'b'c'$ |
-| 0 | 0 | 1 | **1** | $\bm{m_1: a'b'c}$   |
-| 0 | 1 | 0 | 0 | $m_2: a'bc'$       |
-| 0 | 1 | 1 | **1** | $\bm{m_3: a'bc}$    |
-| 1 | 0 | 0 | 0 | $m_4: ab'c'$       |
-| 1 | 0 | 1 | **1** | $\bm{m_5: ab'c}$    |
-| 1 | 1 | 0 | 0 | $m_6: abc'$       |
-| 1 | 1 | 1 | **1** | $\bm{m_7: abc}$     |
-</div>
+<div class="text-base">
 
-<div>
-<div class="p-4 border-1 border-solid border-black rounded-lg">
+$$
+\begin{array}{|c|c|c|c|l|}
+\hline
+a & b & c & f & \text{Minterm} \\
+\hline
+0 & 0 & 0 & 0 & m_0: a'b'c' \\
+0 & 0 & 1 & \mathbf{1} & \bm{m_1: a'b'c} \\
+0 & 1 & 0 & 0 & m_2: a'bc' \\
+0 & 1 & 1 & \mathbf{1} & \bm{m_3: a'bc} \\
+1 & 0 & 0 & 0 & m_4: ab'c' \\
+1 & 0 & 1 & \mathbf{1} & \bm{m_5: ab'c} \\
+1 & 1 & 0 & 0 & m_6: abc' \\
+1 & 1 & 1 & \mathbf{1} & \bm{m_7: abc} \\
+\hline
+\end{array}
+$$
+
+
+<div class="p-2 border-1 border-solid border-black rounded-lg text-base text-center">
 
 $f(a,b,c) = a'b'c + a'bc + ab'c + abc$
 </div>
 
 This can also be written using $m$ notation:
-<div class="p-4 border-1 border-solid border-black rounded-lg">
+<div class="p-2 border-1 border-solid border-black rounded-lg text-base text-center">
 
-$f(a,b,c) = m₁ + m₃ + m₅ + m₇ = Σm(1,3,5,7)$
+$f(a,b,c) = m_1 + m_3 + m_5 + m_7 = \Sigma m(1,3,5,7)$
 
 </div>
-</div>
+
 </div>
 
 <style>
@@ -573,34 +579,36 @@ This is also known as the **canonical product-of-sums** form.
 
 ### Example
 
-<div class="grid grid-cols-2 gap-16">
-<div class="text-sm">
 
-| $a$ | $b$ | $c$ | $f$ | $\text{Maxterm}$ |
-|:-:|:-:|:-:|:-:|:--------|
-| 0 | 0 | 0 | **0** | $\bm{M_0:a+b+c}$   |
-| 0 | 0 | 1 | 1 | $M_1:a+b+c'$        |
-| 0 | 1 | 0 | **0** | $\bm{M_2:a+b'+c}$  |
-| 0 | 1 | 1 | 1 | $M_3:a+b'+c'$       |
-| 1 | 0 | 0 | **0** | $\bm{M_4:a'+b+c}$  |
-| 1 | 0 | 1 | 1 | $M_5: a'+b+c'$      |
-| 1 | 1 | 0 | **0** | $\bm{M_6:a'+b'+c}$ |
-| 1 | 1 | 1 | 1 | $M_7: a'+b'+c'$     |
-</div>
+<div class="text-base">
 
-<div>
-<div class="p-2 border-1 border-solid border-black rounded-lg">
+$$
+\begin{array}{|c|c|c|c|l|}
+\hline
+a & b & c & f & \text{Maxterm} \\
+\hline
+0 & 0 & 0 & \mathbf{0} & \bm{M_0:a+b+c} \\
+0 & 0 & 1 & 1 & M_1:a+b+c' \\
+0 & 1 & 0 & \mathbf{0} & \bm{M_2:a+b'+c} \\
+0 & 1 & 1 & 1 & M_3:a+b'+c' \\
+1 & 0 & 0 & \mathbf{0} & \bm{M_4:a'+b+c} \\
+1 & 0 & 1 & 1 & M_5: a'+b+c' \\
+1 & 1 & 0 & \mathbf{0} & \bm{M_6:a'+b'+c} \\
+1 & 1 & 1 & 1 & M_7: a'+b'+c' \\
+\hline
+\end{array}
+$$
+
+<div class="border-1 border-solid border-black rounded-lg text-xs text-center">
 
 $f(a,b,c) = (a+b+c)·(a+b'+c)·(a'+b+c)·(a'+b'+c)$
 </div>
 
 This can also be written using $M$ notation:
 
-<div class="p-2 border-1 border-solid border-black rounded-lg">
+<div class="p-2 border-1 border-solid border-black rounded-lg text-base text-center">
 
 $f(a,b,c) = M₀ · M₂ · M₄ · M₆ = ΠM(0,2,4,6)$
-</div>
-
 </div>
 
 </div>
@@ -652,33 +660,21 @@ $f(x1,x2) = x1'x2' + x1'x2 + x1x2$
 
 ### Truth Table
 
-| $x1$ | $x2$ | $f$ |
-|:-:|:-:|:-:|
-| 0 | 0 | 1 |
-| 0 | 1 | 1 |
-| 1 | 0 | 0 |
-| 1 | 1 | 1 |
+$$
+\begin{array}{|c|c|c|}
+\hline
+x1 & x2 & f \\
+\hline
+0 & 0 & 1 \\
+0 & 1 & 1 \\
+1 & 0 & 0 \\
+1 & 1 & 1 \\
+\hline
+\end{array}
+$$
 
 </div>
 </div>
-
-<style>
-/* Target the table on this specific slide */
-table {
-  border-collapse: collapse; /* Merges adjacent borders */
-}
-
-/* Add a right border to all table headers and data cells */
-/* The value '1px solid #AC3520' uses your KMUTNB red color */
-th, td {
-  border-right: 1px solid #AAA; 
-}
-
-/* Optional: Remove the border from the very last column */
-th:last-child, td:last-child {
-  border-right: none;
-}
-</style>
 
 ---
 layout: two-cols
@@ -687,11 +683,11 @@ layout: two-cols
 The simplified form $x1' + x2$ requires far fewer gates.
 
 **Original Circuit for $x1'x2' + x1'x2 + x1x2$**
-<img src="/sop.png" class="rounded-lg bg-white p-2 w-80" alt="Complex circuit for unsimplified function">
+<img src="/sop_circuit.svg" class="rounded-lg bg-white p-2 w-80" alt="Complex circuit for unsimplified function">
 <div class="text-sm text-center">Figure 2-7. Original circuit. </div>
 
 **Simplified Circuit for $x1' + x2$**
-<img src="/simplified.png" class="rounded-lg bg-white p-2 mt-4 w-70" alt="Simple circuit for simplified function">
+<img src="/simplified_circuit.svg" class="rounded-lg bg-white p-2 mt-4 w-70" alt="Simple circuit for simplified function">
 <div class="text-sm text-center">Figure 2-8. Simplified circuit.</div>
 
 :: right ::
@@ -778,18 +774,24 @@ layout: two-cols-header
 
 ::right::
 **Truth Table:**
-<div class="text-xs">
+<div class="text-lg">
 
-| $\bm{x_1}$ | $\bm{x_2}$ | $\bm{x_3}$ | $\bm{f}$ |
-|:-:|:-:|:-:|:-:|
-| 0 | 0 | 0 | 0 |
-| 0 | 0 | 1 | **1** |
-| 0 | 1 | 0 | **1** |
-| 0 | 1 | 1 | 0 |
-| 1 | 0 | 0 | **1** |
-| 1 | 0 | 1 | 0 |
-| 1 | 1 | 0 | 0 |
-| 1 | 1 | 1 | **1** |
+$$
+\begin{array}{|c|c|c|c|}
+\hline
+\bm{x_1} & \bm{x_2} & \bm{x_3} & \bm{f} \\
+\hline
+0 & 0 & 0 & 0 \\
+0 & 0 & 1 & \mathbf{1} \\
+0 & 1 & 0 & \mathbf{1} \\
+0 & 1 & 1 & 0 \\
+1 & 0 & 0 & \mathbf{1} \\
+1 & 0 & 1 & 0 \\
+1 & 1 & 0 & 0 \\
+1 & 1 & 1 & \mathbf{1} \\
+\hline
+\end{array}
+$$
 
 </div>
 

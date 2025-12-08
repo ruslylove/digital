@@ -1,0 +1,59 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+
+\ctikzset{
+    logic ports=ieee,
+    logic ports/scale=0.7,
+}
+
+\begin{document}
+\begin{circuitikz}[thick]
+    % Vertical Bus Lines
+    % x1 at x=0, x1' at x=1
+    % x2 at x=2, x2' at x=3
+    
+    % Draw inputs and inverters for bus generation
+    \node at (0, 6) (x1) {$x_1$};
+    \draw (x1) -- (0, 1); % x1 bus
+    \node[not port, rotate=-90, scale=0.6] (N1) at (0.5, 5) {};
+    \draw  (N1.in) -| (x1);
+    \draw (N1.out) -- (0.5, 1) coordinate (x1p); % x1' bus
+    \node at (1, 6) (x2) {$x_2$};
+    \draw (x2) -- (1, 1) coordinate (x2p); % x2 bus
+    \node[not port, rotate=-90, scale=0.6] (N2) at (1.5, 5) {};
+    \draw (N2.in) -| (x2);
+    \draw (N2.out) -- (1.5, 1); % x2' bus
+    
+    % AND Gates
+    % A1: x1' x2'
+    \node[and port] (A1) at (3.5, 4) {};
+    % A2: x1' x2
+    \node[and port] (A2) at (3.5, 3) {};
+    % A3: x1 x2
+    \node[and port] (A3) at (3.5, 2) {};
+    
+    % Connections
+    % A1 inputs: x1' (bus 1) and x2' (bus 3)
+    \draw (A1.in 1) to[short,-*] (A1.in 1 -| x1p);
+    \draw (A1.in 2) to[short,-*] (A1.in 2 -| x2p);
+    
+    % A2 inputs: x1' (bus 1) and x2 (bus 2)
+    \draw (A2.in 1) to[short,-*] (A2.in 1 -| x1p);
+    \draw (A2.in 2) to[short,-*] (A2.in 2 -| x2);
+    
+    % A3 inputs: x1 (bus 0) and x2 (bus 2)
+    \draw (A3.in 1) to[short,-*] (A3.in 1 -| x1);
+    \draw (A3.in 2) to[short,-*] (A3.in 2 -| x2);
+    
+    % OR Gate
+    \node[or port, number inputs=3] (O1) at (7, 3) {};
+    
+    \draw (A1.out) -- ++(0.5,0) |- (O1.in 1);
+    \draw (A2.out) -- (O1.in 2);
+    \draw (A3.out) -- ++(0.5,0) |- (O1.in 3);
+    
+    % Output
+    \draw (O1.out) -- ++(0.5,0) node[right] {$f$};
+
+\end{circuitikz}
+\end{document}
