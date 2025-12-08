@@ -1,0 +1,121 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+\usetikzlibrary{calc}
+
+\begin{document}
+\begin{circuitikz}[american, scale=1.0]
+    \ctikzset{logic ports=ieee}
+    \ctikzset{flipflops/scale=0.85}
+    
+    % Signals
+    \node (clk_in) at (-2, 0) {Clock};
+    \node (logic_1) at (-2, 4) {Logic 1};
+    \node (up_in) at (-2, 3) {Up};
+    \node (down_in) at (-2, 1.5) {Down};
+    
+    % Flip-Flops
+    % LSB (A0) on Left -> MSB (A3) on Right
+    
+    \def\ffdist{5.5}
+    
+    \foreach \i [count=\n from 0] in {0,1,2,3} {
+        \pgfmathsetmacro{\xpos}{\n*\ffdist}
+        
+        % T Flip-Flop
+        \node[flipflop T] (FF\i) at (\xpos, 0) {};
+        
+        % Outputs
+        \node[above] at (FF\i.n) {$FF_\i$};
+        \draw (FF\i.pin 6) -- ++(0.5, 0) coordinate (Q\i_out);
+        \draw (Q\i_out) -- ++(0.5, 0) node[circ, label={above:$A_\i$}] {};
+        
+        % Qbar output needed for Down counting
+        \draw (FF\i.pin 4) -- ++(0.3, 0) coordinate (Qbar\i_out);
+    }
+    
+    % FF0 Logic: T=1
+    \draw (FF0.pin 1) -- ++(-0.5, 0) coordinate (T0_stub);
+    \draw (T0_stub) -- (T0_stub |- logic_1) -- (logic_1);
+    
+    % Cascading Carry/Borrow Logic
+    % We need to generate T inputs for FF1, FF2, FF3.
+    % T_i = (Up * Q_{i-1} * ... * Q_0) + (Down * Qbar_{i-1} * ... * Qbar_0)
+    % Implemented as cascading AND gates.
+    
+    % Carry Chain (Up)
+    % Borrow Chain (Down)
+    
+    % Stage 0 Logic to drive FF1 T input
+    % Need: (Up * Q0) + (Down * Qbar0)
+    % T1 = (Up * Q0) + (Down * Qbar0)
+    % Actually simpler:
+    % Carry0 = Up * Q0
+    % Borrow0 = Down * Qbar0
+    % T1 = Carry0 + Borrow0
+    
+    % AND gates position: between FFs, slightly up
+    
+    \foreach \i [count=\next from 1] in {0,1,2} {
+        % Logic between FF\i and FF\next
+        
+        % Coordinates
+        \coordinate (mid_x) at ($(FF\i)!0.5!(FF\next)$);
+        
+        % Upper AND gate (Up count)
+        \node[and port, scale=0.7] (AND_UP_\i) at ($(mid_x) + (0, 3.0)$) {};
+        
+        % Lower AND gate (Down count)
+        \node[and port, scale=0.7] (AND_DOWN_\i) at ($(mid_x) + (0, 1.5)$) {};
+        
+        % OR gate (Combines for T input of next FF)
+        \node[or port, scale=0.7] (OR_\i) at ($(mid_x) + (1.0, 2.25)$) {};
+        
+        % Connections for AND_UP_\i
+        % Input 1: Up Control (Cascaded or direct?)
+        % Cascaded: Input comes from previous Up-AND output? 
+        % Wait, cascading:
+        % T1: Up*Q0 + Down*Qbar0.
+        % T2: Up*Q0*Q1 + Down*Qbar0*Qbar1.
+        % So Input 1 of AND_UP_1 is Output of AND_UP_0.
+        % Input 2 is Q1.
+        
+        % Connections for AND_UP_\i
+        \ifnum\i=0
+            % First stage: Inputs are directly Up and Down signals
+            \draw (up_in) -| (AND_UP_0.in 1);
+            \draw (down_in) -| (AND_DOWN_0.in 2);
+        \else
+            % Subsequent stages: Inputs from previous AND outputs
+            \pgfmathsetmacro{\prev}{int(\i-1)}
+            \draw (AND_UP_\prev.out) -- ++(0.2, 0) |- (AND_UP_\i.in 1);
+            \draw (AND_DOWN_\prev.out) -- ++(0.2, 0) |- (AND_DOWN_\i.in 2);
+        \fi
+        
+        % Q Connections
+        % Connect Q\i to AND_UP_\i input 2
+        \draw (Q\i_out) ++(0.2, 0) coordinate (tap_Q\i);
+        \node[circ] at (tap_Q\i) {};
+        \draw (tap_Q\i) |- (AND_UP_\i.in 2);
+        
+        % Connect Qbar\i to AND_DOWN_\i input 1
+        \draw (Qbar\i_out) ++(0.2, 0) coordinate (tap_Qbar\i); % Qbar is pin 4 (bottom)
+        \draw (tap_Qbar\i) -- ++(0.2, 0) |- (AND_DOWN_\i.in 1);
+        
+        % Inputs to OR gate
+        \draw (AND_UP_\i.out) |- (OR_\i.in 1);
+        \draw (AND_DOWN_\i.out) |- (OR_\i.in 2);
+        
+        % Output of OR gate drives T input of next FF
+        \draw (OR_\i.out) -- ++(0.2, 0) |- (FF\next.pin 1);
+    }
+    
+    % Clock Distribution
+    \coordinate (clk_line_y) at ($(FF0.pin 2) + (0, -1.5)$);
+    \draw (clk_in) |- (clk_line_y);
+    
+    \foreach \i in {0,1,2,3} {
+        \draw (FF\i.pin 2) -- (FF\i.pin 2 |- clk_line_y) node[circ] {};
+    }
+
+\end{circuitikz}
+\end{document}
