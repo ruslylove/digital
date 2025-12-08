@@ -94,7 +94,7 @@ A two-variable map contains 2² = 4 squares, one for each possible minterm.
 
 ::right::
 
-<div class="grid grid-cols-2 gap-1 text-center text-sm">
+<div class="grid grid-cols-2 text-center text-sm">
 <div>
 
 **Minterm Layout**
@@ -312,7 +312,7 @@ A four-variable map contains $2⁴ = 16$ squares. The structure is extended from
 
 :: right ::
 
-<img src="/kmap_4x4_structure.svg" class="rounded-lg bg-white p-1 mt-2 w-80 mx-auto" alt="4-variable K-map layout">
+<img src="/kmap_4x4_structure.svg" class="rounded-lg bg-white p-2 mt-2 w-80 mx-auto" alt="4-variable K-map layout">
 <p class="text-sm text-center">Figure 3-8. Four-variable K-map structure.</p>
 
 
@@ -352,7 +352,7 @@ $F = y' + w'z' + xz'$
 
 </div>
 
-<img src="/kmap_4x4_ex5.svg" class="w-60 mx-auto" alt="K-map for F(w,x,y,z) = Σ(0,1,2,4,5,6,8,9,12,13,14)">
+<img src="/kmap_4x4_ex5.svg" class="w-60 mx-auto bg-white p-2 rounded-lg" alt="K-map for F(w,x,y,z) = Σ(0,1,2,4,5,6,8,9,12,13,14)">
 <p class="text-sm text-center">Figure 3-9. K-map from Example 5.</p>
 
 
@@ -383,7 +383,7 @@ Sometimes, a function can have more than one minimal sum-of-products expression.
 :: right ::
 4.  **Cover Remaining 1s:** The remaining $1$s ($m₁, m₉$) can be covered in two ways, leading to two minimal solutions.
 
-<img src="/kmap_4x4_ex6_1.svg" class="mx-auto w-55 p-2"/>
+<img src="/kmap_4x4_ex6_1.svg" class="mx-auto w-50 pt-4 p-2 rounded-lg bg-white"/>
 <p class="text-sm text-center">Figure 3-10. K-map from Example 6.</p>
 
 ---
@@ -398,7 +398,7 @@ Group $m₀,m₁,m₈,m₉$ to get $B'C'$.
 
 $F = BD + B'D' + B'C'$
 
-<img src="/kmap_4x4_ex6_sol_1.svg" class="rounded-lg bg-white p-4 w-55 " alt="K-map solution 1">
+<img src="/kmap_4x4_ex6_sol_1.svg" class="rounded-lg bg-white p-4 w-55 mx-auto" alt="K-map solution 1">
 <p class="text-sm text-center">Figure 3-11. K-map Solution 1.</p>
 
 </div>
@@ -410,7 +410,7 @@ Group $m₁,m₅,m₉,m₁₃$ to get $C'D$.
 
 $F = BD + B'D' + C'D$
 
-<img src="/kmap_4x4_ex6_sol_2.svg" class="rounded-lg bg-white p-4 w-55" alt="K-map solution 1">
+<img src="/kmap_4x4_ex6_sol_2.svg" class="rounded-lg bg-white p-4 w-55 mx-auto" alt="K-map solution 1">
 <p class="text-sm text-center">Figure 3-12. K-map Solution 2.</p>
 </div>
 </div>
@@ -465,7 +465,7 @@ $F = yz + w'x'$
 
 <div>
 
-<img src="/kmap_dontcare.svg" class="rounded-lg bg-white p-2 mx-auto" alt="K-map with Don't Cares">
+<img src="/kmap_dontcare.svg" class="rounded-lg bg-white p-5 mx-auto w-full" alt="K-map with Don't Cares">
 <p class="text-sm text-center">Figure 3-13. Don't Care condition K-map.</p>
 
 </div>
@@ -743,10 +743,10 @@ The checkerboard pattern of XOR/XNOR functions is easy to spot on a K-map.
 ### Odd Function (XOR)
 $F = A ⊕ B ⊕ C = Σm(1,2,4,7)$
 
-<img src="/kmap_odd.svg" class="rounded-lg bg-white p-4 w-50" alt="3-variable XOR K-map">
+<img src="/kmap_odd.svg" class="rounded-lg bg-white p-4 w-50 mx-auto" alt="3-variable XOR K-map">
 
 **Logic Diagram**
-<img src="/logic_odd.svg" class="rounded-lg bg-white p-4 w-80" alt="3-input XOR gate">
+<img src="/logic_odd.svg" class="rounded-lg bg-white p-4 w-80 mx-auto" alt="3-input XOR gate">
 <p class="text-sm text-center">Figure 3-23. Odd Function Logic.</p>
 
 ::right::
@@ -754,10 +754,10 @@ $F = A ⊕ B ⊕ C = Σm(1,2,4,7)$
 ### Even Function (XNOR)
 $F = (A ⊕ B ⊕ C)' = Σm(0,3,5,6)$
 
-<img src="/kmap_even.svg" class="rounded-lg bg-white p-4 w-50" alt="3-variable XNOR K-map">
+<img src="/kmap_even.svg" class="rounded-lg bg-white p-4 w-50 mx-auto" alt="3-variable XNOR K-map">
 
 **Logic Diagram**
-<img src="/logic_even.svg" class="rounded-lg bg-white p-4 w-80" alt="3-input XNOR gate">
+<img src="/logic_even.svg" class="rounded-lg bg-white p-4 w-80 mx-auto" alt="3-input XNOR gate">
 <p class="text-sm text-center">Figure 3-24. Even Function Logic.</p>
 
 ---
@@ -799,10 +799,16 @@ This circuit checks a 4-bit message ($x,y,z,P$) for errors. If the number of $1$
 
 </div>
 
+<a href="https://circuitverse.org/simulator/embed/parity-checker-77179d3f-6da0-45d6-bb0a-e72009a519d4?theme=&display_title=false&clock_time=true&fullscreen=true&zoom_in_out=true" target="_blank" class="absolute top-10 right-5">
+  <img src="https://circuitverse.org/assets/CircuitVerse-558fed735d596318cc9b80f9d68e20fa7401c0bbb3718a64bd4f8690fcb23255.svg" class="w-30" />
+</a>
+
 ---
 
 
 ### VHDL Implementation
+
+
 
 <div class="grid grid-cols-2 gap-4">
 <div>
