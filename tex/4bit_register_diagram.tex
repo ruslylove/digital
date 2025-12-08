@@ -1,0 +1,93 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+\usetikzlibrary{calc}
+
+\begin{document}
+\begin{circuitikz}[american, scale=1.0]
+    \ctikzset{logic ports=ieee}
+    \ctikzset{flipflops/scale=0.8}
+    
+    % Common Clock and Clear Inputs
+    \node (clk_in) at (-2, -1.5) {CLK};
+    \node (clr_in) at (-1, -2) {Clear};
+    
+    % Flip-Flops A0-A3 from Left to Right or Top to Bottom?
+    % Usually registers are drawn nicely in a row.
+    % The example image shows them 0 to 3 (left to right or right to left depends on standard, usually MSB left).
+    % Let's standard 0 (LSB) on right or left?
+    % The user image had 4 flip flops. usually indices match bit position.
+    % Let's draw 3 down to 0 from left to right, or 0 to 3.
+    % Standard schematic often puts LSB on right. Let's do A3 A2 A1 A0.
+    
+    % Positioning
+    \def\ffdist{4.5}
+    
+    % Flip-Flop 3 (MSB)
+    \node[flipflop D] (FF3) at (0, 0) {};
+    \node[above] at (FF3.n) {$D_3$};
+    
+    % Flip-Flop 2
+    \node[flipflop D] (FF2) at (\ffdist, 0) {};
+    \node[above] at (FF2.n) {$D_2$};
+
+    % Flip-Flop 1
+    \node[flipflop D] (FF1) at (2*\ffdist, 0) {};
+    \node[above] at (FF1.n) {$D_1$};
+
+    % Flip-Flop 0 (LSB)
+    \node[flipflop D] (FF0) at (3*\ffdist, 0) {};
+    \node[above] at (FF0.n) {$D_0$};
+    
+    % Data Inputs
+    \draw (FF3.pin 1) -- ++(-0.5, 0) node[left] {$I_3$};
+    \draw (FF2.pin 1) -- ++(-0.5, 0) node[left] {$I_2$};
+    \draw (FF1.pin 1) -- ++(-0.5, 0) node[left] {$I_1$};
+    \draw (FF0.pin 1) -- ++(-0.5, 0) node[left] {$I_0$};
+    
+    % Outputs
+    \draw (FF3.pin 6) -- ++(0.5, 0) node[right] {$A_3$};
+    \draw (FF2.pin 6) -- ++(0.5, 0) node[right] {$A_2$};
+    \draw (FF1.pin 6) -- ++(0.5, 0) node[right] {$A_1$};
+    \draw (FF0.pin 6) -- ++(0.5, 0) node[right] {$A_0$};
+    
+    % Clock Distribution
+    \draw (clk_in) -- ++(1, 0) coordinate (clk_start);
+    \draw (clk_start) -- (clk_start -| FF0.pin 3) coordinate (clk_end);
+    
+    \draw (FF3.pin 3) to[short, -*] (FF3.pin 3 |- clk_end);
+    \draw (FF2.pin 3) to[short, -*] (FF2.pin 3 |- clk_end);
+    \draw (FF1.pin 3) to[short, -*] (FF1.pin 3 |- clk_end);
+    \draw (FF0.pin 3) to[short] (FF0.pin 3 |- clk_end);
+
+    % Clear Distribution (Assuming active low or high reset? Usually async active low or high.)
+    % Let's assume standard async clear (often active low, but labeled Clear).
+    % If using 'flipflop D', typically pin 3 is clk. 
+    % Let's see if we can add 'clear' capability. Many circuitikz FlipFlops have R/S or similar.
+    % Using 'flipflop D' usually has set/reset pins if configured or we can draw lines.
+    % Actually standard 'flipflop D' might not show top/bottom pins by default unless specified or needed.
+    % Let's just draw lines to bottom if not standard pins.
+    % Or use "flipflop D, dot on reset" if desirable.
+    % Let's assume 'Clear' connects to a reset pin (typically pin 4 or similar, depends on version).
+    % Let's manually draw to bottom of rectangle for generic visual.
+    
+    \draw (clr_in) -- ++(1, 0) coordinate (clr_start);
+    \draw (clr_start) -- (clr_start -| FF0.s) coordinate (clr_end); 
+    % Note: .s represents south anchor, might not be exact reset pin. 
+    % Standard async clear usually at bottom or top. Let's use bottom.
+    
+    % Connecting Clear to each FF
+    \draw (FF3.s) -- ++(0,-0.2) coordinate (clr3);
+    \draw (FF2.s) -- ++(0,-0.2) coordinate (clr2);
+    \draw (FF1.s) -- ++(0,-0.2) coordinate (clr1);
+    \draw (FF0.s) -- ++(0,-0.2) coordinate (clr0);
+    
+    \draw (clr3) to[short, -*] (clr3 |- clr_end);
+    \draw (clr2) to[short, -*] (clr2 |- clr_end);
+    \draw (clr1) to[short, -*] (clr1 |- clr_end);
+    \draw (clr0) -- (clr0 |- clr_end);
+    
+    % Add bubbles if active low? "Clear" usually means active high clears it (or active low).
+    % Let's skip bubbles to keep it generic unless specified.
+    
+\end{circuitikz}
+\end{document}
