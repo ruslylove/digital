@@ -118,17 +118,59 @@ $$
 </div>
 
 ---
+layout: two-cols-header
+---
 
 ## Serial Adder
 
 A serial adder is a sequential circuit that adds two binary numbers one bit at a time.
 
+:: left ::
 *   It uses two shift registers to hold the numbers to be added.
 *   A single full adder (FA) performs the addition.
 *   A D flip-flop is used to store the carry-out from one bit position and use it as the carry-in for the next.
 
-<img src="/serial_adder.svg" class="rounded-lg bg-white p-4 w-80 mx-auto" alt="Serial Adder with D Flip-Flop">
+
+
+:: right ::
+
+<img src="/serial_adder.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Serial Adder with D Flip-Flop">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-6: Serial Adder using a Full Adder and D Flip-Flop</div>
+
+
+---
+
+### Serial Adder Operation Example
+
+<div class="text-sm">
+
+Let's trace the operation for **A = 1001** (9) and **B = 0011** (3).  
+The Sum should be **1100** (12).
+
+$$
+\begin{array}{|c|c|c|c|c|c|c|}
+\hline
+\text{Time} & \text{Shift Current} & \text{Shift Next} & \text{Reg A (Augend)} & \text{Reg B (Addend)} & \text{Full Adder inputs} & \text{Output} \\
+\text{Pulse} & \text{State} & \text{State} & Q_3 Q_2 Q_1 Q_0 & Q_3 Q_2 Q_1 Q_0 & x \quad y \quad C_{in} & S \quad C_{out} \\
+\hline
+\text{Initial} & - & - & 1 \ 0 \ 0 \ 1 & 0 \ 0 \ 1 \ 1 & - \quad - \quad 0 & - \quad - \\
+T_1 & 1 & 0 & 0 \ 1 \ 0 \ 0 & 1 \ 0 \ 0 \ 1 & 1 \quad 1 \quad 0 & 0 \quad 1 \\
+T_2 & 0 & 1 & 0 \ 0 \ 1 \ 0 & 1 \ 1 \ 0 \ 0 & 0 \quad 1 \quad 1 & 0 \quad 1 \\
+T_3 & 1 & 0 & 1 \ 0 \ 0 \ 1 & 0 \ 1 \ 1 \ 0 & 0 \quad 0 \quad 1 & 1 \quad 0 \\
+T_4 & 0 & 0 & 1 \ 1 \ 0 \ 0 & 0 \ 0 \ 1 \ 1 & 1 \quad 0 \quad 0 & 1 \quad 0 \\
+\hline
+\text{Final} & - & - & \mathbf{1 \ 1 \ 0 \ 0} & 0 \ 0 \ 1 \ 1 & - \quad - \quad - & - \quad - \\
+\hline
+\end{array}
+$$
+
+*   Initially, $C_{in}$ (from D Flip-Flop) is cleared to 0.
+*   At each clock pulse ($T_1 \dots T_4$), the LSBs are added with $C_{in}$.
+*   The Sum ($S$) is shifted into the MSB of Register A.
+*   Register B is rotated (circulated) so its value is preserved.
+*   $C_{out}$ is stored in the D Flip-Flop for the next step.
+
+</div>
 
 
 ---

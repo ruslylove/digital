@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1765198042.4208 "/Users/rus/development/digital/tex/serial_adder.tex" "serial_adder.pdf" "serial_adder" 1765198044.00207 0
-  "/Users/rus/development/digital/tex/serial_adder.tex" 1765198004.08785 4564 b7afd13964954f32bdd3dadd57c95b65 ""
+["pdflatex"] 1765266588.78088 "/Users/rus/Development/slidev/digital/tex/serial_adder.tex" "serial_adder.pdf" "serial_adder" 1765266589.65561 0
+  "/Users/rus/Development/slidev/digital/tex/serial_adder.tex" 1765266588.58846 4484 5ff29e8d2a79fd282e205eed20799779 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmmi6.tfm" 1136768653 1512 f21f83efb36853c0b70002322c1ab3ad ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmmi9.tfm" 1136768653 1524 d89e2d087a9828407a196f428428ef4a ""
@@ -122,11 +122,11 @@
   "/usr/local/texlive/2025/texmf-dist/tex/latex/xcolor/xcolor.sty" 1727642399 55384 b454dec21c2d9f45ec0b793f0995b992 ""
   "/usr/local/texlive/2025/texmf-dist/tex/latex/xkeyval/xkeyval.sty" 1655411236 4937 4ce600ce9bd4ec84d0250eb6892fcf4f ""
   "/usr/local/texlive/2025/texmf-dist/web2c/texmf.cnf" 1739380943 42148 61becc7c670cd061bb319c643c27fdd4 ""
-  "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1763819811 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
-  "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1763819727 3345735 98e8d6ce829fe76d41a990640e1359a8 ""
+  "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1764314756 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
+  "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1764314698 3345742 bbccbb8f48738580c120d7e243c4d5b7 ""
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
-  "serial_adder.aux" 1765198043.89352 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
-  "serial_adder.tex" 1765198004.08785 4564 b7afd13964954f32bdd3dadd57c95b65 ""
+  "serial_adder.aux" 1765266589.6164 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "serial_adder.tex" 1765266588.58846 4484 5ff29e8d2a79fd282e205eed20799779 ""
   (generated)
   "serial_adder.aux"
   "serial_adder.log"
