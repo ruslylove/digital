@@ -773,31 +773,41 @@ $$
 <p class="text-sm text-center">Figure 6-21. State Diagram (Moore Model).</p>
 
 ---
-layout: two-cols-header
----
 
 ## Mealy and Moore Models
 
 Sequential circuits are classified into two models based on how their outputs are generated.
 
-:: left ::
-<div class="text-sm">
 
 ### Mealy Model
-*   The outputs are a function of both the **present state AND the current inputs**.
+
+<div class="text-base">
+
+*   The outputs are a function of both the **present state AND <span class="text-orange-500">the current inputs</span>**.
 *   The output value is written on the transition arrow in the state diagram (`input / output`).
 *   Outputs can change immediately if the input changes, even between clock edges. This can sometimes lead to momentary false outputs.
 
+</div>
+
+
+<img src="/mealy_block.svg" class="rounded-lg bg-white p-4 w-190 mx-auto" alt="Mealy Model Block Diagram">
+<p class="text-sm text-center">Figure 6-22 - Mealy Model Block Diagram.</p>
+
+
+---
+
 ### Moore Model
+
+<div class="text-base">
+
 *   The outputs are a function of the **present state ONLY**.
 *   The output value is written inside the state circle (`state / output`).
 *   Outputs are synchronous with the clock; they only change when the state changes.
 
 </div>
-:: right ::
 
-<img src="/mealy_moore_block.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Mealy vs Moore Block Diagrams">
-<p class="text-sm text-center">Figure 6-22. Block Diagrams of Mealy and Moore Models.</p>
+<img src="/moore_block.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Moore Model Block Diagram">
+<p class="text-sm text-center">Figure 6-23. Moore Model Block Diagram.</p>
 
 ---
 
