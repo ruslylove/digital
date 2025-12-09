@@ -3,7 +3,7 @@
 \usetikzlibrary{calc}
 
 \begin{document}
-\begin{circuitikz}[american, scale=1.0]
+\begin{circuitikz}[]
     \ctikzset{logic ports=ieee}
     \ctikzset{flipflops/scale=0.8}
     
@@ -26,28 +26,27 @@
     
     % Full Adder - using a box or standard shape? 
     % Standard logic box for FA
-    \node[draw, rectangle, minimum width=1.5cm, minimum height=2.0cm, align=center] (FA) at (5, -1.5) {Full\\Adder};
+    \node[draw, rectangle, minimum width=2cm, minimum height=2.2cm, align=center] (FA) at (5, -1.5) {FA};
     
     % D Flip-Flop (Carry)
     \node[flipflop D] (DFF) at (5, -4.5) {};
-    \node[below] at (DFF.s) {Q}; % Q output used as Carry In
-    
+
     % Inputs
-    \node (clk_in) at (-3, -5) {Clock};
-    \node (shift_ctrl) at (-3, 2) {Shift Control};
-    \node (clr_in) at (3, -6) {Clear};
+    \node (clk_in) at ($(DFF.pin 3) - (8, 0)$) {Clock};
+    \draw (RegA.west) -- ++(-2,0) node[left] (shift_ctrl) {Shift Control};
+    \node (clr_in) at ($(DFF.south) + (-9 , -0.5)$) {Clear};
     
     % Register Pins
     % Reg A
     \coordinate (A_SI) at ($(RegA.west) + (0, 0.3)$);
     \coordinate (A_SO) at ($(RegA.east) + (0, 0.3)$);
-    \coordinate (A_CLK) at ($(RegA.south) + (-0.5, 0)$);
+    \coordinate (A_CLK) at ($(RegA.west) + (0, -0.3)$);
     \coordinate (A_Shift) at ($(RegA.north) + (0, 0)$);
     
     % Reg B
     \coordinate (B_SI) at ($(RegB.west) + (0, 0.3)$);
     \coordinate (B_SO) at ($(RegB.east) + (0, 0.3)$);
-    \coordinate (B_CLK) at ($(RegB.south) + (-0.5, 0)$);
+    \coordinate (B_CLK) at ($(RegB.west) + (0, -0.3)$);
     \coordinate (B_Shift) at ($(RegB.north) + (0, 0)$);
     
     % Labels
@@ -77,25 +76,25 @@
     % Connections
     
     % Clock
-    \draw (clk_in) -- (clk_in -| A_CLK) -- (A_CLK);
-    \draw (clk_in -| A_CLK) -- (clk_in -| B_CLK) -- (B_CLK);
-    \draw (clk_in -| B_CLK) -- (clk_in -| DFF.pin 3) -- (DFF.pin 3);
-    \node[circ] at (clk_in -| A_CLK) {};
-    \node[circ] at (clk_in -| B_CLK) {};
-    \node[shape=inputarrow, rotate=90, scale=0.5] at (A_CLK) {};
-    \node[shape=inputarrow, rotate=90, scale=0.5] at (B_CLK) {};
+    \draw (clk_in) -- ++(2,0) node[circ] (clock_common) {};
+    \draw (clock_common) |- (A_CLK);
+    \draw (B_CLK) to[short,-*] (B_CLK -| clock_common);
+    \draw (clock_common) -- (DFF.pin 3);
+
 
     % Shift Control
-    \draw (shift_ctrl) -- (shift_ctrl -| A_Shift) -- (A_Shift);
-    \draw (shift_ctrl -| A_Shift) -- (shift_ctrl -| B_Shift) -- (B_Shift);
-    \node[circ] at (shift_ctrl -| A_Shift) {};
+    \path (shift_ctrl) -- +(2,0) coordinate (shift_common);
+    \draw (RegB.west) -- (RegB.west -| shift_common) to[short,-*] (shift_common);
+  %  \draw (shift_ctrl) -- (shift_ctrl -| A_Shift) -- (A_Shift);
+  %  \draw (shift_ctrl -| A_Shift) -- (shift_ctrl -| B_Shift) -- (B_Shift);
+  %  \node[circ] at (shift_ctrl -| A_Shift) {};
 
     % Data Paths
     % Reg A SO -> FA x
-    \draw (A_SO) -- (FA_x |- A_SO) -- (FA_x);
+    \draw (A_SO) -- ++(0.2,0) |- (FA_x);
     
     % Reg B SO -> FA y
-    \draw (B_SO) -- (FA_y |- B_SO) -- (FA_y);
+    \draw (FA_y) -- ++(-0.2,0) |- (B_SO);
     
     % Reg B SI usually connected to B SO to circulate?
     % The user image link `https://i.imgur.com/3937Q1y.png` shows B circulates.
@@ -105,23 +104,23 @@
     \draw (B_SO) -- (tapB); 
     \node[circ] at (tapB) {};
     \draw (tapB) -- ++(0, 1.2) coordinate (turnB1);
-    \draw (turnB1) -- (turnB1 -| B_SI) -- (B_SI);
+    \draw (turnB1) -- ++(-3.3,0) |- (B_SI);
     
     % FA Sum -> Reg A SI
-    \draw (FA_s) -- (FA_s |- A_SI) -- (A_SI);
+    \draw (FA_s) -- ++(0,1.5) -- ++(-6.5,0) |- (A_SI) ;
     
     % FA Cout -> DFF D
     % DFF D is pin 1.
-    \draw (FA_cout) -| (DFF.pin 1);
+    \draw (FA_cout) -- ++(0.5,0) -- ++(0,1.5) -- ++(-3,0) |- (DFF.pin 1);
     
     % DFF Q -> FA Cin
     % DFF Q is pin 6.
-    \draw (DFF.pin 6) -- ++(0.5, 0) -- ++(0, 1) coordinate (turnQ);
+    \draw (DFF.pin 6) -- ++(0, 1) coordinate (turnQ);
     \draw (turnQ) -| (FA_cin);
 
     % Clear
-    \draw (clr_in) -| (DFF.pin 4); % Assuming pin 4 is R/Clear on flipflop D (usually pin 4 is R(eset))
-    \node[left, font=\tiny] at (DFF.pin 4) {CLR};
+    \draw (clr_in) -| (DFF.bdown); % Assuming pin 4 is R/Clear on flipflop D (usually pin 4 is R(eset))
+    %\node[above] at (DFF.bdown) {CLR};
 
 \end{circuitikz}
 \end{document}
