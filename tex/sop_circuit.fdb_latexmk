@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1765210200.04711 "/Users/rus/development/digital/tex/sop_circuit.tex" "sop_circuit.pdf" "sop_circuit" 1765210201.74436 0
-  "/Users/rus/development/digital/tex/sop_circuit.tex" 1765210199.80758 1716 ae65fc09653f93f78d7004a0cfc76a7c ""
+["pdflatex"] 1765257021.42865 "/Users/rus/Development/slidev/digital/tex/sop_circuit.tex" "sop_circuit.pdf" "sop_circuit" 1765257022.31674 0
+  "/Users/rus/Development/slidev/digital/tex/sop_circuit.tex" 1765257021.25611 1756 6116c59ec9dddf6d08796863eb408d10 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb" 1248133631 36299 5f9df58c2139e7edcf37c8fca4bd384d ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb" 1248133631 32762 224316ccc9ad3ca0423a14971cfa7fc1 ""
   "/usr/local/texlive/2025/texmf-dist/tex/context/base/mkii/supp-pdf.mkii" 1461363279 71627 94eb9990bed73c364d7f53f960cc8c5b ""
@@ -113,11 +113,11 @@
   "/usr/local/texlive/2025/texmf-dist/tex/latex/xcolor/xcolor.sty" 1727642399 55384 b454dec21c2d9f45ec0b793f0995b992 ""
   "/usr/local/texlive/2025/texmf-dist/tex/latex/xkeyval/xkeyval.sty" 1655411236 4937 4ce600ce9bd4ec84d0250eb6892fcf4f ""
   "/usr/local/texlive/2025/texmf-dist/web2c/texmf.cnf" 1739380943 42148 61becc7c670cd061bb319c643c27fdd4 ""
-  "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1763819811 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
-  "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1763819727 3345735 98e8d6ce829fe76d41a990640e1359a8 ""
+  "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1764314756 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
+  "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1764314698 3345742 bbccbb8f48738580c120d7e243c4d5b7 ""
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
-  "sop_circuit.aux" 1765210201.66844 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
-  "sop_circuit.tex" 1765210199.80758 1716 ae65fc09653f93f78d7004a0cfc76a7c ""
+  "sop_circuit.aux" 1765257022.28307 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "sop_circuit.tex" 1765257021.25611 1756 6116c59ec9dddf6d08796863eb408d10 ""
   (generated)
   "sop_circuit.aux"
   "sop_circuit.log"

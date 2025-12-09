@@ -683,11 +683,11 @@ layout: two-cols
 The simplified form $x1' + x2$ requires far fewer gates.
 
 **Original Circuit for $x1'x2' + x1'x2 + x1x2$**
-<img src="/sop_circuit.svg" class="rounded-lg bg-white p-2 w-80" alt="Complex circuit for unsimplified function">
+<img src="/sop_circuit.svg" class="rounded-lg bg-white p-2 w-70 mx-auto" alt="Complex circuit for unsimplified function">
 <div class="text-sm text-center">Figure 2-7. Original circuit. </div>
 
 **Simplified Circuit for $x1' + x2$**
-<img src="/simplified_circuit.svg" class="rounded-lg bg-white p-2 mt-4 w-70" alt="Simple circuit for simplified function">
+<img src="/simplified_circuit.svg" class="rounded-lg bg-white p-2 mt-4 w-60 mx-auto" alt="Simple circuit for simplified function">
 <div class="text-sm text-center">Figure 2-8. Simplified circuit.</div>
 
 :: right ::

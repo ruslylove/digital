@@ -132,10 +132,20 @@ A serial adder is a sequential circuit that adds two binary numbers one bit at a
 
 
 ---
+layout: two-cols-header
+---
 
 ## Universal Shift Register
 
+<div class="text-base">
+
 A **universal shift register** is a versatile register with multiple modes of operation. It combines the features of parallel load, shift-right, and shift-left into a single unit.
+
+</div>
+
+:: left ::
+
+<div class="text-sm">
 
 ### Common Capabilities
 *   **Clear:** Reset all flip-flops to 0.
@@ -144,31 +154,8 @@ A **universal shift register** is a versatile register with multiple modes of op
 *   **Parallel Load:** Load all bits simultaneously from parallel inputs.
 *   **No Change:** Hold the current data.
 
-A mode control input (e.g., `s₁s₀`) selects the operation.
+A mode control input (e.g., $s_1s_0$) selects the operation.
 
-
-
----
-
-### 4-Bit Universal Shift Register
-
-The operation is selected by inputs `s₁` and `s₀`. A 4x1 MUX is used for each flip-flop to select the appropriate input for the next state.
-
-
-<img src="/universal_shift_register.svg" class="rounded-lg bg-white p-4 w-full mb-4 col-span-2" alt="4-Bit Universal Shift Register">
-<div class="text-center text-sm opacity-50 mt-2 mb-8 col-span-2">Figure 7-7: 4-Bit Universal Shift Register</div>
-
-
----
-
-<div class="grid grid-cols-2 gap-8">
-
-<div>
-
-### Function Table
-
-
-<div class="mt-4 text-base">
 $$
 \begin{array}{|cc|l|cccc|}
 \hline
@@ -182,16 +169,24 @@ $$
 \end{array}
 $$
 <div class="text-center text-sm opacity-50 mt-1">Table 7-2: 4-Bit Universal Shift Register Function Table</div>
-</div>
-
 
 </div>
+
+:: right ::
 
 <img src="/universal_shift_register_block.svg" class="rounded-lg bg-white p-4" alt="4-bit Universal Shift Register Diagram">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-8: Block Diagram of 4-Bit Universal Shift Register</div>
 
+---
 
-</div>
+### 4-Bit Universal Shift Register
+
+The operation is selected by inputs `s₁` and `s₀`. A 4x1 MUX is used for each flip-flop to select the appropriate input for the next state.
+
+
+<img src="/universal_shift_register.svg" class="rounded-lg bg-white p-4 w-full mb-4 col-span-2" alt="4-Bit Universal Shift Register">
+<div class="text-center text-sm opacity-50 mt-2 mb-8 col-span-2">Figure 7-7: 4-Bit Universal Shift Register</div>
+
 
 ---
 
@@ -258,15 +253,21 @@ In a ripple counter, the clock is applied only to the first flip-flop. The outpu
 
 
 ---
+layout: two-cols-header
+---
 
 ## BCD Ripple Counter
 
 A BCD counter counts from 0 to 9 (0000 to 1001) and then resets to 0.
 
+:: left ::
+
 *   It can be constructed from a 4-bit binary counter by adding logic to force a reset to 0000 after the count of 1001.
 *   When the counter reaches 1010 (decimal 10), the NAND gate output goes low, asynchronously clearing all flip-flops.
 
-<img src="/bcd_state_diagram.svg" class="rounded-lg bg-white p-4 w-55 mx-auto" alt="State Diagram of BCD Counter">
+:: right ::
+
+<img src="/bcd_state_diagram.svg" class="rounded-lg bg-white p-4 w-85 mx-auto" alt="State Diagram of BCD Counter">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-10: State Diagram of BCD Counter</div>
 
 
@@ -343,7 +344,7 @@ $$
 
 ---
 
-### BCD Counter from Binary Counter
+### BCD Counter from 4-bit Binary Counter with Parallel Load
 
 
 <img src="/sequence_counter_approaches.svg" class="rounded-lg bg-white p-4 w-full" alt="4-bit Any Sequence Counter">
