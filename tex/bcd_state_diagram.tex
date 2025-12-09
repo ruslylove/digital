@@ -20,7 +20,7 @@
         % 360/10 = 36 degrees per step
         % Start at 90 (Top) -> 0
         \pgfmathsetmacro{\angle}{90 - \i * 36}
-        \node[state] (s\i) at (\angle:\radius) {\i};
+        \node[state,font=\Large] (s\i) at (\angle:\radius) {\i};
     }
     
     % Transitions
@@ -42,7 +42,7 @@
     \foreach \i/\bin in {0/0000, 1/0001, 2/0010, 3/0011, 4/0100, 5/0101, 6/0110, 7/0111, 8/1000, 9/1001} {
         \pgfmathsetmacro{\angle}{90 - \i * 36}
         % Position label radially outside
-        \node[font=\footnotesize, color=gray] at (\angle:\radius+0.9cm) {\bin};
+        \node[font=\large, color=gray] at (\angle:\radius+0.9cm) {\bin};
     }
 
 \end{tikzpicture}

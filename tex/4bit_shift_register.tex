@@ -24,10 +24,15 @@
         \draw (FF\i.pin 6) -- ++(0.5, 0) coordinate (Q\i_out) node[right] {};
         
         % Clock
-        \draw (FF\i.pin 3) -- (FF\i.pin 3 |- clk_in) node[circ] {};
+        
         % Clear
         \draw (FF\i.s) -- ++(0,-0.2) coordinate (clr_pt);
+
+        \ifnum\i=0
+        \else
         \draw (clr_pt) -- (clr_pt |- clr_in) node[circ] {};
+        \draw (FF\i.pin 3) -- (FF\i.pin 3 |- clk_in) node[circ] {};
+        \fi
     }
     
     % Serial Input connection to D3
@@ -53,8 +58,8 @@
     \draw (FF0.pin 6) -- ++(0.5, 0) node[right] {Serial Out};
     
     % Finish Rails
-    \draw (clk_in) -- (clk_in -| FF0.pin 3) -- ++(2, 0);
-    \draw (clr_in) -- (clr_in -| FF0.s) -- ++(2, 0);;
+    \draw (clk_in)  -| (FF0.pin 3);
+    \draw (clr_in) -| (FF0.s);
     
 \end{circuitikz}
 \end{document}
