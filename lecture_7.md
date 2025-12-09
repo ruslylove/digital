@@ -223,18 +223,18 @@ $$
 
 ### 4-Bit Universal Shift Register
 
-The operation is selected by inputs `s₁` and `s₀`. A 4x1 MUX is used for each flip-flop to select the appropriate input for the next state.
+The operation is selected by inputs $s_1$ and $s_0$. A 4x1 MUX is used for each flip-flop to select the appropriate input for the next state.
 
 
-<img src="/universal_shift_register.svg" class="rounded-lg bg-white p-4 w-full mb-4 col-span-2" alt="4-Bit Universal Shift Register">
-<div class="text-center text-sm opacity-50 mt-2 mb-8 col-span-2">Figure 7-7: 4-Bit Universal Shift Register</div>
+<img src="/universal_shift_register.svg" class="rounded-lg bg-white p-4 w-full" alt="4-Bit Universal Shift Register">
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-7: 4-Bit Universal Shift Register</div>
 
 
 ---
 
 ### VHDL Implementation
 
-```vhdl
+```vhdl {*}{maxHeight:'380px',lines:true}
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
@@ -290,9 +290,38 @@ In a ripple counter, the clock is applied only to the first flip-flop. The outpu
 *   This creates a "rippling" effect as the state change propagates through the chain of flip-flops.
 *   Simple to construct, but slower than synchronous counters due to the cumulative propagation delay.
 
-<img src="/4bit_ripple_counter.svg" class="rounded-lg bg-white p-4 w-180 mx-auto" alt="4-bit Ripple Counter">
-<div class="text-center text-sm opacity-50 mt-2">Figure 7-9: 4-Bit Binary Ripple Counter</div>
+<img src="/4bit_ripple_counter.svg" class="rounded-lg bg-white mt-4 p-4 w-190 mx-auto" alt="4-bit Ripple Counter">
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-9: 4-Bit Binary Ripple Counter using T Flip-Flops</div>
 
+
+---
+layout: two-cols-header
+---
+
+## Characteristics of Asynchronous Counters
+
+The fundamental characteristic of ripple counters is that flip-flops change state one after another, not simultaneously.
+
+:: left ::
+
+<div class="text-base">
+
+### Propagation Delay
+*   Each flip-flop has a propagation delay ($t_{pd}$).
+*   In a ripple counter, these delays accumulate.
+*   For an *n-bit* counter, the total settling time is $n \times t_{pd}$.
+*   **Glitches**: Decoding logic connected to the counter outputs might see invalid intermediate states (glitches) while the counter is "rippling" to the final state.
+
+### Frequency Limitation
+*   The clock frequency is limited by the total propagation delay.
+*   $f_{clk} < \frac{1}{n \times t_{pd}}$
+
+</div>
+
+:: right ::
+
+<img src="/4bit_ripple_counter_timing.svg" class="rounded-lg bg-white p-2 w-100 mx-auto" alt="Timing Diagram of Ripple Counter">
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-10: Timing Diagram showing Accumulation Delay</div>
 
 ---
 layout: two-cols-header

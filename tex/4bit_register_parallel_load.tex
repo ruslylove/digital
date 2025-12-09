@@ -22,11 +22,9 @@
         \node[flipflop D] (FF\i) at (\xpos, 0) {};
         \node[above] at (FF\i.n) {$D_\i$};
         \draw (FF\i.pin 6) -- ++(0.5, 0) node[right] {$A_\i$};
-        \draw (FF\i.pin 3) -- (FF\i.pin 3 |- clk_in) node[circ] {};
         
-        % Clear connection
-        \draw (FF\i.s) -- ++(0,-0.2) coordinate (clr_pt);
-        \draw (clr_pt) -- (clr_pt |- clr_in) node[circ] {};
+        
+    
         
         % MUX using muxdemux node
         % muxdemux shape: 
@@ -72,13 +70,21 @@
         \draw (fb_turn2) -- (fb_start) -- (MUX\i.lpin 2);
         
         % Load Signal Connection (tpin 1 - Top Select)
-        \draw (MUX\i.tpin 1) -- (MUX\i.tpin 1 |- load_in) node[circ] {}; 
+        \ifnum\i=0
+            % skip last mux
+        \else
+        \draw (MUX\i.tpin 1) -- (MUX\i.tpin 1 |- load_in) node[circ] {};
+            % Clear connection
+        \draw (FF\i.s) -- ++(0,-0.2) coordinate (clr_pt);
+        \draw (clr_pt) -- (clr_pt |- clr_in) node[circ] {};
+        \draw (FF\i.pin 3) -- (FF\i.pin 3 |- clk_in) node[circ] {}; 
+        \fi
     }
     
     % Finish Rails
-    \draw (clk_in) -- (clk_in -| FF0.pin 3) -- ++(3,0);
-    \draw (clr_in) -- (clr_in -| FF0.s)-- ++(3,0);
-    \draw (load_in) -- (load_in -| MUX0.tpin 1)-- ++(3,0);
+    \draw (clk_in) -| (FF0.pin 3);
+    \draw (clr_in) -| (FF0.s);
+    \draw (load_in) -| (MUX0.tpin 1);
     
 \end{circuitikz}
 \end{document}

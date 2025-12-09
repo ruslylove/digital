@@ -12,9 +12,9 @@
    
     
     % Flip-Flops (Standard D, manually drawing Reset)
-    \node[flipflop D] (DFF_A) at (8, 2) {};
+    \node[flipflop D, flipflop def={nd=1}] (DFF_A) at (8, 2) {};
     \node[above] at (DFF_A.n) {Flip-Flop A};
-    \node[flipflop D] (DFF_B) at (8, -3) {};
+    \node[flipflop D, flipflop def={nd=1}] (DFF_B) at (8, -2.5) {};
     \node[above] at (DFF_B.n) {Flip-Flop B};
 
     % Logic for DA = Bx'
@@ -77,18 +77,18 @@
     \node (rst_in) at (-2, -5.5) {Reset};
     
     % Draw bubbles at FF bottom (manually)
-    \draw [fill=white] (DFF_A.s) circle(2pt);
-    \draw [fill=white] (DFF_B.s) circle(2pt);
+   % \draw [fill=white] (DFF_A.s) circle(2pt);
+   % \draw [fill=white] (DFF_B.s) circle(2pt);
     
     % Route Reset
     % Reset line (rst_in) -> horizontal -> vertical bus -> tap off to FFs.
     % Vertical bus at x=6.5
     
     % Main route (Reset to B)
-    \draw (rst_in) -| ($(DFF_B.s) + (0, -2pt)$);
-    
+    \draw (rst_in) -| (DFF_B.down);
+
     % Route to A
-    \draw ($(DFF_A.s) + (0, -2pt)$) -- ++(0, -0.5) -- ++(-1.2,0) coordinate (rst_out);
+    \draw (DFF_A.down) -- ++(0, -0.5) -- ++(-1.2,0) coordinate (rst_out);
     \draw (rst_out) to[short, -*] (rst_out |- rst_in);
     % Top of bus is just a corner, no dot needed unless we continued up.
 

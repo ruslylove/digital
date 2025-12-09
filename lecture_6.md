@@ -257,7 +257,7 @@ The output Q only changes on the **falling edge** of the clock.
 <p class="text-sm text-center">Figure 6-8. Master-Slave D Flip-Flop.</p>
 
 <img src="/d_flip_flop_neg_edge.svg" class="rounded-lg bg-white w-45 p-4 mx-auto" alt="D Flip-Flop Negative Edge">
-<p class="text-sm text-center">Figure 6-9. D Flip-Flop Negative Edge.</p>
+<p class="text-sm text-center">Figure 6-9. D Flip-Flop with Negative Edge Triggered.</p>
 
 ---
 layout: two-cols-header
@@ -281,7 +281,7 @@ JK flip-flop can be constructed from a D flip-flop and external gates.
 <img src="/jk_flip_flop_from_d.svg" class="rounded-lg bg-white p-1 mx-auto w-100" alt="JK Flip-Flop from D Flip-Flop">
 <p class="text-sm text-center">Figure 6-10. Logic Diagram of a JK Flip-Flop from a D Flip-Flop.</p>
 
-<img src="/jk_flip_flop_symbol.svg" class="rounded-lg bg-white p-1 mx-auto w-28" alt="JK Flip-Flop Symbol">
+<img src="/jk_flip_flop_symbol.svg" class="rounded-lg bg-white p-1 mx-auto w-70" alt="JK Flip-Flop Symbol">
 <p class="text-sm text-center">Figure 6-11. JK Flip-Flop Symbol.</p>
 
 ---
@@ -300,7 +300,7 @@ layout: two-cols-header
     * $Q(t+1) = T \oplus Q$
 
 
-<img src="/t_flip_flop_symbol.svg" class="rounded-lg bg-white p-4 mx-auto w-32 mt-7" alt="T Flip-Flop Symbol">
+<img src="/t_flip_flop_symbol.svg" class="rounded-lg bg-white p-4 mx-auto w-80 mt-7" alt="T Flip-Flop Symbol">
 <p class="text-sm text-center">Figure 6-12. T Flip-Flop Symbol.</p>
 
 

@@ -8,9 +8,9 @@
     \ctikzset{flipflops/scale=0.85}
     
     % Signals
-    \node (clk_in) at (-2, 0) {Clock};
-    \node (logic_1) at (0, 2) {Logic 1};
-    \node (clr_in) at (0, -3) {Reset};
+    %\node (clk_in) at (-3, 0) {Clock};
+    \node (logic_1) at (-3, 2) {Logic 1};
+    \node (clr_in) at (-3, -3) {Reset};
     
     % Flip-Flops
     % LSB (A0) on Left -> MSB (A3) on Right
@@ -24,46 +24,45 @@
         \pgfmathsetmacro{\xpos}{\n*\ffdist}
         
         % T Flip-Flop
-        \node[flipflop T] (FF\i) at (\xpos, 0) {};
+        \node[flipflop T, flipflop def={n3=1,nd=1}] (FF\i) at (\xpos, 0) {};
         
         % Outputs
-        \node[above] at (FF\i.n) {$FF_\i$};
+        \node[above] at (FF\i.n) {$T_\i$};
         \draw (FF\i.pin 6) -- ++(0.5, 0) coordinate (Q\i_out);
-        \draw (Q\i_out) -- ++(0.5, 0) node[circ, label={above:$A_\i$}] {};
+        \draw (Q\i_out) -- ++(0.5, 0) node[label={above:$T_\i$}] {};
         
         % T Input (pin 1) -> Logic 1
         \draw (FF\i.pin 1) -- ++(-0.5, 0) coordinate (T_stub);
-        \draw (T_stub) -- (T_stub |- logic_1) node[circ] {};
+        
         
         % Reset (Async Clear) - using down anchor
         \draw (FF\i.down) -- ++(0, -0.2) coordinate (clr_stub);
+        \ifnum\i=3
+        \else
         \draw (clr_stub) -- (clr_stub |- clr_in) node[circ] {};
+        \draw (T_stub) -- (T_stub |- logic_1) node[circ] {};
+        \fi
     }
     
     % Logic 1 Rail
-    \draw (logic_1) -- (logic_1 -| FF3.pin 1);
+    \draw (logic_1) -| ( T_stub);
     
     % Reset Rail
-    \draw (clr_in) -- (clr_in -| FF3.down);
+    \draw (clr_in) -| (FF3.down);
     
     % Clock Connections (Ripple)
     % A0 Clock -> External Clock
-    \draw (clk_in) -- (FF0.pin 2);
+    \draw (FF0.pin 3) -- ++(-1.5,0) node[left] {Clock};
     
     % Ripple: Q of previous -> Clock of next
-    \draw (Q0_out) -- ++(0, -1.0) coordinate (rip0);
-    \draw (rip0) -- (rip0 -| FF1.pin 2) -- (FF1.pin 2);
+    \draw node[circ] at (Q0_out) {};
+    \draw (Q0_out) |-  (FF1.pin 3);
+    \draw node[circ] at (Q1_out) {};
+    \draw (Q1_out) |- (FF2.pin 3);
+    \draw node[circ] at (Q2_out) {};
+    \draw (Q2_out) |- (FF3.pin 3);
+
     
-    \draw (Q1_out) -- ++(0, -1.0) coordinate (rip1);
-    \draw (rip1) -- (rip1 -| FF2.pin 2) -- (FF2.pin 2);
-    
-    \draw (Q2_out) -- ++(0, -1.0) coordinate (rip2);
-    \draw (rip2) -- (rip2 -| FF3.pin 2) -- (FF3.pin 2);
-    
-    % Bubbles on Clock Inputs (Negative Edge)
-    \foreach \i in {0,1,2,3} {
-        \draw ($(FF\i.pin 2)$) circle (0.1);
-    }
     
 \end{circuitikz}
 \end{document}

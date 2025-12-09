@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1765292377.13486 "/Users/rus/development/digital/tex/jk_flip_flop_symbol.tex" "jk_flip_flop_symbol.pdf" "jk_flip_flop_symbol" 1765292378.56593 0
-  "/Users/rus/development/digital/tex/jk_flip_flop_symbol.tex" 1765292376.89648 349 00e47894f49b6287825864c2df820cc1 ""
+["pdflatex"] 1765295574.6214 "/Users/rus/development/digital/tex/universal_shift_register.tex" "universal_shift_register.pdf" "universal_shift_register" 1765295576.35612 0
+  "/Users/rus/development/digital/tex/universal_shift_register.tex" 1765295574.37386 5500 eb60956fe45c2384d33e02766d494537 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmmi6.tfm" 1136768653 1512 f21f83efb36853c0b70002322c1ab3ad ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmmi9.tfm" 1136768653 1524 d89e2d087a9828407a196f428428ef4a ""
@@ -8,6 +8,10 @@
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmr9.tfm" 1136768653 1292 6b21b9c2c7bebb38aa2273f7ca0fb3af ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmsy6.tfm" 1136768653 1116 933a60c408fc0a863a92debe84b2d294 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmsy9.tfm" 1136768653 1116 25a7bf822c58caf309a702ef79f4afbb ""
+  "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb" 1248133631 36299 5f9df58c2139e7edcf37c8fca4bd384d ""
+  "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1248133631 35752 024fb6c41858982481f6968b5fc26508 ""
+  "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb" 1248133631 31809 8670ca339bf94e56da1fc21c80635e2a ""
+  "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb" 1248133631 32762 224316ccc9ad3ca0423a14971cfa7fc1 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb" 1248133631 33993 9b89b85fd2d9df0482bd47194d1d3bf3 ""
   "/usr/local/texlive/2025/texmf-dist/tex/context/base/mkii/supp-pdf.mkii" 1461363279 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "/usr/local/texlive/2025/texmf-dist/tex/generic/circuitikz/pgfcirc.defines.tex" 1736550187 46557 9adcccd6eb69fb5553fe8449b51f7543 ""
@@ -122,10 +126,10 @@
   "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1763819811 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
   "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1763819727 3345735 98e8d6ce829fe76d41a990640e1359a8 ""
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
-  "jk_flip_flop_symbol.aux" 1765292378.49259 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
-  "jk_flip_flop_symbol.tex" 1765292376.89648 349 00e47894f49b6287825864c2df820cc1 ""
+  "universal_shift_register.aux" 1765295576.26805 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "universal_shift_register.tex" 1765295574.37386 5500 eb60956fe45c2384d33e02766d494537 ""
   (generated)
-  "jk_flip_flop_symbol.aux"
-  "jk_flip_flop_symbol.log"
-  "jk_flip_flop_symbol.pdf"
+  "universal_shift_register.aux"
+  "universal_shift_register.log"
+  "universal_shift_register.pdf"
   (rewritten before read)
