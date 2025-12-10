@@ -66,7 +66,7 @@ The key idea is to leverage the human brain's pattern-recognition ability to sim
 
 :: right ::
 
-<img src="/kmap_example.svg" class="w-full bg-white p-2 mx-auto"/>
+<img src="/kmap_example.svg" class="w-full bg-white p-2 mx-auto rounded-lg"/>
 <p class="text-sm text-center">Figure 3-2. Karnaugh Map Example.</p>
 
 

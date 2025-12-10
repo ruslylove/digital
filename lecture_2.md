@@ -32,7 +32,7 @@ hideInToc: false
 *   The general form of a logic circuit is a **switching network**, which takes a set of discrete inputs and produces a set of discrete outputs.
 
 
-<img src="/switching_network.svg" class="rounded-lg bg-white pt-8 w-100 mx-auto" alt="Logic Circuit" />
+<img src="/switching_network.svg" class="rounded-lg bg-white pt-8 w-100 mx-auto p-4" alt="Logic Circuit" />
 <p class="text-sm text-center">Figure 2-1. Diagram of a Switching Network.</p>
 
 
@@ -185,7 +185,6 @@ De Morgan's theorem provides a way to find the complement of a complex expressio
 
 1.  $(x · y)' = x' + y'$
     *   The complement of a product is the sum of the complements.
-
 2.  $(x + y)' = x' · y'$
     *   The complement of a sum is the product of the complements.
 
@@ -193,31 +192,23 @@ De Morgan's theorem provides a way to find the complement of a complex expressio
 
 ### Proof for $(x · y)' = x' + y'$
 
-| $x$ | $y$ | $x·y$ | **$\bm{(x·y)'}$** | $x'$ | $y'$ | **$\bm{x'+y'}$** |
-|:-:|:-:|:---:|:----------:|:--:|:--:|:-------:|
-| 0 | 0 |  0  |     **1**      | 1  | 1  |   **1**   |
-| 0 | 1 |  0  |     **1**      | 1  | 0  |   **1**   |
-| 1 | 0 |  0  |     **1**      | 0  | 1  |   **1**   |
-| 1 | 1 |  1  |     **0**      | 0  | 0  |   **0**   |
+<div class="text-2xl">
 
-<style>
-/* Target the table on this specific slide */
-table {
-  border-collapse: collapse; /* Merges adjacent borders */
-}
+$$
+\begin{array}{|c|c|c|c|c|c|c|}
+\hline
+x & y & x \cdot y & \bm{(x \cdot y)'} & x' & y' & \bm{x' + y'} \\
+\hline
+0 & 0 & 0 & \mathbf{1} & 1 & 1 & \mathbf{1} \\
+0 & 1 & 0 & \mathbf{1} & 1 & 0 & \mathbf{1} \\
+1 & 0 & 0 & \mathbf{1} & 0 & 1 & \mathbf{1} \\
+1 & 1 & 1 & \mathbf{0} & 0 & 0 & \mathbf{0} \\
+\hline
+\end{array}
+$$
 
-/* Add a right border to all table headers and data cells */
-/* The value '1px solid #AAA' uses your KMUTNB red color */
-th, td {
-  border-right: 1px solid #AAA; 
-}
+</div>
 
-/* Optional: Remove the border from the very last column */
-th:last-child, td:last-child {
-  border-right: none;
-}
-
-</style>
 
 ---
 
@@ -246,7 +237,7 @@ The light $L$ is ON ($1$) only if **both** switch $x1$ AND switch $x2$ are close
 
 $L(x1, x2) = x1 · x2$
 
-<img src="/switching_circuit_and.svg" class="rounded-lg bg-white p-4 mt-4 w-90 mx-auto" alt="AND function with series switches">
+<img src="/switching_circuit_and.svg" class="rounded-lg bg-white p-2 mt-10 w-90 mx-auto " alt="AND function with series switches">
 <p class="text-sm text-center">Figure 2-3. Switching circuit as AND function.</p>
 ::right::
 
@@ -255,7 +246,7 @@ The light $L$ is ON ($1$) if switch $x1$ OR switch $x2$ (or both) are closed ($1
 
 $L(x1, x2) = x1 + x2$
 
-<img src="/switching_circuit_or.svg" class="rounded-lg bg-white p-1 mt-1 w-83 mx-auto" alt="OR function with parallel switches">
+<img src="/switching_circuit_or.svg" class="rounded-lg bg-white p-2 mt-1 w-83 mx-auto" alt="OR function with parallel switches">
 <p class="text-sm text-center">Figure 2-4. Switching circuit as OR function.</p>
 
 ---
@@ -285,40 +276,58 @@ What if we want an action to occur when a switch is *opened* instead of closed? 
 
 A **truth table** is a tabular listing that fully describes a logic function by showing the output value for all possible input combinations.
 
-<div class="grid grid-cols-3 gap-8 text-center">
+<div class="grid grid-cols-3 gap-8 text-center mt-10 text-2xl">
 <div>
 
 ### AND
 
 
-| $x1$ | $x2$ | $x1·x2$ |
-|:--:|:--:|:-----:|
-| 0  | 0  |   0   |
-| 0  | 1  |   0   |
-| 1  | 0  |   0   |
-| 1  | 1  |   1   |
+$$
+\begin{array}{|c|c|c|}
+\hline
+x1 & x2 & x1 \cdot x2 \\
+\hline
+0 & 0 & 0 \\
+0 & 1 & 0 \\
+1 & 0 & 0 \\
+1 & 1 & 1 \\
+\hline
+\end{array}
+$$
 
 </div>
 <div>
 
 ### OR
 
-| $x1$ | $x2$ | $x1+x2$ |
-|:--:|:--:|:-----:|
-| 0  | 0  |   0   |
-| 0  | 1  |   1   |
-| 1  | 0  |   1   |
-| 1  | 1  |   1   |
+$$
+\begin{array}{|c|c|c|}
+\hline
+x1 & x2 & x1 + x2 \\
+\hline
+0 & 0 & 0 \\
+0 & 1 & 1 \\
+1 & 0 & 1 \\
+1 & 1 & 1 \\
+\hline
+\end{array}
+$$
 
 </div>
 <div>
 
 ### NOT
 
-| $x1$ | $x1'$ |
-|:--:|:---:|
-| 0  |  1  |
-| 1  |  0  |
+$$
+\begin{array}{|c|c|}
+\hline
+x1 & x1' \\
+\hline
+0 & 1 \\
+1 & 0 \\
+\hline
+\end{array}
+$$
 
 </div>
 </div>
@@ -435,7 +444,7 @@ Each basic logic operation (AND, OR, NOT) is implemented by a physical circuit e
 
 ::right::
 
-<img src="/logic_network.svg" class="rounded-lg bg-white mx-auto" alt="Logic Network Diagram">
+<img src="/logic_network.svg" class="rounded-lg bg-white mx-auto p-4 w-70" alt="Logic Network Diagram">
 <div class="text-sm text-center">
 
 Figure 2-6. A logic gate network of $f=(x_1+x_2) \cdot x_3$.
@@ -445,7 +454,7 @@ Figure 2-6. A logic gate network of $f=(x_1+x_2) \cdot x_3$.
 <div class="pl-2">
 
 **logic_function.vhd**
-```vhdl {*}{maxHeight:'200px',lines:true}
+```vhdl {*}{maxHeight:'180px',lines:true}
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
@@ -655,7 +664,7 @@ $f(x1,x2) = x1'x2' + x1'x2 + x1x2$
 6. $f = x1' + x2$
 
 </div>
-<div class="col-span-2">
+<div class="col-span-2 text-3xl">
 
 
 ### Truth Table
@@ -774,7 +783,7 @@ layout: two-cols-header
 
 ::right::
 **Truth Table:**
-<div class="text-lg">
+<div class="text-2xl">
 
 $$
 \begin{array}{|c|c|c|c|}
@@ -978,7 +987,7 @@ A **testbench** is a VHDL entity used to simulate and verify the correctness of 
 4.  **Verify Correctness:** You check the waveforms to ensure the outputs are correct. For automated checking, VHDL's `assert` statement can be used to report errors if an output does not match its expected value.
 </div>
 <div>
-<img src="/test_bench.svg" class="w-100 mx-auto"/>
+<img src="/test_bench.svg" class="w-100 mx-auto bg-white p-4 rounded-lg"/>
 <p class="text-sm text-center">Figure 2-12. The relationship between the Entity and its Testbench.</p>
 
 </div>
@@ -1012,20 +1021,26 @@ layout: two-cols-header
 
 
 
-<div class="text-sm col-span-2">
+<div class="text-sm col-span-2 text-xl">
 
 ### Truth Table 
 
-| $\bm{s}$ | $\bm{x_1}$ | $\bm{x_2}$ | $\bm{f}$ |
-|:-:|:-:|:-:|:-:|
-| 0 | 0 | 0 | 0 |
-| 0 | 0 | 1 | 0 |
-| 0 | 1 | 0 | **1** |
-| 0 | 1 | 1 | **1** |
-| 1 | 0 | 0 | 0 |
-| 1 | 0 | 1 | **1** |
-| 1 | 1 | 0 | 0 |
-| 1 | 1 | 1 | **1** |
+$$
+\begin{array}{|c|c|c|c|}
+\hline
+\bm{s} & \bm{x_1} & \bm{x_2} & \bm{f} \\
+\hline
+0 & 0 & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 1 & 0 & \mathbf{1} \\
+0 & 1 & 1 & \mathbf{1} \\
+1 & 0 & 0 & 0 \\
+1 & 0 & 1 & \mathbf{1} \\
+1 & 1 & 0 & 0 \\
+1 & 1 & 1 & \mathbf{1} \\
+\hline
+\end{array}
+$$
 </div>
 <div class="col-span-3">
 
@@ -1071,11 +1086,11 @@ layout: two-cols
 ### Circuit and Symbol
 
 **Circuit for $f = s'x_1 + sx_2$**
-<img src="/mux_circuit.png" class="rounded-lg bg-white w-70 mx-auto" alt="Circuit for 2-to-1 Multiplexer">
+<img src="/mux_2to1.svg" class="rounded-lg bg-white w-80 mx-auto p-4" alt="Circuit for 2-to-1 Multiplexer">
 <p class="text-sm text-center">Figure 2-14. Multiplexter 2-to-1 circuit.</p>
 
 **Graphical Symbol**
-<img src="/mux_symbol.png" class="rounded-lg bg-white w-35 mx-auto" alt="Symbol for 2-to-1 Multiplexer">
+<img src="/mux_2_to_1_symbol.svg" class="rounded-lg bg-white w-28 mx-auto p-4" alt="Symbol for 2-to-1 Multiplexer">
 <p class="text-sm text-center">Figure 2-15. Multiplexer 2-to-1 symbol.</p>
 
 :: right ::
@@ -1095,7 +1110,7 @@ layout: two-cols
 **Problem:** Design a car safety alarm $A$ that sounds if:
 1.  The key is in ($K=1$) and the door is not closed ($D=0$), OR
 2.  The door is closed ($D=1$), the key is in ($K=1$), the driver is in the seat ($S=1$), and the seat belt is not closed ($B=0$).
-<img src="/car_alarm_sketch.svg" class="w-55 mx-auto"/>
+<img src="/car_alarm_sketch.svg" class="w-55 mx-auto p-4 bg-white rounded-lg"/>
 <p class="text-sm text-center">Figure 2-16. A Car Alarm System.</p>
 
 
@@ -1184,14 +1199,20 @@ END ARCHITECTURE RTL;
 <div class="col-span-2">
 
 We can define the behavior for both outputs in a single truth table.
-<div class="text-sm">
+<div class="text-xl">
 
-| $x$ | $y$ | $Sum (s)$ | $Carry (c)$ |
-|:-:|:-:|:---------:|:-------:|
-| 0 | 0 |     0     |    0    |
-| 0 | 1 |     1     |    0    |
-| 1 | 0 |     1     |    0    |
-| 1 | 1 |     0     |    1    |
+$$
+\begin{array}{|c|c|c|c|}
+\hline
+x & y & Sum (s) & Carry (c) \\
+\hline
+0 & 0 & 0 & 0 \\
+0 & 1 & 1 & 0 \\
+1 & 0 & 1 & 0 \\
+1 & 1 & 0 & 1 \\
+\hline
+\end{array}
+$$
 </div>
 </div>
 <div class="col-span-3">
@@ -1234,11 +1255,11 @@ layout: two-cols
 The circuit combines an XOR gate for the sum and an AND gate for the carry.
 
 **Circuit Implementation**
-<img src="/half_adder.svg" class="rounded-lg bg-white w-70 mx-auto mt-2" alt="Circuit for a Half-Adder">
+<img src="/half_adder.svg" class="rounded-lg bg-white w-70 mx-auto p-2" alt="Circuit for a Half-Adder">
 <p class="text-sm text-center">Figure 2-18. Circuit for a Half-Adder.</p>
 
 **Block Diagram**
-<img src="/half_adder_block.svg" class="rounded-lg bg-white w-60 mx-auto mt-2" alt="Block Diagram for a Half-Adder">
+<img src="/half_adder_block.svg" class="rounded-lg bg-white w-60 mx-auto p-2" alt="Block Diagram for a Half-Adder">
 <p class="text-sm text-center">Figure 2-19. Block Diagram for a Half-Adder.</p>
 
 :: right ::
@@ -1354,7 +1375,7 @@ The alarm `A` should sound (`A=1`) if the system is armed (`S=1`) **AND** either
 A robot uses three sensors (`L`, `C`, `R`) to follow a black line (`sensor=0`) on a white surface (`sensor=1`). It has two motors, `ML` (Left) and `MR` (Right).
 <div class="grid grid-cols-7 gap-4">
 <div class="text-sm col-span-4">
-<img src="/line_following_robot.svg" class="w-45 mx-auto" />
+<img src="/line_following_robot.svg" class="w-45 mx-auto bg-white p-4 rounded-lg" />
 <p class="text-sm text-center">Figure 2-20. A Line-Following Robot.</p>
 
 *   **Go Forward (`ML=1, MR=1`):** When the robot is centered (`L=1, C=0, R=1`).

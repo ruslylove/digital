@@ -2,8 +2,8 @@ PWD /Users/rus/development/digital/tex
 INPUT /usr/local/texlive/2025/texmf.cnf
 INPUT /usr/local/texlive/2025/texmf-dist/web2c/texmf.cnf
 INPUT /usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt
-INPUT /Users/rus/development/digital/tex/mux_2_to_1_symbol.tex
-OUTPUT mux_2_to_1_symbol.log
+INPUT /Users/rus/development/digital/tex/mux_2to1.tex
+OUTPUT mux_2to1.log
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/standalone/standalone.cls
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/standalone/standalone.cls
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/tools/shellesc.sty
@@ -177,10 +177,10 @@ INPUT /usr/local/texlive/2025/texmf-dist/tex/generic/circuitikz/pgfcirccurrent.t
 INPUT /usr/local/texlive/2025/texmf-dist/tex/generic/circuitikz/pgfcircflow.tex
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
-INPUT ./mux_2_to_1_symbol.aux
-INPUT ./mux_2_to_1_symbol.aux
-INPUT mux_2_to_1_symbol.aux
-OUTPUT mux_2_to_1_symbol.aux
+INPUT ./mux_2to1.aux
+INPUT ./mux_2to1.aux
+INPUT mux_2to1.aux
+OUTPUT mux_2to1.aux
 INPUT /usr/local/texlive/2025/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 INPUT /usr/local/texlive/2025/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 INPUT /usr/local/texlive/2025/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
@@ -189,9 +189,8 @@ INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.st
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
-OUTPUT mux_2_to_1_symbol.pdf
+OUTPUT mux_2to1.pdf
 INPUT /usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map
-INPUT mux_2_to_1_symbol.aux
+INPUT mux_2to1.aux
 INPUT /usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb
-INPUT /usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb
 INPUT /usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb
