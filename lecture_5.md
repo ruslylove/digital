@@ -70,7 +70,7 @@ layout: two-cols-header
 
 <div class="text-center">
 <img src="/combinational_logic_circuit.svg" class="rounded-lg bg-white p-4 w-full" alt="Combinational Logic Circuit Diagram">
-<p class="text-sm text-center">Figure 5-1. Combinational Logic Circuit Diagram.</p>
+<div class="text-center text-sm opacity-50 mt-2">Figure 5-1: Combinational Logic Circuit Diagram.</div>
 </div>
 
 
@@ -109,7 +109,7 @@ Let's analyze the circuit below to find the functions for $F₁$ and $F₂$.
 
 
 <img src="/analysis_example_circuit.svg" class="rounded-lg bg-white w-92" alt="Circuit for Analysis Example">
-<p class="text-sm text-center">Figure 5-2. Circuit for Analysis Example.</p>
+<div class="text-center text-sm opacity-50 mt-2">Figure 5-2: Circuit for Analysis Example.</div>
 
 </div>
 
@@ -207,7 +207,7 @@ Design is the process of creating a circuit that meets a given set of specificat
 2.  **Inputs/Outputs:** 4 input lines (for BCD) and 4 output lines (for Excess-3).
 3.  **Symbols:** Inputs $A, B, C, D$; Outputs $w, x, y, z$.
 <img src="/bcd_to_excess3_block.svg" class="rounded-lg bg-white p-4 w-60 mx-auto" alt="BCD to Excess-3 Block Diagram">
-<p class="text-sm text-center">Figure 5-3. BCD to Excess-3 Block Diagram.</p>
+<div class="text-center text-sm opacity-50 mt-2">Figure 5-3: BCD to Excess-3 Block Diagram.</div>
 
 4.  **Truth Table:** Excess-3 code is found by adding 3 to the BCD value. BCD inputs from 10 to 15 are "don't care" conditions as they are not valid BCD digits.
 </div>
@@ -243,11 +243,11 @@ $$
 <div class="grid grid-cols-2">
 <div>
 <img src="/bcd_kmaps_wx.svg" class="rounded-lg bg-white p-2" alt="K-Maps for w and x">
-<p class="text-sm text-center">Figure 5-4. K-Maps for w and x.</p>
+<div class="text-center text-sm opacity-50 mt-2">Figure 5-4: K-Maps for w and x.</div>
 </div>
 <div>
 <img src="/bcd_kmaps_yz.svg" class="rounded-lg bg-white p-2 w-104" alt="K-Maps for y and z">
-<p class="text-sm text-center">Figure 5-5. K-Maps for y and z.</p>
+<div class="text-center text-sm opacity-50 mt-2">Figure 5-5: K-Maps for y and z.</div>
 
 </div>
 </div>
@@ -269,7 +269,7 @@ $$
 
 <div>
 <img src="/bcd_to_excess3_circuit.svg" class="rounded-lg bg-white p-5" alt="Logic Diagram for BCD to Excess-3 Converter">
-<p class="text-sm text-center">Figure 5-6. Logic Diagram for BCD to Excess-3 Converter.</p>
+<div class="text-center text-sm opacity-50 mt-2">Figure 5-6: Logic Diagram for BCD to Excess-3 Converter.</div>
 </div>
 
 <div>
@@ -296,6 +296,81 @@ end dataflow;
 
 </div>
 
+
+
+---
+
+## Decimal Adder (BCD Adder)
+
+A **BCD Adder** adds two BCD digits in parallel and produces a sum digit also in BCD.
+
+*   BCD digits range from 0 to 9.
+*   Binary sum can range from 0 to 19 (9 + 9 + 1 carry).
+*   **Correction is needed** if the binary sum exceeds 9 (10-19 are invalid BCD codes).
+
+### Design Logic
+
+1.  Design a combinational circuit that adds two BCD digits. It needs 8 inputs ($A_3 A_2 A_1 A_0,  B_3 B_2 B_1 B_0$) and 5 outputs ($Z_3 Z_2 Z_1 Z_0 K$). A truth table of 8 inputs (256 lines)! K-map of 8 variables is not possible!
+2.  Possible to add the two BCD digits using a 4-bit binary adder.
+3.  If the binary sum is greater than 9 ($K=1$ or $Z > 9$), add **6 (0110)** to the result.
+    *   Adding 6 skips the 6 invalid states (10-15) and returns the sum to the correct BCD code.
+    *   Need Correction Logic.
+
+
+
+---
+
+### Derivation of Correction Logic
+
+
+
+The binary sum of two BCD digits can produce results from 0 to 19. We need to correct (Add 6) when the sum is invalid (10-15) or when there is a carry ($K=1$) for sums 16-19.
+
+<div class="grid grid-cols-2 gap-4">
+
+<div>
+
+**Truth Table for Binary Sum ($Z_3 Z_2 Z_1 Z_0$) > 9:**
+
+$$
+\begin{array}{|c|c|c|c|c|c|c|}
+\hline
+\text{Decimal} & K & Z_3 & Z_2 & Z_1 & Z_0 & \text{Corr.} (C) \\
+\hline
+0-9 & 0 & - & - & - & - & 0 \\
+10 & 0 & 1 & 0 & 1 & 0 & 1 \\
+11 & 0 & 1 & 0 & 1 & 1 & 1 \\
+12 & 0 & 1 & 1 & 0 & 0 & 1 \\
+13 & 0 & 1 & 1 & 0 & 1 & 1 \\
+14 & 0 & 1 & 1 & 1 & 0 & 1 \\
+15 & 0 & 1 & 1 & 1 & 1 & 1 \\
+16-19 & 1 & X & X & X & X & 1 \\
+\hline
+\end{array}
+$$
+
+</div>
+
+<div>
+
+**Boolean Algebra Derivation:**
+*   $C=1$ if $K=1$.
+*   For the range 10-15 ($K=0$), $Z_3$ is always 1.
+    *   For 12-15: $Z_3$ and $Z_2$ are 1. $\rightarrow$ **Term: $Z_3 Z_2$**
+    *   For 10-11: $Z_3$ and $Z_1$ are 1. $\rightarrow$ **Term: $Z_3 Z_1$** (Also covers 14-15 redundantly)
+*   **Final Equation:** $C = K + Z_3 Z_2 + Z_3 Z_1$
+
+</div>
+
+</div>
+
+
+
+---
+
+<img src="/bcd_adder.svg" class="rounded-lg bg-white p-4 w-100 mx-auto" alt="BCD Adder Block Diagram">
+<div class="text-center text-sm opacity-50 mt-2">Figure 5-7: BCD Adder Block Diagram.</div>
+
 ---
 layout: two-cols-header
 ---
@@ -310,7 +385,7 @@ A **decoder** is a combinational circuit that converts binary information from *
 *   Decoders are often called *n-to-m-line* decoders, where *m ≤ 2ⁿ*.
 
 <img src="/decoder_3to8_block.svg" class="rounded-lg bg-white p-3 w-48 mx-auto" alt="Block Diagram of 3-to-8 Decoder">
-<p class="text-sm text-center">Figure 5-7. Block Diagram of 3-to-8 Decoder.</p>
+<div class="text-center text-sm opacity-50 mt-2">Figure 5-8: Block Diagram of 3-to-8 Decoder.</div>
 
 :: right ::
 
@@ -348,7 +423,7 @@ $$
 ### Logic Diagram
 
 <img src="/decoder_3to8_circuit.svg" class="rounded-lg bg-white p-3 w-56" alt="Logic Diagram of 3-to-8 Decoder">
-<p class="text-sm text-center">Figure 5-8. Logic Diagram of 3-to-8 Decoder.</p>
+<div class="text-center text-sm opacity-50 mt-2">Figure 5-9: Logic Diagram of 3-to-8 Decoder.</div>
 
 </div>
 
@@ -418,7 +493,7 @@ $$
 
 <div>
 <img src="/decoder_3to8_enable_circuit.svg" class="rounded-lg bg-white p-4 w-55 mx-auto" alt="3-to-8 Decoder with Enable Input Logic Diagram">
-<p class="text-sm text-center">Figure 5-9. 3-to-8 Decoder with Enable Input.</p>
+<div class="text-center text-sm opacity-50 mt-2">Figure 5-10: 3-to-8 Decoder with Enable Input.</div>
 </div>
 
 </div>
@@ -428,9 +503,57 @@ $$
 This allows us to cascade decoders to build larger ones. For example, two 3-to-8 decoders with an enable input can be used to create a 4-to-16 decoder.
 
 <img src="/decoder_4to16_block.svg" class="rounded-lg bg-white p-4 w-65 mx-auto" alt="4-to-16 Decoder using two 3-to-8 Decoders">
-<p class="text-sm text-center">Figure 5-10. 4-to-16 Decoder using two 3-to-8 Decoders.</p>
+<div class="text-center text-sm opacity-50 mt-2">Figure 5-11: 4-to-16 Decoder using two 3-to-8 Decoders.</div>
 
 
+---
+
+## Demultiplexers
+
+A **demultiplexer** (DEMUX) is a circuit that takes information from a single input line and directs it to one of $2^n$ output lines.
+
+*   It has **1** data input, **n** selection lines, and **2ⁿ** outputs.
+*   It performs the inverse operation of a multiplexer.
+
+### Relation to Decoders
+<div class="grid grid-cols-2 gap-4 mt-4">
+<div>
+
+**A decoder with an enable input can function as a demultiplexer.**
+
+*   **Decoder:** Enable input controls activation; Select inputs choose output.
+*   **Demultiplexer:** The *Enable* input becomes the **Data Input**. The *Select* inputs steer this data to the selected output line.
+
+</div>
+
+<div>
+
+**1-to-4 Demultiplexer Truth Table**
+
+$$
+\small
+\begin{array}{|c|cc|cccc|}
+\hline
+\text{Data} & S_1 & S_0 & Y_0 & Y_1 & Y_2 & Y_3 \\
+\hline
+D & 0 & 0 & D & 0 & 0 & 0 \\
+D & 0 & 1 & 0 & D & 0 & 0 \\
+D & 1 & 0 & 0 & 0 & D & 0 \\
+D & 1 & 1 & 0 & 0 & 0 & D \\
+\hline
+\end{array}
+$$
+
+</div>
+
+</div>
+
+---
+
+<div>
+<img src="/demux_1to4.svg" class="rounded-lg bg-white p-4 w-100 mx-auto" alt="1-to-4 Demultiplexer Logic Diagram">
+<div class="text-center text-sm opacity-50 mt-2">Figure 5-12: 1-to-4 Demultiplexer Logic Diagram.</div>
+</div>
 
 ---
 layout: two-cols-header
@@ -472,7 +595,7 @@ $$
 :: right ::
 
 <img src="/encoder_8to3_circuit.svg" class="rounded-lg bg-white p-4 mx-auto w-95" alt="Octal-to-Binary Encoder (8-to-3) Logic Diagram">
-<p class="text-sm text-center">Figure 5-11. Octal-to-Binary Encoder (8-to-3).</p>
+<div class="text-center text-sm opacity-50 mt-2">Figure 5-13: Octal-to-Binary Encoder (8-to-3).</div>
 
 ---
 layout: two-cols
@@ -513,7 +636,7 @@ $$
 :: right ::
 
 <img src="/priority_encoder_circuit.svg" class="rounded-lg bg-white p-4 mx-auto w-92" alt="4-to-2 Priority Encoder Logic Diagram">
-<p class="text-sm text-center">Figure 5-12. 4-to-2 Priority Encoder.</p>
+<div class="text-center text-sm opacity-50 mt-2">Figure 5-14: 4-to-2 Priority Encoder.</div>
 
 
 
@@ -550,7 +673,7 @@ $$
 <div>
 
 <img src="/mux_4to1_logic.svg" class="rounded-lg bg-white w-62 mx-auto" alt="4-to-1 MUX Logic Diagram">
-<p class="text-sm text-center">Figure 5-13. 4-to-1 MUX Logic Diagram.</p>
+<div class="text-center text-sm opacity-50 mt-2">Figure 5-15: 4-to-1 MUX Logic Diagram.</div>
 
 
 </div>
@@ -614,6 +737,59 @@ end behavioral;
 </div>
 
 ---
+
+## Boolean Function Implementation
+
+A multiplexer is essentially a **universal logic circuit**. Any Boolean function of $n$ variables can be implemented using a multiplexer with $n-1$ selection lines.
+
+**Procedure:**
+1.  Connect the first $n-1$ variables to the **Selection** inputs.
+2.  The remaining single variable (say, $D$) is connected to the **Data** inputs.
+3.  Each data input $I_k$ will be connected to either $D, D', 0,$ or $1$ based on the function's requirements utilizing an implementation table.
+
+---
+
+### Example: $F(A, B, C, D) = \Sigma(1, 3, 4, 11, 12, 13, 14, 15)$
+
+<div class="grid grid-cols-2 gap-8">
+<div>
+
+**Implementation Table:**
+Group the truth table by the selection variables ($A, B, C$).
+Determine the output $F$ in terms of the data variable ($D$) for each group.
+
+$$
+\small
+\begin{array}{|ccc|cc|c|}
+\hline
+S_2 & S_1 & S_0 & D=0 & D=1 & \text{MUX Input} \\
+(A) & (B) & (C) & (m_i) & (m_{i+1}) & (I_k) \\
+\hline
+0 & 0 & 0 & 0 & \mathbf{1} & D \\
+0 & 0 & 1 & 2 & \mathbf{3} & D \\
+0 & 1 & 0 & \mathbf{4} & 5 & D' \\
+0 & 1 & 1 & 6 & 7 & 0 \\
+1 & 0 & 0 & 8 & 9 & 0 \\
+1 & 0 & 1 & 10 & \mathbf{11} & D \\
+1 & 1 & 0 & \mathbf{12} & \mathbf{13} & 1 \\
+1 & 1 & 1 & \mathbf{14} & \mathbf{15} & 1 \\
+\hline
+\end{array}
+$$
+*Note: Bold numbers indicate minterms where $F=1$.*
+
+</div>
+<div>
+
+**Logic Diagram using 8-to-1 MUX**
+
+<img src="/mux_8to1_func.svg" class="rounded-lg bg-white p-4 w-60 mx-auto" alt="8-to-1 MUX Function Implementation">
+<div class="text-center text-sm opacity-50 mt-2">Figure 5-16: Boolean Function Implementation with 8-to-1 MUX.</div>
+
+</div>
+</div>
+
+---
 layout: two-cols-header
 ---
 
@@ -627,7 +803,7 @@ A **three-state gate** (or tri-state buffer) exhibits three possible output stat
 3.  **High-Impedance (Hi-Z)**
 
 <img src="/tri_state_buffer.svg" class="rounded-lg bg-white p-4 w-80 mt-8 mx-auto" alt="Three-State Buffer">
-<p class="text-sm text-center">Figure 5-14. Three-State Buffer.</p>
+<div class="text-center text-sm opacity-50 mt-2">Figure 5-17: Three-State Buffer.</div>
 
 :: right ::
 
@@ -695,7 +871,7 @@ $$
 
 ### Logic Diagram of 4-bit Magnitude Comparator
 <img src="/magnitude_comparator.svg" class="rounded-lg bg-white p-4 w-150 mx-auto" alt="4-bit Magnitude Comparator Logic Diagram">
-<p class="text-sm text-center">Figure 5-15. 4-bit Magnitude Comparator.</p>
+<div class="text-center text-sm opacity-50 mt-2">Figure 5-18: 4-bit Magnitude Comparator.</div>
 
 ---
 
