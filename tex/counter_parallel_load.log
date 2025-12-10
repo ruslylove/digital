@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=latex 2025.11.22)  8 DEC 2025 20:50
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=latex 2025.11.22)  10 DEC 2025 16:28
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**/Users/rus/development/digital/tex/counter_parallel_load.tex
-(/Users/rus/development/digital/tex/counter_parallel_load.tex
+**counter_parallel_load.tex
+(./counter_parallel_load.tex
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
 (/usr/local/texlive/2025/texmf-dist/tex/latex/standalone/standalone.cls
@@ -461,7 +461,7 @@ File: l3backend-dvips.def 2024-05-08 L3 backend support: dvips
 \g__pdf_backend_link_int=\count300
 \g__pdf_backend_link_sf_int=\count301
 )
-No file counter_parallel_load.aux.
+(./counter_parallel_load.aux)
 \openout1 = `counter_parallel_load.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 5.
@@ -479,31 +479,52 @@ LaTeX Font Info:    ... okay on input line 5.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 5.
 LaTeX Font Info:    ... okay on input line 5.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 18.
+(Font)              <9> on input line 72.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 18.
+(Font)              <6> on input line 72.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <9> on input line 123.
+(Font)              <5> on input line 72.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 123.
+(Font)              <7> on input line 72.
+
+Missing character: There is no + in font nullfont!
+Missing character: There is no + in font nullfont!
+Missing character: There is no + in font nullfont!
+Missing character: There is no + in font nullfont!
+Missing character: There is no + in font nullfont!
+Missing character: There is no + in font nullfont!
+Missing character: There is no + in font nullfont!
+Missing character: There is no + in font nullfont!
+Missing character: There is no + in font nullfont!
+Missing character: There is no + in font nullfont!
+Missing character: There is no + in font nullfont!
+Missing character: There is no + in font nullfont!
+Missing character: There is no + in font nullfont!
+Missing character: There is no + in font nullfont!
+Missing character: There is no + in font nullfont!
+Missing character: There is no + in font nullfont!
+Missing character: There is no + in font nullfont!
+Missing character: There is no + in font nullfont!
+Missing character: There is no + in font nullfont!
+Missing character: There is no + in font nullfont!
+Missing character: There is no + in font nullfont!
 
 
 [1
 
-] (/Users/rus/development/digital/tex/counter_parallel_load.aux)
+] (./counter_parallel_load.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 31085 strings out of 473191
- 819870 string characters out of 5715825
- 1587037 words of memory out of 5000000
- 54088 multiletter control sequences out of 15000+600000
+ 31727 strings out of 473191
+ 837182 string characters out of 5715825
+ 1654592 words of memory out of 5000000
+ 54729 multiletter control sequences out of 15000+600000
  560660 words of font info for 42 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 117i,8n,121p,480b,1004s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 117i,8n,121p,445b,1021s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on /Users/rus/development/digital/tex/counter_parallel_load.dvi 
-(1 page, 74368 bytes).
+Output written on counter_parallel_load.dvi (1 page, 96492 bytes).

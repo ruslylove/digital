@@ -432,7 +432,7 @@ $$
 
 ---
 
-<img src="/counter_parallel_load.svg" class="rounded-lg bg-white p-4 w-full" alt="4-bit Counter with Parallel Load">
+<img src="/counter_parallel_load.svg" class="rounded-lg bg-white p-4 w-125 mx-auto" alt="4-bit Counter with Parallel Load">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-14: 4-Bit Counter with Parallel Load</div>
 
 ---
