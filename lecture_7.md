@@ -333,8 +333,11 @@ A BCD counter counts from 0 to 9 (0000 to 1001) and then resets to 0.
 
 :: left ::
 
-*   It can be constructed from a 4-bit binary counter by adding logic to force a reset to 0000 after the count of 1001.
-*   When the counter reaches 1010 (decimal 10), the NAND gate output goes low, asynchronously clearing all flip-flops.
+*  BCD counters are essential for digital systems that interface with human users, such as digital clocks and voltmeters, where data must be displayed in decimal format.
+*   They simplify the conversion from binary to 7-segment display formats.  
+*   It can be constructed from a 4-bit binary ripple counter by modifying the interconnections and logic to skip states 10 to 15.
+
+
 
 :: right ::
 
@@ -346,6 +349,9 @@ A BCD counter counts from 0 to 9 (0000 to 1001) and then resets to 0.
 
 ---
 
+*   The J and K inputs are controlled to force the transition from **1001** (9) back to **0000** (0).
+    *   **Q1 Control:** The J input of the Q1 flip-flop is connected to $\overline{Q_3}$. When the counter reaches 1000 ($Q_3=1$), $J=0$, preventing Q1 from toggling to 1 on the next clock pulse.
+    *   **Q3 Control:** The J input of the Q3 flip-flop is connected to $Q_2 \cdot Q_1$. This ensures Q3 only toggles to 1 when the count transitions from 0111 (7) to 1000 (8).
 <div class="my-8"></div>
 
 <img src="/bcd_ripple_counter.svg" class="rounded-lg bg-white p-4 w-full" alt="BCD Ripple Counter Logic Circuit">

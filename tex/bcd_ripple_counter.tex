@@ -27,7 +27,7 @@
         \node[flipflop JK,flipflop def={nd=1,n2=1}] (FF\i) at (\xpos, 0) {};
         
         % Outputs
-        \node[above] at (FF\i.n) {$FF_\i$};
+        \node[above] at (FF\i.n) {$Q_\i$};
         \draw (FF\i.pin 6) -- ++(0.5, 0) coordinate (Q\i_out);
        % \draw (Q\i_out) -- ++(0.3, 0) node[circ, label={above:$Q_\i$}] {};
         
