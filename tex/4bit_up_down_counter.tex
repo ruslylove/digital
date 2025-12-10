@@ -8,15 +8,15 @@
     \ctikzset{flipflops/scale=0.85}
     
     % Signals
-    \node (clk_in) at (-2, 0) {Clock};
-    \node (logic_1) at (-2, 4) {Logic 1};
-    \node (up_in) at (-2, 3) {Up};
-    \node (down_in) at (-2, 1.5) {Down};
+    \node (clk_in) at (-2.5, -2) {Clock};
+    %\node (logic_1) at (-2, 6) {Logic 1};
+  %  \node (up_in) at (-2, 4) {Up};
+   % \node (down_in) at (-2, 2) {Down};
     
     % Flip-Flops
     % LSB (A0) on Left -> MSB (A3) on Right
     
-    \def\ffdist{5.5}
+    \def\ffdist{6}
     
     \foreach \i [count=\n from 0] in {0,1,2,3} {
         \pgfmathsetmacro{\xpos}{\n*\ffdist}
@@ -25,17 +25,17 @@
         \node[flipflop T] (FF\i) at (\xpos, 0) {};
         
         % Outputs
-        \node[above] at (FF\i.n) {$FF_\i$};
-        \draw (FF\i.pin 6) -- ++(0.5, 0) coordinate (Q\i_out);
-        \draw (Q\i_out) -- ++(0.5, 0) node[circ, label={above:$A_\i$}] {};
+        \node[above] at (FF\i.n) {$T_\i$};
+        \draw (FF\i.pin 6) -- ++(0, 0) coordinate (Q\i_out);
+        \draw (Q\i_out) -- ++(0.5, 0) node[label={right:$A_\i$}] {};
         
         % Qbar output needed for Down counting
-        \draw (FF\i.pin 4) -- ++(0.3, 0) coordinate (Qbar\i_out);
+        \draw (FF\i.pin 4) -- ++(0, 0) coordinate (Qbar\i_out);
     }
     
     % FF0 Logic: T=1
     \draw (FF0.pin 1) -- ++(-0.5, 0) coordinate (T0_stub);
-    \draw (T0_stub) -- (T0_stub |- logic_1) -- (logic_1);
+    \draw (T0_stub) -- ++(-0.5,0) node[left] (logic_1) {'1'};
     
     % Cascading Carry/Borrow Logic
     % We need to generate T inputs for FF1, FF2, FF3.
@@ -62,13 +62,13 @@
         \coordinate (mid_x) at ($(FF\i)!0.5!(FF\next)$);
         
         % Upper AND gate (Up count)
-        \node[and port, scale=0.7] (AND_UP_\i) at ($(mid_x) + (0, 3.0)$) {};
+        \node[and port, scale=0.7] (AND_UP_\i) at ($(mid_x) + (-0.5, 4.0)$) {};
         
         % Lower AND gate (Down count)
-        \node[and port, scale=0.7] (AND_DOWN_\i) at ($(mid_x) + (0, 1.5)$) {};
+        \node[and port, scale=0.7] (AND_DOWN_\i) at ($(mid_x) + (-0.5, 2.5)$) {};
         
         % OR gate (Combines for T input of next FF)
-        \node[or port, scale=0.7] (OR_\i) at ($(mid_x) + (1.0, 2.25)$) {};
+        \node[or port, scale=0.7] (OR_\i) at ($(mid_x) + (1.0, 3.25)$) {};
         
         % Connections for AND_UP_\i
         % Input 1: Up Control (Cascaded or direct?)
@@ -82,8 +82,28 @@
         % Connections for AND_UP_\i
         \ifnum\i=0
             % First stage: Inputs are directly Up and Down signals
-            \draw (up_in) -| (AND_UP_0.in 1);
-            \draw (down_in) -| (AND_DOWN_0.in 2);
+            % First stage: Inputs are directly Up and Down signals
+            % Interlock: Down signal to AND_DOWN is (Down AND NOT Up)
+            
+            % Up Input
+            \draw (AND_UP_0.in 1) -- ++(-3.5, 0) node[left] (up_in) {Up};
+            
+            % NOT Up
+            \node[not port, scale=0.6, rotate=-90] (NOT_UP) at ($(up_in) + (1.0, -1.0)$) {};
+            \draw (up_in-|NOT_UP.in) |- (NOT_UP.in);
+            \draw node[circ] at (up_in-|NOT_UP.in) {};
+            
+            % Interlock AND gate
+            \node[and port, scale=0.7] (AND_INTERLOCK) at ($(AND_DOWN_0.in 2) + (-1.5, 0)$) {};
+            
+            % Inputs to Interlock AND
+            % In 1: NOT Up
+            \draw (NOT_UP.out) |- (AND_INTERLOCK.in 1);
+            % In 2: Down Input
+            \draw (AND_INTERLOCK.in 2) -- ++(-1.0, 0) node[left] (down_in) {Down};
+            
+            % Output to AND_DOWN_0
+            \draw (AND_INTERLOCK.out) -- (AND_DOWN_0.in 2);
         \else
             % Subsequent stages: Inputs from previous AND outputs
             \pgfmathsetmacro{\prev}{int(\i-1)}
@@ -98,23 +118,28 @@
         \draw (tap_Q\i) |- (AND_UP_\i.in 2);
         
         % Connect Qbar\i to AND_DOWN_\i input 1
-        \draw (Qbar\i_out) ++(0.2, 0) coordinate (tap_Qbar\i); % Qbar is pin 4 (bottom)
-        \draw (tap_Qbar\i) -- ++(0.2, 0) |- (AND_DOWN_\i.in 1);
+        \draw (FF\i.pin 4) |- (AND_DOWN_\i.in 1);
         
         % Inputs to OR gate
         \draw (AND_UP_\i.out) |- (OR_\i.in 1);
         \draw (AND_DOWN_\i.out) |- (OR_\i.in 2);
+        
+        \ifnum\i=2
+            
+        \else
+        \draw node[circ] at (AND_UP_\i.out) {};
+        \draw node[circ] at (AND_DOWN_\i.out) {};
+        \fi
         
         % Output of OR gate drives T input of next FF
         \draw (OR_\i.out) -- ++(0.2, 0) |- (FF\next.pin 1);
     }
     
     % Clock Distribution
-    \coordinate (clk_line_y) at ($(FF0.pin 2) + (0, -1.5)$);
-    \draw (clk_in) |- (clk_line_y);
+    \draw (clk_in) -| (FF3.pin 3);
     
-    \foreach \i in {0,1,2,3} {
-        \draw (FF\i.pin 2) -- (FF\i.pin 2 |- clk_line_y) node[circ] {};
+    \foreach \i in {0,1,2} {
+        \draw (FF\i.pin 3) -- (FF\i.pin 3 |- clk_in) node[circ] {};
     }
 
 \end{circuitikz}
