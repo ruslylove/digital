@@ -3,10 +3,10 @@ theme: seriph
 background: https://cover.sli.dev
 transition: fade
 layout: cover
-title: Lecture 8 - Finite State Machine Applications
+title: Lecture 8 - Finite State Machines and Register Transfer Level Design
 ---
 
-# Lecture 8: Finite State Machine Applications
+# Lecture 8: Finite State Machines and Register Transfer Level Design
 {{ $slidev.configs.subject }}
 
 
@@ -162,61 +162,110 @@ stateDiagram-v2
     Got10 --> Locked : Reset
 ```
 
----
 
-## Application 4: Datapath Control
-
-As seen in `Digital_8_1.pdf`, FSMs are essential for controlling datapaths. They generate the control signals that manage data flow between registers.
-
-**Problem:** Swap the contents of registers R1 and R2 using R3 as temporary storage. The operation starts when input `w=1`. An output `Done=1` indicates completion.
-
-### Operations
-1.  `R2 => R3` (Copy R2 to R3)
-2.  `R1 => R2` (Copy R1 to R2)
-3.  `R3 => R1` (Copy R3 to R1)
-
-<img src="https://i.imgur.com/YgY1s3C.png" class="rounded-lg bg-white p-4 w-2/3" alt="Datapath Diagram">
 
 ---
 
-## Datapath Control: State Diagram
+## RTL Component: Register File
 
-This Moore FSM generates the control signals (`R1in`, `R1out`, etc.) at each state to perform the register swap.
+A **Register File** is a collection of registers with common read and write ports, packaged as a single fast memory unit.
 
-*   **State A (Idle):** No operation. All control signals are 0.
-*   **State B (Step 1):** Assert `R2out` and `R3in`.
-*   **State C (Step 2):** Assert `R1out` and `R2in`.
-*   **State D (Step 3):** Assert `R3out`, `R1in`, and `Done`.
+*   **Read Access:** Typically has two read ports allowing two registers to be read simultaneously (Selection via `Read Reg 1` and `Read Reg 2`).
+*   **Write Access:** Has one write port (Selection via `Write Reg`, Data via `Write Data`).
+*   **Control:** `RegWrite` enables the write operation on the clock edge.
 
-```mermaid
-stateDiagram-v2
-    direction LR
-    state "A (Idle)" as A
-    state "B (R2->R3)" as B
-    state "C (R1->R2)" as C
-    state "D (R3->R1, Done)" as D
-
-    [*] --> A
-    A --> A : w=0
-    A --> B : w=1
-    B --> C
-    C --> D
-    D --> A
-```
+<img src="/register_file.svg" class="rounded-lg bg-white p-4 w-90 mx-auto mt-4" alt="Register File Block Diagram">
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-2: Register File with 2 Read Ports and 1 Write Port</div>
 
 ---
 
-## Datapath Control: State & Output Table
+## RTL Component: Arithmetic Logic Unit (ALU)
 
-The state table explicitly defines the outputs (control signals) for each state. This table is used to synthesize the combinational logic of the FSM.
+The **ALU** is the computational heart of the CPU. It is a combinational logic circuit that performs arithmetic and logical operations.
 
-| Present State | Next State (w=0) | Next State (w=1) | R1out | R1in | R2out | R2in | R3out | R3in | Done |
-|:-------------:|:----------------:|:----------------:|:-----:|:----:|:-----:|:----:|:-----:|:----:|:----:|
-| A             | A                | B                | 0     | 0    | 0     | 0    | 0     | 0    | 0    |
-| B             | C                | C                | 0     | 0    | 1     | 0    | 0     | 1    | 0    |
-| C             | D                | D                | 1     | 0    | 0     | 1    | 0     | 0    | 0    |
-| D             | A                | A                | 0     | 1    | 0     | 0    | 1     | 0    | 1    |
+*   **Inputs:** Operands A and B.
+*   **Output:** Result.
+*   **Control:** Selects the operation (e.g., ADD, SUB, AND, OR).
+*   **Status Flags:**
+    *   **Zero (Z):** Set if Result is 0.
+    *   **Overflow (V):** Set if signed arithmetic overflow occurs.
 
+---
+
+<img src="/alu_block.svg" class="rounded-lg bg-white p-4 w-90 mx-auto mt-4" alt="ALU Block Diagram">
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-3: Arithmetic Logic Unit (ALU)</div>
+
+---
+
+## Register Transfer Level (RTL) Design
+
+**RTL Design** is a methodology for defining digital systems by describing the flow of data between registers and the operations performed on that data.
+
+*   **Registers:** Store the state of the system.
+*   **Combinational Logic (e.g., ALU):** Performs operations.
+*   **Buses:** Transfer data between components.
+
+### Notation (RTL)
+
+*   **Transfer:** $R2 \leftarrow R1$ (Copy contents of R1 to R2)
+*   **Operation:** $R1 \leftarrow R1 + R2$ (Add R1 and R2, store in R1)
+*   **Conditional:** $P: R2 \leftarrow R1$ (Transfer occurs only if control signal P=1)
+
+---
+
+## RTL Component: Register File
+
+A **Register File** is a collection of registers with common read and write ports, packaged as a single fast memory unit.
+
+*   **Read Access:** Typically has two read ports allowing two registers to be read simultaneously (Selection via `Read Reg 1` and `Read Reg 2`).
+*   **Write Access:** Has one write port (Selection via `Write Reg`, Data via `Write Data`).
+*   **Control:** `RegWrite` enables the write operation on the clock edge.
+
+<img src="/register_file.svg" class="rounded-lg bg-white p-4 w-90 mx-auto mt-4" alt="Register File Block Diagram">
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-1: Register File with 2 Read Ports and 1 Write Port</div>
+
+---
+
+## RTL Component: Arithmetic Logic Unit (ALU)
+
+The **ALU** is the computational heart of the CPU. It is a combinational logic circuit that performs arithmetic and logical operations.
+
+*   **Inputs:** Operands A and B.
+*   **Output:** Result.
+*   **Control:** Selects the operation (e.g., ADD, SUB, AND, OR).
+*   **Status Flags:**
+    *   **Zero (Z):** Set if Result is 0.
+    *   **Overflow (V):** Set if signed arithmetic overflow occurs.
+
+<img src="/alu_block.svg" class="rounded-lg bg-white p-4 w-90 mx-auto mt-4" alt="ALU Block Diagram">
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-2: Arithmetic Logic Unit (ALU)</div>
+
+---
+
+<img src="/alu_block.svg" class="rounded-lg bg-white p-4 w-90 mx-auto mt-4" alt="ALU Block Diagram">
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-3: Arithmetic Logic Unit (ALU)</div>
+
+---
+
+## Register Transfer on a Common Bus
+
+In digital systems with many registers, it is impractical to connect every register output to every other register input. A more efficient approach is to use a **Common Bus System**.
+
+*   A **Bus** is a shared set of lines.
+*   Control signals determine which register drives the bus (Source) and which register accepts the data (Destination).
+
+### Common Bus Construction using Multiplexers
+
+*   For *k* registers of *n* bits each, we use *n* multiplexers of size *k-to-1*.
+*   The select lines ($S_1, S_0$) determine the **Source Register**.
+*   The **Load** signals on the registers determine the **Destination Register**.
+
+---
+
+<img src="/common_bus_system.svg" class="rounded-lg bg-white p-4 w-90 mx-auto mt-4" alt="Common Bus System">
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-3: Common Bus System for 4 Registers</div>
+
+This structure forms the foundation for the Datapath Control application.
 ---
 
 ## Summary

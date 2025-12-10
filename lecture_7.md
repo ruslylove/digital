@@ -207,7 +207,7 @@ $$
 :: right ::
 
 <img src="/universal_shift_register_block.svg" class="rounded-lg bg-white p-4" alt="4-bit Universal Shift Register Diagram">
-<div class="text-center text-sm opacity-50 mt-2">Figure 7-8: Block Diagram of 4-Bit Universal Shift Register</div>
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-7: Block Diagram of 4-Bit Universal Shift Register</div>
 
 ---
 
@@ -217,7 +217,7 @@ The operation is selected by inputs $s_1$ and $s_0$. A 4x1 MUX is used for each 
 
 
 <img src="/universal_shift_register.svg" class="rounded-lg bg-white p-4 w-full" alt="4-Bit Universal Shift Register">
-<div class="text-center text-sm opacity-50 mt-2">Figure 7-7: 4-Bit Universal Shift Register</div>
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-8: 4-Bit Universal Shift Register</div>
 
 
 ---
@@ -291,7 +291,7 @@ In a ripple counter, the clock is applied only to the first flip-flop. The outpu
 *   Simple to construct, but slower than synchronous counters due to the cumulative propagation delay.
 
 <img src="/4bit_ripple_counter.svg" class="rounded-lg bg-white mt-4 p-4 w-190 mx-auto" alt="4-bit Ripple Counter">
-<div class="text-center text-sm opacity-50 mt-2">Figure 7-9: 4-Bit Binary Ripple Counter using T Flip-Flops</div>
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-10: 4-Bit Binary Ripple Counter using T Flip-Flops</div>
 
 
 ---
@@ -321,7 +321,7 @@ The fundamental characteristic of ripple counters is that flip-flops change stat
 :: right ::
 
 <img src="/4bit_ripple_counter_timing.svg" class="rounded-lg bg-white p-2 w-100 mx-auto" alt="Timing Diagram of Ripple Counter">
-<div class="text-center text-sm opacity-50 mt-2">Figure 7-10: Timing Diagram showing Accumulation Delay</div>
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-11: Timing Diagram showing Accumulation Delay</div>
 
 ---
 layout: two-cols-header
@@ -342,7 +342,7 @@ A BCD counter counts from 0 to 9 (0000 to 1001) and then resets to 0.
 :: right ::
 
 <img src="/bcd_state_diagram.svg" class="rounded-lg bg-white p-4 w-85 mx-auto" alt="State Diagram of BCD Counter">
-<div class="text-center text-sm opacity-50 mt-2">Figure 7-10: State Diagram of BCD Counter</div>
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-12: State Diagram of BCD Counter</div>
 
 
 
@@ -355,7 +355,7 @@ A BCD counter counts from 0 to 9 (0000 to 1001) and then resets to 0.
 <div class="my-8"></div>
 
 <img src="/bcd_ripple_counter.svg" class="rounded-lg bg-white p-4 w-full" alt="BCD Ripple Counter Logic Circuit">
-<div class="text-center text-sm opacity-50 mt-2">Figure 7-11: BCD Ripple Counter Logic Circuit</div>
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-13: BCD Ripple Counter Logic Circuit</div>
 
 ---
 
@@ -368,7 +368,7 @@ In a **synchronous counter**, all flip-flops are triggered simultaneously by a c
 *   The design follows the standard procedure for synchronous sequential circuits.
 
 <img src="/4bit_synchronous_counter.svg" class="rounded-lg bg-white p-4 w-full mt-4" alt="4-bit Synchronous Binary Counter">
-<div class="text-center text-sm opacity-50 mt-2">Figure 7-12: 4-Bit Synchronous Binary Counter</div>
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-14: 4-Bit Synchronous Binary Counter</div>
 
 
 ---
@@ -392,14 +392,14 @@ An up-down counter is capable of counting in both ascending and descending order
 <div class="flex justify-center mt-2">
     <img src="/4bit_up_down_counter_state_diagram.svg" class="rounded-lg bg-white w-80" alt="State Diagram of 4-bit Up-Down Counter">
 </div>
-<div class="text-center text-sm opacity-50 mt-2">Figure 7-14: State Diagram of 4-Bit Up/Down Counter</div>
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-15: State Diagram of 4-Bit Up/Down Counter</div>
 
 
 
 ---
 
 <img src="/4bit_up_down_counter.svg" class="rounded-lg bg-white p-4 w-full" alt="4-bit Up-Down Counter">
-<div class="text-center text-sm opacity-50 mt-2">Figure 7-13: 4-Bit Synchronous Up/Down Binary Counter</div>
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-16: 4-Bit Synchronous Up/Down Binary Counter</div>
 
 
 
@@ -433,15 +433,9 @@ $$
 ---
 
 <img src="/counter_parallel_load.svg" class="rounded-lg bg-white p-4 w-125 mx-auto" alt="4-bit Counter with Parallel Load">
-<div class="text-center text-sm opacity-50 mt-2">Figure 7-14: 4-Bit Counter with Parallel Load</div>
-
----
-
-### BCD Counter from 4-bit Binary Counter with Parallel Load
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-17: 4-Bit Counter with Parallel Load</div>
 
 
-<img src="/sequence_counter_approaches.svg" class="rounded-lg bg-white p-4 w-full" alt="4-bit Any Sequence Counter">
-<div class="text-center text-sm opacity-50 mt-2">Figure 7-15: 4-Bit BCD Counter</div>
 
 ---
 
@@ -480,16 +474,79 @@ end behavioral;
 
 ---
 
-## Other Counter Types
-
-### Modulo-N Counter (Divide-by-N)
+## Modulo-N Counter (Divide-by-N)
 *   A counter that goes through a repeated sequence of *N* states. The counter "divides" the input clock frequency by *N*.
 *   A BCD counter is a Modulo-10 counter.
 *   Can be designed to follow any arbitrary sequence.
 
-### Self-Correcting Counter
+<img src="/modulo_n_counter.svg" class="rounded-lg bg-white p-4 w-120 mx-auto mt-4" alt="Modulo-N Counter Block Diagram">
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-18: Modulo-N Counter Block Diagram</div>
+
+---
+
+### BCD (Modulo-10) Counter    
+
+<div class="text-base">
+
+Two common approaches to implement a BCD counter using a 4-bit binary counter with parallel load:
+
+*   **Using Synchronous Load:** Detect the count of **9 (1001)**. On the next clock edge, load **0000** into the counter.
+*   **Using Asynchronous Clear:** Detect the count of **10 (1010)**. This immediately resets the counter to **0000**.
+</div>
+
+<div class="grid grid-cols-2 gap-4 mt-4">
+
+<div class="text-center">
+<img src="/bcd_counter_sync_load.svg" class="rounded-lg bg-white p-4 w-90" alt="BCD Counter Sync Load">
+<div class="text-sm opacity-50 mt-2">Figure 7-19: Using Synchronous Load (Detect 9)</div>
+</div>
+
+<div class="text-center">
+<img src="/bcd_counter_async_clear.svg" class="rounded-lg bg-white p-4 w-90 mt-15" alt="BCD Counter Async Clear">
+<div class="text-sm opacity-50 mt-2">Figure 7-20: Using Asynchronous Clear (Detect 10)</div>
+</div>
+
+</div>
+
+
+---
+
+## Self-Correcting Counter
 *   A counter with unused states can sometimes enter one of these states due to noise.
 *   A self-correcting design ensures that if the counter enters an unused state, it will eventually transition back to a valid state.
+
+
+<div class="grid grid-cols-2 gap-8 items-center">
+
+<div class="text-center">
+<img src="/self_correcting_counter.svg" class="rounded-lg bg-white p-4 w-70 mx-auto" alt="State Diagram of Self-Correcting Counter">
+<div class="text-sm opacity-50 mt-2">Figure 7-21: State Diagram of Self-Correcting Counter (Modulo-6)</div>
+</div>
+
+<div class="text-xl">
+$$
+\begin{array}{|ccc|ccc|}
+\hline
+Q_2 & Q_1 & Q_0 & Q_2^+ & Q_1^+ & Q_0^+ \\
+\hline
+0 & 0 & 0 & 0 & 0 & 1 \\
+0 & 0 & 1 & 0 & 1 & 0 \\
+0 & 1 & 0 & 0 & 1 & 1 \\
+0 & 1 & 1 & 1 & 0 & 0 \\
+1 & 0 & 0 & 1 & 0 & 1 \\
+1 & 0 & 1 & 0 & 0 & 0 \\
+\hline
+1 & 1 & 0 & 0 & 0 & 0 \\
+1 & 1 & 1 & 0 & 0 & 0 \\
+\hline
+\end{array}
+$$
+<div class="text-center text-sm opacity-50 mt-2">Table 7-4: State Table with Self-Correction</div>
+</div>
+
+</div>
+
+
 
 ---
 
@@ -505,7 +562,7 @@ A **ring counter** is a circular shift register where only one flip-flop is set 
 
 <div>
 <img src="/ring_counter.svg" class="rounded-lg bg-white p-4 mx-auto" alt="Ring Counter Diagram">
-<p class="text-sm opacity-50 text-center">Figure 7-16: Ring Counter Diagram</p>
+<p class="text-sm opacity-50 text-center">Figure 7-22: Ring Counter Diagram</p>
 
 </div>
 
@@ -532,7 +589,7 @@ $$
 ### Ring Counter Timing Signals
 
 <img src="/timing_signals.svg" class="rounded-lg bg-white p-4 w-200 mt-4" alt="Timing Signals">
-<div class="text-center text-sm opacity-50 mt-2">Figure 7-18: Timing Signals</div>
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-23: Timing Signals</div>
 ---
 
 ## Application: Generating Timing Signals
@@ -547,8 +604,8 @@ Counters are frequently used to generate timing signals that control the sequenc
 *   Uses *N* flip-flops for *N* timing signals.
 *   Simple, requires no decoder.
 
-<img src="/ring_counter.svg" class="rounded-lg bg-white p-4 w-90" alt="Ring Counter">
-<div class="text-center text-sm opacity-50 mt-2">Figure 7-16: Ring Counter Diagram</div>
+<img src="/ring_counter_generator.svg" class="rounded-lg bg-white p-4 w-90 mx-auto" alt="Ring Counter Generator">
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-24: Ring Counter Timing Generator</div>
 
 </div>
 
@@ -558,9 +615,86 @@ Counters are frequently used to generate timing signals that control the sequenc
 *   Uses an *n-bit* counter and an *n-to-2ⁿ* decoder to generate *N = 2ⁿ* timing signals.
 *   More efficient in terms of flip-flop count for a large number of signals.
 
-<img src="/counter_decoder_block.svg" class="rounded-lg bg-white p-4" alt="Counter and Decoder">
-<div class="text-center text-sm opacity-50 mt-2">Figure 7-17: Counter and Decoder Block</div>
+<img src="/counter_decoder_block.svg" class="rounded-lg bg-white p-4 mt-3 mx-auto" alt="Counter and Decoder">
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-25: Counter and Decoder Block</div>
 
 </div>
 </div>
 
+
+
+---
+
+
+## Lecture 7 Summary
+
+*   **Registers:** Groups of flip-flops storing binary information. Parallel load capabilities allow simultaneous data transfer.
+*   **Shift Registers:** Capable of shifting data serially. Universal shift registers combine serial/parallel operations.
+*   **Counters:**
+    *   **Ripple:** Asynchronous, simple but slower due to propagation delay.
+    *   **Synchronous:** Common clock, faster, requires more logic.
+    *   **Up/Down:** Count in both directions.
+    *   **Modulo-N:** Reset at a specific count.
+    *   **Ring Counter:** One-hot encoding, useful for timing signals.
+
+---
+layout: section
+---
+
+## Lecture 7 Exercises
+
+---
+
+
+### Exercise 7-1: Register Design
+
+**Design a 4-bit Register with the following specifications:**
+
+*   **Inputs:** Clock `CLK`, Clear `CLR`, Load `LD`, Increment `INC`, Input Data `I[3:0]`.
+*   **Operations:**
+    *   `CLR = 1`: Reset to `0000`.
+    *   `LD = 1`: Load `I` into the register (priority over `INC`).
+    *   `INC = 1`: Increment value by 1.
+    *   Otherwise: Hold current value.
+
+**Task:** Write the VHDL Behavioral Architecture for this register.
+
+---
+
+### Exercise 7-2: Shift Register Analysis
+
+**Given a 4-bit Universal Shift Register (Table 7-2) initially containing `1010`:**
+
+Determine the content of the register after the following sequence of operations:
+
+1.  **Shift Right** (serial input `SIR = 1`).
+2.  **Shift Left** (serial input `SIL = 0`).
+3.  **No Change**.
+4.  **Parallel Load** (`I = 1100`).
+
+---
+
+### Exercise 7-3: Counter Design
+
+**Design a Synchronous Modulo-6 Counter using JK Flip-Flops.**
+
+*   **Sequence:** 0, 1, 2, 3, 4, 5, 0, ...
+*   **Task:** Determine the J and K input equations for the flip-flops.
+
+**Hint:**
+1.  Draw the State Diagram.
+2.  Create the Excitation Table.
+3.  Simplify maps for J and K inputs.
+
+---
+
+### Exercise 7-4: Timing Diagram
+
+**Draw the timing diagram for a 4-bit Ring Counter.**
+
+*   **Initial State:** `1000` ($Q_3=1, Q_2=0, Q_1=0, Q_0=0$)
+*   **Clock:** Show 5 clock pulses.
+
+**Question:**
+*   What is the relationship between the frequency of the clock and the frequency of the signal at any single output $Q_i$?
+*   How does this differ from a Johnson Counter (Switch-Tail Ring Counter)?
