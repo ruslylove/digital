@@ -367,15 +367,19 @@ In a **synchronous counter**, all flip-flops are triggered simultaneously by a c
 *   This design avoids the cumulative delay of ripple counters, making them faster and more suitable for high-frequency applications.
 *   The design follows the standard procedure for synchronous sequential circuits.
 
-<img src="/4bit_synchronous_counter.svg" class="rounded-lg bg-white p-4 w-full" alt="4-bit Synchronous Binary Counter">
+<img src="/4bit_synchronous_counter.svg" class="rounded-lg bg-white p-4 w-full mt-4" alt="4-bit Synchronous Binary Counter">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-12: 4-Bit Synchronous Binary Counter</div>
 
 
+---
+layout: two-cols-header
 ---
 
 ## Up-Down Binary Counter
 
 An up-down counter is capable of counting in both ascending and descending order, controlled by an `Up` and `Down` input.
+
+:: left ::
 
 *   When `Up=1`, the circuit counts up.
 *   When `Down=1`, the circuit counts down.
@@ -383,8 +387,20 @@ An up-down counter is capable of counting in both ascending and descending order
     *   **Up-count:** A flip-flop `Aᵢ` toggles if all lower-order bits `Aᵢ₋₁...A₀` are 1.
     *   **Down-count:** A flip-flop `Aᵢ` toggles if all lower-order bits `Aᵢ₋₁...A₀` are 0.
 
-<img src="/4bit_up_down_counter.svg" class="rounded-lg bg-white p-4 w-120" alt="4-bit Up-Down Counter">
+:: right ::
+
+<div class="flex justify-center mt-2">
+    <img src="/4bit_up_down_counter_state_diagram.svg" class="rounded-lg bg-white w-80" alt="State Diagram of 4-bit Up-Down Counter">
+</div>
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-14: State Diagram of 4-Bit Up/Down Counter</div>
+
+
+
+---
+
+<img src="/4bit_up_down_counter.svg" class="rounded-lg bg-white p-4 w-full" alt="4-bit Up-Down Counter">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-13: 4-Bit Synchronous Up/Down Binary Counter</div>
+
 
 
 ---
@@ -486,20 +502,36 @@ A **ring counter** is a circular shift register where only one flip-flop is set 
 
 <div class="grid grid-cols-2 gap-8 items-center">
 
-<img src="https://i.imgur.com/978051s.png" class="rounded-lg bg-white p-4" alt="Ring Counter Diagram">
+<div>
+<img src="/ring_counter.svg" class="rounded-lg bg-white p-4 mx-auto" alt="Ring Counter Diagram">
+<p class="text-sm opacity-50 text-center">Figure 7-16: Ring Counter Diagram</p>
+
+</div>
 
 <div>
 
-**4-bit Sequence**
-*   1000
-*   0100
-*   0010
-*   0001
-*   (repeats) 1000
+$$
+\begin{array}{|c|cccc|}
+\hline
+\text{Clock} & T_0 & T_1 & T_2 & T_3 \\
+\hline
+t_0 & 1 & 0 & 0 & 0 \\
+t_1 & 0 & 1 & 0 & 0 \\
+t_2 & 0 & 0 & 1 & 0 \\
+t_3 & 0 & 0 & 0 & 1 \\
+t_4 & 1 & 0 & 0 & 0 \\
+\hline
+\end{array}
+$$
 
 </div>
 </div>
+---
 
+### Ring Counter Timing Signals
+
+<img src="/timing_signals.svg" class="rounded-lg bg-white p-4 w-200 mt-4" alt="Timing Signals">
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-18: Timing Signals</div>
 ---
 
 ## Application: Generating Timing Signals
@@ -514,7 +546,8 @@ Counters are frequently used to generate timing signals that control the sequenc
 *   Uses *N* flip-flops for *N* timing signals.
 *   Simple, requires no decoder.
 
-<img src="https://i.imgur.com/978051s.png" class="rounded-lg bg-white p-4 w-48" alt="Ring Counter">
+<img src="/ring_counter.svg" class="rounded-lg bg-white p-4 w-90" alt="Ring Counter">
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-16: Ring Counter Diagram</div>
 
 </div>
 
@@ -524,9 +557,9 @@ Counters are frequently used to generate timing signals that control the sequenc
 *   Uses an *n-bit* counter and an *n-to-2ⁿ* decoder to generate *N = 2ⁿ* timing signals.
 *   More efficient in terms of flip-flop count for a large number of signals.
 
-<img src="https://i.imgur.com/9b2915l.png" class="rounded-lg bg-white p-4 w-48" alt="Counter and Decoder">
+<img src="/counter_decoder_block.svg" class="rounded-lg bg-white p-4" alt="Counter and Decoder">
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-17: Counter and Decoder Block</div>
 
 </div>
 </div>
 
-<img src="https://i.imgur.com/39665jS.png" class="rounded-lg bg-white p-4 w-full mt-4" alt="Timing Signals">
