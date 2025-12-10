@@ -166,34 +166,6 @@ stateDiagram-v2
 
 ---
 
-## RTL Component: Register File
-
-A **Register File** is a collection of registers with common read and write ports, packaged as a single fast memory unit.
-
-*   **Read Access:** Typically has two read ports allowing two registers to be read simultaneously (Selection via `Read Reg 1` and `Read Reg 2`).
-*   **Write Access:** Has one write port (Selection via `Write Reg`, Data via `Write Data`).
-*   **Control:** `RegWrite` enables the write operation on the clock edge.
-
-<img src="/register_file.svg" class="rounded-lg bg-white p-4 w-90 mx-auto mt-4" alt="Register File Block Diagram">
-<div class="text-center text-sm opacity-50 mt-2">Figure 8-2: Register File with 2 Read Ports and 1 Write Port</div>
-
----
-
-## RTL Component: Arithmetic Logic Unit (ALU)
-
-The **ALU** is the computational heart of the CPU. It is a combinational logic circuit that performs arithmetic and logical operations.
-
-*   **Inputs:** Operands A and B.
-*   **Output:** Result.
-*   **Control:** Selects the operation (e.g., ADD, SUB, AND, OR).
-*   **Status Flags:**
-    *   **Zero (Z):** Set if Result is 0.
-    *   **Overflow (V):** Set if signed arithmetic overflow occurs.
-
----
-
-<img src="/alu_block.svg" class="rounded-lg bg-white p-4 w-90 mx-auto mt-4" alt="ALU Block Diagram">
-<div class="text-center text-sm opacity-50 mt-2">Figure 8-3: Arithmetic Logic Unit (ALU)</div>
 
 ---
 
@@ -239,11 +211,6 @@ The **ALU** is the computational heart of the CPU. It is a combinational logic c
 
 <img src="/alu_block.svg" class="rounded-lg bg-white p-4 w-90 mx-auto mt-4" alt="ALU Block Diagram">
 <div class="text-center text-sm opacity-50 mt-2">Figure 8-2: Arithmetic Logic Unit (ALU)</div>
-
----
-
-<img src="/alu_block.svg" class="rounded-lg bg-white p-4 w-90 mx-auto mt-4" alt="ALU Block Diagram">
-<div class="text-center text-sm opacity-50 mt-2">Figure 8-3: Arithmetic Logic Unit (ALU)</div>
 
 ---
 

@@ -498,12 +498,12 @@ Two common approaches to implement a BCD counter using a 4-bit binary counter wi
 
 <div class="text-center">
 <img src="/bcd_counter_sync_load.svg" class="rounded-lg bg-white p-4 w-90" alt="BCD Counter Sync Load">
-<div class="text-sm opacity-50 mt-2">Figure 7-19: Using Synchronous Load (Detect 9)</div>
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-19: Using Synchronous Load (Detect 9)</div>
 </div>
 
 <div class="text-center">
 <img src="/bcd_counter_async_clear.svg" class="rounded-lg bg-white p-4 w-90 mt-15" alt="BCD Counter Async Clear">
-<div class="text-sm opacity-50 mt-2">Figure 7-20: Using Asynchronous Clear (Detect 10)</div>
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-20: Using Asynchronous Clear (Detect 10)</div>
 </div>
 
 </div>
@@ -520,7 +520,7 @@ Two common approaches to implement a BCD counter using a 4-bit binary counter wi
 
 <div class="text-center">
 <img src="/self_correcting_counter.svg" class="rounded-lg bg-white p-4 w-70 mx-auto" alt="State Diagram of Self-Correcting Counter">
-<div class="text-sm opacity-50 mt-2">Figure 7-21: State Diagram of Self-Correcting Counter (Modulo-6)</div>
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-21: State Diagram of Self-Correcting Counter (Modulo-6)</div>
 </div>
 
 <div class="text-xl">
@@ -562,7 +562,7 @@ A **ring counter** is a circular shift register where only one flip-flop is set 
 
 <div>
 <img src="/ring_counter.svg" class="rounded-lg bg-white p-4 mx-auto" alt="Ring Counter Diagram">
-<p class="text-sm opacity-50 text-center">Figure 7-22: Ring Counter Diagram</p>
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-22: Ring Counter Diagram</div>
 
 </div>
 
