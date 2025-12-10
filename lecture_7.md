@@ -12,22 +12,12 @@ title: Lecture 7 - Registers and Counters
 
 {{ $slidev.configs.author }}
 ---
+hideInToc: false
+---
 
 ## Outline
 
-*   Registers
-    *   Parallel Load
-    *   Shift Registers
-    *   Universal Shift Register
-*   Serial Transfer & Addition
-*   Counters
-    *   Ripple Counters (Asynchronous)
-    *   Synchronous Counters
-    *   Up-Down Counters
-    *   Counters with Parallel Load
-*   Special Counters
-    *   Ring Counter
-    *   Johnson Counter
+<toc mode="onlySiblings" minDepth="2" columns="2"/>
 
 ---
 
@@ -234,6 +224,8 @@ The operation is selected by inputs $s_1$ and $s_0$. A 4x1 MUX is used for each 
 
 ### VHDL Implementation
 
+**universal_shift_register.vhd**
+
 ```vhdl {*}{maxHeight:'380px',lines:true}
 library ieee;
 use ieee.std_logic_1164.all;
@@ -269,6 +261,8 @@ end behavioral;
 ```
 
 ---
+layout: two-cols-header
+---
 
 ## Counters
 
@@ -277,10 +271,16 @@ A **counter** is a register that goes through a predetermined sequence of states
 *   The input pulses are often clock pulses.
 *   The sequence of states can be a binary count or any other sequence.
 
+:: left ::
+
 ### Categories of Counters
 *   **Ripple Counters (Asynchronous):** The flip-flop output transition serves as the clock for the next flip-flop. No common clock pulse.
 *   **Synchronous Counters:** All flip-flops are triggered by a common clock pulse.
 
+:: right ::
+
+<img src="/counter_block.svg" class="rounded-lg bg-white p-4 w-100 mx-auto mt-4" alt="General Counter Block Diagram">
+<div class="text-center text-sm opacity-50 mt-2">Figure 7-9: General n-Bit Counter Block Diagram</div>
 ---
 
 ## Ripple Counters (Asynchronous)
@@ -447,7 +447,8 @@ $$
 
 ### VHDL Implementation
 
-```vhdl
+**counter_parallel_load.vhd**
+```vhdl {*}{maxHeight:'380px',lines:true}
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;

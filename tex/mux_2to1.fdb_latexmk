@@ -1,8 +1,7 @@
 # Fdb version 4
-["pdflatex"] 1765368526.12376 "/Users/rus/development/digital/tex/mux_2_to_1_symbol.tex" "mux_2_to_1_symbol.pdf" "mux_2_to_1_symbol" 1765368527.5579 0
-  "/Users/rus/development/digital/tex/mux_2_to_1_symbol.tex" 1765368525.88203 856 9fd729d16611b1b786c3e0b71fe43016 ""
+["pdflatex"] 1765368175.18131 "/Users/rus/development/digital/tex/mux_2to1.tex" "mux_2to1.pdf" "mux_2to1" 1765368176.74443 0
+  "/Users/rus/development/digital/tex/mux_2to1.tex" 1765368174.89485 1480 657b53e1017eee3bd8d84066860e705a ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb" 1248133631 36299 5f9df58c2139e7edcf37c8fca4bd384d ""
-  "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1248133631 35752 024fb6c41858982481f6968b5fc26508 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb" 1248133631 32762 224316ccc9ad3ca0423a14971cfa7fc1 ""
   "/usr/local/texlive/2025/texmf-dist/tex/context/base/mkii/supp-pdf.mkii" 1461363279 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "/usr/local/texlive/2025/texmf-dist/tex/generic/circuitikz/pgfcirc.defines.tex" 1736550187 46557 9adcccd6eb69fb5553fe8449b51f7543 ""
@@ -117,10 +116,10 @@
   "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1763819811 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
   "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1763819727 3345735 98e8d6ce829fe76d41a990640e1359a8 ""
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
-  "mux_2_to_1_symbol.aux" 1765368527.4783 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
-  "mux_2_to_1_symbol.tex" 1765368525.88203 856 9fd729d16611b1b786c3e0b71fe43016 ""
+  "mux_2to1.aux" 1765368176.66942 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "mux_2to1.tex" 1765368174.89485 1480 657b53e1017eee3bd8d84066860e705a ""
   (generated)
-  "mux_2_to_1_symbol.aux"
-  "mux_2_to_1_symbol.log"
-  "mux_2_to_1_symbol.pdf"
+  "mux_2to1.aux"
+  "mux_2to1.log"
+  "mux_2to1.pdf"
   (rewritten before read)

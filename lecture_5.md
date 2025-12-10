@@ -626,7 +626,7 @@ A **three-state gate** (or tri-state buffer) exhibits three possible output stat
 2.  Logic **1** (HIGH)
 3.  **High-Impedance (Hi-Z)**
 
-<img src="/tri_state_buffer.svg" class="rounded-lg bg-white p-4 w-100" alt="Three-State Buffer">
+<img src="/tri_state_buffer.svg" class="rounded-lg bg-white p-4 w-80 mt-8 mx-auto" alt="Three-State Buffer">
 <p class="text-sm text-center">Figure 5-14. Three-State Buffer.</p>
 
 :: right ::

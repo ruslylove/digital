@@ -1938,7 +1938,7 @@ Fixed-point is a simple way to represent fractional numbers using a fixed number
 
 <div class="text-sm p-2">
 
-*   **Format:** The position of the radix point (binary point) is implicitly fixed. A common notation is `Qn.m`, where `n` is the number of integer bits and `m` is the number of fractional bits.
+*   **Format:** The position of the radix point (binary point) is implicitly fixed. A common notation is $Qn.m$, where $n$ is the number of integer bits and $m$ is the number of fractional bits.
 *   **Conversion:** The integer part is converted as a standard unsigned binary number. The fractional part is converted by repeatedly multiplying by 2.
 *   **Advantages:**
     *   Much simpler and faster hardware than floating-point.
@@ -1956,16 +1956,16 @@ Fixed-point is a simple way to represent fractional numbers using a fixed number
 
 An 8-bit number with 4 integer bits and 4 fractional bits.
 
-1.  **Integer Part:** `(6)₁₀ = (0110)₂`
-2.  **Fractional Part:** `(0.75)₁₀`
-    *   `0.75 × 2 = 1.50` &rarr; `1`
-    *   `0.50 × 2 = 1.00` &rarr; `1`
-    *   `0.00 × 2 = 0.00` &rarr; `0`
-    *   `0.00 × 2 = 0.00` &rarr; `0`
-    *   Fractional part is `(.1100)₂`
+1.  **Integer Part:** $(6)₁₀ = (0110)₂$
+2.  **Fractional Part:** $(0.75)₁₀$
+    *   $0.75 × 2 = 1.50$ &rarr; $1$
+    *   $0.50 × 2 = 1.00$ &rarr; $1$
+    *   $0.00 × 2 = 0.00$ &rarr; $0$
+    *   $0.00 × 2 = 0.00$ &rarr; $0$
+    *   Fractional part is $(.1100)₂$
 
 **Result:**
-The Q4.4 representation is `0110 1100`.
+The Q4.4 representation is $0110 1100$.
 
 * Value = $(0 \cdot 2^3 + 1 \cdot 2^2 + 1 \cdot 2^1 + 0 \cdot 2^0) + (1 \cdot 2^{-1} + 1 \cdot 2^{-2} + 0 \cdot 2^{-3} + 0 \cdot 2^{-4})$
 * Value = $(4 + 2) + (0.5 + 0.25) = 6.75$
@@ -1996,8 +1996,8 @@ The standard calls for a normalized mantissa, where the most significant bit is 
 
 **Convert (3.5)₁₀ to IEEE 754 single precision.**
 
-1.  Convert to binary: `3.5 = 11.1₂`
-2.  Normalize: `11.1₂ = 1.11₂ × 2¹`
+1.  Convert to binary: $(3.5)₁₀ = (11.1)₂$
+2.  Normalize: $(11.1)₂ = (1.11)₂ × 2¹$
 3.  **Sign (S):** 0 (positive)
 4.  **Exponent (E):** True exponent is 1. `E = 1 + 127 = 128`. In binary, `128 = 10000000₂`.
 5.  **Mantissa (M):** The fractional part is `.11`. We pad with zeros to 23 bits: `11000000000000000000000`.
@@ -2013,7 +2013,7 @@ The standard calls for a normalized mantissa, where the most significant bit is 
 *   Uses 4 bits per digit, for digits 0-9.
     *   `0 = 0000`, `1 = 0001`, ..., `9 = 1001`.
     *   The binary codes `1010` through `1111` are unused.
-*   **Example:** `(78)₁₀ = (0111 1000)BCD`
+*   **Example:** $(78)₁₀ = (0111 1000)BCD$
 *   Convenient for applications that interface with humans, like calculators or digital clocks, as it simplifies displaying numbers.
 
 ---
