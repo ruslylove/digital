@@ -21,7 +21,7 @@ hideInToc: false
 
 ---
 
-## Finite State Machine (FSM) Overview
+## Finite State Machine (FSM): Recall
 
 A **Finite State Machine (FSM)** is a computation model used to design sequential circuits.
 *   It consists of a finite number of **states**.
@@ -53,7 +53,8 @@ Output depends **only on the current state**.
 *   Outputs change synchronously with state transitions.
 *   **Pros:** Simpler output logic, safer glitch-free outputs.
 
-<img src="" class="rounded-lg bg-white p-2 mt-2 w-full" alt="Moore Machine Diagram">
+<img src="/moore_block.svg" class="rounded-lg bg-white p-2 mt-2 w-full" alt="Moore Machine Diagram">
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-2: Moore Machine Diagram</div>
 
 </div>
 
@@ -65,7 +66,8 @@ Output depends on **current state AND current inputs**.
 *   Outputs can change immediately when inputs change.
 *   **Pros:** Fewer states often needed, faster response.
 
-<img src="" class="rounded-lg bg-white p-2 mt-2 w-full" alt="Mealy Machine Diagram">
+<img src="/mealy_block.svg" class="rounded-lg bg-white p-2 mt-2 w-full" alt="Mealy Machine Diagram">
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-3: Mealy Machine Diagram</div>
 
 </div>
 </div>
@@ -93,7 +95,7 @@ layout: two-cols-header
 
 :: right ::
 
-<img src="" class="rounded-lg bg-white p-4 w-80 mx-auto" alt="Sequential Circuit for Analysis">
+<img src="/analysis_example_fsm.svg" class="rounded-lg bg-white p-4 w-90 mx-auto" alt="Sequential Circuit for Analysis">
 <div class="text-center text-sm opacity-50 mt-2">Figure 8-2: Example Circuit</div>
 
 **Equations:**
@@ -128,14 +130,7 @@ layout: two-cols-header
 ### 1. State Diagram
 Let's assume a design requirement leads to this diagram:
 
-```mermaid
-stateDiagram-v2
-    direction LR
-    S0 --> S1 : In=1
-    S0 --> S0 : In=0
-    S1 --> S1 : In=1
-    S1 --> S0 : In=0
-```
+<img src="/fsm_example_1.svg" class="rounded-lg bg-white p-4 w-90 mx-auto" alt="State Diagram Example">
 
 </div>
 
@@ -143,12 +138,18 @@ stateDiagram-v2
 
 ### 2. State Table
 
-| Present State | Input | Next State |
-| :---: | :---: | :---: |
-| S0 | 0 | S0 |
-| S0 | 1 | S1 |
-| S1 | 0 | S0 |
-| S1 | 1 | S1 |
+$$
+\begin{array}{|c|c|c|}
+\hline
+\text{Present State} & \text{Input} & \text{Next State} \\
+\hline
+S_0 & 0 & S_0 \\
+S_0 & 1 & S_1 \\
+S_1 & 0 & S_0 \\
+S_1 & 1 & S_1 \\
+\hline
+\end{array}
+$$
 
 </div>
 
@@ -160,48 +161,59 @@ stateDiagram-v2
 
 **Problem:** Design a synchronous 2-bit counter that counts up when input $x=1$ and down when $x=0$.
 
+<div class="grid grid-cols-2 gap-8 text-sm">
+<div>
+
 ### 1. State Diagram & Table
 *   **States:** 00, 01, 10, 11
 *   **Transitions:**
     *   $x=1$: $00 \to 01 \to 10 \to 11 \to 00$
     *   $x=0$: $00 \to 11 \to 10 \to 01 \to 00$
 
-<div class="grid grid-cols-2 gap-8">
-<div>
+
 
 **State Table**
 
-| Present State ($Q_1 Q_0$) | Input ($x$) | Next State ($Q_1^+ Q_0^+$) |
-| :---: | :---: | :---: |
-| 0 0 | 0 | 1 1 |
-| 0 0 | 1 | 0 1 |
-| 0 1 | 0 | 0 0 |
-| 0 1 | 1 | 1 0 |
-| 1 0 | 0 | 0 1 |
-| 1 0 | 1 | 1 1 |
-| 1 1 | 0 | 1 0 |
-| 1 1 | 1 | 0 0 |
+
+$$
+\begin{array}{|c|c|c|cc|cc|}
+\hline
+\text{PS } (Q_1 Q_0) & \text{Input } (x) & \text{NS } (Q_1^+ Q_0^+) & J_1 & K_1 & J_0 & K_0 \\
+\hline
+0 \quad 0 & 0 & 1 \quad 1 & 1 & X & 1 & X \\
+0 \quad 0 & 1 & 0 \quad 1 & 0 & X & 1 & X \\
+0 \quad 1 & 0 & 0 \quad 0 & 0 & X & X & 1 \\
+0 \quad 1 & 1 & 1 \quad 0 & 1 & X & X & 1 \\
+1 \quad 0 & 0 & 0 \quad 1 & X & 1 & 1 & X \\
+1 \quad 0 & 1 & 1 \quad 1 & X & 0 & 1 & X \\
+1 \quad 1 & 0 & 1 \quad 0 & X & 0 & X & 1 \\
+1 \quad 1 & 1 & 0 \quad 0 & X & 1 & X & 1 \\
+\hline
+\end{array}
+$$
 
 </div>
 <div>
 
 **Logic Equations (JK Flip-Flops)**
 
-Using K-maps (not shown) to solve for $J$ and $K$ inputs:
+We use K-maps to solve for $J$ and $K$ inputs:
 
-*   **For $Q_0$:** Toggles on every clock.
-    *   $J_0 = 1, \quad K_0 = 1$
-*   **For $Q_1$:**
-    *   $J_1 = x Q_0 + x' Q_0' = x \oplus Q_0'$ (Wait, let's verify)
-    *   Actually, usually:
-        *   Up ($x=1$): Toggle $Q_1$ if $Q_0=1$.
-        *   Down ($x=0$): Toggle $Q_1$ if $Q_0=0$.
-    *   $J_1 = K_1 = x Q_0 + x' Q_0' = \overline{x \oplus Q_0}$
+<img src="/up_down_counter_kmaps.svg" class="rounded-lg bg-white w-100 mx-auto" alt="K-Maps for Up/Down Counter">
 
 </div>
+
 </div>
 
 ---
+
+From the K-maps:
+*   **For $Q_0$:** All entries are 1 or X.
+    *   $J_0 = 1, \quad K_0 = 1$
+*   **For $Q_1$:**
+    *   $J_1 = x \odot Q_0 = \overline{x \oplus Q_0}$
+    *   $K_1 = x \odot Q_0 = \overline{x \oplus Q_0}$
+
 
 ### 2. Logic Diagram
 
@@ -209,10 +221,14 @@ Based on the derived equations:
 *   $FF_0$: $J=1, K=1$
 *   $FF_1$: $J=K= \overline{x \oplus Q_0}$
 
-<img src="" class="rounded-lg bg-white p-4 w-100 mx-auto mt-4" alt="2-Bit Up/Down Counter Logic Diagram">
+---
+
+<img src="/up_down_counter_circuit.svg" class="rounded-lg bg-white p-4 w-100 mx-auto mt-4" alt="2-Bit Up/Down Counter Logic Diagram">
 <div class="text-center text-sm opacity-50 mt-2">Figure 8-3: Logic Diagram of 2-Bit Up/Down Counter</div>
 
 Optimization aims to reduce the cost (gates, flip-flops) and improve performance.
+
+---
 
 ### 1. State Reduction
 *   Two states are **equivalent** if, for every possible input sequence, they produce the same output sequence.
@@ -237,28 +253,55 @@ The binary codes assigned to states affect the complexity of the combinational l
     *   If M=1, go to **Armed** state.
     *   In **Armed** state, if D=1 (Door opens), go to **Triggered** state (Alarm ON).
     *   In **Triggered** state, remain involved until M=0 (Reset).
+---
 
 ### State Diagram
 
-```mermaid
-stateDiagram-v2
-    direction LR
-    state "Disarmed / A=0" as S0
-    state "Armed / A=0" as S1
-    state "Triggered / A=1" as S2
+<img src="/car_security_fsm.svg" class="rounded-lg bg-white p-4 w-120 mx-auto" alt="Car Security System State Diagram">
 
-    [*] --> S0
-    
-    S0 --> S1 : M=1
-    S0 --> S0 : M=0
+---
 
-    S1 --> S0 : M=0
-    S1 --> S2 : M=1, D=1
-    S1 --> S1 : M=1, D=0
+### State Table
 
-    S2 --> S0 : M=0
-    S2 --> S2 : M=1
-```
+$$
+\begin{array}{|c|cc|c|c|}
+\hline
+\text{State} & \text{Input } M & \text{Input } D & \text{Next State } & \text{Output } A \\
+\hline
+\text{Disarmed (00)} & 0 & X & 00 & 0 \\
+\text{Disarmed (00)} & 1 & X & 01 & 0 \\
+\hline
+\text{Armed (01)} & 0 & X & 00 & 0 \\
+\text{Armed (01)} & 1 & 0 & 01 & 0 \\
+\text{Armed (01)} & 1 & 1 & 10 & 0 \\
+\hline
+\text{Triggered (10)} & 0 & X & 00 & 1 \\
+\text{Triggered (10)} & 1 & X & 10 & 1 \\
+\hline
+\end{array}
+$$
+
+---
+
+### Logic Synthesis
+
+We use **K-maps** to derive the Next State equations ($D_1, D_0$) and Output equation ($A$).
+
+<img src="/car_security_kmaps.svg" class="rounded-lg bg-white p-4 w-120 mx-auto" alt="Car Security K-Maps">
+
+**Equations:**
+*   $D_1 = M Q_1 + M D Q_0$
+*   $D_0 = Q_1' M Q_0' + Q_1' M D'$
+*   $A = Q_1$
+
+---
+
+### Logic Diagram
+
+<img src="/car_security_circuit.svg" class="rounded-lg bg-white p-4 w-120 mx-auto" alt="Car Security Logic Circuit">
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-4: Car Security Logic Diagram</div>
+
+---
 
 ### VHDL Implementation (Logic)
 
@@ -288,27 +331,68 @@ stateDiagram-v2
 
 **Problem:** Design a synchronous count-up counter that counts from 0 to 5 and repeats.
 
+<div class="grid grid-cols-2 gap-8">
+<div>
+
 ### 1. State Diagram & Table
 *   **States:** 000, 001, 010, 011, 100, 101.
 *   **Transitions:** $0 \to 1 \to 2 \to 3 \to 4 \to 5 \to 0$.
 
-<div class="grid grid-cols-2 gap-8">
+<img src="/modulo_6_counter.svg" class="rounded-lg bg-white p-4 w-80 mx-auto mt-4" alt="Modulo-6 Up-Counter State Diagram">
+
+</div>
 <div>
 
 **State Table**
 
-| Present State ($Q_2 Q_1 Q_0$) | Next State ($Q_2^+ Q_1^+ Q_0^+$) |
-| :---: | :---: |
-| 0 0 0 | 0 0 1 |
-| 0 0 1 | 0 1 0 |
-| 0 1 0 | 0 1 1 |
-| 0 1 1 | 1 0 0 |
-| 1 0 0 | 1 0 1 |
-| 1 0 1 | 0 0 0 |
-| *Others* | *Don't Care* |
+$$
+\begin{array}{|c|c|c|c|}
+\hline
+\text{PS } (Q_2 Q_1 Q_0) & \text{NS } (C=0) & \text{NS } (C=1) & \text{Output } Y \\
+\hline
+0 \quad 0 \quad 0 & 0 \quad 0 \quad 0 & 0 \quad 0 \quad 1 & 0 \\
+0 \quad 0 \quad 1 & 0 \quad 0 \quad 1 & 0 \quad 1 \quad 0 & 0 \\
+0 \quad 1 \quad 0 & 0 \quad 1 \quad 0 & 0 \quad 1 \quad 1 & 0 \\
+0 \quad 1 \quad 1 & 0 \quad 1 \quad 1 & 1 \quad 0 \quad 0 & 0 \\
+1 \quad 0 \quad 0 & 1 \quad 0 \quad 0 & 1 \quad 0 \quad 1 & 0 \\
+1 \quad 0 \quad 1 & 1 \quad 0 \quad 1 & 0 \quad 0 \quad 0 & 1 \\
+\text{Others} & \text{X X X} & \text{X X X} & \text{X} \\
+\hline
+\end{array}
+$$
 
 </div>
-<div>
+</div>
+
+
+
+---
+
+### 2. Logic Synthesis
+
+We assume **D Flip-Flops**.
+*   **Input:** $C$ (Count Enable)
+*   **State:** $Q_2, Q_1, Q_0$
+*   **Output:** $Y = 1$ when State = 5 ($101$)
+
+---
+
+<img src="/modulo_6_kmaps.svg" class="rounded-lg bg-white p-4 w-150 mx-auto" alt="Modulo-6 K-Maps">
+
+**Equations:**
+*   $D_2 = Q_2 Q_1' + Q_2 Q_0 C' + Q_1 Q_0 C$
+*   $D_1 = Q_1 Q_0' + Q_1 Q_0 C' + \overline{Q_2}\overline{Q_1}Q_0 C$
+*   $D_0 = Q_0 \oplus C$
+*   $Y = Q_2 Q_0$
+
+---
+
+### 3. Logic Diagram
+
+<img src="/modulo_6_circuit.svg" class="rounded-lg bg-white p-4 w-120 mx-auto" alt="Modulo-6 Logic Circuit">
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-5: Modulo-6 Counter Logic Diagram</div>
+
+---
 
 **VHDL Implementation**
 ```vhdl
@@ -325,8 +409,7 @@ begin
     end if;
 end process;
 ```
-</div>
-</div>
+
 
 ---
 
@@ -339,26 +422,51 @@ end process;
 
 ### State Diagram
 
-```mermaid
-stateDiagram-v2
-    direction LR
-    state "S0 (Wait BTN)" as S0
-    state "S1 (Pulse)" as S1
-    state "S2 (Wait Release)" as S2
 
-    [*] --> S0
-    S0 --> S0 : B=0 / S=0
-    S0 --> S1 : B=1 / S=1
-    
-    S1 --> S2 : B=1 / S=0
-    S1 --> S2 : B=0 / S=0 (Glitched? Should go S0)
-    
-    S2 --> S2 : B=1 / S=0
-    S2 --> S0 : B=0 / S=0
-```
+<img src="/one_shot_fsm.svg" class="rounded-lg bg-white p-4 w-120 mx-auto" alt="One-Shot Circuit State Diagram">
+
 *   **S0:** Wait for valid Press ($B=1$).
 *   **S1:** Output $S=1$ (Pulse). Immediate transition to S2 on next clock.
-*   **S2:** Wait for valid Release ($B=0$) to prevent multiple pulses if held.
+*   **S2:** Wait for $B=0$ to transition back to S0.
+
+---
+
+### State Table
+
+$$
+\begin{array}{|c|c|c|c|}
+\hline
+\text{PS } (Q_1 Q_0) & \text{Next State } (B=0) & \text{Next State } (B=1) & \text{Output } S (B=1) \\
+\hline
+\text{S0 (00)} & 00 & 01 & 1 \\
+\text{S1 (01)} & 10 & 10 & 0 \\
+\text{S2 (10)} & 00 & 10 & 0 \\
+\text{Unused (11)} & 00 & 00 & 0 \\
+\hline
+\end{array}
+$$
+
+---
+
+### Logic Synthesis
+
+From the Next State table, we derive the K-maps for $D_1, D_0$ and Output $S$. Note that the unused state $11$ resets to $00$.
+
+<img src="/one_shot_kmaps.svg" class="rounded-lg bg-white p-4 w-150 mx-auto" alt="One-Shot K-Maps">
+
+**Equations:**
+*   $D_1 = Q_1' Q_0 + Q_1 Q_0' B$
+*   $D_0 = Q_1' Q_0' B$
+*   $S = Q_1' Q_0' B$
+
+---
+
+### Logic Diagram
+
+<img src="/one_shot_circuit.svg" class="rounded-lg bg-white p-4 w-100 mx-auto" alt="One-Shot Logic Circuit">
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-6: One-Shot Circuit Logic Diagram</div>
+
+---
 
 ---
 

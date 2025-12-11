@@ -1,0 +1,56 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+
+\begin{document}
+\begin{circuitikz}[american, scale=1.0]
+    \ctikzset{logic ports=ieee} 
+    % Flip-Flops
+    \tikzset{d-ff/.style={flipflop, flipflop def={t1=D, t6=Q, t4=\ctikztextnot{Q}, c3=1}}}
+    
+    % Nodes
+    \node (B) at (-2, 6) {$B$};
+    \node (clk) at (6, -1) {CLK};
+    
+    % FFs
+    \node[d-ff] (FF0) at (6, 1) {$Q_0$};
+    \node[d-ff] (FF1) at (6, 5) {$Q_1$};
+    
+    % Clock
+    \draw (clk) -| (FF0.pin 3);
+    \draw (clk) -| (FF1.pin 3);
+    
+    % Logic D0 = S = Q1' Q0' B
+    \node[and port, number inputs=3] (and_d0) at (2, 1) {};
+    
+    \draw (FF1.pin 4) -- ++(0.5, -0.5) -- ++(-1, 0) coordinate(Q1_bar_out) |- (and_d0.in 1);
+    \draw (FF0.pin 4) -- ++(0.5, -0.5) -- ++(-2, 0) coordinate(Q0_bar_out) |- (and_d0.in 2);
+    \draw (B) |- (and_d0.in 3);
+    
+    \draw (and_d0.out) -- (FF0.pin 1);
+    
+    % Output S (Same as D0 logic)
+    \draw (and_d0.out) -- ++(1, 0) coordinate(s_tap) -- ++(0, -1.5) node[right] {$S$};
+    
+    % Logic D1 = Q1' Q0 + Q1 Q0' B
+    % Terms
+    \node[and port] (term1_d1) at (0, 7) {}; % Q1' Q0
+    \node[and port, number inputs=3] (term2_d1) at (0, 5) {}; % Q1 Q0' B
+    \node[or port] (or_d1) at (3, 6) {};
+    
+    % Connections D1
+    % Q1' Q0
+    \draw (Q1_bar_out) |- (term1_d1.in 1);
+    \draw (FF0.pin 6) -- ++(0.5, 0) coordinate(Q0_out) |- (term1_d1.in 2);
+    
+    % Q1 Q0' B
+    \draw (FF1.pin 6) -- ++(0.5, 0) coordinate(Q1_out) |- (term2_d1.in 1);
+    \draw (Q0_bar_out) |- (term2_d1.in 2);
+    \draw (B) |- (term2_d1.in 3);
+    
+    % OR for D1
+    \draw (term1_d1.out) -- (or_d1.in 1);
+    \draw (term2_d1.out) -- (or_d1.in 2);
+    \draw (or_d1.out) -- (FF1.pin 1);
+
+\end{circuitikz}
+\end{document}

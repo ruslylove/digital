@@ -1,0 +1,70 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+
+\begin{document}
+\begin{circuitikz}[american, scale=1.2]
+    \ctikzset{logic ports=ieee}
+    % Definitions
+    \tikzset{
+        d-ff/.style={flipflop, flipflop def={
+            t1=D, t6=Q, t4=\ctikztextnot{Q},
+            c3=1
+        }}
+    }
+
+    % Inputs
+    \node (M) at (-2, 6) {$M$};
+    \node (D) at (-2, 4) {$D$};
+    \node (clk) at (4, -1) {CLK};
+    
+    % FFs
+    \node[d-ff] (FF0) at (4, 1) {$Q_0$};
+    \node[d-ff] (FF1) at (4, 5) {$Q_1$};
+    
+    % Clock
+    \draw (clk) -| (FF0.pin 3);
+    \draw (clk) -| (FF1.pin 3);
+    
+    % Logic D1 = MQ1 + MQ0D
+    % Gates
+    \node[and port] (and1_d1) at (0, 7) {}; % M Q1
+    \node[and port, number inputs=3] (and2_d1) at (0, 5.5) {}; % M Q0 D
+    \node[or port] (or_d1) at (2, 6.25) {};
+    
+    % Connections D1
+    \draw (M) |- (and1_d1.in 1);
+    \draw (FF1.pin 6) -- ++(0.5,0)coordinate(Q1_out) |- (and1_d1.in 2); % Feedback Q1
+    
+    \draw (M) |- (and2_d1.in 1);
+    \draw (FF0.pin 6) -- ++(0.5,0)coordinate(Q0_out) |- (and2_d1.in 2); % Feedback Q0
+    \draw (D) |- (and2_d1.in 3);
+    
+    \draw (and1_d1.out) -- (or_d1.in 1);
+    \draw (and2_d1.out) -- (or_d1.in 2);
+    \draw (or_d1.out) -- (FF1.pin 1); % To D1
+    
+    % Logic D0 = Q1' M Q0' + Q1' M D'
+    % Factor out Q1' M? -> Q1' M (Q0' + D')
+    % Gates
+    \node[or port] (or_d0_term) at (-1, 3) {};     % Q0' + D'
+    \node[not port, scale=0.6] (inv_D) at (-2.5, 3.2) {}; % D'
+    \draw (D) |- (inv_D.in);
+    
+    % Q0' from FF0
+    \draw (FF0.pin 4) -- ++(0.5,-0.5) -- ++(-5,0) |- (or_d0_term.in 2);
+    \draw (inv_D.out) -- (or_d0_term.in 1);
+    
+    % AND with Q1' M
+    \node[and port, number inputs=3] (and_d0) at (2, 2.5) {};
+    
+    \draw (FF1.pin 4) -- ++(0.5, -0.5) -- ++(-1,0) |- (and_d0.in 1); % Q1'
+    \draw (M) |- (and_d0.in 2);
+    \draw (or_d0_term.out) -- (and_d0.in 3); % (Q0' + D')
+    
+    \draw (and_d0.out) -- (FF0.pin 1); % To D0
+    
+    % Output A = Q1
+    \draw (Q1_out) -- ++(2,0) node[right] {$A$};
+
+\end{circuitikz}
+\end{document}
