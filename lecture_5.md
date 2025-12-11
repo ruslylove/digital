@@ -830,6 +830,111 @@ $$
 </div>
 
 ---
+layout: default
+---
+
+## Shannon's Expansion Theorem
+
+**Shannon's Expansion Theorem** states that any Boolean function $F(x_1, x_2, \dots, x_n)$ can be decomposed into two sub-functions (co-factors) derived by setting a variable $x_i$ to 0 and 1.
+
+$$F(x_1, \dots, x_n) = \bar{x}_i \cdot F(x_1, \dots, 0, \dots, x_n) + x_i \cdot F(x_1, \dots, 1, \dots, x_n)$$
+
+*   This corresponds directly to a **2-to-1 Multiplexer**:
+    *   $x_i$ acts as the **Select** input.
+    *   The co-factors $F_{x_i=0}$ and $F_{x_i=1}$ act as the Data inputs.
+
+---
+layout: two-cols-header
+---
+
+### MUX Synthesis Example
+
+**Synthesis Theorem:** Any $n$-variable logic function can be implemented using a tree of $2^{n-1} - 1$ multiplexers (2-to-1).
+
+:: left ::
+
+**Example:** Implement $F(A,B,C) = A \cdot B + C$ using 2-to-1 MUXes.
+
+1.  **Expand on A:**
+    *   $F_{\bar{A}} = 0 \cdot B + C = C$
+    *   $F_A = 1 \cdot B + C = B + C$
+2.  **Expand co-factors on B:**
+    *   For $F_A$:
+        *   $F_{A\bar{B}} = 0 + C = C$
+        *   $F_{AB} = 1 + C = 1$
+3.  **Use C** as the input to the final MUXes.
+
+:: right ::
+
+<img src="/mux_tree_3var.svg" class="w-80 mx-auto" alt="Shannon Expansion MUX Tree"/>
+<div class="text-center text-sm opacity-50 mt-2">Figure 5-17: 3-Variable MUX Tree.</div>
+
+---
+layout: two-cols-header
+---
+
+## Arithmetic Logic Unit (ALU)
+
+The **Arithmetic Logic Unit (ALU)** is a combinational circuit that performs arithmetic and logic operations on binary numbers. A classic example is the **74381** 4-bit ALU.
+
+:: left ::
+
+*   It performs 8 different operations on two 4-bit operands ($A$ and $B$).
+*   The operation is selected by a 3-bit input ($S_{2..0}$).
+*   It generates **Group Propagate ($\bar{P}$)** and **Group Generate ($\bar{G}$)** signals.
+*   These signals are critical for high-speed addition using **Carry Lookahead Generators** (like the 74182).
+
+:: right ::
+
+<img src="/alu_74381_block.svg" class="w-80 mx-auto" alt="74381 ALU Symbol"/>
+<div class="text-center text-sm opacity-50 mt-2">Figure 5-18: 74381 ALU Block Diagram.</div>
+
+---
+layout: default
+---
+
+## 74381 Function Table
+
+The 74381 provides the following functions based on the selection inputs:
+
+$$
+\begin{array}{ccc|l|l}
+\textbf{S}_2 & \textbf{S}_1 & \textbf{S}_0 & \textbf{Function} & \textbf{Operation} \\
+\hline
+0 & 0 & 0 & \text{Clear} & F = 0000 \\
+0 & 0 & 1 & \text{Subtract} & F = B - A \\
+0 & 1 & 0 & \text{Subtract} & F = A - B \\
+0 & 1 & 1 & \text{Add} & F = A + B \\
+1 & 0 & 0 & \text{XOR} & F = A \oplus B \\
+1 & 0 & 1 & \text{OR} & F = A + B \text{ (Logical)} \\
+1 & 1 & 0 & \text{AND} & F = A \cdot B \\
+1 & 1 & 1 & \text{Preset} & F = 1111 \\
+\end{array}
+$$
+
+*   Note that subtraction is usually performed using 2's complement logic (e.g., $A + \bar{B} + 1$).
+*   The P and G outputs allow for expansion to wider ALUs (e.g., 16-bit or 64-bit) without significant delay penalties.
+
+---
+layout: two-cols-header
+---
+
+## 1-Bit ALU Slice Logic
+
+:: left ::
+
+Each bit of the ALU contains logic to perform the selected operation and generate the local propagate/generate signals.
+
+*   **Logic Unit:** Performs AND, OR, XOR.
+*   **Arithmetic Unit:** A Full Adder simplifies to $P_i = A_i \oplus B_i$ and $G_i = A_i \cdot B_i$ for CLA.
+*   **Multiplexer:** Selects the result based on $S$.
+
+:: right ::
+
+<img src="/alu_74381_logic.svg" class="w-100 mx-auto" alt="1-Bit ALU Slice Logic"/>
+<div class="text-center text-sm opacity-50 mt-2">Figure 5-19: Simplified 1-Bit ALU Slice.</div>
+
+---
 layout: two-cols-header
 ---
 
@@ -843,7 +948,7 @@ A **three-state gate** (or tri-state buffer) exhibits three possible output stat
 3.  **High-Impedance (Hi-Z)**
 
 <img src="/tri_state_buffer.svg" class="rounded-lg bg-white p-4 w-80 mt-8 mx-auto" alt="Three-State Buffer">
-<div class="text-center text-sm opacity-50 mt-2">Figure 5-17: Three-State Buffer.</div>
+<div class="text-center text-sm opacity-50 mt-2">Figure 5-20: Three-State Buffer.</div>
 
 :: right ::
 
@@ -911,7 +1016,7 @@ $$
 
 ### Logic Diagram of 4-bit Magnitude Comparator
 <img src="/magnitude_comparator.svg" class="rounded-lg bg-white p-4 w-150 mx-auto" alt="4-bit Magnitude Comparator Logic Diagram">
-<div class="text-center text-sm opacity-50 mt-2">Figure 5-18: 4-bit Magnitude Comparator.</div>
+<div class="text-center text-sm opacity-50 mt-2">Figure 5-21: 4-bit Magnitude Comparator.</div>
 
 ---
 
