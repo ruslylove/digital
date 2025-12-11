@@ -3,247 +3,533 @@ theme: seriph
 background: https://cover.sli.dev
 transition: fade
 layout: cover
-title: Lecture 8 - Finite State Machines and Register Transfer Level Design
+title: Lecture 8 - Finite State Machines
 ---
 
-# Lecture 8: Finite State Machines and Register Transfer Level Design
+# Lecture 8: Finite State Machines
 {{ $slidev.configs.subject }}
 
 
 {{ $slidev.configs.author }}
 ---
+hideInToc: false
+---
 
 ## Outline
 
-*   FSM Design Recap
-*   Application 1: Sequence Detector
-*   Application 2: Simple Vending Machine
-*   Application 3: Security Door Lock
-*   Application 4: Datapath Control Unit
+<toc mode="onlySiblings" minDepth="2" columns="2"/>
 
 ---
 
-## FSM Design Recap
+## Finite State Machine (FSM) Overview
 
-A Finite State Machine (FSM) is a model of computation used to design sequential logic circuits. Its behavior can be represented by a finite number of states.
+A **Finite State Machine (FSM)** is a computation model used to design sequential circuits.
+*   It consists of a finite number of **states**.
+*   It transitions between states based on **inputs** and the **current state**.
+*   It produces **outputs** based on the state (and potentially inputs).
 
-### Basic Design Steps
-1.  **Specify Desired Circuit:** Clearly define inputs, outputs, and behavior.
-2.  **Create State Diagram:** Visualize the states and transitions.
-3.  **Create State Table:** Tabulate the state diagram's information.
-4.  **Perform State Reduction (Optional):** Eliminate redundant states.
-5.  **Perform State Assignment:** Assign binary codes to each state.
-6.  **Choose Flip-Flop Type:** (D, JK, T) and derive logic equations.
-7.  **Draw Logic Diagram:** Implement the circuit.
+### General Block Diagram
+An FSM consists of three main parts:
+1.  **Next State Logic:** Combinational logic that determines the next state.
+2.  **State Memory:** Flip-flops that store the current state.
+3.  **Output Logic:** Combinational logic that generates outputs.
 
-<div class="grid grid-cols-2 gap-4 mt-4">
+<img src="" class="rounded-lg bg-white p-4 w-100 mx-auto mt-4" alt="FSM General Block Diagram">
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-1: General Block Diagram of an FSM</div>
+
+---
+
+## FSM Models: Moore vs. Mealy
+
+There are two primary types of FSMs, distinguished by how their outputs are generated.
+
+<div class="grid grid-cols-2 gap-8 mt-4">
 
 <div>
 
 ### Moore Machine
-Outputs depend **only on the present state**.
+Output depends **only on the current state**.
+*   $Output = f(Current\_State)$
+*   Outputs change synchronously with state transitions.
+*   **Pros:** Simpler output logic, safer glitch-free outputs.
 
-<img src="https://i.imgur.com/g8V5G43.png" class="rounded-lg bg-white p-2 w-2/3" alt="Moore Machine Diagram">
+<img src="" class="rounded-lg bg-white p-2 mt-2 w-full" alt="Moore Machine Diagram">
 
 </div>
 
 <div>
 
 ### Mealy Machine
-Outputs depend on the **present state AND current inputs**.
+Output depends on **current state AND current inputs**.
+*   $Output = f(Current\_State, Inputs)$
+*   Outputs can change immediately when inputs change.
+*   **Pros:** Fewer states often needed, faster response.
 
-<img src="https://i.imgur.com/z488Y6J.png" class="rounded-lg bg-white p-2 w-2/3" alt="Mealy Machine Diagram">
+<img src="" class="rounded-lg bg-white p-2 mt-2 w-full" alt="Mealy Machine Diagram">
 
 </div>
 </div>
 
 ---
+layout: two-cols-header
+---
 
-## Application 1: Sequence Detector
+## FSM Analysis Procedure
 
-**Problem:** Design a Moore FSM that asserts its output `z=1` when it detects two consecutive `1`s on its input `w`.
+**Analysis** is determining the behavior of a given sequential circuit.
 
-### State Diagram
-*   **State A (Reset):** No `1`s have been seen yet. Output `z=0`.
-*   **State B (Got one '1'):** The last input was a `1`. Output `z=0`.
-*   **State C (Got two '1's):** The last two inputs were `1`s. Output `z=1`.
+:: left ::
+
+### Steps:
+1.  **Determine Logic Equations:**
+    *   Find Next State equations ($D_i, J_i, K_i, T_i$) from the circuit.
+    *   Find Output equations ($Z$).
+2.  **Construct State Transition Table:**
+    *   List all possible Present States and Inputs.
+    *   Calculate Next States and Outputs.
+3.  **Draw State Diagram:**
+    *   Represent states as nodes.
+    *   Represent transitions as directed edges labeled with `Input / Output`.
+
+:: right ::
+
+<img src="" class="rounded-lg bg-white p-4 w-80 mx-auto" alt="Sequential Circuit for Analysis">
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-2: Example Circuit</div>
+
+**Equations:**
+*   $D_A = A \oplus x \oplus y$
+*   $z = A \cdot x$
+
+---
+
+## FSM Synthesis (Design) Procedure
+
+**Synthesis** is the process of creating a circuit from a description of its behavior.
+
+1.  **Understand specifications:** Define inputs, outputs, and start state.
+2.  **Create State Diagram:** Model the behavior.
+3.  **create State Table:** Tabulate transitions.
+4.  **State Minimization (Optional):** Remove redundant states to simplify logic.
+5.  **State Assignment:** Assign binary codes to states.
+6.  **Flip-Flop Selection:** Choose D, JK, or T flip-flops.
+7.  **Derive Logic Equations:** Use K-maps to find equations for flip-flop inputs and FSM outputs.
+8.  **Draw Logic Diagram.**
+
+---
+
+## Design Example: Evaluation of a Sequence
+
+**Problem:** Design a generic FSM.
+
+<div class="grid grid-cols-2 gap-8">
+
+<div>
+
+### 1. State Diagram
+Let's assume a design requirement leads to this diagram:
 
 ```mermaid
 stateDiagram-v2
     direction LR
-    state "A / z=0" as A
-    state "B / z=0" as B
-    state "C / z=1" as C
-
-    [*] --> A
-    A --> A : w=0
-    A --> B : w=1
-    B --> A : w=0
-    B --> C : w=1
-    C --> A : w=0
-    C --> C : w=1
+    S0 --> S1 : In=1
+    S0 --> S0 : In=0
+    S1 --> S1 : In=1
+    S1 --> S0 : In=0
 ```
 
-This is a fundamental application used in pattern recognition, communication protocols, and command decoders.
+</div>
+
+<div>
+
+### 2. State Table
+
+| Present State | Input | Next State |
+| :---: | :---: | :---: |
+| S0 | 0 | S0 |
+| S0 | 1 | S1 |
+| S1 | 0 | S0 |
+| S1 | 1 | S1 |
+
+</div>
+
+</div>
 
 ---
 
-## Application 2: Simple Vending Machine
+## Design Example: 2-Bit Up/Down Counter
 
-**Problem:** Design a Mealy FSM for a vending machine that accepts 5¢ (Nickel) and 10¢ (Dime) coins. An item costs 15¢. The machine gives change if necessary.
+**Problem:** Design a synchronous 2-bit counter that counts up when input $x=1$ and down when $x=0$.
+
+### 1. State Diagram & Table
+*   **States:** 00, 01, 10, 11
+*   **Transitions:**
+    *   $x=1$: $00 \to 01 \to 10 \to 11 \to 00$
+    *   $x=0$: $00 \to 11 \to 10 \to 01 \to 00$
+
+<div class="grid grid-cols-2 gap-8">
+<div>
+
+**State Table**
+
+| Present State ($Q_1 Q_0$) | Input ($x$) | Next State ($Q_1^+ Q_0^+$) |
+| :---: | :---: | :---: |
+| 0 0 | 0 | 1 1 |
+| 0 0 | 1 | 0 1 |
+| 0 1 | 0 | 0 0 |
+| 0 1 | 1 | 1 0 |
+| 1 0 | 0 | 0 1 |
+| 1 0 | 1 | 1 1 |
+| 1 1 | 0 | 1 0 |
+| 1 1 | 1 | 0 0 |
+
+</div>
+<div>
+
+**Logic Equations (JK Flip-Flops)**
+
+Using K-maps (not shown) to solve for $J$ and $K$ inputs:
+
+*   **For $Q_0$:** Toggles on every clock.
+    *   $J_0 = 1, \quad K_0 = 1$
+*   **For $Q_1$:**
+    *   $J_1 = x Q_0 + x' Q_0' = x \oplus Q_0'$ (Wait, let's verify)
+    *   Actually, usually:
+        *   Up ($x=1$): Toggle $Q_1$ if $Q_0=1$.
+        *   Down ($x=0$): Toggle $Q_1$ if $Q_0=0$.
+    *   $J_1 = K_1 = x Q_0 + x' Q_0' = \overline{x \oplus Q_0}$
+
+</div>
+</div>
+
+---
+
+### 2. Logic Diagram
+
+Based on the derived equations:
+*   $FF_0$: $J=1, K=1$
+*   $FF_1$: $J=K= \overline{x \oplus Q_0}$
+
+<img src="" class="rounded-lg bg-white p-4 w-100 mx-auto mt-4" alt="2-Bit Up/Down Counter Logic Diagram">
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-3: Logic Diagram of 2-Bit Up/Down Counter</div>
+
+Optimization aims to reduce the cost (gates, flip-flops) and improve performance.
+
+### 1. State Reduction
+*   Two states are **equivalent** if, for every possible input sequence, they produce the same output sequence.
+*   Equivalent states can be combined into a single state.
+
+### 2. State Assignment (Encoding)
+The binary codes assigned to states affect the complexity of the combinational logic.
+
+*   **Binary Encoding:** Minimum number of flip-flops ($N$ states $\rightarrow \lceil \log_2 N \rceil$ bits). E.g., `00, 01, 10, 11`.
+*   **One-Hot Encoding:** One flip-flop per state ($N$ states $\rightarrow N$ bits). E.g., `0001, 0010, 0100, 1000`. Fast, simple next-state logic, but more flip-flops.
+*   **Gray Code:** Adjacent states differ by only one bit. Good for minimizing switching noise.
+
+---
+
+## Design Example 2: Car Security System
+
+**Problem:** Design a controller for a car security system.
+*   **Inputs:** `Master` switch (M), `Door` sensor (D).
+*   **Outputs:** `Alarm` (A).
+*   **Behavior:**
+    *   System is initially **Disarmed**.
+    *   If M=1, go to **Armed** state.
+    *   In **Armed** state, if D=1 (Door opens), go to **Triggered** state (Alarm ON).
+    *   In **Triggered** state, remain involved until M=0 (Reset).
 
 ### State Diagram
-*   **Inputs:** `N` (Nickel), `D` (Dime).
-*   **Outputs:** `Dispense` (item), `Change5` (5¢ change).
-*   **States:** `S0` (0¢), `S5` (5¢), `S10` (10¢).
 
 ```mermaid
 stateDiagram-v2
     direction LR
-    state "S0 (0¢)" as S0
-    state "S5 (5¢)" as S5
-    state "S10 (10¢)" as S10
+    state "Disarmed / A=0" as S0
+    state "Armed / A=0" as S1
+    state "Triggered / A=1" as S2
 
     [*] --> S0
-    S0 --> S5 : N / ---
-    S0 --> S10 : D / ---
-    S5 --> S10 : N / ---
-    S5 --> S0 : D / Dispense
-    S10 --> S0 : N / Dispense
-    S10 --> S5 : D / Dispense, Change5
+    
+    S0 --> S1 : M=1
+    S0 --> S0 : M=0
+
+    S1 --> S0 : M=0
+    S1 --> S2 : M=1, D=1
+    S1 --> S1 : M=1, D=0
+
+    S2 --> S0 : M=0
+    S2 --> S2 : M=1
+```
+
+### VHDL Implementation (Logic)
+
+```vhdl
+    -- Next State Logic
+    process(current_state, M, D)
+    begin
+        next_state <= current_state; 
+        Alarm <= '0';
+        
+        case current_state is
+            when Disarmed =>
+                if M='1' then next_state <= Armed; end if;
+            when Armed =>
+                if M='0' then next_state <= Disarmed;
+                elsif D='1' then next_state <= Triggered; end if;
+            when Triggered =>
+                Alarm <= '1';
+                if M='0' then next_state <= Disarmed; end if;
+        end case;
+    end process;
 ```
 
 ---
 
-## Vending Machine: State Table
+## Design Example 3: Modulo-6 Up-Counter
 
-This table represents the logic from the state diagram. From here, we could assign binary values to the states (e.g., S0=00, S5=01, S10=10) and derive the logic for the flip-flops and outputs.
+**Problem:** Design a synchronous count-up counter that counts from 0 to 5 and repeats.
 
-| Present State | Input | Next State | Output (Dispense, Change5) |
-|:-------------:|:-----:|:----------:|:--------------------------:|
-| S0            | N     | S5         | 0, 0                       |
-| S0            | D     | S10        | 0, 0                       |
-| S5            | N     | S10        | 0, 0                       |
-| S5            | D     | S0         | 1, 0                       |
-| S10           | N     | S0         | 1, 0                       |
-| S10           | D     | S5         | 1, 1                       |
+### 1. State Diagram & Table
+*   **States:** 000, 001, 010, 011, 100, 101.
+*   **Transitions:** $0 \to 1 \to 2 \to 3 \to 4 \to 5 \to 0$.
+
+<div class="grid grid-cols-2 gap-8">
+<div>
+
+**State Table**
+
+| Present State ($Q_2 Q_1 Q_0$) | Next State ($Q_2^+ Q_1^+ Q_0^+$) |
+| :---: | :---: |
+| 0 0 0 | 0 0 1 |
+| 0 0 1 | 0 1 0 |
+| 0 1 0 | 0 1 1 |
+| 0 1 1 | 1 0 0 |
+| 1 0 0 | 1 0 1 |
+| 1 0 1 | 0 0 0 |
+| *Others* | *Don't Care* |
+
+</div>
+<div>
+
+**VHDL Implementation**
+```vhdl
+process(clk, reset)
+begin
+    if reset='1' then
+        count <= "000";
+    elsif rising_edge(clk) then
+        if count = "101" then
+            count <= "000";
+        else
+            count <= count + 1;
+        end if;
+    end if;
+end process;
+```
+</div>
+</div>
 
 ---
 
-## Application 3: Security Door Lock
+## Design Example 4: One-Shot Circuit
 
-**Problem:** Design a Moore FSM for a simple digital lock. The lock opens (`Unlock=1`) if the 3-digit sequence `1-0-1` is entered on a keypad. A `Reset` button returns it to the initial locked state.
+**Problem:** Design a circuit that produces an output pulse $S=1$ for exactly one clock cycle when an input button $B$ is pressed.
+
+*   Debouncing logic is assumed.
+*   The circuit waits for $B=1$ to go to a "Pulse" state, then proceeds to a "Wait" state until $B=0$.
 
 ### State Diagram
-*   **Input:** `Digit` (from keypad), `Reset`.
-*   **Output:** `Unlock`.
-*   **States:** `Locked`, `Got1`, `Got10`.
 
 ```mermaid
 stateDiagram-v2
-    state "Locked / Unlock=0" as Locked
-    state "Got1 / Unlock=0" as Got1
-    state "Got10 / Unlock=0" as Got10
-    state "Unlocked / Unlock=1" as Unlocked
+    direction LR
+    state "S0 (Wait BTN)" as S0
+    state "S1 (Pulse)" as S1
+    state "S2 (Wait Release)" as S2
 
-    [*] --> Locked
-    Locked --> Got1 : Digit=1
-    Locked --> Locked : Digit!=1
+    [*] --> S0
+    S0 --> S0 : B=0 / S=0
+    S0 --> S1 : B=1 / S=1
     
-    Got1 --> Got10 : Digit=0
-    Got1 --> Locked : Digit!=0
+    S1 --> S2 : B=1 / S=0
+    S1 --> S2 : B=0 / S=0 (Glitched? Should go S0)
+    
+    S2 --> S2 : B=1 / S=0
+    S2 --> S0 : B=0 / S=0
+```
+*   **S0:** Wait for valid Press ($B=1$).
+*   **S1:** Output $S=1$ (Pulse). Immediate transition to S2 on next clock.
+*   **S2:** Wait for valid Release ($B=0$) to prevent multiple pulses if held.
 
-    Got10 --> Unlocked : Digit=1
-    Got10 --> Locked : Digit!=1
+---
 
-    Unlocked --> Locked : Reset
+## Design Example 5: Simple Microprocessor Control Unit
 
-    Got1 --> Locked : Reset
-    Got10 --> Locked : Reset
+**Problem:** Design a control unit for a simple CPU that executes instructions: Fetch $\to$ Decode $\to$ Execute.
+
+*   **Inputs:** `Opcode`, `ZeroFlag`, `Clock`.
+*   **Outputs:** `PC_Load`, `IR_Load`, `ALU_Op`, `Reg_Write`.
+
+### State Diagram Strategy
+1.  **Fetch:** Load instruction from memory to IR. (`IR_Load=1`, `PC_Inc=1`) $\to$ Go to Decode.
+2.  **Decode:** Analyze Opcode. Transitions to specific Execute states (ADD, LOAD, STORE, JUMP).
+3.  **Execute:** Perform operation (e.g., `ALU_Op=Add`, `Reg_Write=1`). $\to$ Go back to Fetch.
+
+*(Detailed diagrams for simple CPUs typically involve 10+ states, this highlights the concept.)*
+
+---
+
+## Design Example 6: Elevator Controller
+
+**Problem:** Controller for a simple 2-floor elevator.
+
+*   **Inputs:** Button 1 ($B_1$), Button 2 ($B_2$), Limit Switch 1 ($L_1$, floor 1), Limit Switch 2 ($L_2$, floor 2).
+*   **Outputs:** Motor Up ($M_{up}$), Motor Down ($M_{down}$), Door Open ($DO$).
+
+### Moore Machine Approach
+*   States represent the physical status: **Floor 1 Open**, **Floor 1 Closed**, **Moving Up**, **Moving Down**, **Floor 2 Open**, **Floor 2 Closed**.
+*   Output depends only on state (e.g., if in **Moving Up**, $M_{up}=1$).
+
+### Mealy Machine Approach
+*   States might be fewer (e.g., just **Floor 1**, **Floor 2**).
+*   Output depends on input (e.g., If at Floor 1 and $B_2$ pressed, immediately output $M_{up}=1$).
+
+---
+
+## Application 3: Sequence Detector (101)
+
+**Spec:** Detect the sequence "101" (overlapping allowed). Output $Z=1$ when detected.
+
+### State Diagram (Mealy)
+*   **S0:** Reset/Nothing
+*   **S1:** Got '1'
+*   **S2:** Got '10'
+
+```mermaid
+stateDiagram-v2
+    direction LR
+    state "S0" as S0
+    state "S1" as S1
+    state "S2" as S2
+
+    [*] --> S0
+    S0 --> S0 : 0 / 0
+    S0 --> S1 : 1 / 0
+    
+    S1 --> S1 : 1 / 0
+    S1 --> S2 : 0 / 0
+
+    S2 --> S0 : 0 / 0
+    S2 --> S1 : 1 / 1
+```
+*Note: The transition S2 -> S1 on input 1 outputs 1 because "10" followed by "1" completes "101".*
+
+---
+
+## VHDL Implementation of FSMs
+
+FSMs are typically implemented in VHDL using **three processes** (or two):
+
+1.  **State Register Process:** Synchronous reset and clock edge detection. Update `current_state` with `next_state`.
+2.  **Next State Logic Process:** Combinational process sensitive to `current_state` and inputs. Determines `next_state`.
+3.  **Output Logic Process:** Combinational process determining outputs. (Can be merged with Next State logic).
+
+### Template (State Register)
+
+```vhdl
+process(clk, reset)
+begin
+    if reset = '1' then
+        current_state <= S0;
+    elsif rising_edge(clk) then
+        current_state <= next_state;
+    end if;
+end process;
 ```
 
+---
 
+### Template (Next State & Output Logic)
+
+```vhdl
+process(current_state, input_signal)
+begin
+    -- Default assignments
+    next_state <= current_state;
+    output_signal <= '0';
+    
+    case current_state is
+        when S0 =>
+            if input_signal = '1' then
+                next_state <= S1;
+            end if;
+        when S1 =>
+            -- Logic for S1
+            output_signal <= '1'; -- Moore output example
+        when others =>
+            next_state <= S0;
+    end case;
+end process;
+```
 
 ---
 
+## Example: Vending Machine
+
+**Scenario:** Dispense item (15¢) for Nickels (5¢) and Dimes (10¢). Give change.
+
+### VHDL Entity
+```vhdl
+entity vending_machine is
+    port ( clk, rst : in std_logic;
+           N, D     : in std_logic; -- Nickel, Dime inputs
+           Disp     : out std_logic; -- Dispense
+           Change   : out std_logic ); -- Give 5c change
+end vending_machine;
+```
 
 ---
 
-## Register Transfer Level (RTL) Design
+### VHDL Architecture
 
-**RTL Design** is a methodology for defining digital systems by describing the flow of data between registers and the operations performed on that data.
+```vhdl {*}{maxHeight:'400px'}
+architecture Behavioral of vending_machine is
+    type state_type is (S0, S5, S10); -- 0c, 5c, 10c credit
+    signal current_state, next_state : state_type;
+begin
+    -- 1. State Register
+    process(clk, rst)
+    begin
+        if rst = '1' then current_state <= S0;
+        elsif rising_edge(clk) then current_state <= next_state;
+        end if;
+    end process;
 
-*   **Registers:** Store the state of the system.
-*   **Combinational Logic (e.g., ALU):** Performs operations.
-*   **Buses:** Transfer data between components.
+    -- 2. Next State & Output Logic
+    process(current_state, N, D)
+    begin
+        next_state <= current_state; Disp <= '0'; Change <= '0'; -- Defaults
+        case current_state is
+            when S0 =>
+                if N='1' then next_state <= S5;
+                elsif D='1' then next_state <= S10; end if;
+            when S5 =>
+                if N='1' then next_state <= S10;
+                elsif D='1' then next_state <= S0; Disp <= '1'; end if;
+            when S10 =>
+                if N='1' then next_state <= S0; Disp <= '1';
+                elsif D='1' then next_state <= S5; Disp <= '1'; Change <= '1'; end if;
+        end case;
+    end process;
+end Behavioral;
+```
 
-### Notation (RTL)
-
-*   **Transfer:** $R2 \leftarrow R1$ (Copy contents of R1 to R2)
-*   **Operation:** $R1 \leftarrow R1 + R2$ (Add R1 and R2, store in R1)
-*   **Conditional:** $P: R2 \leftarrow R1$ (Transfer occurs only if control signal P=1)
-
----
-
-## RTL Component: Register File
-
-A **Register File** is a collection of registers with common read and write ports, packaged as a single fast memory unit.
-
-*   **Read Access:** Typically has two read ports allowing two registers to be read simultaneously (Selection via `Read Reg 1` and `Read Reg 2`).
-*   **Write Access:** Has one write port (Selection via `Write Reg`, Data via `Write Data`).
-*   **Control:** `RegWrite` enables the write operation on the clock edge.
-
-<img src="/register_file.svg" class="rounded-lg bg-white p-4 w-90 mx-auto mt-4" alt="Register File Block Diagram">
-<div class="text-center text-sm opacity-50 mt-2">Figure 8-1: Register File with 2 Read Ports and 1 Write Port</div>
-
----
-
-## RTL Component: Arithmetic Logic Unit (ALU)
-
-The **ALU** is the computational heart of the CPU. It is a combinational logic circuit that performs arithmetic and logical operations.
-
-*   **Inputs:** Operands A and B.
-*   **Output:** Result.
-*   **Control:** Selects the operation (e.g., ADD, SUB, AND, OR).
-*   **Status Flags:**
-    *   **Zero (Z):** Set if Result is 0.
-    *   **Overflow (V):** Set if signed arithmetic overflow occurs.
-
-<img src="/alu_block.svg" class="rounded-lg bg-white p-4 w-90 mx-auto mt-4" alt="ALU Block Diagram">
-<div class="text-center text-sm opacity-50 mt-2">Figure 8-2: Arithmetic Logic Unit (ALU)</div>
-
----
-
-## Register Transfer on a Common Bus
-
-In digital systems with many registers, it is impractical to connect every register output to every other register input. A more efficient approach is to use a **Common Bus System**.
-
-*   A **Bus** is a shared set of lines.
-*   Control signals determine which register drives the bus (Source) and which register accepts the data (Destination).
-
-### Common Bus Construction using Multiplexers
-
-*   For *k* registers of *n* bits each, we use *n* multiplexers of size *k-to-1*.
-*   The select lines ($S_1, S_0$) determine the **Source Register**.
-*   The **Load** signals on the registers determine the **Destination Register**.
-
----
-
-<img src="/common_bus_system.svg" class="rounded-lg bg-white p-4 w-90 mx-auto mt-4" alt="Common Bus System">
-<div class="text-center text-sm opacity-50 mt-2">Figure 8-3: Common Bus System for 4 Registers</div>
-
-This structure forms the foundation for the Datapath Control application.
 ---
 
 ## Summary
 
-Finite State Machines are a powerful and fundamental concept for designing any system with "memory" or sequential behavior.
-
-### Common Applications:
-*   **Pattern/Sequence Recognition:** Network packet analysis, command decoders, digital locks.
-*   **Counters & Timers:** Generating timing signals, controlling program flow.
-*   **Control Units:** Managing complex datapaths in CPUs and other processors.
-*   **Protocol Implementation:** USB, Ethernet, and other communication standards.
-*   **UI Logic:** Managing states in user interfaces (e.g., elevator controls, traffic lights).
-
-The design process is systematic, allowing complex behaviors to be broken down into manageable states and transitions.
+*   **Finite State Machines (FSMs)** are accurate models for sequential logic.
+*   **Moore vs. Mealy:** Moore outputs depend on state only; Mealy on state and inputs.
+*   **Analysis:** Circuit $\to$ State Diagram.
+*   **Synthesis:** Specification $\to$ State Diagram $\to$ Logic Circuit.
+*   **Optimization:** Reduces hardware cost via state reduction and prudent encoding.
+*   **VHDL:** Implemented using standard templates separating sequential (state memory) and combinational (next state/output) logic.
