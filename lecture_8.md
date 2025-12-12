@@ -28,14 +28,25 @@ A **Finite State Machine (FSM)** is a computation model used to design sequentia
 *   It transitions between states based on **inputs** and the **current state**.
 *   It produces **outputs** based on the state (and potentially inputs).
 
-### General Block Diagram
+<div class="grid grid-cols-3 gap-8">
+
+<div class="text-base">
+
 An FSM consists of three main parts:
 1.  **Next State Logic:** Combinational logic that determines the next state.
 2.  **State Memory:** Flip-flops that store the current state.
 3.  **Output Logic:** Combinational logic that generates outputs.
 
-<img src="" class="rounded-lg bg-white p-4 w-100 mx-auto mt-4" alt="FSM General Block Diagram">
+</div>
+
+<div class="col-span-2">
+
+<img src="/fsm_general_block_diagram.svg" class="rounded-lg bg-white p-4 w-full mx-auto mt-10" alt="FSM General Block Diagram">
 <div class="text-center text-sm opacity-50 mt-2">Figure 8-1: General Block Diagram of an FSM</div>
+
+</div>
+
+</div>
 
 ---
 
@@ -95,12 +106,45 @@ layout: two-cols-header
 
 :: right ::
 
-<img src="/analysis_example_fsm.svg" class="rounded-lg bg-white p-4 w-90 mx-auto" alt="Sequential Circuit for Analysis">
+<img src="/analysis_example_fsm.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Sequential Circuit for Analysis">
 <div class="text-center text-sm opacity-50 mt-2">Figure 8-2: Example Circuit</div>
 
 **Equations:**
 *   $D_A = A \oplus x \oplus y$
 *   $z = A \cdot x$
+
+
+
+---
+
+**State Table:**
+
+<div class="text-sm">
+
+$$
+\begin{array}{|c|c|c|c|c|}
+\hline
+\text{PS } (A) & \text{Inputs } (x \ y) & D_A = A \oplus x \oplus y & \text{NS } (A_{next}) & \text{Output } (z = A \cdot x) \\
+\hline
+0 & 0 \quad 0 & 0 & 0 & 0 \\
+0 & 0 \quad 1 & 1 & 1 & 0 \\
+0 & 1 \quad 0 & 1 & 1 & 0 \\
+0 & 1 \quad 1 & 0 & 0 & 0 \\
+1 & 0 \quad 0 & 1 & 1 & 0 \\
+1 & 0 \quad 1 & 0 & 0 & 0 \\
+1 & 1 \quad 0 & 0 & 0 & 1 \\
+1 & 1 \quad 1 & 1 & 1 & 1 \\
+\hline
+\end{array}
+$$
+
+</div>
+
+**State Diagram:**
+
+<img src="/analysis_example_state_diagram.svg" class="rounded-lg bg-white p-4 w-90 mx-auto" alt="Analysis Example State Diagram">
+
+
 
 ---
 
@@ -119,22 +163,18 @@ layout: two-cols-header
 
 ---
 
-## Design Example: Evaluation of a Sequence
+## Design Example
 
 **Problem:** Design a generic FSM.
 
-<div class="grid grid-cols-2 gap-8">
+<div class="grid grid-cols-2 gap-8 text-base">
 
 <div>
 
 ### 1. State Diagram
 Let's assume a design requirement leads to this diagram:
 
-<img src="/fsm_example_1.svg" class="rounded-lg bg-white p-4 w-90 mx-auto" alt="State Diagram Example">
-
-</div>
-
-<div>
+<img src="/fsm_example_1.svg" class="rounded-lg bg-white p-4 w-50 mx-auto" alt="State Diagram Example">
 
 ### 2. State Table
 
@@ -150,6 +190,20 @@ S_1 & 1 & S_1 \\
 \hline
 \end{array}
 $$
+
+</div>
+
+<div>
+
+### 3. State Equations
+
+*   Assume State Encoding: $S_0 = 0, S_1 = 1$. Let $A$ be the state variable.
+*   From the table: $A_{next} = 1$ when $x=1$; $A_{next} = 0$ when $x=0$.
+*   Equation: $D_A = A_{next} = x$
+
+### 4. Logic Diagram
+
+<img src="/fsm_example_1_circuit.svg" class="rounded-lg bg-white p-4 w-50 mx-auto" alt="Design Example Logic Circuit">
 
 </div>
 

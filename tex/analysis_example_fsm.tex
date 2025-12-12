@@ -12,22 +12,24 @@
     }
 
     % Flip Flop A
-    \node[d-ff] (FF) at (6, 0) {A};
-
+    \node[d-ff] (FF) at (6.5, 0) {A};
+    \draw (FF.pin 1) -- ++(-0, 0) node[xor port, anchor=out] (xor2) {};
+    \draw (FF.pin 3) -- ++(-0.5, 0) node[left] (clk) {Clk};
     % Inputs
-    \node (x) at (0, 3) {$x$};
-    \node (y) at (0, 0.5) {$y$};
-    \node (clk) at (4, -2) {clk};
+
+    %\node (y) at (-0.5, 0.5) {$y$};
+   % \node (clk) at (4, -0.5) {clk};
 
     % XOR Gates for D input: D = A XOR x XOR y
     % Logic: (x XOR y) XOR A
     \node[xor port] (xor1) at (2, 2) {};
-    \node[xor port] (xor2) at (4, 0) {};
+    %\node[xor port] (xor2) at (4.5, 0) {};
 
     % Connect x, y to xor1
-    \draw (x) to[short, -*] ++(1,0) |- (xor1.in 1);
-    \draw (y) to[short, -*] ++(1,0) |- (xor1.in 2);
-
+   % \draw (x) to[short, -*] ++(1,0) |- (xor1.in 1);
+    \draw (xor1.in 2) -- ++(-1,0) node[left](y){$y$};
+    \node (x) at ($(y) + (0, 1.5)$) {$x$};
+    \draw (xor1.in 1) to[short,-*] (xor1.in 1 |- x);
     % Connect xor1 to xor2 result
     \draw (xor1.out) |- (xor2.in 1);
 
@@ -35,15 +37,15 @@
     \draw (xor2.out) -- (FF.pin 1);
 
     % Clock connection
-    \draw (clk) |- (FF.pin 3);
+  %  \draw (clk) |- (FF.pin 3);
 
     % Feedback Loop: A (Q) to xor2
     % Avoid crossing component body too messy
-    \draw (FF.pin 6) -- ++(1,0) coordinate (Q_out);
-    \draw (Q_out) -- ++(0, -3) -| (xor2.in 2);
+    \draw (FF.pin 6) -- ++(0.3,0) node[circ] (Q_out) {};
+    \draw (Q_out) -- ++(0, -2.5) -| (xor2.in 2);
 
     % Output Logic: z = A AND x
-    \node[and port] (and1) at (8, 2) {};
+    \node[and port] (and1) at (9, 2) {};
     
     % Connect A to AND
     \draw (Q_out) |- (and1.in 2);
