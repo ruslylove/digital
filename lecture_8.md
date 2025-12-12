@@ -23,30 +23,36 @@ hideInToc: false
 
 ## Finite State Machine (FSM): Recall
 
+<div class="grid grid-cols-2 gap-8 text-base">
+
+<div>
+
 A **Finite State Machine (FSM)** is a computation model used to design sequential circuits.
 *   It consists of a finite number of **states**.
 *   It transitions between states based on **inputs** and the **current state**.
 *   It produces **outputs** based on the state (and potentially inputs).
 
-<div class="grid grid-cols-3 gap-8">
 
-<div class="text-base">
+
+
+</div>
+
+<div>
+
 
 An FSM consists of three main parts:
 1.  **Next State Logic:** Combinational logic that determines the next state.
 2.  **State Memory:** Flip-flops that store the current state.
 3.  **Output Logic:** Combinational logic that generates outputs.
 
+
+
 </div>
 
-<div class="col-span-2">
+</div>
 
-<img src="/fsm_general_block_diagram.svg" class="rounded-lg bg-white p-4 w-full mx-auto mt-10" alt="FSM General Block Diagram">
+<img src="/fsm_general_block_diagram.svg" class="rounded-lg bg-white p-4 w-180 mx-auto mt-4" alt="FSM General Block Diagram">
 <div class="text-center text-sm opacity-50 mt-2">Figure 8-1: General Block Diagram of an FSM</div>
-
-</div>
-
-</div>
 
 ---
 
@@ -261,6 +267,9 @@ We use K-maps to solve for $J$ and $K$ inputs:
 
 ---
 
+<div class="grid grid-cols-3 gap-8 text-sm">
+<div>
+
 From the K-maps:
 *   **For $Q_0$:** All entries are 1 or X.
     *   $J_0 = 1, \quad K_0 = 1$
@@ -275,38 +284,29 @@ Based on the derived equations:
 *   $FF_0$: $J=1, K=1$
 *   $FF_1$: $J=K= \overline{x \oplus Q_0}$
 
----
+</div>
+<div class="col-span-2">
 
-<img src="/up_down_counter_circuit.svg" class="rounded-lg bg-white p-4 w-100 mx-auto mt-4" alt="2-Bit Up/Down Counter Logic Diagram">
+<img src="/up_down_counter_circuit.svg" class="rounded-lg bg-white p-4 w-full mx-auto mt-4" alt="2-Bit Up/Down Counter Logic Diagram">
 <div class="text-center text-sm opacity-50 mt-2">Figure 8-3: Logic Diagram of 2-Bit Up/Down Counter</div>
 
-Optimization aims to reduce the cost (gates, flip-flops) and improve performance.
+</div>
+</div>
 
----
 
-### 1. State Reduction
-*   Two states are **equivalent** if, for every possible input sequence, they produce the same output sequence.
-*   Equivalent states can be combined into a single state.
-
-### 2. State Assignment (Encoding)
-The binary codes assigned to states affect the complexity of the combinational logic.
-
-*   **Binary Encoding:** Minimum number of flip-flops ($N$ states $\rightarrow \lceil \log_2 N \rceil$ bits). E.g., `00, 01, 10, 11`.
-*   **One-Hot Encoding:** One flip-flop per state ($N$ states $\rightarrow N$ bits). E.g., `0001, 0010, 0100, 1000`. Fast, simple next-state logic, but more flip-flops.
-*   **Gray Code:** Adjacent states differ by only one bit. Good for minimizing switching noise.
 
 ---
 
 ## Design Example 2: Car Security System
 
 **Problem:** Design a controller for a car security system.
-*   **Inputs:** `Master` switch (M), `Door` sensor (D).
+*   **Inputs:** `Master` switch (M), `Door` sensor (D), `Vibration` sensor (V).
 *   **Outputs:** `Alarm` (A).
 *   **Behavior:**
-    *   System is initially **Disarmed**.
-    *   If M=1, go to **Armed** state.
-    *   In **Armed** state, if D=1 (Door opens), go to **Triggered** state (Alarm ON).
-    *   In **Triggered** state, remain involved until M=0 (Reset).
+    *   System is initially **Disarmed** (No Siren).
+    *   If M=1, go to **Armed** (Siren OFF).
+    *   If Armed (M=1) AND (Door=1 OR Vibration=1), go to **Siren** state.
+    *   Once in **Siren** state, stay there until M=0 (Reset).
 ---
 
 ### State Diagram
@@ -318,19 +318,17 @@ The binary codes assigned to states affect the complexity of the combinational l
 ### State Table
 
 $$
-\begin{array}{|c|cc|c|c|}
+\begin{array}{|c|ccc|c|c|}
 \hline
-\text{State} & \text{Input } M & \text{Input } D & \text{Next State } & \text{Output } A \\
+\text{State } Q & M & D & V & \text{Next State } Q_{next} & \text{Output } A \\
 \hline
-\text{Disarmed (00)} & 0 & X & 00 & 0 \\
-\text{Disarmed (00)} & 1 & X & 01 & 0 \\
+0 \text{ (No Siren)} & 0 & X & X & 0 & 0 \\
+0 \text{ (No Siren)} & 1 & 0 & 0 & 0 & 0 \\
+0 \text{ (No Siren)} & 1 & 1 & X & 1 & 0 \\
+0 \text{ (No Siren)} & 1 & X & 1 & 1 & 0 \\
 \hline
-\text{Armed (01)} & 0 & X & 00 & 0 \\
-\text{Armed (01)} & 1 & 0 & 01 & 0 \\
-\text{Armed (01)} & 1 & 1 & 10 & 0 \\
-\hline
-\text{Triggered (10)} & 0 & X & 00 & 1 \\
-\text{Triggered (10)} & 1 & X & 10 & 1 \\
+1 \text{ (Siren)} & 0 & X & X & 0 & 1 \\
+1 \text{ (Siren)} & 1 & X & X & 1 & 1 \\
 \hline
 \end{array}
 $$
@@ -339,14 +337,15 @@ $$
 
 ### Logic Synthesis
 
-We use **K-maps** to derive the Next State equations ($D_1, D_0$) and Output equation ($A$).
+We derive the Next State equation from the requirement:
+*   Transition to 1 if $M=1$ AND ($D=1$ OR $V=1$).
+*   Hold 1 if $M=1$ AND $Q=1$.
+
+**Equation:**
+*   $Q_{next} = M \cdot (Q + D + V)$
+*   $A = Q$
 
 <img src="/car_security_kmaps.svg" class="rounded-lg bg-white p-4 w-120 mx-auto" alt="Car Security K-Maps">
-
-**Equations:**
-*   $D_1 = M Q_1 + M D Q_0$
-*   $D_0 = Q_1' M Q_0' + Q_1' M D'$
-*   $A = Q_1$
 
 ---
 
@@ -361,20 +360,31 @@ We use **K-maps** to derive the Next State equations ($D_1, D_0$) and Output equ
 
 ```vhdl
     -- Next State Logic
-    process(current_state, M, D)
+    process(clk, reset)
+    begin
+        if reset = '1' then
+            current_state <= No_Siren;
+        elsif rising_edge(clk) then
+            current_state <= next_state;
+        end if;
+    end process;
+
+    -- Combinational Logic
+    process(current_state, M, D, V)
     begin
         next_state <= current_state; 
         Alarm <= '0';
         
         case current_state is
-            when Disarmed =>
-                if M='1' then next_state <= Armed; end if;
-            when Armed =>
-                if M='0' then next_state <= Disarmed;
-                elsif D='1' then next_state <= Triggered; end if;
-            when Triggered =>
+            when No_Siren =>
+                if M='1' and (D='1' or V='1') then 
+                    next_state <= Siren; 
+                end if;
+            when Siren =>
                 Alarm <= '1';
-                if M='0' then next_state <= Disarmed; end if;
+                if M='0' then 
+                    next_state <= No_Siren; 
+                end if;
         end case;
     end process;
 ```
