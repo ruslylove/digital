@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=latex 2025.11.27)  11 DEC 2025 13:57
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=latex 2025.11.27)  12 DEC 2025 11:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -92,10 +92,10 @@ Package: trig 2023/12/02 v1.11 sin cos tan (DPC)
 (/usr/local/texlive/2025/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
-Package graphics Info: Driver file: dvips.def on input line 106.
+Package graphics Info: Driver file: dvisvgm.def on input line 106.
 
-(/usr/local/texlive/2025/texmf-dist/tex/latex/graphics-def/dvips.def
-File: dvips.def 2022/09/22 v3.1e Graphics/color driver for dvips
+(/usr/local/texlive/2025/texmf-dist/tex/latex/graphics-def/dvisvgm.def
+File: dvisvgm.def 2022/09/22 v1.6 dvisvgm graphics driver for latex
 ))
 \Gin@req@height=\dimen144
 \Gin@req@width=\dimen145
@@ -135,22 +135,25 @@ tered.code.tex
 (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/systemlayer/pgf.cfg
 File: pgf.cfg 2023-01-15 v3.1.10 (3.1.10)
 )
-Driver file for pgf: pgfsys-dvips.def
+Driver file for pgf: pgfsys-dvisvgm.def
 
-(/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-dvips.de
-f
-File: pgfsys-dvips.def 2023-01-15 v3.1.10 (3.1.10)
+(/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-dvisvgm.
+def
+File: pgfsys-dvisvgm.def 2023-01-15 v3.1.10 (3.1.10)
 
-(/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-common-p
-ostscript.def
-File: pgfsys-common-postscript.def 2023-01-15 v3.1.10 (3.1.10)
-\pgf@objectcount=\count278
+(/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-common-s
+vg.def
+File: pgfsys-common-svg.def 2023-01-15 v3.1.10 (3.1.10)
+\pgf@sys@svg@objectcount=\count278
+\pgf@sys@svg@scopecount=\count279
+\pgf@sys@svg@type@count=\count280
+\pgf@sys@svg@canvascount=\count281
 )))
 (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/systemlayer/pgfsyssoftpath.
 code.tex
 File: pgfsyssoftpath.code.tex 2023-01-15 v3.1.10 (3.1.10)
-\pgfsyssoftpath@smallbuffer@items=\count279
-\pgfsyssoftpath@bigbuffer@items=\count280
+\pgfsyssoftpath@smallbuffer@items=\count282
+\pgfsyssoftpath@bigbuffer@items=\count283
 )
 (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/systemlayer/pgfsysprotocol.
 code.tex
@@ -161,7 +164,7 @@ Package: xcolor 2024/09/29 v3.02 LaTeX color extensions (UK)
 (/usr/local/texlive/2025/texmf-dist/tex/latex/graphics-cfg/color.cfg
 File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
-Package xcolor Info: Driver file: dvips.def on input line 274.
+Package xcolor Info: Driver file: dvisvgm.def on input line 274.
 
 (/usr/local/texlive/2025/texmf-dist/tex/latex/graphics/mathcolor.ltx)
 Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1349.
@@ -179,7 +182,7 @@ Package: pgfcore 2023-01-15 v3.1.10 (3.1.10)
 (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/math/pgfmathutil.code.tex)
 (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/math/pgfmathparser.code.tex
 \pgfmath@dimen=\dimen156
-\pgfmath@count=\count281
+\pgfmath@count=\count284
 \pgfmath@box=\box54
 \pgfmath@toks=\toks26
 \pgfmath@stack@operand=\toks27
@@ -205,7 +208,7 @@ code.tex)
 erarithmetics.code.tex)
 (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/math/pgfmathcalc.code.tex)
 (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/math/pgfmathfloat.code.tex
-\c@pgfmathroundto@lastzeros=\count282
+\c@pgfmathroundto@lastzeros=\count285
 )) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/math/pgfint.code.tex)
 (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepoints.co
 de.tex
@@ -243,7 +246,7 @@ File: pgfcorescopes.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgfpic=\box55
 \pgf@hbox=\box56
 \pgf@layerbox@main=\box57
-\pgf@picture@serial@count=\count283
+\pgf@picture@serial@count=\count286
 )
 (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/basiclayer/pgfcoregraphicst
 ate.code.tex
@@ -278,8 +281,8 @@ File: pgfcorearrows.code.tex 2023-01-15 v3.1.10 (3.1.10)
 e.tex
 File: pgfcoreshade.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgf@max=\dimen180
-\pgf@sys@shading@range@num=\count284
-\pgf@shadingcount=\count285
+\pgf@sys@shading@range@num=\count287
+\pgf@shadingcount=\count288
 )
 (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreimage.cod
 e.tex
@@ -344,7 +347,7 @@ Package: tikz 2023-01-15 v3.1.10 (3.1.10)
 (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/libraries/pgflibraryplothan
 dlers.code.tex
 File: pgflibraryplothandlers.code.tex 2023-01-15 v3.1.10 (3.1.10)
-\pgf@plot@mark@count=\count286
+\pgf@plot@mark@count=\count289
 \pgfplotmarksize=\dimen185
 )
 \tikz@lastx=\dimen186
@@ -359,19 +362,19 @@ File: pgflibraryplothandlers.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \tikz@figbox@bg=\box61
 \tikz@tempbox=\box62
 \tikz@tempbox@bg=\box63
-\tikztreelevel=\count287
-\tikznumberofchildren=\count288
-\tikznumberofcurrentchild=\count289
-\tikz@fig@count=\count290
+\tikztreelevel=\count290
+\tikznumberofchildren=\count291
+\tikznumberofcurrentchild=\count292
+\tikz@fig@count=\count293
 
 (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/modules/pgfmodulematrix.cod
 e.tex
 File: pgfmodulematrix.code.tex 2023-01-15 v3.1.10 (3.1.10)
-\pgfmatrixcurrentrow=\count291
-\pgfmatrixcurrentcolumn=\count292
-\pgf@matrix@numberofcolumns=\count293
+\pgfmatrixcurrentrow=\count294
+\pgfmatrixcurrentcolumn=\count295
+\pgf@matrix@numberofcolumns=\count296
 )
-\tikz@expandcount=\count294
+\tikz@expandcount=\count297
 
 (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
 s/tikzlibrarytopaths.code.tex
@@ -418,9 +421,9 @@ s/tikzlibraryfpu.code.tex
 (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/libraries/pgflibraryfpu.cod
 e.tex))
 (/usr/local/texlive/2025/texmf-dist/tex/generic/circuitikz/pgfcirc.defines.tex
-\pgf@circ@count@a=\count295
-\pgf@circ@count@b=\count296
-\pgf@circ@count@c=\count297
+\pgf@circ@count@a=\count298
+\pgf@circ@count@b=\count299
+\pgf@circ@count@c=\count300
 \pgf@circ@res@up=\dimen261
 \pgf@circ@res@down=\dimen262
 \pgf@circ@res@zero=\dimen263
@@ -441,7 +444,7 @@ e.tex))
 ) (/usr/local/texlive/2025/texmf-dist/tex/generic/circuitikz/pgfcircbipoles.tex
 )
 (/usr/local/texlive/2025/texmf-dist/tex/generic/circuitikz/pgfcirctripoles.tex
-\pgf@circ@res@count=\count298
+\pgf@circ@res@count=\count301
 )
 (/usr/local/texlive/2025/texmf-dist/tex/generic/circuitikz/pgfcircquadpoles.tex
 )
@@ -452,14 +455,12 @@ x) (/usr/local/texlive/2025/texmf-dist/tex/generic/circuitikz/pgfcirclabel.tex)
 )
 (/usr/local/texlive/2025/texmf-dist/tex/generic/circuitikz/pgfcirccurrent.tex)
 (/usr/local/texlive/2025/texmf-dist/tex/generic/circuitikz/pgfcircflow.tex))
-(/usr/local/texlive/2025/texmf-dist/tex/latex/l3backend/l3backend-dvips.def
-File: l3backend-dvips.def 2024-05-08 L3 backend support: dvips
-\l__pdf_internal_box=\box65
-\l__pdf_backend_content_box=\box66
-\l__pdf_backend_model_box=\box67
-\g__pdf_backend_annotation_int=\count299
-\g__pdf_backend_link_int=\count300
-\g__pdf_backend_link_sf_int=\count301
+(/usr/local/texlive/2025/texmf-dist/tex/latex/l3backend/l3backend-dvisvgm.def
+File: l3backend-dvisvgm.def 2024-05-08 L3 backend support: dvisvgm
+\g__kernel_backend_scope_int=\count302
+\l__kernel_backend_scope_int=\count303
+\g__kernel_clip_path_int=\count304
+\g__draw_backend_path_int=\count305
 )
 (./car_security_circuit.aux)
 \openout1 = `car_security_circuit.aux'.
@@ -479,13 +480,13 @@ LaTeX Font Info:    ... okay on input line 4.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 4.
 LaTeX Font Info:    ... okay on input line 4.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 16.
+(Font)              <7> on input line 7.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 16.
+(Font)              <5> on input line 7.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <9> on input line 21.
+(Font)              <9> on input line 22.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 21.
+(Font)              <6> on input line 22.
 
 
 [1
@@ -497,12 +498,12 @@ L3 programming layer <2025-01-18>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 30676 strings out of 473191
- 812110 string characters out of 5715825
- 1456164 words of memory out of 5000000
- 53678 multiletter control sequences out of 15000+600000
+ 30560 strings out of 473191
+ 808594 string characters out of 5715825
+ 1417879 words of memory out of 5000000
+ 53562 multiletter control sequences out of 15000+600000
  560660 words of font info for 42 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 117i,8n,121p,423b,929s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 117i,8n,121p,440b,779s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on car_security_circuit.dvi (1 page, 23464 bytes).
+Output written on car_security_circuit.dvi (1 page, 9660 bytes).

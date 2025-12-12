@@ -12,7 +12,7 @@
     }
 
     % Input x
-    \node (x) at (-2, 2) {$x$};
+    %\node[left] (x) at (-2, 2) {$x$};
 
     % Flip Flop 0 (Q0) - LSB
     \node[jk-ff] (FF0) at (2, 0) {$Q_0$};
@@ -21,14 +21,16 @@
     \node[jk-ff] (FF1) at (8, 0) {$Q_1$};
 
     % Clock
-    \node (clk) at (0, -3) {CLK};
-    \draw (clk) -| (FF0.pin 2);
-    \draw (clk) -| (FF1.pin 2);
+    \node (clk) at (0, -2) {CLK};
+    \draw (clk) -- ++(1,0) node[circ] (clk_tap) {} |- (FF0.pin 2);
+    \draw (clk_tap) -| (FF1.pin 2);
+    \draw (FF0.pin 3) -- ++(-0.5,0) coordinate (FF0_K) -- ++(0,1.5) node[vcc] (vcc) {$'1'$};
+    \draw (FF0.pin 1) to[short,-*] (FF0.pin 1 -| FF0_K);
 
     % Logic for FF0: J=1, K=1
-    \node[vcc] (vcc) at (0, 1) {1};
-    \draw (vcc) -| (FF0.pin 1); % J0
-    \draw (vcc) -| (FF0.pin 3); % K0
+   % \node[vcc] (vcc) at (0, 1) {1};
+   % \draw (vcc) -| (FF0.pin 1); % J0
+   % \draw (vcc) -| (FF0.pin 3); % K0
 
     % Logic for FF1: J=K= x XNOR Q0
     % Need Q0 output from FF0
@@ -40,15 +42,16 @@
     \node[xnor port] (xnor) at (5, 1.5) {};
     
     % Wire x to XNOR
-    \draw (x) |- (xnor.in 1);
+    \draw (xnor.in 1) -- ++(-2,0) node[left] (x) {$x$};
     
     % Wire Q0 to XNOR
     \draw (Q0_out) |- (xnor.in 2);
     
     % Output of XNOR to J1 and K1
     \draw (xnor.out) -- ++(0.5,0) coordinate (logic_out);
-    \draw (logic_out) |- (FF1.pin 1); % J1
+    %\draw (logic_out) |- (FF1.pin 1); % J1
     \draw (logic_out) |- (FF1.pin 3); % K1
+    \draw (FF1.pin 1) to[short,-*] (FF1.pin 1 -| logic_out);
 
     % FF1 Output
     \draw (FF1.pin 6) -- ++(1,0) node[right] {$Q_1$};
