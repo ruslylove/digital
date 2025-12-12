@@ -463,7 +463,7 @@ We assume **D Flip-Flops**.
 
 ### 3. Logic Diagram
 
-<img src="/modulo_6_circuit.svg" class="rounded-lg bg-white p-4 w-120 mx-auto" alt="Modulo-6 Logic Circuit">
+<img src="/modulo_6_circuit.svg" class="rounded-lg bg-white p-4 w-110 mx-auto" alt="Modulo-6 Logic Circuit">
 <div class="text-center text-sm opacity-50 mt-2">Figure 8-5: Modulo-6 Counter Logic Diagram</div>
 
 ---
