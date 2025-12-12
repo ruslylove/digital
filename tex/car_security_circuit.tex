@@ -1,42 +1,53 @@
-\documentclass[dvisvgm]{standalone}
-\usepackage[european]{circuitikz}
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
 
 \begin{document}
-\begin{circuitikz}
-    % Inputs
-    \node (M) at (-2, 2) {$M$};
-    \node (D) at (-2, 0) {$D$};
-    \node (V) at (-2, -1) {$V$};
-    \node (Q) at (-2, 1) {$Q$};
+\begin{circuitikz}[american]
+    \ctikzset{logic ports=ieee}
+    \tikzset{d-ff/.style={flipflop, flipflop def={t1=D, t6=Q, t4=\ctikztextnot{Q}, c3=1,td=Clear
+    }}}
 
-    % Gates
-    % OR gate for Q + D + V
-    % Since standard or gate has fewer inputs, we'll cascade or use a larger one conceptually
-    % Let's use a 3-input OR
-    \node[or port, number inputs=3] (OR1) at (1, 0) {};
+    % Components
+    %\node[or port, number inputs=3] (OR) at (0,0) {};
+    %\node[and port] (AND) at (3,0) {};
+    \node[d-ff] (DFF) at (6,0) {$Q$};
+    \draw (DFF.pin 1) -- ++(-0.5,0) node[and port,anchor=out] (AND) {};
+    \draw (AND.in 1) -- ++(-0.5,0) node[or port,anchor=out,number inputs=3] (OR) {};
     
-    % AND gate for M * (OR1)
-    \node[and port] (AND1) at (3, 1) {};
-
-    % Flip Flop
-    \node[flipflop D] (FF) at (5, 1) {};
-    \node[right] at (FF.bup) {CLK};
-    \node (CLK) at (3.5, -0.5) {CLK};
+    % Inputs
+    \node[left] at (OR.in 2) (D) {$D$};
+    \node[left] at (OR.in 3) (V) {$V$};
+    % Input 1 is feedback
     
     % Connections
-    \draw (Q) -- (OR1.in 1);
-    \draw (D) -- (OR1.in 2);
-    \draw (V) -- (OR1.in 3);
+    \draw (D) -- (OR.in 2);
+    \draw (V) -- (OR.in 3);
     
-    \draw (M) |- (AND1.in 1);
-    \draw (OR1.out) |- (AND1.in 2);
+    % OR to AND
+    % OR output to AND input 2
     
-    \draw (AND1.out) -- (FF.pin 1); % D input
-    \draw (CLK) -| (FF.pin 3);
     
-    % Output loopback Q
-    \draw (FF.pin 6) -- ++(1,0) node[right] (Output) {$A (Alarm)$}
-          (FF.pin 6) -- ++(0.5,0) -- ++(0, 2) -- (-2.5, 3) |- (Q);
+    % M input to AND input 1
+    \node[left] at ($(OR.in 3)+(0,-0.5)$) (M) {$M$};
+    \draw (M) -| (AND.in 2);
+    
+    
+    % AND to DFF
+    \draw (AND.out) -- (DFF.pin 1);
+    
+    % CLK
+    \draw (DFF.pin 3) -- ++(0,-0.5) coordinate(tmp) -- (tmp -| M) node[left] {CLK};
+    
+    % Output and Feedback
+    \draw (DFF.pin 6) -- ++(1,0) node[right] {$A (Alarm)$};
+    
+    % Feedback Loop
+    % From Q output back to OR input 1
+    \draw (DFF.pin 6) -- ++(0.5,0) node[circ] (tmp) {} -- ++(0, 1.5) -| (OR.in 1);
+    
+    % Label Q on feedback line near OR input for clarity
+    % \node[above right] at (OR.in 1) {$Q$};
+    \draw (DFF.down) -- ++(0, -0.2) coordinate (tmp) -- (tmp -| M) node[left] {Reset};
 
 \end{circuitikz}
 \end{document}
