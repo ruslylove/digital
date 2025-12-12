@@ -10,18 +10,34 @@
     \tikzset{d-ff/.style={flipflop, flipflop def={t1=D, t6=Q, t4=\ctikztextnot{Q}, c3=1}}}
     
     % Q-Bus Nodes
-    \coordinate (Q2_bus) at (-5, 13);
-    \coordinate (Q1_bus) at (-4, 13);
-    \coordinate (Q0_bus) at (-3, 13);
-    \coordinate (C_bus) at (-2, 13);
+    \coordinate (Q2_bus) at (-8.5, 15);
+    \coordinate (Q2_bar_bus) at (-7.5, 15);
+    \coordinate (Q1_bus) at (-6.5, 15);
+    \coordinate (Q1_bar_bus) at (-5.5, 15);
+    \coordinate (Q0_bus) at (-4.5, 15);
+    \coordinate (Q0_bar_bus) at (-3.5, 15);
+    \coordinate (C_bus) at (-2.5, 15);
+    \coordinate (C_bar_bus) at (-1.5, 15);
     
     % Draw Buses
-    \draw (Q2_bus) node[above] {$Q_2$} -- (-5, -1);
-    \draw (Q1_bus) node[above] {$Q_1$} -- (-4, -1);
-    \draw (Q0_bus) node[above] {$Q_0$} -- (-3, -1);
-    \draw (C_bus) node[above] {$C$} -- (-2, -1);
+    \draw (Q2_bus) node[above] {$(Q_2)$} -- (-8.5, -3);
+    \draw (Q2_bar_bus) node[above] {$(Q_2')$} -- (-7.5, -3);
+    \draw (Q1_bus) node[above] {$(Q_1)$} -- (-6.5, -3);
+    \draw (Q1_bar_bus) node[above] {$(Q_1')$} -- (-5.5, -3);
+    \draw (Q0_bus) node[above] {$(Q_0)$} -- (-4.5, -3);
+    \draw (Q0_bar_bus) node[above] {$(Q_0')$} -- (-3.5, -3);
+    \draw (C_bus) node[above] {$C$} -- (-2.5, -3);
+   % \draw (C_bar_bus) node[above] {$C'$} -- (-1.5, -1);
     
-    \node (clk) at (6, -1) {CLK};
+    % Inverter for C -> C'
+    \path (C_bus) -- ++(0,-0.5) coordinate (c_tap);
+    \node[circ] (tmp) at (c_tap) {};
+    \node[not port, scale=0.5, anchor=in] (c_inv) at (c_tap) {};
+    \draw (c_inv.out) -- (c_inv.out -| C_bar_bus) -- (-1.5,-3);
+   % \draw (-2, 12.5) -- (c_inv.in);
+   % \draw (c_inv.out) -- (-1.5, 12.5);
+    
+    \node[left] (clk) at (3, -3) {CLK};
     
     % FFs
     \node[d-ff] (FF0) at (6, 1) {$Q_0$};
@@ -30,12 +46,12 @@
     
     % Clock distribution & Q Routing
     \begin{scope}[on background layer]
-        \draw (clk) -| (FF0.pin 3);
-        \draw (clk) -| (FF1.pin 3);
+  %      \draw (clk) -| (FF0.pin 3);
+  %      \draw (clk) -| (FF1.pin 3);
         \draw (clk) -| (FF2.pin 3);
         
         % Route Q to Bus
-        \draw (FF0.pin 6) -- ++(1,0) -- ++(0, 5) -- ++(-11, 0) -- (-3, 6 |- Q0_bus); % Route Q0 up and over to -3
+   %     \draw (FF0.pin 6) -- ++(1,0) -- ++(0, 5) -- ++(-11, 0) -- (-3, 6 |- Q0_bus); % Route Q0 up and over to -3
         % Wait, routing up and over might be messy. Let's route horizontally through the gap if possible or go up/down.
         % Actually, simpler: Route directly left if 'background' works well.
         % FF inputs (D) are on pin 1 (left). FF outputs (Q) are on pin 6 (right).
@@ -43,15 +59,15 @@
         % Let's go UP from each Q, then LEFT above everything (y=12.5), then DOWN to the bus.
         
         % Q2 Route
-        \draw (FF2.pin 6) -- ++(0.5,0) -- ++(0, 0.5) -- (-5, 9.5) -- (Q2_bus |- FF2.pin 6); % Just connect to the vertical line? No, the vertical line is the bus.
+    %    \draw (FF2.pin 6) -- ++(0.5,0) -- ++(0, 0.5) -- (-5, 9.5) -- (Q2_bus |- FF2.pin 6); % Just connect to the vertical line? No, the vertical line is the bus.
         % Let's just define the bus as the source.
         % We need to drive the bus FROM the FFs.
         % Route Q2
-        \draw (FF2.pin 6) -- ++(0.5,0) -- ++(0, 2) -- (-5, 11) -- (-5, 9); % Connect to bus line at -5
+    %    \draw (FF2.pin 6) -- ++(0.5,0) -- ++(0, 2) -- (-5, 11) -- (-5, 9); % Connect to bus line at -5
         % Route Q1
-        \draw (FF1.pin 6) -- ++(0.5,0) -- ++(0, 6) -- (-4, 11) -- (-4, 5); % Connect to bus line at -4
+    %    \draw (FF1.pin 6) -- ++(0.5,0) -- ++(0, 6) -- (-4, 11) -- (-4, 5); % Connect to bus line at -4
         % Route Q0
-        \draw (FF0.pin 6) -- ++(0.5,0) -- ++(0, 10) -- (-3, 11) -- (-3, 1); % Connect to bus line at -3
+    %    \draw (FF0.pin 6) -- ++(0.5,0) -- ++(0, 10) -- (-3, 11) -- (-3, 1); % Connect to bus line at -3
         
         % Re-thinking routing: The FFs are stacked at x=6, y=1,5,9.
         % The logic is to the left (x=0..3).
@@ -68,25 +84,38 @@
     
     \begin{scope}[on background layer]
         % Clock
-        \draw (clk) -| (FF0.pin 3);
-        \draw (clk) -| (FF1.pin 3);
+      %  \draw (clk) -| (FF0.pin 3);
+      %  \draw (clk) -| (FF1.pin 3);
         \draw (clk) -| (FF2.pin 3);
         
         % Q2 Feedback
-        \draw[red] (FF2.pin 6) -- ++(0.5,0) -- ++(0, 3) -- (-5, 12) -- (-5, -1);
+    \draw (FF2.pin 6) -- ++(0, 2) coordinate (q2);
+    \draw (q2) to[short,-*] (q2 -| Q2_bus);
         % Q1 Feedback
-        \draw[blue] (FF1.pin 6) -- ++(0.5,0) -- ++(0.2,0) -- ++(0, 7.2) -- (-4, 12.2) -- (-4, -1);
+    \draw (FF1.pin 6) -- ++(1,0) -- ++(0, 6.6) coordinate (q1);
+    \draw (q1) to[short,-*] (q1 -| Q1_bus);
         % Q0 Feedback
-        \draw[green] (FF0.pin 6) -- ++(0.5,0) -- ++(0.4,0) -- ++(0, 11.4) -- (-3, 12.4) -- (-3, -1);
+    \draw (FF0.pin 6) -- ++(2,0) -- ++(0, 11.2) coordinate (q0);
+    \draw (q0) to[short,-*] (q0 -| Q0_bus);
+        
+        % Q2' Feedback
+    \draw (FF2.pin 4) -- ++(0.5,0) -- ++(0, 4) coordinate (q2_bar);
+    \draw (q2_bar) to[short,-*] (q2_bar -| Q2_bar_bus);
+        % Q1' Feedback
+    \draw (FF1.pin 4) -- ++(1.5,0) -- ++(0, 8.6) coordinate (q1_bar);
+    \draw (q1_bar) to[short,-*] (q1_bar -| Q1_bar_bus);
+        % Q0' Feedback
+    \draw (FF0.pin 4) -- ++(2.5,0) -- ++(0, 13.2) coordinate (q0_bar);
+    \draw (q0_bar) to[short,-*] (q0_bar -| Q0_bar_bus);
     \end{scope}
     
     % Logic D0 = Q0 XOR C (D0 = Q0 + C)
     % D0 = Q0 XOR C.
     \node[xor port] (xor_d0) at (2, 1) {};
     \begin{scope}[on background layer]
-        \draw (-3, 1 |- xor_d0.in 1) -- (xor_d0.in 1); % Q0
-        \draw (-2, 1 |- xor_d0.in 2) -- (xor_d0.in 2); % C
-        \draw (xor_d0.out) -- (FF0.pin 1);
+        \draw (Q0_bus |- xor_d0.in 1) to[short,*-] (xor_d0.in 1); % Q0
+        \draw (C_bus |- xor_d0.in 2) to[short,*-] (xor_d0.in 2); % C
+        \draw (xor_d0.out) |- (FF0.pin 1);
     \end{scope}
     
     % Logic D2 = Q2 Q1' + Q2 Q0 C' + Q1 Q0 C
@@ -94,36 +123,32 @@
     \node[and port] (term1_d2) at (0, 11) {}; % Q2 Q0'
     \node[and port] (term2_d2) at (0, 9.5) {}; % Q2 C'
     \node[and port, number inputs=3] (term3_d2) at (0, 8) {}; % Q1 Q0 C
-    \node[or port, number inputs=3] (or_d2) at (3, 9) {};
+    \node[or port, number inputs=3] (or_d2) at ($(term2_d2) + (3, 0)$) {};
 
     % Connections D2
     \begin{scope}[on background layer]
         % Q2 Q0'
         % Input 1: Q2 from bus
-        \draw (-5, 1 |- term1_d2.in 1) -- (term1_d2.in 1);
-        % Input 2: Q0' (Q0 from bus + NOT)
-        \node[not port, scale=0.6] (inv_q0_d2) at (-1, 11 |- term1_d2.in 2) {};
-        \draw (-3, 1 |- inv_q0_d2.in) -- (inv_q0_d2.in); % Q0
-        \draw (inv_q0_d2.out) -- (term1_d2.in 2);
+        \draw (Q2_bus |- term1_d2.in 1) to[short,*-] (term1_d2.in 1);
+        % Input 2: Q0' (from bus)
+        \draw (Q0_bar_bus |- term1_d2.in 2) to[short,*-] (term1_d2.in 2);
         
         % Q2 C'
         % Input 1: Q2
-        \draw (-5, 1 |- term2_d2.in 1) -- (term2_d2.in 1);
-        % Input 2: C' (C from bus + NOT)
-        \node[not port, scale=0.6] (inv_c_d2) at (-1, 9.5 |- term2_d2.in 2) {};
-        \draw (-2, 1 |- inv_c_d2.in) -- (inv_c_d2.in);
-        \draw (inv_c_d2.out) -- (term2_d2.in 2);
+        \draw (Q2_bus |- term2_d2.in 1) to[short,*-] (term2_d2.in 1);
+        % Input 2: C' (from bus)
+        \draw (C_bar_bus |- term2_d2.in 2) to[short,*-] (term2_d2.in 2);
         
         % Q1 Q0 C
-        \draw (-4, 1 |- term3_d2.in 1) -- (term3_d2.in 1); % Q1
-        \draw (-3, 1 |- term3_d2.in 2) -- (term3_d2.in 2); % Q0
-        \draw (-2, 1 |- term3_d2.in 3) -- (term3_d2.in 3); % C
+        \draw (Q1_bus |- term3_d2.in 1) to[short,*-] (term3_d2.in 1); % Q1
+        \draw (Q0_bus |- term3_d2.in 2) to[short,*-] (term3_d2.in 2); % Q0
+        \draw (C_bus |- term3_d2.in 3) to[short,*-] (term3_d2.in 3); % C
         
         % OR
-        \draw (term1_d2.out) -- (or_d2.in 1);
-        \draw (term2_d2.out) -- (or_d2.in 2);
-        \draw (term3_d2.out) -- (or_d2.in 3);
-        \draw (or_d2.out) -- (FF2.pin 1);
+        \draw (term1_d2.out) |- (or_d2.in 1);
+        \draw (term2_d2.out) |- (or_d2.in 2);
+        \draw (term3_d2.out) |- (or_d2.in 3);
+        \draw (or_d2.out) |- (FF2.pin 1);
     \end{scope}
     
     % Logic D1 = Q1 Q0' + Q1 Q0 C' + Q2' Q1' Q0 C
@@ -131,55 +156,45 @@
     \node[and port] (term1_d1) at (0, 6) {}; % Q1 Q0'
     \node[and port] (term2_d1) at (0, 4.5) {}; % Q1 C'
     \node[and port, number inputs=4] (term3_d1) at (0, 3) {}; % Q2' Q1' Q0 C
-    \node[or port, number inputs=3] (or_d1) at (3, 5) {};
+    \node[or port, number inputs=3] (or_d1) at ($(term2_d1) + (3, 0)$) {};
     
     % Connections D1
     \begin{scope}[on background layer]
         % Q1 Q0'
-        \draw (-4, 1 |- term1_d1.in 1) -- (term1_d1.in 1); % Q1
+        \draw (Q1_bus |- term1_d1.in 1) to[short,*-] (term1_d1.in 1); % Q1
         % Q0'
-        \node[not port, scale=0.6] (inv_q0_d1) at (-1, 6 |- term1_d1.in 2) {};
-        \draw (-3, 1 |- inv_q0_d1.in) -- (inv_q0_d1.in);
-        \draw (inv_q0_d1.out) -- (term1_d1.in 2);
+        \draw (Q0_bar_bus |- term1_d1.in 2) to[short,*-] (term1_d1.in 2);
         
         % Q1 C'
-        \draw (-4, 1 |- term2_d1.in 1) -- (term2_d1.in 1); % Q1
+        \draw (Q1_bus |- term2_d1.in 1) to[short,*-] (term2_d1.in 1); % Q1
         % C'
-        \node[not port, scale=0.6] (inv_c_d1) at (-1, 4.5 |- term2_d1.in 2) {};
-        \draw (-2, 1 |- inv_c_d1.in) -- (inv_c_d1.in);
-        \draw (inv_c_d1.out) -- (term2_d1.in 2);
+        \draw (C_bar_bus |- term2_d1.in 2) to[short,*-] (term2_d1.in 2);
         
         % Q2' Q1' Q0 C
         % Q2'
-        \node[not port, scale=0.6] (inv_q2_d1) at (-1, 3 |- term3_d1.in 1) {};
-        \draw (-5, 1 |- inv_q2_d1.in) -- (inv_q2_d1.in);
-        \draw (inv_q2_d1.out) -- (term3_d1.in 1);
+        \draw (Q2_bar_bus |- term3_d1.in 1) to[short,*-] (term3_d1.in 1);
         % Q1'
-        \node[not port, scale=0.6] (inv_q1_d1) at (-0.5, 3 |- term3_d1.in 2) {}; % Shift x slightly to avoid overlap
-        \draw (-4, 1 |- inv_q1_d1.in) -- (inv_q1_d1.in);
-        \draw (inv_q1_d1.out) -- (term3_d1.in 2);
+        \draw (Q1_bar_bus |- term3_d1.in 2) to[short,*-] (term3_d1.in 2);
         % Q0
-        \draw (-3, 1 |- term3_d1.in 3) -- (term3_d1.in 3);
+        \draw (Q0_bus |- term3_d1.in 3) to[short,*-] (term3_d1.in 3);
         % C
-        \draw (-2, 1 |- term3_d1.in 4) -- (term3_d1.in 4);
+        \draw (C_bus |- term3_d1.in 4) to[short,*-] (term3_d1.in 4);
         
         % OR
-        \draw (term1_d1.out) -- (or_d1.in 1);
-        \draw (term2_d1.out) -- (or_d1.in 2);
-        \draw (term3_d1.out) -- (or_d1.in 3);
-        \draw (or_d1.out) -- (FF1.pin 1);
+        \draw (term1_d1.out) |- (or_d1.in 1);
+        \draw (term2_d1.out) |- (or_d1.in 2);
+        \draw (term3_d1.out) |- (or_d1.in 3);
+        \draw (or_d1.out) |- (FF1.pin 1);
     \end{scope}
     
     % Output Y = Q2 Q1' Q0
-    \node[and port, number inputs=3] (and_y) at (10, 5) {};
+    \node[and port, number inputs=3] (and_y) at (9, -1.5) {};
     \begin{scope}[on background layer]
-        \draw (-5, 1 |- and_y.in 1) -- (and_y.in 1); % Q2
+        \draw (Q2_bus |- and_y.in 1) to[short,*-] (and_y.in 1); % Q2
         % Q1'
-        \node[not port, scale=0.6] (inv_q1_y) at (9, 5 |- and_y.in 2) {};
-        \draw (-4, 1 |- inv_q1_y.in) -- (inv_q1_y.in);
-        \draw (inv_q1_y.out) -- (and_y.in 2);
+        \draw (Q1_bar_bus |- and_y.in 2) to[short,*-] (and_y.in 2);
         % Q0
-        \draw (-3, 1 |- and_y.in 3) -- (and_y.in 3); % Q0
+        \draw (Q0_bus |- and_y.in 3) to[short,*-] (and_y.in 3); % Q0
         \draw (and_y.out) -- ++(0.5,0) node[right] {$Y$};
     \end{scope}
 
