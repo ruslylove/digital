@@ -21,6 +21,7 @@ hideInToc: false
 
 ---
 
+
 ## Finite State Machine (FSM): Recall
 
 <div class="grid grid-cols-2 gap-8 text-base">
@@ -296,9 +297,11 @@ Based on the derived equations:
 
 
 ---
+layout: two-cols-header
+---
 
 ## Design Example 2: Car Security System
-
+:: left ::
 **Problem:** Design a controller for a car security system.
 *   **Inputs:** `Master` switch (M), `Door` sensor (D), `Vibration` sensor (V).
 *   **Outputs:** `Alarm` (A).
@@ -307,13 +310,14 @@ Based on the derived equations:
     *   If M=1, go to **Armed** (Siren OFF).
     *   If Armed (M=1) AND (Door=1 OR Vibration=1), go to **Siren** state.
     *   Once in **Siren** state, stay there until M=0 (Reset).
----
+
+::right::
 
 ### State Diagram
 
-<img src="/car_security_fsm.svg" class="rounded-lg bg-white p-4 w-120 mx-auto" alt="Car Security System State Diagram">
+<img src="/car_security_fsm.svg" class="rounded-lg bg-white p-4 w-70 mx-auto" alt="Car Security System State Diagram">
 
----
+
 
 ### State Table
 
@@ -334,20 +338,22 @@ $$
 $$
 
 ---
+layout: two-cols-header
+---
 
 ### Logic Synthesis
 
-We derive the Next State equation from the requirement:
-*   Transition to 1 if $M=1$ AND ($D=1$ OR $V=1$).
-*   Hold 1 if $M=1$ AND $Q=1$.
+:: left ::
+
+We derive the Next State equation from Karnaugh maps:
+
+<img src="/car_security_kmaps.svg" class="rounded-lg bg-white p2 w-60 mx-auto" alt="Car Security K-Maps">
 
 **Equation:**
 *   $Q_{next} = M \cdot (Q + D + V)$
 *   $A = Q$
 
-<img src="/car_security_kmaps.svg" class="rounded-lg bg-white p-4 w-120 mx-auto" alt="Car Security K-Maps">
-
----
+:: right ::
 
 ### Logic Diagram
 
@@ -358,7 +364,7 @@ We derive the Next State equation from the requirement:
 
 ### VHDL Implementation (Logic)
 
-```vhdl
+```vhdl{*}{maxHeight:'420px',lines:true}
     -- Next State Logic
     process(clk, reset)
     begin
@@ -402,12 +408,15 @@ We derive the Next State equation from the requirement:
 *   **States:** 000, 001, 010, 011, 100, 101.
 *   **Transitions:** $0 \to 1 \to 2 \to 3 \to 4 \to 5 \to 0$.
 
-<img src="/modulo_6_counter.svg" class="rounded-lg bg-white p-4 w-80 mx-auto mt-4" alt="Modulo-6 Up-Counter State Diagram">
+<img src="/modulo_6_counter.svg" class="rounded-lg bg-white p-4 w-full mx-auto mt-4" alt="Modulo-6 Up-Counter State Diagram">
 
 </div>
-<div>
+<div class="text-sm">
 
 **State Table**
+*   **Input:** $C$ (Count Enable)
+*   **State:** $Q_2, Q_1, Q_0$
+*   **Output:** $Y = 1$ when State = 5 ($101$)
 
 $$
 \begin{array}{|c|c|c|c|}
@@ -425,29 +434,30 @@ $$
 \end{array}
 $$
 
+
+
+
 </div>
 </div>
 
-
-
+---
+layout: two-cols-header
 ---
 
 ### 2. Logic Synthesis
 
+:: left ::
+
 We assume **D Flip-Flops**.
-*   **Input:** $C$ (Count Enable)
-*   **State:** $Q_2, Q_1, Q_0$
-*   **Output:** $Y = 1$ when State = 5 ($101$)
+<img src="/modulo_6_kmaps.svg" class="rounded-lg bg-white p-4 w-100 mx-auto" alt="Modulo-6 K-Maps">
 
----
-
-<img src="/modulo_6_kmaps.svg" class="rounded-lg bg-white p-4 w-150 mx-auto" alt="Modulo-6 K-Maps">
+:: right ::
 
 **Equations:**
-*   $D_2 = Q_2 Q_1' + Q_2 Q_0 C' + Q_1 Q_0 C$
-*   $D_1 = Q_1 Q_0' + Q_1 Q_0 C' + \overline{Q_2}\overline{Q_1}Q_0 C$
+*   $D_2 = Q_2 Q_0' + Q_2 C' + Q_1 Q_0 C$
+*   $D_1 = Q_1 C' + Q_1 Q_0' + \bar{Q_2}\bar{Q_1}Q_0 C$
 *   $D_0 = Q_0 \oplus C$
-*   $Y = Q_2 Q_0$
+*   $Y = Q_2 Q_1' Q_0$
 
 ---
 
@@ -468,7 +478,8 @@ begin
         if count = "101" then
             count <= "000";
         else
-            count <= count + 1;
+            count <= count 
+            + 1;
         end if;
     end if;
 end process;

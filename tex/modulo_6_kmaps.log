@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=latex 2025.11.27)  11 DEC 2025 14:35
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=latex 2025.11.28)  12 DEC 2025 15:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -417,8 +417,7 @@ File: tikzlibrarymatrix.code.tex 2023-01-15 v3.1.10 (3.1.10)
 )
 \@karnaughmap@var@colorindex@=\count300
 \@karnaughmap@var@colorindexnext@=\count301
-)
-No file modulo_6_kmaps.aux.
+) (./modulo_6_kmaps.aux)
 \openout1 = `modulo_6_kmaps.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 5.
@@ -444,23 +443,33 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 \@karnaughmap@local@max@=\count302
 \@karnaughmap@local@northwest@=\count303
 \@karnaughmap@local@southeast@=\count304
-\@karnaughmap@local@northwest@=\count305
-\@karnaughmap@local@southeast@=\count306
-\@karnaughmap@local@northwest@=\count307
-\@karnaughmap@local@southeast@=\count308
+\@karnaughmap@local@testcaseone@=\count305
+\@karnaughmap@local@testcasetwo@=\count306
+\@karnaughmap@local@coordinateonecounter@=\count307
+\@karnaughmap@local@coordinatetwocounter@=\count308
+\@karnaughmap@local@coordinateonecounter@=\count309
+\@karnaughmap@local@coordinatetwocounter@=\count310
+\@karnaughmap@local@northwest@=\count311
+\@karnaughmap@local@southeast@=\count312
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 50.
-\@karnaughmap@local@max@=\count309
-\@karnaughmap@local@northwest@=\count310
-\@karnaughmap@local@southeast@=\count311
-\@karnaughmap@local@northwest@=\count312
-\@karnaughmap@local@southeast@=\count313
+\@karnaughmap@local@max@=\count313
 \@karnaughmap@local@northwest@=\count314
 \@karnaughmap@local@southeast@=\count315
-\@karnaughmap@local@max@=\count316
-\@karnaughmap@local@max@=\count317
-\@karnaughmap@local@northwest@=\count318
-\@karnaughmap@local@southeast@=\count319
+\@karnaughmap@local@testcaseone@=\count316
+\@karnaughmap@local@testcasetwo@=\count317
+\@karnaughmap@local@coordinateonecounter@=\count318
+\@karnaughmap@local@coordinatetwocounter@=\count319
+\@karnaughmap@local@coordinateonecounter@=\count320
+\@karnaughmap@local@coordinatetwocounter@=\count321
+\@karnaughmap@local@max@=\count322
+\@karnaughmap@local@northwest@=\count323
+\@karnaughmap@local@southeast@=\count324
+\@karnaughmap@local@northwest@=\count325
+\@karnaughmap@local@southeast@=\count326
+\@karnaughmap@local@max@=\count327
+\@karnaughmap@local@northwest@=\count328
+\@karnaughmap@local@southeast@=\count329
 
 
 [1
@@ -472,12 +481,12 @@ L3 programming layer <2025-01-18>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 13509 strings out of 473191
- 285877 string characters out of 5715825
- 850519 words of memory out of 5000000
- 36548 multiletter control sequences out of 15000+600000
+ 13521 strings out of 473191
+ 286124 string characters out of 5715825
+ 853203 words of memory out of 5000000
+ 36558 multiletter control sequences out of 15000+600000
  560660 words of font info for 42 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  117i,16n,121p,673b,1461s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on modulo_6_kmaps.dvi (1 page, 69700 bytes).
+Output written on modulo_6_kmaps.dvi (1 page, 71424 bytes).
