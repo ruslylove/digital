@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=latex 2025.11.27)  11 DEC 2025 14:47
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=latex 2025.11.22)  13 DEC 2025 07:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -417,8 +417,7 @@ File: tikzlibrarymatrix.code.tex 2023-01-15 v3.1.10 (3.1.10)
 )
 \@karnaughmap@var@colorindex@=\count300
 \@karnaughmap@var@colorindexnext@=\count301
-)
-No file one_shot_kmaps.aux.
+) (./one_shot_kmaps.aux)
 \openout1 = `one_shot_kmaps.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 5.
@@ -465,12 +464,12 @@ L3 programming layer <2025-01-18>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 13281 strings out of 473191
- 280520 string characters out of 5715825
- 750144 words of memory out of 5000000
- 36320 multiletter control sequences out of 15000+600000
+ 13284 strings out of 473191
+ 280589 string characters out of 5715825
+ 750141 words of memory out of 5000000
+ 36321 multiletter control sequences out of 15000+600000
  560660 words of font info for 42 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  117i,16n,121p,673b,1459s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on one_shot_kmaps.dvi (1 page, 40000 bytes).
+Output written on one_shot_kmaps.dvi (1 page, 40008 bytes).
