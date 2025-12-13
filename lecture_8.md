@@ -366,8 +366,20 @@ We derive the Next State equation from Karnaugh maps:
 
 ### VHDL Implementation (Logic)
 
+<div class="grid grid-cols-2 gap-8">
+
 ```vhdl{*}{maxHeight:'420px',lines:true}
-    -- Next State Logic
+entity Car_Security is
+    Port ( clk, reset : in std_logic;
+           M, D, V : in std_logic;
+           A : out std_logic);
+end Car_Security;
+
+architecture Behavioral of Car_Security is
+    type state_type is (No_Siren, Siren);
+    signal current_state, next_state : state_type;
+begin
+    -- State Register
     process(clk, reset)
     begin
         if reset = '1' then
@@ -377,11 +389,12 @@ We derive the Next State equation from Karnaugh maps:
         end if;
     end process;
 
-    -- Combinational Logic
+    -- Next State and Output Logic
     process(current_state, M, D, V)
     begin
+        -- Default assignments
         next_state <= current_state; 
-        Alarm <= '0';
+        A <= '0';
         
         case current_state is
             when No_Siren =>
@@ -389,13 +402,26 @@ We derive the Next State equation from Karnaugh maps:
                     next_state <= Siren; 
                 end if;
             when Siren =>
-                Alarm <= '1';
+                A <= '1';
                 if M='0' then 
                     next_state <= No_Siren; 
                 end if;
         end case;
     end process;
+end Behavioral;
 ```
+
+<div class="">
+
+*   **Entity:** Defines inputs (`M`, `D`, `V`) and output (`A`).
+*   **State Enumeration:** `type state_type` improves readability by naming states (`No_Siren`, `Siren`) instead of finding binary codes manually.
+*   **Two-Process Method:**
+    1.  **Sequential Process:** Updates `current_state` on clock edges.
+    2.  **Combinational Process:** Calculates `next_state` and outputs based on `current_state` and inputs.
+
+</div>
+
+</div>
 
 ---
 
@@ -667,52 +693,168 @@ layout: two-cols
 *   **State 10 (Floor 2):** Idle. If $f_1$ pressed $\to$ State 01.
 *   **State 01 (Moving Down):** $go_1=1, go_0=0$. LEDs Off. Wait for $at_1 \to$ State 00.
 
-**Note:**
->If both buttons ($f_2, f_1$) are pressed, the FSM remains in the current state.
-$go[1:0]$ controls the motor.
-LEDs indicate current floor, off when moving.
-
 :: right ::
 
 <!-- Placeholder for Figure 6.19(a) (FSM Diagram) -->
 <img src="/elevator_fsm.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Elevator FSM">
 <div class="text-center text-sm opacity-50 mt-2">Figure 8-9: Elevator Controller State Diagram</div>
 
+---
+layout: two-cols-header
+---
+
+### Logic Synthesis
+
+:: left ::
+
+<div class="text-sm pr-2">
+
+**State Table**
+$$
+\begin{array}{|c|c|c|cc|}
+\hline
+\text{PS} & \text{Conditions} & \text{NS } (D_1 D_0) & \text{Out } (go_1 go_0 & led_1 led_2) \\
+\hline
+00 (\text{Flr 1}) & f_2=1 & 11 & 0 \ X & 1 \ 0 \\
+ & \text{Others} & 00 & & \\
+\hline
+11 (\text{Up}) & at_2=1 & 10 & 1 \ 1 & 0 \ 0 \\
+ & \text{Others} & 11 & & \\
+\hline
+10 (\text{Flr 2}) & f_1=1 & 01 & 0 \ X & 0 \ 1 \\
+ & \text{Others} & 10 & & \\
+\hline
+01 (\text{Down}) & at_1=1 & 00 & 1 \ 0 & 0 \ 0 \\
+ & \text{Others} & 01 & & \\
+\hline
+\end{array}
+$$
+</div>
+:: right ::
+
+**Next State K-Maps**
+<img src="/elevator_moore_kmaps.svg" class="rounded-lg bg-white p-2 w-full mx-auto" alt="Moore Elevator K-Maps">
+
+**Equations:**
+*   $D_1 = Q_1'Q_0' f_2 + Q_1 Q_0 + Q_1 Q_0' f_1'$
+*   $D_0 = Q_1'Q_0' f_2 + Q_1 Q_0 at_2' + Q_1 Q_0' f_1 + Q_1' Q_0 at_1'$
+
+---
+layout: two-cols-header
+---
+
+## Design Example 7: Mealy Elevator Controller
+
+**Problem:** Redesign the elevator controller using a Mealy Machine to reduce the number of states.
+
+:: left ::
+
+### Specifications
+*   **States:** Floor 1, Floor 2.
+*   **Transitions:** The state only changes when the elevator *arrives* at a floor (`at_x` sensor).
+*   **Outputs:** Motor control depends on **Current State** AND **Input Buttons** ($f_x$).
+
+**Advantage:**
+*   Reduces states from 4 (Moore) to 2 (Mealy).
+*   Simplifies state memory but makes output logic slightly more complex.
+
+:: right ::
+
+### Mealy State Diagram
+
+<img src="/elevator_mealy_fsm.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Mealy Elevator State Diagram">
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-10: Mealy Elevator State Diagram</div>
+
 
 
 ---
+layout: two-cols-header
+---
 
-## Application 3: Sequence Detector (101)
+### Logic Synthesis
 
-**Spec:** Detect the sequence "101" (overlapping allowed). Output $Z=1$ when detected.
+:: left ::
 
-### State Diagram (Mealy)
-*   **S0:** Reset/Nothing
-*   **S1:** Got '1'
-*   **S2:** Got '10'
+**State Table (Condensed)**
+$$
+\begin{array}{|c|c|c|c|}
+\hline
+\text{PS} & \text{Inputs} & \text{NS } (D) & \text{Out } (led, go) \\
+\hline
+0 & f_2=1, at_2=1 & 1 & 10, \ 11 (\uparrow) \\
+ & \text{Others} & 0 & 10, \ 00 \text{ or } 11 \\
+\hline
+1 & f_1=1, at_1=1 & 0 & 01, \ 10 (\downarrow) \\
+ & \text{Others} & 1 & 01, \ 00 \text{ or } 10 \\
+\hline
+\end{array}
+$$
 
-```mermaid
-stateDiagram-v2
-    direction LR
-    state "S0" as S0
-    state "S1" as S1
-    state "S2" as S2
+**Equations:**
+*   $D = \overline{Q}(f_2 \cdot at_2) + Q(\overline{f_1 \cdot at_1})$
+*   $led_1 = \overline{Q}, \quad led_2 = Q$
+*   $go_1 = \overline{Q}f_2 + Q f_1$
 
-    [*] --> S0
-    S0 --> S0 : 0 / 0
-    S0 --> S1 : 1 / 0
-    
-    S1 --> S1 : 1 / 0
-    S1 --> S2 : 0 / 0
+:: right ::
 
-    S2 --> S0 : 0 / 0
-    S2 --> S1 : 1 / 1
+**Next State K-Maps**
+<img src="/elevator_mealy_kmaps.svg" class="rounded-lg bg-white p-2 w-full mx-auto" alt="Mealy Elevator K-Maps">
+
+---
+
+### VHDL Implementation (Mealy)
+
+```vhdl{*}{maxHeight:'400px',lines:true}
+entity Elevator_Mealy is
+    Port ( clk, reset : in std_logic;
+           f1, f2, at1, at2 : in std_logic;
+           go1, go0, led1, led2 : out std_logic);
+end Elevator_Mealy;
+
+architecture Behavioral of Elevator_Mealy is
+    type state_type is (Floor1, Floor2);
+    signal current_state, next_state : state_type;
+begin
+    -- State Register
+    process(clk, reset)
+    begin
+        if reset = '1' then
+            current_state <= Floor1;
+        elsif rising_edge(clk) then
+            current_state <= next_state;
+        end if;
+    end process;
+
+    -- Next State and Output Logic
+    process(current_state, f1, f2, at1, at2)
+    begin
+        -- Defaults
+        next_state <= current_state;
+        go1 <= '0'; go0 <= '0'; -- Motor Off
+        led1 <= '0'; led2 <= '0';
+        
+        case current_state is
+            when Floor1 =>
+                led1 <= '1';
+                if f2 = '1' then
+                    go1 <= '1'; go0 <= '1'; -- Move Up
+                    if at2 = '1' then
+                        next_state <= Floor2;
+                    end if;
+                end if;
+                
+            when Floor2 =>
+                led2 <= '1';
+                if f1 = '1' then
+                    go1 <= '1'; go0 <= '0'; -- Move Down
+                    if at1 = '1' then
+                        next_state <= Floor1;
+                    end if;
+                end if;
+        end case;
+    end process;
+end Behavioral;
 ```
-*Note: The transition S2 -> S1 on input 1 outputs 1 because "10" followed by "1" completes "101".*
-
----
-
-
 
 ---
 
@@ -763,57 +905,6 @@ begin
 end process;
 ```
 
----
-
-## Example: Vending Machine
-
-**Scenario:** Dispense item (15¢) for Nickels (5¢) and Dimes (10¢). Give change.
-
-### VHDL Entity
-```vhdl
-entity vending_machine is
-    port ( clk, rst : in std_logic;
-           N, D     : in std_logic; -- Nickel, Dime inputs
-           Disp     : out std_logic; -- Dispense
-           Change   : out std_logic ); -- Give 5c change
-end vending_machine;
-```
-
----
-
-### VHDL Architecture
-
-```vhdl {*}{maxHeight:'400px'}
-architecture Behavioral of vending_machine is
-    type state_type is (S0, S5, S10); -- 0c, 5c, 10c credit
-    signal current_state, next_state : state_type;
-begin
-    -- 1. State Register
-    process(clk, rst)
-    begin
-        if rst = '1' then current_state <= S0;
-        elsif rising_edge(clk) then current_state <= next_state;
-        end if;
-    end process;
-
-    -- 2. Next State & Output Logic
-    process(current_state, N, D)
-    begin
-        next_state <= current_state; Disp <= '0'; Change <= '0'; -- Defaults
-        case current_state is
-            when S0 =>
-                if N='1' then next_state <= S5;
-                elsif D='1' then next_state <= S10; end if;
-            when S5 =>
-                if N='1' then next_state <= S10;
-                elsif D='1' then next_state <= S0; Disp <= '1'; end if;
-            when S10 =>
-                if N='1' then next_state <= S0; Disp <= '1';
-                elsif D='1' then next_state <= S5; Disp <= '1'; Change <= '1'; end if;
-        end case;
-    end process;
-end Behavioral;
-```
 
 ---
 
