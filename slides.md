@@ -77,3 +77,6 @@ src: lecture_9.md
 ---
 src: lecture_10.md
 ---
+---
+src: mini_project_25.md
+---

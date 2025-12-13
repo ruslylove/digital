@@ -169,6 +169,8 @@ $$
 8.  **Draw Logic Diagram.**
 
 ---
+hide: true
+---
 
 ## Design Example
 
@@ -218,7 +220,7 @@ $$
 
 ---
 
-## Design Example: 2-Bit Up/Down Counter
+## Design Example 1: 2-Bit Up/Down Counter
 
 **Problem:** Design a synchronous 2-bit counter that counts up when input $x=1$ and down when $x=0$.
 
@@ -475,14 +477,18 @@ begin
     if reset='1' then
         count <= "000";
     elsif rising_edge(clk) then
-        if count = "101" then
-            count <= "000";
-        else
-            count <= count 
-            + 1;
+        if C = '1' then
+            if count = "101" then
+                count <= "000";
+            else
+                count <= count + 1;
+            end if;
         end if;
     end if;
 end process;
+
+    -- Output Logic
+    Y <= '1' when count = "101" else '0';
 ```
 
 
@@ -546,43 +552,133 @@ From the Next State table, we derive the K-maps for $D_1, D_0$ and Output $S$. N
 
 ### Logic Diagram
 
-<img src="/one_shot_circuit.svg" class="rounded-lg bg-white p-4 w-100 mx-auto" alt="One-Shot Logic Circuit">
+<img src="/one_shot_circuit.svg" class="rounded-lg bg-white p-4 w-120 mx-auto" alt="One-Shot Logic Circuit">
 <div class="text-center text-sm opacity-50 mt-2">Figure 8-6: One-Shot Circuit Logic Diagram</div>
 
 ---
+
+### VHDL Implementation
+
+```vhdl {9-29}{maxHeight:'420px',lines:true}
+entity One_Shot is
+    Port ( clk, reset : in std_logic;
+           B : in std_logic;
+           S : out std_logic);
+end One_Shot;
+
+architecture Behavioral of One_Shot is
+    signal Q : std_logic_vector(1 downto 0);
+begin
+    process(clk, reset)
+    begin
+        if reset='1' then
+            Q <= "00";
+        elsif rising_edge(clk) then
+            case Q is
+                when "00" => -- S0
+                    if B='1' then Q <= "01"; end if;
+                when "01" => -- S1
+                    Q <= "10";
+                when "10" => -- S2
+                    if B='0' then Q <= "00"; end if;
+                when others =>
+                    Q <= "00";
+            end case;
+        end if;
+    end process;
+
+    -- Output Logic
+    S <= '1' when Q="01" else '0';
+end Behavioral;
+```
+
 
 ---
 
 ## Design Example 5: Simple Microprocessor Control Unit
 
-**Problem:** Design a control unit for a simple CPU that executes instructions: Fetch $\to$ Decode $\to$ Execute.
+In this example, we will synthesize an FSM that illustrates what a simple control unit of a microprocessor is like. We start with the state diagram.
 
-*   **Inputs:** `Opcode`, `ZeroFlag`, `Clock`.
-*   **Outputs:** `PC_Load`, `IR_Load`, `ALU_Op`, `Reg_Write`.
+<div class="grid grid-cols-2 gap-8 text-base">
+<div>
 
-### State Diagram Strategy
-1.  **Fetch:** Load instruction from memory to IR. (`IR_Load=1`, `PC_Inc=1`) $\to$ Go to Decode.
-2.  **Decode:** Analyze Opcode. Transitions to specific Execute states (ADD, LOAD, STORE, JUMP).
-3.  **Execute:** Perform operation (e.g., `ALU_Op=Add`, `Reg_Write=1`). $\to$ Go back to Fetch.
+### Specifications
+*   **States:** $s_0, s_1, s_2, s_3$
+*   **Outputs:** $x, y$
+*   **Status Signals:** $Start$, $n=9$
 
-*(Detailed diagrams for simple CPUs typically involve 10+ states, this highlights the concept.)*
+**Transitions:**
+*   From $s_0$:
+    *   If $Start=1$, take edge $Start$.
+    *   Else, take edge $Start'$.
+*   From $s_2$:
+    *   If $n=9$, take edge $(n=9)$.
+    *   Else, take edge $(n=9)'$.
+
+</div>
+<div>
+
+<!-- Placeholder for Figure 6.18(a) -->
+<img src="/simple_cpu_fsm_example.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Simple CPU FSM">
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-7: Control Unit State Diagram</div>
+
+</div>
+</div>
 
 ---
 
 ## Design Example 6: Elevator Controller
 
-**Problem:** Controller for a simple 2-floor elevator.
+**Problem:** Design the FSM controller for a 2-floor elevator.
 
-*   **Inputs:** Button 1 ($B_1$), Button 2 ($B_2$), Limit Switch 1 ($L_1$, floor 1), Limit Switch 2 ($L_2$, floor 2).
-*   **Outputs:** Motor Up ($M_{up}$), Motor Down ($M_{down}$), Door Open ($DO$).
+<div class="grid grid-cols-2 gap-8">
+<div>
 
-### Moore Machine Approach
-*   States represent the physical status: **Floor 1 Open**, **Floor 1 Closed**, **Moving Up**, **Moving Down**, **Floor 2 Open**, **Floor 2 Closed**.
-*   Output depends only on state (e.g., if in **Moving Up**, $M_{up}=1$).
+**Inputs:**
+*   $f_1, f_2$: Call buttons (Floor 1, Floor 2). (Combines hall ($f$) and inside ($e$) buttons).
+*   $at_1, at_2$: Position sensors (Asserted when elevator is at the respective floor).
 
-### Mealy Machine Approach
-*   States might be fewer (e.g., just **Floor 1**, **Floor 2**).
-*   Output depends on input (e.g., If at Floor 1 and $B_2$ pressed, immediately output $M_{up}=1$).
+**Outputs:**
+*   $go_1$: Motor Enable (1 = On, 0 = Off).
+*   $go_0$: Direction (0 = Floor 1, 1 = Floor 2).
+*   $led_1, led_2$: Floor indicators.
+
+
+
+</div>
+<div>
+
+<!-- Elevator Setup Illustration -->
+<img src="/elevator_setup.svg" class="rounded-lg bg-white p-4 w-full mx-auto mb-4" alt="Elevator System Setup">
+<div class="text-center text-sm opacity-50 mt-2 mb-8">Figure 8-8: Elevator System Setup</div>
+
+
+</div>
+</div>
+
+---
+layout: two-cols
+---
+
+
+**Operation:**
+*   **State 00 (Floor 1):** Idle. If $f_2$ pressed $\to$ State 11.
+*   **State 11 (Moving Up):** $go_1=1, go_0=1$. LEDs Off. Wait for $at_2 \to$ State 10.
+*   **State 10 (Floor 2):** Idle. If $f_1$ pressed $\to$ State 01.
+*   **State 01 (Moving Down):** $go_1=1, go_0=0$. LEDs Off. Wait for $at_1 \to$ State 00.
+
+**Note:**
+>If both buttons ($f_2, f_1$) are pressed, the FSM remains in the current state.
+$go[1:0]$ controls the motor.
+LEDs indicate current floor, off when moving.
+
+:: right ::
+
+<!-- Placeholder for Figure 6.19(a) (FSM Diagram) -->
+<img src="/elevator_fsm.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Elevator FSM">
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-9: Elevator Controller State Diagram</div>
+
+
 
 ---
 
@@ -615,6 +711,11 @@ stateDiagram-v2
 *Note: The transition S2 -> S1 on input 1 outputs 1 because "10" followed by "1" completes "101".*
 
 ---
+
+
+
+---
+
 
 ## VHDL Implementation of FSMs
 
