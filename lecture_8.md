@@ -495,23 +495,28 @@ end process;
 *   Debouncing logic is assumed.
 *   The circuit waits for $B=1$ to go to a "Pulse" state, then proceeds to a "Wait" state until $B=0$.
 
+<div class="grid grid-cols-2 gap-8 text-base">
+<div>
+
 ### State Diagram
 
 
-<img src="/one_shot_fsm.svg" class="rounded-lg bg-white p-4 w-120 mx-auto" alt="One-Shot Circuit State Diagram">
+<img src="/one_shot_fsm.svg" class="rounded-lg bg-white p-4 w-100 mx-auto" alt="One-Shot Circuit State Diagram">
+
+
+
+</div>
+<div>
 
 *   **S0:** Wait for valid Press ($B=1$).
 *   **S1:** Output $S=1$ (Pulse). Immediate transition to S2 on next clock.
 *   **S2:** Wait for $B=0$ to transition back to S0.
-
----
-
 ### State Table
 
 $$
 \begin{array}{|c|c|c|c|}
 \hline
-\text{PS } (Q_1 Q_0) & \text{Next State } (B=0) & \text{Next State } (B=1) & \text{Output } S (B=1) \\
+\text{PS } (Q_1 Q_0) & \text{NS } (B=0) & \text{NS } (B=1) & S (B=1) \\
 \hline
 \text{S0 (00)} & 00 & 01 & 1 \\
 \text{S1 (01)} & 10 & 10 & 0 \\
@@ -521,13 +526,16 @@ $$
 \end{array}
 $$
 
+</div>
+</div>
+
 ---
 
 ### Logic Synthesis
 
 From the Next State table, we derive the K-maps for $D_1, D_0$ and Output $S$. Note that the unused state $11$ resets to $00$.
 
-<img src="/one_shot_kmaps.svg" class="rounded-lg bg-white p-4 w-150 mx-auto" alt="One-Shot K-Maps">
+<img src="/one_shot_kmaps.svg" class="rounded-lg bg-white p-2 w-full mx-auto" alt="One-Shot K-Maps">
 
 **Equations:**
 *   $D_1 = Q_1' Q_0 + Q_1 Q_0' B$
