@@ -462,7 +462,7 @@ $$
 
 ### Logic Diagram
 
-<img src="/decoder_3to8_circuit.svg" class="rounded-lg bg-white p-3 w-56" alt="Logic Diagram of 3-to-8 Decoder">
+<img src="/decoder_3to8_circuit.svg" class="rounded-lg bg-white p-3 w-80 mx-auto" alt="Logic Diagram of 3-to-8 Decoder">
 <div class="text-center text-sm opacity-50 mt-2">Figure 5-9: Logic Diagram of 3-to-8 Decoder.</div>
 
 </div>
@@ -501,10 +501,12 @@ end dataflow;
 
 ---
 
-## Decoder with Enable Input
 <div class="grid grid-cols-2 gap-4">
 
 <div class="text-base">
+
+## Decoder with Enable Input
+
 
 Decoders often include an **Enable** input (`E`) to control the circuit's operation.
 
@@ -532,7 +534,7 @@ $$
 </div>
 
 <div>
-<img src="/decoder_3to8_enable_circuit.svg" class="rounded-lg bg-white p-4 w-55 mx-auto" alt="3-to-8 Decoder with Enable Input Logic Diagram">
+<img src="/decoder_3to8_enable_circuit.svg" class="rounded-lg bg-white p-4 w-85 mx-auto" alt="3-to-8 Decoder with Enable Input Logic Diagram">
 <div class="text-center text-sm opacity-50 mt-2">Figure 5-10: 3-to-8 Decoder with Enable Input.</div>
 </div>
 
@@ -1008,7 +1010,7 @@ end behavioral;
 ```
 <br>
 
-> [!NOTE]
+
 > For the **Three-State Buffer**, only a **behavioral** design is possible. The high-impedance state (`Z`) is a fundamental property of the output driver circuit and cannot be constructed dynamically using standard Boolean logic gates (AND, OR, NOT) in a structural architecture.
 
 

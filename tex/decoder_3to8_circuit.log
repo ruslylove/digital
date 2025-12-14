@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=latex 2025.11.22)  5 DEC 2025 22:00
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=latex 2025.11.22)  14 DEC 2025 21:54
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -494,11 +494,11 @@ L3 programming layer <2025-01-18>
  ) 
 Here is how much of TeX's memory you used:
  30902 strings out of 473191
- 821006 string characters out of 5715825
- 1533479 words of memory out of 5000000
+ 821008 string characters out of 5715825
+ 1535382 words of memory out of 5000000
  53910 multiletter control sequences out of 15000+600000
  558837 words of font info for 36 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  117i,5n,121p,423b,857s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on decoder_3to8_circuit.dvi (1 page, 54008 bytes).
+Output written on decoder_3to8_circuit.dvi (1 page, 54896 bytes).

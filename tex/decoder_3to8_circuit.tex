@@ -11,22 +11,22 @@
     \node (z) at (2, 16) {$z$};
 
     % Vertical Rails
-    \draw (x) -- (0, -1); % x rail
-    \draw (y) -- (1, -1); % y rail
-    \draw (z) -- (2, -1); % z rail
+    \draw (x) -- (0, 3); % x rail
+    \draw (y) -- (1, 3); % y rail
+    \draw (z) -- (2, 3); % z rail
     
     % Inverters and Complement Rails
     \node[not port, rotate=-90, scale=0.6] (inv_x) at (0.5, 15) {};
     \draw (0, 15.5) -| (inv_x.in);
-    \draw (inv_x.out) -- (0.5, -1); % x' rail
+    \draw (inv_x.out) -- (0.5, 3); % x' rail
 
     \node[not port, rotate=-90, scale=0.6] (inv_y) at (1.5, 15) {};
     \draw (1, 15.5) -| (inv_y.in);
-    \draw (inv_y.out) -- (1.5, -1); % y' rail
+    \draw (inv_y.out) -- (1.5, 3); % y' rail
 
     \node[not port, rotate=-90, scale=0.6] (inv_z) at (2.5, 15) {};
     \draw (2, 15.5) -| (inv_z.in);
-    \draw (inv_z.out) -- (2.5, -1); % z' rail
+    \draw (inv_z.out) -- (2.5, 3); % z' rail
 
     % Label Rails at bottom (optional, but finding for debugging)
     % 0:x, 0.5:x', 1:y, 1.5:y', 2:z, 2.5:z'
@@ -45,8 +45,8 @@
         6/110/xyz',
         7/111/xyz
     } {
-        \node[and port, number inputs=3] (D\i) at (6, 14 - \i*2) {};
-        \node[right] at (D\i.out) {$D_\i = \minterm$};
+        \node[and port, number inputs=3] (D\i) at (6, 14 - \i*1.5) {};
+        \draw (D\i.out) -- ++(1,0) node[right] {$D_\i = \minterm$};
     }
 
     % Connections
