@@ -88,7 +88,7 @@ There are three primary schemes for this, each with different ways of handling n
 
 <div class="col-span-5">
 
-<img src="/8bit_msb_lsb.svg" class="w110 mx-auto mt-4 mb-8" alt="8-bit MSB LSB Illustration"/>
+<img src="/8bit_msb_lsb.svg" class="w110 mx-auto mt-4 mb-8 bg-white rounded-lg p-4" alt="8-bit MSB LSB Illustration"/>
 <p class="text-center text-sm">Figure 4-1: 8-bit Signed Number uses MSB as sign bit.</p>
 
 </div>
@@ -337,12 +337,9 @@ From the truth table, we can derive the logic equations:
 ::right::
 
 #### Logic Circuit
-
-
-
 This is implemented with one XOR gate and one AND gate.
 
-<img src="/half_adder.svg" class="h-40 mt-4" alt="Half Adder Circuit"/>
+<img src="/half_adder.svg" class="h-40 mt-4 bg-white rounded-lg p-4" alt="Half Adder Circuit"/>
 <p class="text-sm text-center">Figure 4-2. Half Adder Circuit.</p>
 
 ---
@@ -365,14 +362,14 @@ This is implemented with one XOR gate and one AND gate.
 
 </div>
 ---
-layout: two-cols-header
----
+
 
 ## Full-Adder
 
 A **Full Adder** is a combinational circuit that adds three bits: two input bits (A, B) and a carry-in ($C_{in}$). This allows them to be chained together to add multi-bit numbers.
 
-::left::
+<div class="grid grid-cols-10 gap-1">
+<div class="col-span-4 text-base">
 
 #### Truth Table & Logic
 
@@ -394,19 +391,19 @@ $$
 *   $\text{Sum} = A \oplus B \oplus C_\text{in}$
 *   $C_\text{out} = (A \cdot B) + (C_\text{in} \cdot (A \oplus B))$
 
-::right::
 
-#### Implementation
-<div class="text-sm">
-A full-adder can be constructed from two half-adders and an OR gate.
 
-<img src="/full_adder.svg" class="p-1 w-90 mx-auto" alt="Full Adder Circuit"/>
+</div>
+<div class="col-span-6 text-base">
+
+<img src="/full_adder.svg" class="p-1 w-95 mx-auto bg-white rounded-lg" alt="Full Adder Circuit"/>
 <p class="text-sm text-center">Figure 4-6. Full Adder Circuit.</p>
-<img src="/full_adder_from_ha.svg" class="p-1 w-85 mx-auto" alt="HA"/>
+A full-adder can be constructed from two half-adders and an OR gate.
+<img src="/full_adder_from_ha.svg" class="p-1 w-95 mx-auto bg-white rounded-lg" alt="HA"/>
 <p class="text-sm text-center">Figure 4-7. Full Adder from Half Adders.</p>
 
 </div>
-
+</div>
 ---
 
 ### Quartus(r) Schematic
@@ -526,21 +523,19 @@ END ARCHITECTURE structural;
 
 
 ---
-layout: two-cols-header
----
+
 
 ## Ripple-Carry Adder
 
 To add multi-bit numbers, we can cascade full-adders. The carry-out ($C_{out}$) from one stage "ripples" to become the carry-in ($C_{in}$) of the next stage.
 
-:: left ::
+
 
 *   This creates a **4-bit ripple-carry adder**.
 *   The initial carry-in, $C_0$, is typically set to 0 for standard addition.
-
 *   The main drawback is the delay; the sum bit $S_3$ is not valid until the carry has propagated through all previous stages.
-:: right ::
-<img src="/ripple_adder.svg" class="w-100 mx-auto" alt="4-bit Ripple-Carry Adder"/>
+
+<img src="/ripple_adder.svg" class="w-115 mx-auto bg-white rounded-lg p-4" alt="4-bit Ripple-Carry Adder"/>
 <p class="text-sm text-center">Figure 4-11. 4-bit Ripple-Carry Adder.</p>
 
 
@@ -554,10 +549,6 @@ To add multi-bit numbers, we can cascade full-adders. The carry-out ($C_{out}$) 
 <div>
 
 The following code defines the 4-bit adder, receives two 4-bit vectors ($A$ and $B$) and a carry-in ($C_{in}$), and outputs the 4-bit sum ($S$) and the final carry-out ($C_{out}$).
-
-
-
-
 
 **ripple_adder_4bit.vhd**
 ```vhdl {*}{maxHeight:'260px',lines:true}
@@ -769,7 +760,7 @@ $A - B = A + (-B) = A + B' + 1$
 
 ::right::
 
-<img src="/adder_subtractor.svg" class="w-120 mx-auto" alt="Adder/Subtractor Circuit"/>
+<img src="/adder_subtractor.svg" class="w-full mx-auto bg-white rounded-lg p-4" alt="Adder/Subtractor Circuit"/>
 <p class="text-sm text-center">Figure 4-14. Adder/Subtractor Circuit.</p>
 
 ---
@@ -953,7 +944,7 @@ The critical path (worst-case delay) in a ripple-carry adder occurs when a carry
 *   For an n-bit adder, the total delay is proportional to *n*. For a 16-bit adder, this could be **32 gate delays** or more.
 *   This linear scaling of delay is unacceptable for modern high-speed processors.
 
-<img src="/ripple_carry_delay.svg" class="w-150 mx-auto mt-4 mb-4" alt="Ripple Carry Delay Illustration"/>
+<img src="/ripple_carry_delay.svg" class="w-145 mx-auto bg-white rounded-lg mt-4 p-1" alt="Ripple Carry Delay Illustration"/>
 <p class="text-sm text-center">Figure 4-17. Ripple Carry Delay Illustration.</p>
 
 
@@ -964,7 +955,7 @@ The critical path (worst-case delay) in a ripple-carry adder occurs when a carry
 
 * A **Carry Lookahead Adder (CLA)** solves this by computing all the carry signals in parallel, directly from the input bits. This breaks the dependency chain and makes the adder significantly faster.
 
-<img src="/cla_4bit.svg" class="w-200 mx-auto pt-4" alt="Carry Lookahead Adder Block Diagram"/>
+<img src="/cla_4bit.svg" class="w-200 mx-auto mt-4 bg-white rounded-lg p-4" alt="Carry Lookahead Adder Block Diagram"/>
 <p class="text-sm text-center">Figure 4-18. Carry Lookahead Adder Block Diagram.</p>
 
 
@@ -1193,7 +1184,7 @@ END ARCHITECTURE structural;
 
 **16-bit Adder with Cascaded CLAs**
 
-<img src="/16-bit_cla.svg" class="w-180 mx-auto" alt="Placeholder: 16-bit Cascaded Carry Lookahead Adder diagram"/>
+<img src="/16-bit_cla.svg" class="w-180 mx-auto mt-4 bg-white rounded-lg p-4" alt="Placeholder: 16-bit Cascaded Carry Lookahead Adder diagram"/>
 <p class="text-sm text-center">Figure 4-20. 16-bit Cascaded Carry Lookahead Adder.</p>
 
 
@@ -1709,7 +1700,7 @@ A combinational multiplier can be built using an array of AND gates to form the 
 *   16 AND gates to form partial products.
 *   12 adders (a mix of HA and FA) to sum them.
 
-<img src="/multiplier_4x4.svg" class="p-4 w-[600px] mx-auto"/>
+<img src="/multiplier_4x4.svg" class="p-4 w-145 mx-auto bg-white rounded-lg"/>
 <p class="text-sm text-center">Figure 4-23. 4x4 Array Multiplier.</p>
 
 
@@ -2026,7 +2017,7 @@ The standard calls for a normalized mantissa, where the most significant bit is 
 </div>
 </div>
 
-<img src="/floating_point_32bit.svg" class="w-130 mx-auto mt-4 mb-4" alt="IEEE 754 32-bit Floating Point Format"/>
+<img src="/floating_point_32bit.svg" class="w-130 mx-auto bg-white rounded-lg p-2" alt="IEEE 754 32-bit Floating Point Format"/>
 <p class="text-sm text-center">Figure 4-26. IEEE 754 32-bit Floating Point Format.</p>
 
 ---
