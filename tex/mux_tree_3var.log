@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=latex 2025.11.22)  11 DEC 2025 21:34
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=latex 2025.11.22)  14 DEC 2025 12:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -491,11 +491,11 @@ LaTeX Font Info:    ... okay on input line 6.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 6.
 LaTeX Font Info:    ... okay on input line 6.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <9> on input line 60.
+(Font)              <9> on input line 25.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 60.
+(Font)              <6> on input line 25.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 60.
+(Font)              <5> on input line 25.
 
 
 [1
@@ -507,12 +507,12 @@ L3 programming layer <2025-01-18>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 30738 strings out of 473191
- 813944 string characters out of 5715825
- 1464947 words of memory out of 5000000
- 53727 multiletter control sequences out of 15000+600000
+ 30887 strings out of 473191
+ 818434 string characters out of 5715825
+ 1469947 words of memory out of 5000000
+ 53876 multiletter control sequences out of 15000+600000
  561571 words of font info for 45 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 117i,5n,121p,433b,727s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 117i,5n,121p,433b,760s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on mux_tree_3var.dvi (1 page, 18992 bytes).
+Output written on mux_tree_3var.dvi (1 page, 20048 bytes).

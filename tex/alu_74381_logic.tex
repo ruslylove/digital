@@ -1,69 +1,139 @@
 \documentclass[border=10pt]{standalone}
+\usepackage[utf8]{inputenc}
 \usepackage{circuitikz}
 \usepackage{tikz}
-\usetikzlibrary{calc}
+\usetikzlibrary{shapes.geometric, positioning, calc}
+
+\ctikzset{
+logic ports=ieee,
+logic ports/scale=1,
+}
 
 \begin{document}
-\begin{tikzpicture}[
-    >=Stealth, 
-    thick, 
-    font=\sffamily\small
-]
 
-    % Inputs
-    \node (Ai) at (0, 6) {$A_i$};
-    \node (Bi) at (0, 4) {$B_i$};
-    \node (Si) at (2, 8) {Select ($S_{2..0}$)};
-
-    % Logic Gates (Conceptual)
-    % We will show a cloud or block for "Logic/Arithmetic Gen"
-    % actually 74381 uses a mix of gates. Let's draw a few representative ones feeding a Mux.
+\begin{circuitikz}
+    % Global styles
+    \tikzset{
+        adder/.style={draw, rectangle, minimum size=1.2cm, fill=white},
+        control/.style={font=\small, align=center}
+    }
     
-    % XOR
-    \node[american xor port, scale=0.8] (xor) at (3, 6) {};
-    % AND
-    \node[american and port, scale=0.8] (and) at (3, 4) {};
-    % OR
-    \node[american or port, scale=0.8] (or) at (3, 2) {};
+    % --- Frame ---
+    \draw[thick] (-2, 0) rectangle (14, 11);
+
+    % --- Inputs ---
+    \node (a) at (-3, 9) {a};
+    \node (b) at (-3, 3) {b};
+
+    % --- Control Signal Labels (Top) ---
+    \node[control] (ainv) at (1, 11.5) {AInvert};
+    \node[control] (binv) at (4, 11.5) {BInvert};
+    \node[control] (cin) at (8, 11.5) {CarryIn};
+    \node[control] (op) at (12, 11.5) {Operation};
+
+    % --- Input Multiplexers ---
+    % MUX A
+    \node[muxdemux, muxdemux def={Lh=4, NL=2, Rh=3, NB=0, w=1.5, NT=1, square pins=1}] (muxA) at (1, 9) {};
+    \node [right][xshift=1em] at (muxA.lpin 1) {0};
+    \node [right][xshift=1em] at (muxA.lpin 2) {1};
     
-    % Adder (Full Adder)
-    \draw[fill=white] (2.5, 0) rectangle (4.5, 1.5);
-    \node at (3.5, 0.75) {Adder};
+    % Connections for MUX A
+    \draw (a) -- (-1, 9) coordinate (splitA);
+    \draw (splitA) -- (splitA |- muxA.lpin 1) -- (muxA.lpin 1); % Direct input (0)
+   % \draw (splitA) -- (-1, 8.4) node[not port, scale=0.6,anchor=in] (notA) {};
+    \draw (muxA.lpin 2) -- ++(-0.2,0)node[not port, scale=0.6,anchor=out] (notA) {};
+    \draw (notA.in) -| (splitA); % Inverted input (1)
+    \draw (ainv) -- (muxA.tpin 1); % Control line
 
-    % Mux
-    \draw[fill=white] (6, 1) rectangle (7, 7);
-    \node[rotate=90] at (6.5, 4) {Function Selector};
+    % MUX B
+    \node[muxdemux, muxdemux def={Lh=4, NL=2, Rh=3, NB=0, w=1.5, NT=1, square pins=1}] (muxB) at (1, 3) {};
+    \node [right][xshift=1em] at (muxB.lpin 1) {0};
+    \node [right][xshift=1em] at (muxB.lpin 2) {1};
+
+    % Connections for MUX B
+    \draw (b) -- (-1, 3) coordinate (splitB);
+    \draw (splitB) -- (splitB |- muxB.lpin 1) -- (muxB.lpin 1); 
+    %\draw (splitB) -- (-1, 2.2) node[not port, rotate=-90, scale=0.6] (notB) {};
+    \draw (muxB.lpin 2) -- ++(-0.2,0)node[not port, scale=0.6,anchor=out] (notB) {};
+    \draw (notB.in) -| (splitB); 
+    \draw (notB.out) |- (muxB.lpin 2);
     
-    % Connections
-    \draw (Ai) -- (1, 6) |- (xor.in 1);
-    \draw (1, 6) |- (and.in 1);
-    \draw (1, 6) |- (or.in 1);
-    \draw (1, 6) |- (2.5, 1.2); % To Adder
+    % Control line for BInvert (goes down, bypasses Mux A)
+    \draw (binv) |- (muxB.tpin 1);
 
-    \draw (Bi) -- (1, 4) |- (xor.in 2);
-    \draw (1, 4) |- (and.in 2);
-    \draw (1, 4) |- (or.in 2);
-    \draw (1, 4) |- (2.5, 0.3); % To Adder
+    \node[circ] at (splitA) {};
+    \node[circ] at (splitB) {};
 
-    % Gate outputs to Mux
-    \draw (xor.out) -- (6, 6);
-    \draw (and.out) -- (6, 4);
-    \draw (or.out) -- (6, 2);
-    \draw (4.5, 0.75) -- (6, 1.5);
 
-    % Select lines
-    \draw[->] (Si) -- (6.5, 7);
+    % --- Logic Gates & Adder ---
+    % Vertical distribution
+    \node[and port] (and) at (6, 8) {};
+    \node[or port] (or) at (6, 6) {};
+    \node[adder] (add) at (6, 4) {\Large +};
+    \node[xor port] (xor) at (6, 2) {};
 
-    % Outputs
-    \draw[->] (7, 4) -- (8, 4) node[right] {$F_i$};
+    % --- Internal Wiring (Buses) ---
+    % Vertical rails for Mux outputs
+    \draw (muxA.rpin 1) -- (2.5, 9) coordinate(railA) -- (2.5, 1.5); % Rail A
+    \draw (muxB.rpin 1) -- (3.0, 3) node[circ] (railB) {} -- (3.0, 8.5); % Rail B
+
+    % Connect Rail A to gates (Top inputs)
+    \draw (railB) |- (xor.in 2);
+    \draw (and.in 1) to[short,-*] (and.in 1 -| railA);
+    \draw (or.in 1) to[short,-*] (or.in 1 -| railA);
+    \path (add.west) -- ++(0,+0.2) coordinate (addIn1);
+    \draw (addIn1) to[short,-*] (addIn1 -| railA);
+    \draw (xor.in 1) to[short,-*] (xor.in 1 -| railA);
     
-    % Propagate / Generate from simplified logic
-    \node[right] at (8, 5) {Propagate $P_i$};
-    \node[right] at (8, 3) {Generate $G_i$};
-    
-    % Connecting P/G lines conceptually
-    \draw[dotted, ->] (3.5, 6) -- (8, 6.2); % From XOR/Logic
-    \draw[dotted, ->] (3.5, 4) -- (8, 2.8); % From AND/Logic
+    % Connect Rail B to gates (Bottom inputs)
+   % \draw (railA) |- (add.in 1);
+    \draw (railB) |- (xor.in 2);
+    \draw (and.in 2) to[short,-*] (and.in 2 -| railB);
+    \draw (or.in 2) to[short,-*] (or.in 2 -| railB);
 
-\end{tikzpicture}
+    \path (add.west) -- ++(0,-0.2) coordinate (addIn2);
+    \draw (addIn2) to[short,-*] (addIn2 -| railB);
+ %   \draw (xor.in 2) to[short,-*] (xor.in 2 -| railB);
+
+
+    % --- Adder Specific Wiring ---
+    % Carry In
+    \draw (cin) -- (8, 4.8) -- (6, 4.8) -- (add.north);
+    % Carry Out
+    \draw (add.south) -- (6, 3) -- (8, 3) -- (8, -0.5) node[control, below] {CarryOut};
+    \node[control, below] (Pi) at (9.5, -0.5) {Pi};
+    \node[control, below] (Gi) at (10.5, -0.5) {Gi};
+    %\draw (Pi) to[short,-*] (Pi |- xor.out);
+    
+
+    % --- Output Multiplexer ---
+    \node[muxdemux, muxdemux def={Lh=14.5, NL=4, Rh=12.5, NB=0, w=2.0, NT=1, square pins=1}] (muxOut) at (12, 5) {};
+    
+    % Labels inside Big Mux
+    \node [right, font=\small][xshift=1em] at (muxOut.lpin 1) {0};
+    \node [right, font=\small][xshift=1em] at (muxOut.lpin 2) {1};
+    \node [right, font=\small][xshift=1em] at (muxOut.lpin 3) {2};
+    \node [right, font=\small][xshift=1em] at (muxOut.lpin 4) {3};
+    \node[rotate=90, font=\small] at (muxOut.center) {Mux};
+
+    % Operation Control
+    \draw (op) -- (muxOut.tpin 1);
+
+    % Connect Gate Outputs to Mux
+    \draw (and.out) -- (muxOut.lpin 1); % Connect to level 0 area
+    \draw (or.out) -- (muxOut.lpin 2);   % Connect to level 1 area
+    \draw (add.east) -- (muxOut.lpin 3); % Connect to level 2 area
+    \draw (xor.out) -- (muxOut.lpin 4); % Connect to level 3 area
+
+    % --- Result Output ---
+    \draw[->] (muxOut.rpin 1) -- (14.5, 5) node[right] {Result};
+
+    % Connection Dots (Optional for clarity)
+    
+    \draw (Gi) to[short,-*] (Gi |- muxOut.lpin 1);
+    \draw (Pi) to[short,-*] (Pi |- muxOut.lpin 4);
+
+
+\end{circuitikz}
+
 \end{document}

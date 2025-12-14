@@ -778,7 +778,7 @@ end behavioral;
 
 ---
 
-## Boolean Function Implementation
+## Boolean Function Implementation using MUX
 
 A multiplexer is essentially a **universal logic circuit**. Any Boolean function of $n$ variables can be implemented using a multiplexer with $n-1$ selection lines.
 
@@ -799,24 +799,45 @@ Group the truth table by the selection variables ($A, B, C$).
 Determine the output $F$ in terms of the data variable ($D$) for each group.
 
 $$
-\small
-\begin{array}{|ccc|cc|c|}
+\scriptsize
+\begin{array}{cc}
+\begin{array}{|cccc|c|c|}
 \hline
-S_2 & S_1 & S_0 & D=0 & D=1 & \text{MUX Input} \\
-(A) & (B) & (C) & (m_i) & (m_{i+1}) & (I_k) \\
+S_2 & S_1 & S_0 & D & F & \text{MUX Input} \\
 \hline
-0 & 0 & 0 & 0 & \mathbf{1} & D \\
-0 & 0 & 1 & 2 & \mathbf{3} & D \\
-0 & 1 & 0 & \mathbf{4} & 5 & D' \\
-0 & 1 & 1 & 6 & 7 & 0 \\
-1 & 0 & 0 & 8 & 9 & 0 \\
-1 & 0 & 1 & 10 & \mathbf{11} & D \\
-1 & 1 & 0 & \mathbf{12} & \mathbf{13} & 1 \\
-1 & 1 & 1 & \mathbf{14} & \mathbf{15} & 1 \\
+0 & 0 & 0 & 0 & 0 & I_0 = D \\
+0 & 0 & 0 & 1 & 1 & \\
+\hline
+0 & 0 & 1 & 0 & 0 & I_1 = D \\
+0 & 0 & 1 & 1 & 1 & \\
+\hline
+0 & 1 & 0 & 0 & 1 & I_2 = D' \\
+0 & 1 & 0 & 1 & 0 & \\
+\hline
+0 & 1 & 1 & 0 & 0 & I_3 = 0 \\
+0 & 1 & 1 & 1 & 0 & \\
 \hline
 \end{array}
+&
+\begin{array}{|cccc|c|c|}
+\hline
+S_2 & S_1 & S_0 & D & F & \text{MUX Input} \\
+\hline
+1 & 0 & 0 & 0 & 0 & I_4 = 0 \\
+1 & 0 & 0 & 1 & 0 & \\
+\hline
+1 & 0 & 1 & 0 & 0 & I_5 = D \\
+1 & 0 & 1 & 1 & 1 & \\
+\hline
+1 & 1 & 0 & 0 & 1 & I_6 = 1 \\
+1 & 1 & 0 & 1 & 1 & \\
+\hline
+1 & 1 & 1 & 0 & 1 & I_7 = 1 \\
+1 & 1 & 1 & 1 & 1 & \\
+\hline
+\end{array}
+\end{array}
 $$
-*Note: Bold numbers indicate minterms where $F=1$.*
 
 </div>
 <div>
@@ -893,7 +914,7 @@ The **Arithmetic Logic Unit (ALU)** is a combinational circuit that performs ari
 layout: default
 ---
 
-## 74381 Function Table
+### 74381 Function Table
 
 The 74381 provides the following functions based on the selection inputs:
 
@@ -916,23 +937,27 @@ $$
 *   The P and G outputs allow for expansion to wider ALUs (e.g., 16-bit or 64-bit) without significant delay penalties.
 
 ---
-layout: two-cols-header
----
 
-## 1-Bit ALU Slice Logic
 
-:: left ::
+### 1-Bit ALU Slice Logic
 
 Each bit of the ALU contains logic to perform the selected operation and generate the local propagate/generate signals.
+
+<div class="grid grid-cols-3 gap-8">
+<div>
 
 *   **Logic Unit:** Performs AND, OR, XOR.
 *   **Arithmetic Unit:** A Full Adder simplifies to $P_i = A_i \oplus B_i$ and $G_i = A_i \cdot B_i$ for CLA.
 *   **Multiplexer:** Selects the result based on $S$.
 
-:: right ::
+</div>
+<div class="col-span-2">
 
-<img src="/alu_74381_logic.svg" class="w-100 mx-auto" alt="1-Bit ALU Slice Logic"/>
+<img src="/alu_74381_logic.svg" class="w-120 mx-auto" alt="1-Bit ALU Slice Logic"/>
 <div class="text-center text-sm opacity-50 mt-2">Figure 5-19: Simplified 1-Bit ALU Slice.</div>
+
+</div>
+</div>
 
 ---
 layout: two-cols-header
