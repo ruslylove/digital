@@ -333,6 +333,25 @@ This is implemented with one XOR gate and one AND gate.
 <p class="text-sm text-center">Figure 4-1. Half Adder Circuit.</p>
 
 ---
+
+### Quartus(r) Schematic for Half Adder
+
+<div class="grid grid-cols-3 gap-4">
+
+<div class="col-span-2">
+<img src="/quartus_schematic_HA.png" class="w-full p-2 mx-auto bg-white rounded-lg" alt="Half Adder Schematic"/>
+<p class="text-sm text-center">Figure 4-2. Half Adder Schematic (Block Diagram/Schematic File).</p>
+<img src="/simulation_waveform_HA.png" class="w-full p-2 mx-auto bg-white rounded-lg" alt="Half Adder Simulation"/>
+<p class="text-sm text-center">Figure 4-3. Half Adder Simulation (University Program VWF).</p>
+</div>
+
+<div>
+<img src="/rtl_viewer_schematic_HA.png" class="w-full p-2 mx-auto bg-white rounded-lg mt-25" alt="Half Adder Schematic"/>
+<p class="text-sm text-center">Figure 4-4. Half Adder Schematic (RTL Viewer).</p>
+</div>
+
+</div>
+---
 layout: two-cols-header
 ---
 
@@ -374,6 +393,16 @@ A full-adder can be constructed from two half-adders and an OR gate.
 <p class="text-sm text-center">Figure 4-3. Full Adder from Half Adders.</p>
 
 </div>
+
+---
+
+### Quartus(r) Schematic
+
+<img src="/schematic_FA_from_HA.png" class="w-200 p-2 mx-auto bg-white rounded-lg" alt="Full Adder Schematic"/>
+<p class="text-sm text-center">Figure 4-2. Full Adder from Half Adders Schematic (using Half Adder Symbol File).</p>
+<img src="/simulation_schematic_FA_from_HA.png" class="w-200 p-2 mx-auto bg-white rounded-lg" alt="Full Adder Simulation"/>
+<p class="text-sm text-center">Figure 4-3. Full Adder Simulation (University Program VWF).</p>
+
 
 ---
 layout: two-cols
