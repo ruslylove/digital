@@ -163,7 +163,7 @@ This datapath feeds the output of register A back to one input of an adder. The 
 
 :: right ::
 
-<img src="/datapath_A_plus_3.png" class="rounded-lg bg-white p-4 w-100 mx-auto" alt="Datapath for A = A + 3">
+<img src="/datapath_A_plus_3.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Datapath for A = A + 3">
 <p class="text-center text-sm">Figure 9-6: Datapath for A = A + 3</p>
 
 ---
@@ -204,6 +204,7 @@ To perform multiple operations using a single functional unit (the adder), we us
 <p class="text-center text-sm">Figure 9-8: Datapath for A = A + 3 and A = B + C using only one adder</p>
 
 </div>
+
 </div>
 
 ---
@@ -389,30 +390,48 @@ OUTPUT Sum
 
 ---
 
+
+
+<div class="text-sm grid grid-cols-2 gap-4">
+<div>
+
 *   **CW 1 & 3 (Update Sum)**: `sumLoad` is asserted. The value loaded is determined by `sumMux`. `iLoad` and `OE` are disabled. For CW 3, `addMux` is de-asserted (0) to use `Sum` as the second operand.
 *   **CW 2 & 4 (Update i)**: `iLoad` is asserted. `iMux` selects the source (constant vs adder). For CW 4, `iMux` is asserted (1) for the increment operation.
 *   **CW 5 (Output)**: `OE` is asserted to output the `Sum` value.
-
 This can be implemented with a dedicated datapath using a register, an adder, and a comparator.
 
+<div class="text-sm">
+
 $$
+\scriptsize
 \def\arraystretch{1.5}
 \begin{array}{|c|l|c|c|c|c|c|c|}
 \hline
 \textbf{CW} & \textbf{Instruction} & \textbf{sumLoad} & \textbf{sumMux} & \textbf{iLoad} & \textbf{iMux} & \textbf{addMux} & \textbf{OE} \\
 \hline
-1 & \text{Sum} = 0 & 1 & 0 & 0 & \times & \times & 0 \\
+1 & \text{Sum} = 0 & 1 & 1 & 0 & \times & \times & 0 \\
 \hline
-2 & i = 1 & 0 & \times & 1 & 0 & \times & 0 \\
+2 & i = 1 & 0 & \times & 1 & 1 & \times & 0 \\
 \hline
-3 & \text{Sum} = \text{Sum} + i & 1 & 1 & 0 & \times & 0 & 0 \\
+3 & \text{Sum} = \text{Sum} + i & 1 & 0 & 0 & \times & 0 & 0 \\
 \hline
-4 & i = i + 1 & 0 & \times & 1 & 1 & \times & 0 \\
+4 & i = i + 1 & 0 & \times & 1 & 0 & \times & 0 \\
 \hline
 5 & \text{OUTPUT Sum} & 0 & \times & 0 & \times & \times & 1 \\
 \hline
 \end{array}
 $$
+
+</div>
+</div>
+
+<div>
+<img src="/datapath_sum_1_to_10.png" class="rounded-lg bg-white p-1 w-full mx-auto" alt="Counter datapath with adder">
+<p class="text-center text-sm">Figure 9-11: Datapath for summing numbers from 1 to 10</p>
+</div>
+</div>
+
+
 
 
 ---
@@ -427,8 +446,14 @@ $$
 *   **Status Signals** (from comparators) enable conditional branching in algorithms (IF-THEN, loops).
 
 ---
+layout: section
+---
 
-## Exercise 1: Datapath Design
+## Lecture 9 Exercises
+
+---
+
+### Exercise 9-1: Datapath Design
 
 **Question:**
 Draw a dedicated datapath that can perform the operation:
@@ -442,7 +467,7 @@ $$ R1 = R1 - R2 $$
 
 ---
 
-## Exercise 2: Control Signal Analysis
+### Exercise 9-2: Control Signal Analysis
 
 **Question:**
 Refer to the **Combined Datapath** (Figure 9-8) which supports `A = A + 3` and `A = B + C`.
@@ -456,7 +481,7 @@ $$ A = B + 3 $$
 
 ---
 
-## Exercise 3: Conditional Logic
+### Exercise 9-3: Conditional Logic
 
 **Question:**
 Design the hardware modification needed to support the instruction:
@@ -469,7 +494,7 @@ $$ \text{IF } (A > 10) \text{ THEN...} $$
 
 ---
 
-## Exercise 4: Sequence Design
+### Exercise 9-4: Sequence Design
 
 **Question:**
 Write the step-by-step **Control Word sequence** (similar to the Summation example) for **Swapping** the values of Register A and Register B.
