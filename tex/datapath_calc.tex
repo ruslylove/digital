@@ -1,0 +1,70 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{tikz}
+\usepackage{circuitikz}
+\usetikzlibrary{positioning, calc}
+
+\begin{document}
+\begin{circuitikz}[
+    thick,
+    font=\sffamily,
+    arrow/.style={-{Latex}, line width=1pt},
+    label_text/.style={font=\footnotesize}
+]
+
+    % Registers B and C (Top)
+    % Use flipflop but rotate -90 so D is Up, Q is Down.
+    % Label externally to avoid rotation issues.
+    \node[flipflop D, rotate=-90, fill=blue!10] (reg_b) {};
+    \node[above=0.2cm of reg_b] {Register B};
+    
+    \node[flipflop D, rotate=-90, fill=blue!10, right=2.5cm of reg_b] (reg_c) {};
+    \node[above=0.2cm of reg_c] {Register C};
+
+    % Adder (Middle)
+    % Rotate -90 so Inputs West->Up, Output East->Down.
+    \node[adder, fill=yellow!10, rotate=-90, below=2cm of $(reg_b)!0.5!(reg_c)$] (alu) {};
+    \node[right=0.1cm of alu, font=\footnotesize] {Add};
+
+    % Register A (Bottom)
+    \node[flipflop D, rotate=-90, fill=blue!10, below=2cm of alu] (reg_a) {};
+    \node[below=0.2cm of reg_a] {Register A};
+
+    % Connections
+    % Reg B Q (pin 6) -> Adder Input 1
+    % Q (East) rotated -> South (Screen Down).
+    % Adder Input 1?
+    % Connecting to specific anchors if available, or visual corners.
+    % Adder West side (rotated -> North) receives inputs.
+    % Let's create an explicit path.
+    \draw[arrow] (reg_b.pin 6) -- ++(0,-0.8) -| ($(alu.west) + (-0.5, 0)$) -- (alu.west);
+    % Actually cleaner to connect to alu corners rotated.
+    % Or simply coordinate logic.
+    % Reg B (Left) to Adder. Reg C (Right) to Adder.
+    \draw[arrow] (reg_b.pin 6) -- ++(0,-0.5) -| ($(alu.north) + (-0.3, 0.3)$) -- (alu.north); 
+    % Note: alu.north is rotated East? No.
+    % Shape anchors rotate. alu.north is shape north.
+    % Rotated -90: alu.north points East.
+    % alu.west points North.
+    % So verify: I want to hit alu.west (Screen Up).
+    
+    % Let's stick to using coordinates relative to center for robustness if anchors are confusing.
+    % alu.center.
+    \draw[arrow] (reg_b.pin 6) |- ($(alu.center) + (-0.5, 1)$) -- ($(alu.center) + (-0.5, 0)$); 
+    % Wait, adder is circle. Inputs usually implicit.
+    % I will draw arrows stopping at circumference.
+    \draw[arrow] (reg_b.pin 6) -- ++(0,-0.8) -| ($(alu.center) + (-0.4, 0.4)$); 
+    \draw[arrow] (reg_c.pin 6) -- ++(0,-0.8) -| ($(alu.center) + (0.4, 0.4)$);
+    
+    % Adder Output (East -> Screen Down) to Reg A D (pin 1, West -> Screen Up).
+    \draw[arrow] (alu.east) -- (reg_a.pin 1);
+
+    % Control Signal (ALoad)
+    % From Screen Left to Reg A.
+    % Reg A South (Screen West).
+    % Let's assume ALoad enables Clock or is a specific enable.
+    % Flipflop has pin 3 (clk)?
+    % We will just draw arrow to the side.
+    \draw[arrow, color=red] ($(reg_a) + (-3, 0)$) -- node[above, font=\scriptsize] {ALoad} (reg_a.south);
+
+\end{circuitikz}
+\end{document}
