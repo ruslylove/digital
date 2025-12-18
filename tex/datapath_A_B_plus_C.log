@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=latex 2025.11.28)  18 DEC 2025 10:57
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=latex 2025.11.28)  18 DEC 2025 10:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**datapath_A_plus_3.tex
-(./datapath_A_plus_3.tex
+**datapath_A_B_plus_C.tex
+(./datapath_A_B_plus_C.tex
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
 (/usr/local/texlive/2025/texmf-dist/tex/latex/standalone/standalone.cls
@@ -465,8 +465,8 @@ File: l3backend-dvips.def 2024-05-08 L3 backend support: dvips
 \g__pdf_backend_link_int=\count300
 \g__pdf_backend_link_sf_int=\count301
 )
-(./datapath_A_plus_3.aux)
-\openout1 = `datapath_A_plus_3.aux'.
+(./datapath_A_B_plus_C.aux)
+\openout1 = `datapath_A_B_plus_C.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 12.
 LaTeX Font Info:    ... okay on input line 12.
@@ -483,30 +483,30 @@ LaTeX Font Info:    ... okay on input line 12.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 12.
 LaTeX Font Info:    ... okay on input line 12.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 20.
+(Font)              <7> on input line 22.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 20.
+(Font)              <5> on input line 22.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 22.
+(Font)              <8> on input line 45.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 22.
+(Font)              <6> on input line 45.
 
 
 [1
 
-] (./datapath_A_plus_3.aux)
+] (./datapath_A_B_plus_C.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 30436 strings out of 473191
- 807378 string characters out of 5715825
- 1443565 words of memory out of 5000000
- 53434 multiletter control sequences out of 15000+600000
+ 30512 strings out of 473191
+ 809522 string characters out of 5715825
+ 1454571 words of memory out of 5000000
+ 53510 multiletter control sequences out of 15000+600000
  560965 words of font info for 43 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 102i,7n,107p,421b,744s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 102i,7n,107p,423b,746s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on datapath_A_plus_3.dvi (1 page, 16852 bytes).
+Output written on datapath_A_B_plus_C.dvi (1 page, 24796 bytes).

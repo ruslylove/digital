@@ -41,7 +41,6 @@ A computer system can be modeled with five basic components. The microprocessor 
 *   **Microprocessor:** The "brain" of the system.
     *   **Datapath:** Performs data processing operations (arithmetic, logic).
     *   **Control Unit:** Determines the sequence of operations.
-
 :: right ::
 
 <img src="/von_neumann_model.svg" class="rounded-lg bg-white p-4 w-full" alt="Von Neumann Model of a Computer"/>
@@ -145,7 +144,7 @@ This datapath loads registers B and C, adds their values, and stores the result 
 
 :: right ::
 
-<img src="/datapath_A_B_plus_C.png" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Datapath for A = B + C">
+<img src="/datapath_A_B_plus_C.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Datapath for A = B + C">
 <p class="text-center text-sm">Figure 9-5: Datapath for A = B + C</p>
 
 
@@ -163,7 +162,7 @@ This datapath feeds the output of register A back to one input of an adder. The 
 
 :: right ::
 
-<img src="/datapath_A_plus_3.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Datapath for A = A + 3">
+<img src="/datapath_A_plus_3.svg" class="rounded-lg bg-white p-4 w-100 mx-auto" alt="Datapath for A = A + 3">
 <p class="text-center text-sm">Figure 9-6: Datapath for A = A + 3</p>
 
 ---

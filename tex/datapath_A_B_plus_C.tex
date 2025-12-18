@@ -1,0 +1,59 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{tikz}
+\usepackage{circuitikz}
+\usetikzlibrary{positioning, calc}
+
+\tikzset{register/.style={muxdemux, muxdemux def={Lh=2, Rh=2, NL=2, NB=1, NT=1,w=4,NR=0},
+                            muxdemux label={L1=Load, L2=Clock, R1=right1, R2=right,T1=$D_{7..0}$,B1=$Q_{7..0}$,},},
+                 }
+
+\tikzset{adder/.style={muxdemux, muxdemux def={Lh=1, Rh=1,NL=0, NB=1, NT=2,w=2,NR=0}}}
+
+\begin{document}
+\begin{circuitikz}[
+    font=\sffamily,
+    arrow/.style={-Latex, line width=1pt},
+    label_text/.style={font=\footnotesize},
+    bus/.style={-Latex,line width=2pt},
+]
+
+    % Components
+    % Sources B and C at the top
+    \node[register, thick] at (-2,3.5) (B) {$B$};
+    \node[register, thick] at (2,3.5) (C) {$C$};
+    
+    % Adder in the middle
+    \node[adder, thick, box only, anchor=center] at (0,1) (Add) {+};
+    
+    % Destination A at the bottom
+    \node[register, thick] at (0,-0.5) (A) {$A$};
+
+    % Connections
+    % B (Bottom) to Adder (Top Pin 1)
+    % Use coordinate calculations for clean Manhattan lines
+    \draw[bus] (B.bbpin 1) -- ++(0,-1) -| (Add.btpin 1);
+    
+    % C (Bottom) to Adder (Top Pin 2)
+    \draw[bus] (C.bbpin 1) -- ++(0,-1) -| (Add.btpin 2);
+    
+    % Adder (Bottom) to A (Top)
+    \draw[bus] (Add.bbpin 1) -- (A.btpin 1);
+
+
+    % Control Signals
+    % Common Clock Rail
+    \draw[arrow] (-4, -1.5) node[below, label_text] (ClkLabel) {$Clock$} |- (B.blpin 2);
+    
+    % Clock Connections
+    \draw[arrow] (-4, 0 |- A.lpin 2) to[short,*-] (A.blpin 2);
+   % \draw[arrow] (-6, 0 |- B.lpin 2) to[short,*-] (B.blpin 2);
+    % Clock to C (route above B)
+    \draw[arrow] (-4, 2.5) to[short,*-] ++(4,0) |- (C.blpin 2);
+
+    % Load Signals
+    \draw[arrow] (-5, 0 |- A.lpin 1) node[left, label_text] {$ALoad$} -- (A.blpin 1);
+    \draw[arrow] (-5, 0 |- B.lpin 1) node[left, label_text] {$BLoad$} -- (B.blpin 1);
+    \draw[arrow] (-5, 4.5) node[left, label_text] {$CLoad$} -- ++(5,0) |- (C.blpin 1);
+
+\end{circuitikz}
+\end{document}

@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1766030217.33909 "/Users/rus/Development/slidev/digital/tex/datapath_A_plus_3.tex" "datapath_A_plus_3.pdf" "datapath_A_plus_3" 1766030218.24091 0
-  "/Users/rus/Development/slidev/digital/tex/datapath_A_plus_3.tex" 1766030217.16149 2995 523b4ae58913d86895dec92988dc8f3d ""
+["pdflatex"] 1766029954.43044 "/Users/rus/Development/slidev/digital/tex/datapath_A_B_plus_C.tex" "datapath_A_B_plus_C.pdf" "datapath_A_B_plus_C" 1766029955.35929 0
+  "/Users/rus/Development/slidev/digital/tex/datapath_A_B_plus_C.tex" 1766029954.24606 2015 581480f0e5a4fc25d75765f6ce76a13c ""
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmmi6.tfm" 1136768653 1512 f21f83efb36853c0b70002322c1ab3ad ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmmi8.tfm" 1136768653 1520 eccf95517727cb11801f4f1aee3a21b4 ""
@@ -13,9 +13,7 @@
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb" 1248133631 37912 77d683123f92148345f3fc36a38d9ab1 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb" 1248133631 35469 70d41d2b9ea31d5d813066df7c99281c ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb" 1248133631 31809 8670ca339bf94e56da1fc21c80635e2a ""
-  "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb" 1248133631 32726 0a1aea6fcd6468ee2cf64d891f5c43c8 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb" 1248133631 24457 5cbb7bdf209d5d1ce9892a9b80a307cc ""
-  "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb" 1248133631 32587 1788b0c1c5b39540c96f5e42ccd6dae8 ""
   "/usr/local/texlive/2025/texmf-dist/tex/context/base/mkii/supp-pdf.mkii" 1461363279 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "/usr/local/texlive/2025/texmf-dist/tex/generic/circuitikz/pgfcirc.defines.tex" 1736550187 46557 9adcccd6eb69fb5553fe8449b51f7543 ""
   "/usr/local/texlive/2025/texmf-dist/tex/generic/circuitikz/pgfcircbipoles.tex" 1736550187 313284 6adca7701e0659dde0293b21114e4157 ""
@@ -130,10 +128,10 @@
   "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1764314756 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
   "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1764314698 3345742 bbccbb8f48738580c120d7e243c4d5b7 ""
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
-  "datapath_A_plus_3.aux" 1766030218.19188 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
-  "datapath_A_plus_3.tex" 1766030217.16149 2995 523b4ae58913d86895dec92988dc8f3d ""
+  "datapath_A_B_plus_C.aux" 1766029955.31818 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "datapath_A_B_plus_C.tex" 1766029954.24606 2015 581480f0e5a4fc25d75765f6ce76a13c ""
   (generated)
-  "datapath_A_plus_3.aux"
-  "datapath_A_plus_3.log"
-  "datapath_A_plus_3.pdf"
+  "datapath_A_B_plus_C.aux"
+  "datapath_A_B_plus_C.log"
+  "datapath_A_B_plus_C.pdf"
   (rewritten before read)
