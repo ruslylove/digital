@@ -1,7 +1,7 @@
 \documentclass[border=10pt]{standalone}
 \usepackage{tikz}
 \usepackage{circuitikz}
-\usetikzlibrary{positioning, calc}
+\usetikzlibrary{positioning, calc, decorations.markings}
 
 \tikzset{register/.style={muxdemux, muxdemux def={Lh=2, Rh=2, NL=2, NB=1, NT=1,w=4,NR=0},
                             muxdemux label={L1=Load, L2=Clock, R1=right1, R2=right,T1=$D_{7..0}$,B1=$Q_{7..0}$,},},
@@ -12,18 +12,27 @@
 \begin{document}
 \begin{circuitikz}[
     font=\sffamily,
-    arrow/.style={-Latex, line width=1pt},
+    arrow/.style={-Latex, line width=0.5pt},
     label_text/.style={font=\footnotesize},
-    bus/.style={-Latex,line width=2pt}]
+    bus/.style={-Latex, line width=1.5pt,
+        postaction={decorate},
+        decoration={markings, mark=at position 0.5 with {
+            \draw[thick,-] (-2pt,-3pt) -- (2pt,3pt);
+            \node[above left] {\footnotesize $8$};
+        }}},
+    control_signal/.style={-Latex, line width=0.5pt},
+]
 
 
-    \node[register, thick] at (3,0) (A) {$A$};
+    \node[register] at (3,0) (A) {$A$};
 
-    \draw[<-] (A.blpin 1) -- ++(-2,0) node[left,label_text] (ALoad) {$ALoad$};
-    \draw[<-] (A.blpin 2) -- ++(-2,0) node[left,label_text] (AClock) {$Clock$};
+    \node[left,label_text] at ($(A.blpin 1) + (-2,0)$) (ALoad) {$ALoad$};
+    \draw[control_signal] (ALoad) -- (A.blpin 1);
+    \node[left,label_text] at ($(A.blpin 2) + (-2,0)$) (AClock) {$Clock$};
+    \draw[control_signal] (AClock) -- (A.blpin 2);
     \draw[bus] (A.bbpin 1) -- ++(0,-0.5) -| ++ (0.5,-1) coordinate (AdderInput);
     \node[adder, box only, anchor=btpin 1] (Adder) at (AdderInput) {+};
-    \node[above,label_text] at ($(Adder.tpin 2) + (0.0,0.5)$) (three) {$'3'$}; 
+    \node[above,label_text] at ($(Adder.tpin 2) + (0.0,0.7)$) (three) {$'3'$}; 
     \draw[bus] (three) -- (Adder.btpin 2);
     \draw[bus] (Adder.south) -- ++ (0,-0.5) -| ++(-3,4.5) -| (A.north);
 

@@ -149,20 +149,17 @@ This datapath loads registers B and C, adds their values, and stores the result 
 
 
 ---
-layout: two-cols-header
----
+
 
 ## Designing a Dedicated Datapath (cont.)
 
-:: left ::
+
 
 ### Example 2: `A = A + 3`
 
 This datapath feeds the output of register A back to one input of an adder. The other input is the constant value `3`. The result is loaded back into A.
 
-:: right ::
-
-<img src="/datapath_A_plus_3.svg" class="rounded-lg bg-white p-4 w-100 mx-auto" alt="Datapath for A = A + 3">
+<img src="/datapath_A_plus_3.svg" class="rounded-lg bg-white p-4 w-70 mx-auto" alt="Datapath for A = A + 3">
 <p class="text-center text-sm">Figure 9-6: Datapath for A = A + 3</p>
 
 ---
