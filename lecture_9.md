@@ -613,9 +613,21 @@ $$
 
 ## Counter Control Unit: Complete Microprocessor
 
+<div class="grid grid-cols-3 gap-8">
+
+<div>
+
 By combining the datapath and the synthesized control unit, we get the complete dedicated microprocessor. The control unit's logic generates the `Clear` and `Count` signals, while the `(i=10)` status signal from the datapath feeds back into the control unit's next-state logic.
 
-<img src="https://i.imgur.com/u389v4s.png" class="rounded-lg bg-white p-4 w-full" alt="Complete Counter Microprocessor">
+
+
+</div>
+
+<div class="col-span-2">
+<img src="/counter_combined.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Complete Counter Microprocessor">
+<p class="text-center text-sm">Figure 9-15: Complete Counter Microprocessor</p>
+</div>
+</div>
 
 ---
 
