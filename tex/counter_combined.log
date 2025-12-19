@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=latex 2025.11.28)  19 DEC 2025 14:35
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=latex 2025.11.28)  19 DEC 2025 15:25
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**counter_logic.tex
-(./counter_logic.tex
+**counter_combined.tex
+(./counter_combined.tex
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
 (/usr/local/texlive/2025/texmf-dist/tex/latex/standalone/standalone.cls
@@ -456,55 +456,76 @@ x) (/usr/local/texlive/2025/texmf-dist/tex/generic/circuitikz/pgfcirclabel.tex)
 s/tikzlibrarypositioning.code.tex
 File: tikzlibrarypositioning.code.tex 2023-01-15 v3.1.10 (3.1.10)
 )
+(/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
+s/tikzlibrarydecorations.markings.code.tex
+(/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
+s/tikzlibrarydecorations.code.tex
+(/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/modules/pgfmoduledecoration
+s.code.tex
+\pgfdecoratedcompleteddistance=\dimen273
+\pgfdecoratedremainingdistance=\dimen274
+\pgfdecoratedinputsegmentcompleteddistance=\dimen275
+\pgfdecoratedinputsegmentremainingdistance=\dimen276
+\pgf@decorate@distancetomove=\dimen277
+\pgf@decorate@repeatstate=\count299
+\pgfdecorationsegmentamplitude=\dimen278
+\pgfdecorationsegmentlength=\dimen279
+)
+\tikz@lib@dec@box=\box65
+)
+(/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/libraries/decorations/pgfli
+brarydecorations.markings.code.tex))
 (/usr/local/texlive/2025/texmf-dist/tex/latex/l3backend/l3backend-dvips.def
 File: l3backend-dvips.def 2024-05-08 L3 backend support: dvips
-\l__pdf_internal_box=\box65
-\l__pdf_backend_content_box=\box66
-\l__pdf_backend_model_box=\box67
-\g__pdf_backend_annotation_int=\count299
-\g__pdf_backend_link_int=\count300
-\g__pdf_backend_link_sf_int=\count301
+\l__pdf_internal_box=\box66
+\l__pdf_backend_content_box=\box67
+\l__pdf_backend_model_box=\box68
+\g__pdf_backend_annotation_int=\count300
+\g__pdf_backend_link_int=\count301
+\g__pdf_backend_link_sf_int=\count302
 )
-(./counter_logic.aux)
-\openout1 = `counter_logic.aux'.
+(./counter_combined.aux)
+\openout1 = `counter_combined.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <9> on input line 15.
+(Font)              <9> on input line 34.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 15.
+(Font)              <6> on input line 34.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 15.
+(Font)              <5> on input line 34.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 157.
 
 
 [1
 
-] (./counter_logic.aux)
+] (./counter_combined.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 30894 strings out of 473191
- 817978 string characters out of 5715825
- 1487521 words of memory out of 5000000
- 53891 multiletter control sequences out of 15000+600000
- 561271 words of font info for 44 fonts, out of 8000000 for 9000
+ 31605 strings out of 473191
+ 839565 string characters out of 5715825
+ 1526337 words of memory out of 5000000
+ 54584 multiletter control sequences out of 15000+600000
+ 562791 words of font info for 49 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 117i,8n,121p,450b,837s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 117i,8n,121p,475b,1301s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on counter_logic.dvi (1 page, 35680 bytes).
+Output written on counter_combined.dvi (1 page, 46684 bytes).

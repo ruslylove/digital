@@ -1,0 +1,196 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+\usetikzlibrary{positioning, calc, decorations.markings}
+\ctikzset{logic ports=ieee}
+
+% Define the register style (from counter_datapath.tex)
+\tikzset{register/.style={muxdemux, muxdemux def={Lh=2, Rh=2, NL=3, NB=1, NT=1, w=4.5, NR=0},
+                            muxdemux label={L1=Load, L2=Clock, T1=$D$, B1=$Q$}}}
+
+% Define a comparator style (from counter_datapath.tex)
+\tikzset{comparator/.style={muxdemux, muxdemux def={Lh=2, Rh=2, NL=0, NB=0, NT=2, w=3, NR=1},
+                            muxdemux label={L1=, T1=$A$, T2=$B$, R1=$=$}}}
+
+\begin{document}
+
+\begin{circuitikz}[
+    font=\sffamily\small,
+    >=latex,
+    arrow/.style={-Latex, line width=1pt},
+    label_text/.style={font=\footnotesize},
+    bus/.style={-Latex, line width=1.5pt,
+        postaction={decorate},
+        decoration={markings, mark=at position 0.5 with {
+            \draw[thick,-] (-2pt,-3pt) -- (2pt,3pt);
+            \node[above left=0.5pt] {\footnotesize $4$}; % 4-bit counter
+        }}},
+    control_signal/.style={-Latex, line width=0.5pt},
+]
+
+    % --- Control Unit (Left) ---
+    \begin{scope}[local bounding box=ControlUnit]
+        % Flip Flops (Right Side of Control)
+        % FF1 (Top) for Q1
+        \node[flipflop D, scale=0.8, anchor=pin 6] (FF1) at (0, 2.5) {};
+        \node[above] at (FF1.n) {$FF_1$};
+        % FF0 (Bottom) for Q0
+        \node[flipflop D, scale=0.8, anchor=pin 6] (FF0) at (0, -1) {};
+        \node[above] at (FF0.n) {$FF_0$};
+        
+        % FF Outputs Labels
+        \draw (FF1.pin 6) -- ++(0.5,0) coordinate (Q1out) node[right] {$Q_1$};
+        \draw (FF1.pin 4) -- ++(0.5,0) node[right] {$\overline{Q_1}$};
+        \draw (FF0.pin 6) -- ++(0.5,0) coordinate (Q0out) node[right] {$Q_0$};
+        \draw (FF0.pin 4) -- ++(0.5,0) node[right] {$\overline{Q_0}$};
+
+        % Logic Cloud (Center)
+        % We need vertical bus lines on the left for: Q1, Q1', Q0, Q0', x
+        
+        \coordinate (BusTop) at (-11, 8);
+        \coordinate (BusBot) at (-11, -3);
+        
+        % Define vertical bus x-coordinates relative to origin 0,0 (FF pin 6)
+        % FF1 pin 6 is at (0, 2.5). Let's shift left appropriately.
+        % Actually, let's keep the relative coordinates from counter_logic.tex but shifted.
+        % Original FF1 was at (10, 2.5). Here it is at (0, 2.5). Shift = -10.
+        % Original Bus lines around x=0 to 1.5. Shift = -10 + (original values)? No.
+        % Let's redefine based on component positions.
+        
+        \coordinate (LineQ1) at (-9.7, 0);
+        \coordinate (LineQ1b) at (-9.4, 5);
+        \coordinate (LineQ0) at (-9.1, 0);
+        \coordinate (LineQ0b) at (-8.8, -2);
+        \coordinate (LineX) at (-8.5, 0);
+
+        % External Input x point
+        \coordinate (xPoint) at (-8.5, -2.5); % On LineX
+
+        % Feedback Routing from FFs to Bus
+        % Route Q1
+        \draw (FF1.pin 6) to[short,*-] ++(0, 3.1) -| (LineQ1);
+        % Route Q1'
+        \draw (FF1.pin 4) -- ++(0.3,0) to[short,*-] ++(0, 4.8) -| (LineQ1b);
+        
+        % Route Q0
+        \draw (FF0.pin 6) to[short,*-] ++(0,0) -- ++(0, -2.2) -| (LineQ0); 
+        % Route Q0'
+        \draw (FF0.pin 4) -- ++(0.3,0) to[short,*-] ++(0, -1.2) -| (LineQ0b);
+        
+        % Logic Gates Placement (Shifted by -10 relative to original roughly)
+        % Original AND1 at (3,1) -> (-7, 1)
+        
+        % D1 = Q1 + Q0.x
+        \node[and port, scale=0.8] (and1) at (-7, 1) {};
+        \node[or port, scale=0.8] (or1) at (-5, 2.5) {};
+        
+        % Connections for D1 Logic
+        \draw (LineQ0 |- and1.in 1) node[circ]{} -- (and1.in 1);
+        \draw (LineQ1 |- or1.in 1) node[circ]{} -- (or1.in 1);
+        \draw (and1.out) |- (or1.in 2);
+        \draw (xPoint) |- (and1.in 2);
+        
+        % D1 to FF1 D input
+        \draw (or1.out) -- (FF1.pin 1) node[midway, above] {$D_1$};
+
+        % D0 = Q1 + Q0' + x'
+        \node[or port, number inputs=3, scale=0.8] (or2) at (-5, -1) {};
+        \draw (LineQ0b) |- (or2.in 2);
+        \draw (LineQ1) |- (or2.in 1);
+        
+        % x' connection
+        \draw (xPoint |- or2.in 3) node[circ]{} -- (or2.in 3);
+        \node[notcirc,anchor=east] at (or2.bin 3) {};
+        
+        % D0 to FF0 D input
+        \draw (or2.out) -- (FF0.pin 1) node[midway, above] {$D_0$};
+        
+        % Clear = (Q1 + Q0)' -> NOR(Q1, Q0)
+        \node[nor port, scale=0.8] (nor1) at (-5, 5) {};
+        \draw (LineQ0) |- (nor1.in 2);
+        \draw (LineQ1 |- nor1.in 1) node[circ]{} -- (nor1.in 1);
+        
+        % Output Clear
+        \draw (nor1.out) -- ++(2,0) coordinate (ClearOut) node[above] {$Clear$};
+
+        % Count = Q1' . Q0 -> AND(Q1', Q0)
+        \node[and port, scale=0.8] (and2) at (-5, 3.8) {};
+        \draw (LineQ1b) |- (and2.in 1);
+        \draw (LineQ0 |- and2.in 2) node[circ]{} -- (and2.in 2);
+        
+        % Output Count
+        \draw (and2.out) -- ++(2,0) coordinate (CountOut) node[above] {$Count$};
+        
+        % Clocks
+        % Connect Clocks
+        % Define Global Clock
+        \coordinate (GlobalClk) at (-10, -4);
+        \node[left] at (GlobalClk) {$Clock$};
+        \node[left] (Reset) at (-10,-4.3) {$Reset$};
+
+        \path (FF1.pin 3) -- ++(-0.5,0) coordinate (clk_local);
+    
+        % To Control Unit
+        \draw (GlobalClk) -| (clk_local |- FF0.pin 3);
+    
+
+      
+        \draw (FF1.pin 3) -- (FF1.pin 3 -| clk_local) to[short,-*] (clk_local |- GlobalClk);
+        \draw (FF0.pin 3) to[short,-*] (FF0.pin 3 -| clk_local);
+      %  \draw (clk_local |- FF0.pin 3) -- (clk_local) |- (FF1.pin 3);
+        % We will connect this to a global clock later or leave as is
+        
+        % Box around Control Unit
+        %\draw[dashed] (BusTop |- 9,0) rectangle (LineX |- -4,0);
+        \node[above, font=\bfseries] at (-5, 6) {Control Unit};
+
+    \end{scope}
+
+    % --- Datapath (Right) ---
+    \begin{scope}[shift={(5.5,0)}, local bounding box=Datapath]
+        % Counter Register
+        \node[register, muxdemux label={L1=Count, L2=Clear, L3=Clock}] (Counter) at (0,0) {Counter};
+        
+        % Comparator
+        \node[comparator, muxdemux label={R1={$(i=10)$}}, anchor=tpin 1] (Comp) at (0,-2) {};
+
+        % Connections
+        \draw[bus] (Counter.bbpin 1) -- ++(0,-1) -| (Comp.btpin 1) node[pos=0.25, right] {$i$};
+        
+        % Constant '10' to Comparator Input (B)
+        \draw[bus] ($(Comp.btpin 2)+(0,1)$) node[above] {$'10'$} -- (Comp.btpin 2);
+        
+        % Comparator Output
+      %  \draw[control_signal] (Comp.brpin 1) -- ++(1.5,0) coordinate (StatusOut) node[right, label_text] {Status};
+        
+        % Datapath Label
+        \node[above, font=\bfseries] at (0, 3) {Datapath};
+    \end{scope}
+
+    % --- Interconnections ---
+
+    % Connect Clear
+    % nor1.out is ClearOut. Counter.blpin 2 is Clear input.
+    \draw[control_signal] (ClearOut.east) -- ++(5,0) |- (Counter.blpin 2);
+
+    % Connect Count
+    % and2.out is CountOut. Counter.blpin 1 is Count input.
+    \draw[control_signal] (CountOut.east) -- ++(6,0) |- (Counter.blpin 1);
+
+    % Connect Status (i=10) back to Logic x
+    % StatusOut is at Logic right. xPoint is at Logic left.
+    % Route bottom
+    \draw[control_signal] (Comp.brpin 1) -- ++(0.5,0) -- ++(0, -1.8) -| (xPoint) node[right] {$(i=10)$};
+    %\node[above] at (xPoint) {$x$};
+
+        % To Datapath
+        \draw (GlobalClk) -| (Counter.lpin 3);
+
+    % Clear line
+    \draw (FF1.bdown) |- ++(-1, -0.5) coordinate (ClearLine);
+    \draw (Reset) -| (ClearLine);
+    \draw (FF0.bdown) -- (FF0.down) to[short,-*] (FF0.down -| ClearLine);
+    
+
+\end{circuitikz}
+
+\end{document}
