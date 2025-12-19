@@ -3,304 +3,365 @@ theme: seriph
 background: https://cover.sli.dev
 transition: fade
 layout: cover
-title: "Lecture 10 - Control Unit Design"
+title: "Lecture 10 - General-Purpose Microprocessors"
 ---
 
-# Lecture 10: Control Unit Design
+# Lecture 10: General-Purpose Microprocessors
 {{ $slidev.configs.subject }}
 
 
 {{ $slidev.configs.author }}
+
 ---
 
 ## Outline
 
-*   Recap: Datapath & Control Unit
-*   Control Unit as a Finite State Machine (FSM)
-*   Design Example 1: Counter Control Unit
-    *   FSM State Diagram
-    *   State Table & Synthesis
-    *   Complete Microprocessor
-*   Design Example 2: `if-then-else` Control Unit
-    *   FSM State Diagram
-    *   State Table & Synthesis
-*   Design Example 3: GCD Control Unit
-    *   FSM State Diagram
-    *   State Table & Synthesis
-*   Design Methodologies: FSM+D vs. FSMD
+*   **General-Purpose vs. Dedicated Microprocessors**
+*   **Overview of CPU Design**
+    *   Instruction Set Definition
+    *   Datapath Design
+    *   Control Unit Design
+*   **The EC-1 General-Purpose Microprocessor**
+    *   Instruction Set
+    *   Datapath Construction
+    *   Control Unit FSM
+*   **Instruction Cycle: Fetch, Decode, Execute**
 
 ---
-
-## Recap: Datapath and Control Unit
-
-A microprocessor is partitioned into two main parts that work together.
-
-*   **Datapath:**
-    *   Performs data processing operations. Contains ALUs, registers, MUXes, etc.
-
-*   **Control Unit:**
-    *   A Finite State Machine that determines the sequence of datapath operations.
-    *   Generates **control signals** to tell the datapath what to do.
-    *   Receives **status signals** from the datapath to make decisions.
-
-<img src="https://i.imgur.com/YgY1s3C.png" class="rounded-lg bg-white p-4 w-2/3" alt="Datapath and Control Unit Interaction">
-
-Our goal now is to design the **Control Unit** FSM.
-
+layout: two-cols
 ---
 
-## Design Example 1: Counter Control Unit
+## General-Purpose Microprocessors
 
-Let's design the control unit for the "Count from 1 to 10" algorithm.
+Unlike **dedicated microprocessors** (ASICs) designed for a single specific task, **general-purpose microprocessors** can perform many different functions.
 
-<div class="grid grid-cols-2 gap-8">
+*   **Programmable:** Their function is determined by the **software instructions** they execute.
+*   **Versatile:** Changing the program changes the function without modifying the hardware.
+*   **Examples:** Intel Core i7, ARM Cortex, etc.
 
-<div>
+:: right ::
 
-**Algorithm:**
-```
-i = 0
-WHILE (i != 10) {
-  i = i + 1
-}
-```
+> [!NOTE]
+> A general-purpose microprocessor can be viewed as a **dedicated** microprocessor whose single dedicated function is to **fetch and execute instructions**.
 
-**Datapath:**
-<img src="https://i.imgur.com/5u0wJ6v.png" class="rounded-lg bg-white p-4" alt="Counter datapath with up-counter">
+<div class="mt-8">
 
-**Status Signal:** `(i=10)`
-**Control Signals:** `Clear`, `Count`
+**Design Perspective:**
+We can design a general-purpose CPU using the same methods as dedicated datapaths, but the "data" we process includes user instructions.
 
-</div>
-
-<div>
-
-**Control Unit FSM (State Diagram):**
-
-*   **S₀ (Init):** Clear the counter (`i=0`).
-*   **S₁ (Count):** Increment the counter (`i=i+1`).
-*   **S₂ (Done):** Loop is finished.
-
-```mermaid
-stateDiagram-v2
-    direction LR
-    S₀ --> S₁
-    S₁ --> S₁ : i != 10
-    S₁ --> S₂ : i == 10
-    S₂ --> S₂ : Halt
-```
-
-</div>
 </div>
 
 ---
+layout: two-cols
+---
 
-## Counter Control Unit: State & Output Tables
+## Overview of CPU Design
 
-We can now create the tables from the state diagram.
-**State Assignment:** `S₀=00`, `S₁=01`, `S₂=10`, `S₃(Halt)=11`.
-**Input:** `(i=10)` status signal.
+Designing a Central Processing Unit (CPU) involves three main steps.
 
-<div class="grid grid-cols-2 gap-8">
+:: left ::
 
-<div>
+### 1. Define Instruction Set
+*   **Instructions:** What operations can the CPU perform? (Add, Load, Jump, etc.)
+*   **Encoding:** How are these instructions represented in binary? (Opcode, Operands)
 
-### Next State Table
+### 2. Design Datapath
+*   Create a custom datapath capable of executing *every* instruction in the set.
+*   Includes **PC** (Program Counter), **IR** (Instruction Register), **ALU**, **Registers**, and **Memory**.
 
-| Current State | Input `(i=10)` | Next State |
-|:-------------:|:--------------:|:----------:|
-| `Q₁Q₀`        |                | `D₁D₀`     |
-| 00 (S₀)       | X              | 01 (S₁)    |
-| 01 (S₁)       | 0              | 01 (S₁)    |
-| 01 (S₁)       | 1              | 10 (S₂)    |
-| 10 (S₂)       | X              | 11 (S₃)    |
-| 11 (S₃)       | X              | 11 (S₃)    |
+:: right ::
 
-</div>
-
-<div>
-
-### Output Table (Moore Model)
-
-| Current State | `Clear` | `Count` |
-|:-------------:|:-------:|:-------:|
-| 00 (S₀)       | 1       | 0       |
-| 01 (S₁)       | 0       | 1       |
-| 10 (S₂)       | 0       | 0       |
-| 11 (S₃)       | 0       | 0       |
-
-</div>
-</div>
-
-From these tables, we can derive the logic equations for the FSM.
+### 3. Design Control Unit
+*   Design an FSM to orchestrate the **Instruction Cycle**:
+    1.  **Fetch:** Get instruction from memory.
+    2.  **Decode:** Figure out what to do.
+    3.  **Execute:** Perform the operation.
 
 ---
 
-## Counter Control Unit: Complete Microprocessor
+## The EC-1 Microprocessor ("Enoch's Computer 1")
 
-By combining the datapath and the synthesized control unit, we get the complete dedicated microprocessor. The control unit's logic generates the `Clear` and `Count` signals, while the `(i=10)` status signal from the datapath feeds back into the control unit's next-state logic.
+To understand the design process, we will build a simple 8-bit general-purpose microprocessor called the **EC-1**.
 
-<img src="https://i.imgur.com/u389v4s.png" class="rounded-lg bg-white p-4 w-full" alt="Complete Counter Microprocessor">
+*   **Goal:** Keep it simple to allow manual design.
+*   **Architecture:**
+    *   **Data Width:** 8 bits
+    *   **Address Width:** 4 bits (16 memory locations)
+    *   **Memory:** Read-Only Memory (ROM) for program storage.
 
 ---
 
-## Design Example 2: `if-then-else` Control Unit
+## 1. EC-1 Instruction Set
 
-**Algorithm:**
-```
-INPUT A
-IF (A = 5) THEN
-  B = 8
-ELSE
-  B = 13
-END IF
-OUTPUT B
-```
+The EC-1 has a very small instruction set with only 5 instructions. We use **3 bits** for the Opcode.
 
-<div class="grid grid-cols-2 gap-8">
+$$
+\footnotesize
+\def\arraystretch{1.5}
+\begin{array}{|l|l|l|l|l|}
+\hline
+\textbf{Instruction} & \textbf{Mnemonic} & \textbf{Encoding} & \textbf{Operation} & \textbf{Description} \\
+\hline
+\textbf{Input} & \text{IN A} & 011 \text{ xxxxx} & A \leftarrow \text{Input} & \text{Input data to A} \\
+\hline
+\textbf{Output} & \text{OUT A} & 100 \text{ xxxxx} & \text{Output} \leftarrow A & \text{Output data from A} \\
+\hline
+\textbf{Decrement} & \text{DEC A} & 101 \text{ xxxxx} & A \leftarrow A - 1 & \text{Decrement A} \\
+\hline
+\textbf{JumpNotZero} & \text{JNZ addr} & 110 \text{ aaaa} & \text{If } A \neq 0, PC \leftarrow aaaa & \text{Conditional Jump} \\
+\hline
+\textbf{Halt} & \text{HALT} & 111 \text{ xxxxx} & \text{Halt} & \text{Stop execution} \\
+\hline
+\end{array}
+$$
 
+*   **nop:** Opcodes `000`, `001`, `010` are unused (No Operation).
+*   **aaaa:** Represents a 4-bit memory address.
+*   **xxxxx:** Don't care bits (unused).
+
+---
+
+## 2. EC-1 Datapath Design
+
+The datapath must support fetching instructions and executing data operations.
+
+**Key Components:**
+*   **Program Counter (PC):** 4-bit register. Points to the next instruction.
+*   **Instruction Register (IR):** 8-bit register. Stores the current instruction.
+*   **Accumulator (A):** 8-bit register. Stores data for processing.
+*   **Memory (ROM):** 16 x 8-bit. Stores the program.
+*   **Functional Units:**
+    *   **Incrementer:** $PC = PC + 1$
+    *   **Decrementer:** $A = A - 1$
+    *   **Comparator:** Check if $A = 0$ (for JNZ)
+
+---
+
+## EC-1 Datapath Diagram
+
+<div class="grid grid-cols-2 gap-4">
 <div>
 
-**Datapath:**
-<img src="https://i.imgur.com/v8t762L.png" class="rounded-lg bg-white p-4" alt="if-then-else datapath">
+**Instruction Cycle Logic:**
+*   **PC Logic:**
+    *   Usually `PC = PC + 1` (Next instruction).
+    *   For `JNZ`, if taken: `PC = IR[3:0]` (Jump address).
+    *   Uses a `JNZmux` to select between incremented PC and Jump address.
 
-**Status Signal:** `(A=5)`
-**Control Signals:** `ALoad`, `BLoad`, `Muxsel`, `Out`
+**Execution Logic:**
+*   **Accumulator (A) Logic:**
+    *   Input from generic `Input` port OR
+    *   Input from `Decrement Unit`.
+    *   Selected by `INmux`.
+*   **Output:** Tri-state buffer controlled by `OutE`.
 
 </div>
-
 <div>
 
-**Control Unit FSM (State Diagram):**
-
-*   **S_input:** Load register A.
-*   **S_extra:** A wait state to allow register A to settle before checking its value.
-*   **S_equal:** Load B with 8.
-*   **S_notequal:** Load B with 13.
-*   **S_output:** Output the value from B.
-
-```mermaid
-stateDiagram-v2
-    S_input --> S_extra
-    S_extra --> S_equal : A=5
-    S_extra --> S_notequal : A!=5
-    S_equal --> S_output
-    S_notequal --> S_output
-    S_output --> S_output
-```
+<!-- Placeholder for Datapath Image - Ideally this would be an SVG -->
+<div class="border-2 border-gray-400 p-4 rounded-lg bg-white text-center">
+    <div class="text-xs text-left mb-2">Datapath Construction</div>
+    <div class="flex flex-col gap-4">
+        <div class="border p-2">
+            <strong>Fetch Path:</strong><br>
+            PC (4-bit) -> Memory -> IR (8-bit)
+        </div>
+        <div class="border p-2">
+            <strong>Update Path:</strong><br>
+            PC + 1 -> PC (Normal)<br>
+            IR[3:0] -> PC (Jump)
+        </div>
+        <div class="border p-2">
+            <strong>Data Path:</strong><br>
+            Input / (A-1) -> MUX -> Reg A -> Output
+        </div>
+    </div>
+</div>
 
 </div>
 </div>
 
 ---
 
-## `if-then-else` Control Unit: Synthesis
+## 3. EC-1 Control Unit (FSM)
 
-From the state diagram, we derive the state and output tables to synthesize the logic.
+The Control Unit orchestrates the datapath. It transitions through generic states for fetching and decoding, then specific states for execution.
 
-**State Assignment:** `S_input=000`, `S_extra=001`, `S_notequal=010`, `S_equal=011`, `S_output=100`
+### FSM States:
+1.  **FETCH (000):**
+    *   Read instruction from Memory at address PC.
+    *   Load into IR (`IRload`).
+    *   Increment PC (`PCload`).
+2.  **DECODE (001):**
+    *   Look at Opcode `IR[7:5]`.
+    *   Transition to the specific execution state.
+3.  **EXECUTE (Various):**
+    *   `INPUT` state, `OUTPUT` state, `DEC` state, `JNZ` state, `HALT` state.
 
-<div class="grid grid-cols-2 gap-8">
+---
+layout: two-cols
+---
 
-<div>
+## Instruction Cycle Details
 
-### Next State Table (Partial)
+### Step 1: Fetch
+*   **Operation:** $IR \leftarrow Memory[PC]$, $PC \leftarrow PC + 1$
+*   **Control Signals:** `IRload = 1`, `PCload = 1`, `JNZmux = 0` (select increment).
 
-| PS | Input `(A=5)` | NS |
-|:--:|:-------------:|:--:|
-| 000 | X | 001 |
-| 001 | 0 | 010 |
-| 001 | 1 | 011 |
-| 010 | X | 100 |
-| 011 | X | 100 |
-| 100 | X | 100 |
+### Step 2: Decode
+*   **Operation:** Determine Next State based on `IR[7:5]`.
+*   **Control Signals:** None (internal FSM transition).
 
-</div>
+:: right ::
 
-<div>
+### Step 3: Execute (Examples)
 
-### Output Table (Moore Model)
+**IN A:**
+*   Load A with data from Input port.
+*   Signals: `INmux = 1` (Input), `Aload = 1`.
+*   Return to **FETCH**.
 
-| State | `ALoad` | `Muxsel` | `BLoad` | `Out` |
-|:-----:|:-------:|:--------:|:-------:|:-----:|
-| 000 | 1 | X | 0 | 0 |
-| 010 | 0 | 0 | 1 | 0 |
-| 011 | 0 | 1 | 1 | 0 |
-| 100 | 0 | X | 0 | 1 |
+**DEC A:**
+*   Load A with (A - 1).
+*   Signals: `INmux = 0` (Dec unit), `Aload = 1`.
+*   Return to **FETCH**.
 
-</div>
-</div>
-
-**Synthesized Logic (from PDF):**
-*   `ALoad = Q₂'Q₁'Q₀'`
-*   `Muxsel = Q₂'Q₁'Q₀`
-*   `BLoad = Q₂'Q₁`
-*   `Out = Q₂Q₁'Q₀'`
+**JNZ address:**
+*   If $A \neq 0$, load PC with address from IR.
+*   Signals: If $A \neq 0$ then `PCload = 1`, `JNZmux = 1`.
+*   Return to **FETCH**.
 
 ---
 
-## Design Example 3: GCD Control Unit
+## EC-1 State Diagram
 
-**Problem:** Design a control unit to find the Greatest Common Divisor (GCD) of two numbers, X and Y.
+<img src="/ec1_fsm.svg" class="rounded-lg bg-white p-4 w-full h-80 object-contain mx-auto" alt="EC-1 Control Unit FSM">
 
-<div class="grid grid-cols-2 gap-8">
 
+---
+layout: section
+---
+
+## The EC-2 Microprocessor
+
+A more advanced general-purpose microprocessor.
+
+---
+
+## EC-2 Overview
+
+The **EC-2** improves upon the EC-1 by adding more instructions and capabilities.
+
+*   **Expanded Instruction Set:** 8 Instructions (utilizing all 3 opcode bits).
+*   **Memory:** 32 x 8-bit **RAM** (Read/Write capabilities).
+*   **Addressing:** 5-bit address bus.
+*   **ALU:** Adder/Subtractor unit.
+
+---
+
+## EC-2 Instruction Set
+
+$$
+
+\def\arraystretch{1.5}
+\begin{array}{|l|c|l|l|}
+\hline
+\textbf{Instruction} & \textbf{Encoding} & \textbf{Operation} & \textbf{Description} \\
+\hline
+\textbf{LOAD A, addr} & 000 \text{ aaaaa} & A \leftarrow \text{Memory}[aaaaa] & \text{Load A from Memory} \\
+\hline
+\textbf{STORE A, addr} & 001 \text{ aaaaa} & \text{Memory}[aaaaa] \leftarrow A & \text{Store A to Memory} \\
+\hline
+\textbf{ADD A, addr} & 010 \text{ aaaaa} & A \leftarrow A + \text{Memory}[aaaaa] & \text{Add Memory to A} \\
+\hline
+\textbf{SUB A, addr} & 011 \text{ aaaaa} & A \leftarrow A - \text{Memory}[aaaaa] & \text{Sub Memory from A} \\
+\hline
+\textbf{IN A} & 100 \text{ xxxxx} & A \leftarrow \text{Input} & \text{Input to A} \\
+\hline
+\textbf{JZ addr} & 101 \text{ aaaaa} & \text{If } A = 0, PC \leftarrow aaaaa & \text{Jump if Zero} \\
+\hline
+\textbf{JPOS addr} & 110 \text{ aaaaa} & \text{If } A \ge 0, PC \leftarrow aaaaa & \text{Jump if Pos/Zero} \\
+\hline
+\textbf{HALT} & 111 \text{ xxxxx} & \text{Halt} & \text{Halt execution} \\
+\hline
+\end{array}
+$$
+
+---
+
+## EC-2 Datapath Enhancements
+
+To support the new instructions, the datapath is upgraded:
+
+1.  **5-bit Address Bus:** To address 32 memory locations.
+2.  **RAM vs ROM:** Allows `STORE` operations.
+3.  **Memory Address MUX:**
+    *   **Fetch:** Address comes from **PC**.
+    *   **Execute (Load/Store/Add/Sub):** Address comes from **IR[4:0]**.
+4.  **ALU:** Performs both Addition and Subtraction.
+5.  **Accumulator MUX (4-to-1):** Selects input from:
+    *   Memory Output (LOAD)
+    *   ALU Output (ADD/SUB)
+    *   Input Port (IN)
+
+---
+
+## EC-2 Datapath Diagram
+
+<div class="grid grid-cols-2 gap-4">
 <div>
 
-**Algorithm:**
-```
-WHILE (X != Y) {
-  IF (X > Y) THEN
-    X = X - Y
-  ELSE
-    Y = Y - X
-}
-```
-
-**Datapath:**
-<img src="https://i.imgur.com/s64052X.png" class="rounded-lg bg-white p-4" alt="GCD Datapath">
-
-**Status Signals:** `XeqY`, `XgtY`
+**Key Control Signals:**
+*   `MemInst`: Selects address source (0=PC, 1=IR).
+*   `MemWr`: Enables writing to RAM.
+*   `Asel`: Selects Accumulator input source.
+*   `Sub`: Selects ALU operation (0=Add, 1=Sub).
+*   `JMPmux`: Controls PC update for Jumps.
 
 </div>
-
 <div>
 
-**Control Unit FSM (State Diagram):**
-
-*   **S₀ (Init):** Load X and Y.
-*   **S₁ (Check):** Compare X and Y.
-*   **S₂ (X=X-Y):** Perform subtraction.
-*   **S₃ (Y=Y-X):** Perform subtraction.
-*   **S₄ (Done):** Output the result.
-
-```mermaid
-stateDiagram-v2
-    S₀ --> S₁
-    S₁ --> S₄ : XeqY
-    S₁ --> S₂ : not(XeqY) AND XgtY
-    S₁ --> S₃ : not(XeqY) AND not(XgtY)
-    S₂ --> S₁
-    S₃ --> S₁
-    S₄ --> S₄
-```
+<div class="border-2 border-gray-400 p-4 rounded-lg bg-white text-center text-xs">
+    <strong>EC-2 Datapath Flow</strong>
+    <div class="mt-2 flex flex-col gap-2">
+        <div class="border p-2 bg-blue-50">
+            <strong>Memory Interface</strong><br>
+            Addr MUX(PC, IR) -> RAM -> Data Out
+        </div>
+        <div class="border p-2 bg-green-50">
+            <strong>ALU Section</strong><br>
+            A +/- RAM Data -> Result
+        </div>
+        <div class="border p-2 bg-yellow-50">
+            <strong>Accumulator Logic</strong><br>
+            MUX(RAM, ALU, Input) -> A Register
+        </div>
+    </div>
+</div>
 
 </div>
 </div>
 
 ---
 
-## FSM+D vs. FSMD
+## EC-2 Control Unit
 
-There are two main methodologies for designing microprocessor systems in an HDL.
+The FSM is slightly more complex to handle the memory operands.
 
-### FSM+D (FSM plus Datapath)
-*   The FSM (Control Unit) and the Datapath are designed as **separate, manually constructed units**.
-*   They are then connected together in a top-level module.
-*   **Advantage:** You have full, explicit control over the datapath structure. This is useful for highly optimized or unusual datapaths. This is the method we have been following.
+### Instruction Cycle with Memory Access:
+1.  **Fetch:** `MemInst=0` (Use PC). Fetch instruction.
+2.  **Decode:** Check Opcode.
+3.  **Execute:**
+    *   **LOAD:** `MemInst=1` (Use IR addr). Read RAM. Load A.
+    *   **STORE:** `MemInst=1`. Write A to RAM (`MemWr=1`).
+    *   **ADD:** `MemInst=1`. Read RAM. ALU adds A + RAM. Load A.
 
-### FSMD (FSM with Datapath)
-*   The entire design is described as a **single behavioral FSM** in an HDL.
-*   Datapath operations (like `A <= B + C;`) are embedded directly within the FSM states.
-*   The synthesis tool automatically infers and generates the necessary datapath components (registers, adders, MUXes) and connects them to the control unit.
-*   **Advantage:** Faster and simpler design process for standard operations. This is the most common modern approach.
+---
+
+## Summary
+
+*   **General-purpose microprocessors** execute a sequence of instructions stored in memory.
+*   The **Instruction Cycle** consists of **Fetch**, **Decode**, and **Execute** phases.
+*   The **Datapath** supports specific structural requirements (PC, IR) and functional units.
+*   **EC-1** demonstrates a minimal 5-instruction set and 8-bit architecture.
+*   **EC-2** extends this with memory-reference instructions (Load/Store), RAM, and more complex addressing.
