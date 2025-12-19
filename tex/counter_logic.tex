@@ -1,0 +1,138 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+\usetikzlibrary{positioning, calc}
+\ctikzset{logic ports=ieee}
+
+\begin{document}
+
+\begin{circuitikz}[
+    font=\sffamily\small,
+    >=latex
+]
+
+    % Flip Flops (Right Side)
+    % FF1 (Top) for Q1
+    \node[flipflop D, scale=0.8, anchor=pin 6] (FF1) at (10, 3) {};
+    \node[above] at (FF1.n) {$FF_1$};
+    % FF0 (Bottom) for Q0
+    \node[flipflop D, scale=0.8, anchor=pin 6] (FF0) at (10, -1) {};
+    \node[above] at (FF0.n) {$FF_0$};
+    
+    % FF Outputs Labels
+    \draw (FF1.pin 6) -- ++(0.5,0) node[right] {$Q_1$};
+    \draw (FF1.pin 4) -- ++(0.5,0) node[right] {$\overline{Q_1}$};
+    \draw (FF0.pin 6) -- ++(0.5,0) node[right] {$Q_0$};
+    \draw (FF0.pin 4) -- ++(0.5,0) node[right] {$\overline{Q_0}$};
+
+    % Logic Cloud (Center)
+    % We need vertical bus lines on the left for: Q1, Q1', Q0, Q0', x
+    
+    \coordinate (BusTop) at (-1, 8);
+    \coordinate (BusBot) at (-1, -3);
+    
+    % Define vertical bus x-coordinates (spacing 0.3)
+    \coordinate (LineQ1) at (-2, 0);
+    \coordinate (LineQ1b) at (-1.7, 0);
+    \coordinate (LineQ0) at (-1.4, 0);
+    \coordinate (LineQ0b) at (-1.1, 0);
+    \coordinate (LineX) at (-0.8, 0);
+    
+    % Draw Vertical Bus Lines (Visual guide)
+    %\draw[gray!30] (LineQ1 |- BusTop) -- (LineQ1 |- BusBot);
+    
+    % Inputs Label
+   % \node[above] at (LineQ1 |- BusTop) {$Q_1$};
+   % \node[above] at (LineQ1b |- BusTop) {$\overline{Q_1}$};
+   % \node[above] at (LineQ0 |- BusTop) {$Q_0$};
+   % \node[above] at (LineQ0b |- BusTop) {$\overline{Q_0}$};
+   % \node[above] at (LineX |- BusTop) {$x$};
+
+    % External Input x
+    \node (InputX) at (-3, -2.5) {$x$};
+    \draw (InputX) -- (LineX |- InputX) coordinate (xPoint) -- (LineX |- BusTop); 
+    % Extend bus downwards
+    \draw (xPoint) -- (LineX |- BusBot);
+
+    % Feedback Routing from FFs to Bus
+    % Route Q1
+    \draw (FF1.pin 6) -- ++(0,0) -- ++(0, 3) -| (LineQ1) -- (LineQ1 |- BusBot);
+    % Route Q1'
+    \draw (FF1.pin 4) -- ++(0.3,0) -- ++(0, 4.7) -| (LineQ1b) -- (LineQ1b |- BusBot);
+    
+    % Route Q0
+    \draw (FF0.pin 6) -- ++(0,0) -- ++(0, -2.2) -| (LineQ0) -- (LineQ0 |- BusTop); % Up to top
+    % Route Q0'
+    \draw (FF0.pin 4) -- ++(0.3,0) -- ++(0, -1.2) -| (LineQ0b) -- (LineQ0b |- BusTop);
+    
+    % Logic Gates Placement
+    
+    % D1 = Q1 + Q0.x
+    % AND(Q0, x) -> OR(Q1, ...)
+    \node[and port, scale=0.8] (and1) at (3, 1) {};
+    \node[or port, scale=0.8] (or1) at (5, 2.5) {};
+    
+    % Connections for D1 Logic
+    % and1 inputs: Q0, x
+    \draw (LineQ0 |- and1.in 1) node[circ]{} -- (and1.in 1);
+    \draw (LineX |- and1.in 2) node[circ]{} -- (and1.in 2);
+    % or1 inputs: Q1, and1.out
+    \draw (LineQ1 |- or1.in 1) node[circ]{} -- (or1.in 1);
+    \draw (and1.out) |- (or1.in 2);
+    
+    % D1 to FF1 D input
+    \draw (or1.out) -- (FF1.pin 1) node[midway, above] {$D_1$};
+
+    % D0 = Q1 + Q0' + x'
+    % OR3(Q1, Q0', x')
+    \node[or port, number inputs=3, scale=0.8] (or2) at (5, -1) {};
+    
+    % Connections for D0 Logic
+    % or2 inputs: Q1, Q0', x'
+    % Q1
+    \draw (LineQ1 |- or2.in 1) node[circ]{} -- (or2.in 1);
+    % Q0'
+    \draw (LineQ0b |- or2.in 2) node[circ]{} -- (or2.in 2);
+    % x' (x is typical high, need NOT or bubble)
+    % Assuming bubble on input
+    \draw (LineX |- or2.in 3) node[circ]{} -- (or2.in 3);
+    \node[circle, draw, fill=white, inner sep=0pt, minimum size=3pt, anchor=east] at (or2.in 3) {};
+    
+    % D0 to FF0 D input
+    \draw (or2.out) -- (FF0.pin 1) node[midway, above] {$D_0$};
+    
+    % Clear = (Q1 + Q0)'
+    % NOR(Q1, Q0)
+    \node[nor port, scale=0.8] (nor1) at (5, 5) {};
+    
+    % Connections for Clear
+    \draw (LineQ1 |- nor1.in 1) node[circ]{} -- (nor1.in 1);
+    \draw (LineQ0 |- nor1.in 2) node[circ]{} -- (nor1.in 2);
+    
+    % Output Clear
+    \draw (nor1.out) -- ++(1,0) node[right] {$Clear$};
+
+    % Count = Q1' . Q0
+    % AND(Q1', Q0)
+    \node[and port, scale=0.8] (and2) at (5, 3.8) {};
+    
+    % Connections for Count
+    \draw (LineQ1b |- and2.in 1) node[circ]{} -- (and2.in 1);
+    \draw (LineQ0 |- and2.in 2) node[circ]{} -- (and2.in 2);
+    
+    % Output Count
+    \draw (and2.out) -- ++(1,0) node[right] {$Count$};
+    
+    % Clocks
+    % Assume pin 3 is Clock (Standard Circuitikz often uses C pin label on Pin 1/3? No Pin 2 is usually C).
+    % Let's use coordinate relative to FF.
+    %\draw (FF1.pin 3) -- ++(-0.5,0) -- ++(0, -2) coordinate (clk_merge);
+    % Actually pin 3 is usually PRE/CLR in some libs.
+    % Let's check visually from previous iteration: pin 3 worked.
+    % Connecting clocks
+    \draw (FF1.pin 3) -- ++(-0.5,0) -- ++(0, -3) coordinate (clk_merge);
+    \draw (FF0.pin 3) -- ++(-0.5,0) |- (clk_merge);
+    \draw (clk_merge) -- ++(-0.5,0) node[left] {Clk};
+
+\end{circuitikz}
+
+\end{document}

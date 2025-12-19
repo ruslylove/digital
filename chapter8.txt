@@ -1,0 +1,3926 @@
+CHAPTER 8
+
+General-Purpose
+Microprocessors
+Control
+Inputs
+
+Microprocessor
+Control Unit
+
+Data
+Inputs
+8
+
+'0'
+
+Datapath
+
+MUX
+
+ff
+Nextstate
+Logic
+
+State
+Memory
+Register
+
+Output
+Logic
+
+Control
+Signals
+
+ALU
+
+8
+
+ff
+
+Register
+
+Status
+Signals
+Control
+Outputs
+
+8
+Data
+Outputs
+
+363
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+364
+
+geneRAl-PuRPose MICRoPRoCessoRs
+
+CHAPTER 8
+
+Unlike a dedicated or custom microprocessor that is capable of performing only one
+function, a general-purpose microprocessor, such as the Intel Core™i7 CPU, is capable
+of performing many different functions under the direction of program instructions.
+Given a different instruction set or program, the general-purpose microprocessor will
+perform a different function. However, a general-purpose microprocessor also can be
+viewed as a dedicated microprocessor, because it is made to perform only one function, and that is to execute the program instructions. In this sense, we can design and
+construct a general-purpose microprocessor in the same way that we constructed the
+dedicated microprocessors as discussed in Chapter 7.
+
+8.1 Overview of the CPU Design
+A general-purpose microprocessor is often referred to as the central processing unit
+(CPU). The CPU is simply a dedicated microprocessor that executes only software
+instructions. Figure 8.1 shows an overview of a general-purpose microprocessor. The
+following discussion references this diagram.
+In designing a CPU, we must first define its instruction set and how the instructions
+are encoded and executed. We need to answer questions such as:
+●
+●
+●
+
+How many instructions do we want?
+What are the instructions?
+What binary encoding (normally referred to as the operation code or opcode) do
+we assign to each of the instructions?
+Input
+Control
+Unit
+Fetch
+
+Control
+Signals
+Status
+
+Decode
+
+Execute
+Instruction1
+
++1
+
+Signals
+
+Execute
+Instructionn
+
+PC
+
+Datapath
+
+Address
+Memory
+
+IR
+
+Instruction
+
+Datapath
+for
+Executing
+All
+Instructions
+
+Control
+Signals
+
+Output
+
+FIGURE 8.1 Overview of a general-purpose microprocessor.
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+8.1 oveRvIew oF tHe CPu desIgn
+●
+●
+●
+
+365
+
+What are the operands in the instruction?
+How are the operands encoded?
+How many bits do we use to encode an instruction?
+
+After we have decided on the instruction set, we can proceed to design a datapath
+that can execute all of the instructions in the instruction set. In this step, we are creating
+a custom datapath, so we need to answer questions such as:
+●
+●
+●
+●
+
+What functional units do we need?
+How many registers do we need?
+Do we use a single register file or separate registers?
+How are the different units connected together?
+
+Creating the datapath for a general-purpose microprocessor is exactly the same as
+creating the datapath for a dedicated microprocessor. However, in addition to being
+able to perform all of the instructions in the instruction set, other data operations and
+registers must be included in the datapath for the general-purpose microprocessor.
+These data operations and registers deal with how the general-purpose microprocessor
+fetches the instructions from memory and executes them. In particular, the program
+counter (PC) register contains the memory location of where the next instruction is
+stored, and the instruction register (IR) stores the instruction being fetched from the
+memory. Usually after an instruction is fetched from the memory location pointed
+to by the PC, the PC is incremented to the next memory location, ready for the next
+instruction fetch. However, if the instruction is a jump instruction, the PC is loaded
+with the new memory address for the jump.
+The control unit for a general-purpose microprocessor basically cycles through
+three main steps, usually referred to as the instruction cycle:
+Step 1 fetches an instruction.
+Step 2 decodes the instruction.
+Step 3 executes the instruction.
+Steps 1 and 2 are each executed in one state of the finite-state machine (FSM). For
+Step 3, most instructions will execute in one clock cycle, although some memory access
+instructions might require two or more clock cycles to complete. Therefore, they might
+require several states for correct timing.
+For fetching the instruction in Step 1, the control unit simply reads the memory
+location specified by the PC and copies the content of that memory location into
+the IR. The PC is then incremented by 1 (assuming that each instruction occupies one
+memory location). For decoding the instruction in Step 2, the control unit extracts the
+opcode bits (which uniquely identifies the instruction) from the instruction register
+and determines what the current instruction is by jumping to the state that is assigned
+for executing that instruction. Once in that particular state, the control unit performs
+Step 3 simply by asserting the appropriate control signals to control the datapath to
+execute that instruction.
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+366
+
+CHAPTER 8
+
+geneRAl-PuRPose MICRoPRoCessoRs
+
+Instructions for the program usually are stored in external memory, so in addition
+to the CPU, external memory is connected to the CPU via an address bus and a data
+bus. Therefore, Step 1 (fetch an instruction) usually involves the control unit setting
+up a memory address on the address bus and telling the external memory to output
+the instruction from that memory location onto the data bus. The control unit then
+reads the instruction from the data bus. To keep our design simple, instead of having
+an external memory, we will include the memory as part of the datapath so that we
+do not have to worry about the handshaking and timing issues involved for accessing
+external memory.
+
+8.2 The EC-1 General-Purpose Microprocessor
+This first version of the EC1 computer is extremely small and very limited as to what
+it can do, and therefore, its general-purpose microprocessor is very “EC”2 to design
+manually. In order to keep the manual design of the microprocessor manageable, we
+have to keep the number of variables small. Because these variables determine the
+number of states and input signals for the finite-state machine, these factors have to
+be kept to the bare minimum. Nevertheless, the manual building of this computer
+demonstrates how a general-purpose microprocessor is designed and how the different components are put together. After this exercise, you will appreciate the power
+of designing with HDL at a higher abstraction level and the use of an automatic
+HDL synthesizer.
+We first will manually design the general-purpose microprocessor for our EC-1
+computer. Then we will interface this microprocessor to external I/Os, and implement
+the complete computer in an FPGA (field-programmable gate array) chip on a development board to make it into a real-working general-purpose microprocessor. Using the
+few instructions available in its instruction set, we then will write a program in machine
+language to execute on the EC-1 and see that it actually works.
+
+8.2.1 Instruction Set
+The instructions that our EC-1 general-purpose microprocessor can execute and the
+corresponding encodings for them are defined in Figure 8.2. The Instruction column
+shows the syntax and mnemonic to use for the instruction when writing a program in
+assembly language. The Encoding column shows the binary encoding defined for the
+instruction, and the Operation column shows the operation of the instruction.
+As we can see from Figure 8.2, our EC-1’s instruction set has only five instructions.
+To encode five instructions, the operation code (or opcode) will require three bits—
+giving us eight different combinations. As shown in the Encoding column, the first three
+most significant bits is the opcode given to the instruction. For example, the opcode for
+
+1
+2
+
+“EC” is the acronym for Enoch’s Computer
+“EC” sounds like “easy”
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+367
+
+8.2 tHe eC-1 geneRAl-PuRPose MICRoPRoCessoR
+
+Instruction
+
+Encoding
+
+Operation
+
+Comment
+
+IN A
+
+011 33333 A d Input
+
+Input to A
+
+OUT A
+
+100 33333 Output d A
+
+Output from A
+
+DEC A
+
+101 33333 A d A 2 1
+
+Decrement A
+
+JNZ address 110 3aaaa
+HALT
+
+IF 1 A ! 5 0 2 THEN PC 5 aaaa
+
+111 33333 Halt
+
+Jump to address if A is
+not zero
+Halt execution
+
+Notations:
+A 5 accumulator
+PC 5 program counter
+aaaa 5 four bits for specifying a memory address
+3 5 don’t-cares
+FIGURE 8.2 Instruction set for the EC-1.
+
+the IN A instruction is 011, the opcode for OUT A is 100, and so on. The three encodings,
+000, 001, and 010, are not defined and so can be used as a “no-operation” (NOP) instruction. Because the width of each instruction is fixed at 8 bits, the last 5 bits are not used
+by all of the instructions, except for the JNZ (Jump Not Zero) instruction. Normally, for
+a more extensive instruction set, these extra bits are used as operand bits to specify what
+registers or other resources to use. In our case, only the JNZ instruction uses the last
+4 bits, designated as aaaa, to specify an address in the memory to jump to.
+The IN A instruction inputs an 8-bit value from the data input port, Input, and
+stores it into the accumulator (A). The accumulator is an 8-bit register for performing
+data operations. The OUT A instruction enables a tri-state buffer to output the content
+of the accumulator to the output port, Output. The DEC A instruction decrements the
+content of A by 1 and stores the result back into A. The JNZ instruction tests to see if
+the value in A is equal to 0 or not. If A is equal to 0, then nothing is done, but if A is
+not equal to 0, then the last 4 bits (aaaa) of the instruction are loaded into the PC.
+When this value is loaded into the PC, we essentially are performing a jump to this new
+memory address, because the value stored in the PC is the memory location for the next
+fetch operation. Finally, the HALT instruction halts the CPU by having the control unit
+stay in the Halt state indefinitely until reset.
+
+8.2.2 Datapath
+Having defined the instruction set for the EC-1 general-purpose microprocessor, we
+now are ready to design the custom datapath that will execute all of the operations
+as defined by all of the instructions. The custom datapath for the EC-1 is shown
+in Figure 8.3.
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+368
+
+CHAPTER 8
+
+geneRAl-PuRPose MICRoPRoCessoRs
+
+Input
+IRload
+IR7-5
+JNZmux
+
+D7-0
+Load 8-bit Register
+Clear IR
+IR7-5 IR3-0
+
+4
+
+3
+1
+
+8
+8
+
+4
+0
+
+4
+PCload
+
+D3-0
+Load 4-bit Register
+Clear PC
+PC3-0
+
+1
+
+4-bit
+Increment
+
+16 locations 8 bits
+ROM
+Address3-0
+
+INmux
+Aload
+Reset
+Clock
+(A
+
+8
+
+Q7-0
+
+4
+
+0
+
+D7-0
+Load 8-bit Register
+Clear
+A
+A7-0
+
+8
+
+8
+8
+
+8-bit
+Decrement
+
+0)
+
+OutE
+Output
+Instruction Cycle Operations
+
+Memory
+
+Instruction Set Operations
+
+FIGURE 8.3 Datapath for the EC-1.
+
+The datapath can be viewed as having three separate parts: (1) the portion that
+performs the instruction cycle operations of fetching an instruction and either incrementing or loading the PC, (2) the memory, and (3) the portion that performs the data
+operations for all of the instructions in the instruction set.
+The portion of the datapath that performs the instruction cycle operations basically contains the instruction register (IR) and the program counter (PC). The bit width
+of the instructions determines the size of the IR; whereas, the number of addressable
+memory locations determines the size of the PC. For this datapath, we want a memory with 16 locations, each being 8 bits wide, so we need a 4-bit 1 24 5 16 2 address.
+Therefore, the PC is 4 bits wide, and the IR is 8 bits wide. A 4-bit increment unit is
+used to increment the PC by 1. The PC needs to be loaded with either the result of
+the increment unit for the next instruction in memory or the 4-bit address from the
+JNZ instruction; therefore, a 2-to-1 multiplexer is needed for this purpose. One input of
+the multiplexer is from the increment unit, and the other input is from the four least
+significant bits of the IR, IR3-0.
+Instead of having external memory, we have included the memory as part of
+the datapath in order to keep our first design simple. In this design, the memory is a
+16-location 3 8-bit wide read-only memory (ROM). We use a ROM here instead of a
+RAM because the instruction set does not have an instruction that writes to memory.
+The output of the PC is connected directly to the 4-bit memory address lines, because
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+8.2 tHe eC-1 geneRAl-PuRPose MICRoPRoCessoR
+
+369
+
+the memory location always is determined by the content of the PC. The 8-bit memory
+output, Q7-0, is connected to the input of the IR to execute the instruction fetch operation (Step 1 of the instruction cycle). The construction of this memory was discussed
+in Section 5.14.1.
+The portion of the datapath that performs the instruction set operations includes
+the 8-bit register for the accumulator A, and an 8-bit decrement unit. A 2-to-1 multiplexer is used to select the input to the accumulator. For the IN A instruction, the input
+to the accumulator is from the data input port, Input; whereas for the DEC A instruction,
+the input is from the output of the decrement unit, which performs the decrement of
+A. The output of the accumulator is connected via a tri-state buffer to the data output
+port, Output. The JNZ instruction requires an 8-input OR gate connected to the output
+of the accumulator to test for the condition 1 A 2 0 2 . The actual operation required by
+the JNZ instruction is to load the PC with the four least significant bits of the IR. The
+HALT instruction also does not require any specific datapath actions. It simply asserts a
+Halt signal to notify the external world that the program has halted.
+The control word for this custom datapath has six control signals: IRload, PCload,
+INmux, Aload, JNZmux, and OutE. The datapath provides two status signals, IR7-5 and
+1 A 2 0 2 , to the control unit. The three IR bits, IR7-5, which forms the opcode, are sent
+to the control unit for the instruction decode operation (Step 2 of the instruction cycle).
+The control words for executing the instruction cycle operations and the instruction set
+operations are discussed in the next section.
+
+8.2.3 Control Unit
+The state diagram for the control unit is shown in Figure 8.4(a), and the actions that
+are executed, specifically the control signals that are asserted in each state, are shown
+in Figure 8.4(d).
+In the Fetch state, 000, the IR is loaded with the memory content from the location
+specified by the PC by asserting the IRload signal. Also in this state, the PC is incremented by 1, and the result is loaded back into the PC by asserting the PCload signal.
+In the output table shown in Figure 8.4(d), these two assertions are denoted by the two
+1s under the IRload and PCload columns for control word 1. There is no timing conflict in asserting both the IRload and PCload signals together in the same clock cycle
+because the PC will not be updated with the incremented value until the next clock
+cycle, and at that time, the IR already will have been written with the newly fetched
+instruction. This is correct only if the memory can be accessed in one clock cycle.
+After fetching, the FSM goes to the Decode state unconditionally. In the Decode
+state, the FSM tests the three most significant bits of the IR, IR7-5, and goes to the corresponding state as encoded by the 3-bit opcode for executing the instruction. Testing
+of the opcode bits does not involve any datapath operations and so the control word
+in the output table for this state contains all 0s.
+In the five instruction execute states corresponding to the five instructions, the
+appropriate control signals for the datapath are asserted to execute that instruction.
+For example, the IN A instruction requires setting the INmux signal to a 1 for the input
+multiplexer, and setting the Aload signal to a 1 to load the input value into A. In order
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+370
+
+CHAPTER 8
+
+geneRAl-PuRPose MICRoPRoCessoRs
+
+Fetch
+000
+
+(IR7-5 = 000, 001, or 010)
+
+Decode
+001
+
+(IR7-5 = 011)
+
+Input
+011
+
+(IR7-5 = 100)
+
+Output
+100
+
+(IR7-5 = 101)
+
+Dec
+101
+
+(IR7-5 = 110)
+
+Jnz
+110
+
+(IR7-5 = 111)
+
+Halt
+111
+
+(a)
+
+Next State (Implementation)
+Q2nextQ1nextQ0next (D2D1D0)
+Current State
+Q2Q1Q0
+
+IR7, IR6, IR5
+000
+
+001
+
+010
+
+011
+
+100
+
+101
+
+110
+
+111
+
+NOP
+
+NOP
+
+NOP
+
+INPUT
+
+OUTPUT
+
+DEC
+
+JNZ
+
+HALT
+
+000 Fetch
+
+001
+
+001
+
+001
+
+001
+
+001
+
+001
+
+001
+
+001
+
+001 Decode
+
+000
+
+000
+
+000
+
+011
+
+100
+
+101
+
+110
+
+111
+
+011 Input
+
+000
+
+000
+
+000
+
+000
+
+000
+
+000
+
+000
+
+000
+
+100 Output
+
+000
+
+000
+
+000
+
+000
+
+000
+
+000
+
+000
+
+000
+
+101 Dec
+
+000
+
+000
+
+000
+
+000
+
+000
+
+000
+
+000
+
+000
+
+110 Jnz
+
+000
+
+000
+
+000
+
+000
+
+000
+
+000
+
+000
+
+000
+
+111 Halt
+
+111
+
+111
+
+111
+
+111
+
+111
+
+111
+
+111
+
+111
+
+(b)
+FIGURE 8.4 Control unit for the EC-1: (a) state diagram; (b) next-state (implementation) table;
+(c) next-state equations; (d) control words and output table; (e) output equations; (f) circuit.
+(continued on next page)
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+371
+
+8.2 tHe eC-1 geneRAl-PuRPose MICRoPRoCessoR
+
+Q2next 5 D2 5 Q2rQ1rQ0IR7 1 Q2Q1Q0
+Q1next 5 D1 5 Q2rQ1rQ0 1 IR6IR5 1 IR7IR6 2 1 Q2Q1Q0
+Q0next 5 D0 5 Q2rQ1rQ0r 1 Q2rQ1rQ0 1 IR6IR5 1 IR7IR5 2 1 Q2Q1Q0
+(c)
+
+Control
+Word
+
+State
+Q2Q1Q0
+
+IRload
+
+PCload
+
+1
+
+000 Fetch
+
+1
+
+1
+
+0
+
+0
+
+2
+
+001 Decode
+
+0
+
+0
+
+0
+
+3
+
+011 Input
+
+0
+
+0
+
+1
+
+4
+
+100 Output
+
+0
+
+0
+
+0
+
+5
+
+101 Dec
+
+0
+
+0
+
+0
+
+1
+
+0
+
+0
+
+0
+
+6
+
+110 Jnz
+
+0
+
+IF 1 A 2 0 2 THEN 1 ELSE 0
+
+0
+
+0
+
+1
+
+0
+
+0
+
+7
+
+111 Halt
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+1
+
+INmux Aload JNZmux
+
+OutE
+
+Halt
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+0
+
+1
+
+0
+
+0
+
+0
+
+0
+
+0
+
+1
+
+0
+
+(d)
+IRload 5 Q2rQ1rQ0r
+PCload 5 Q2rQ1rQ0r 1 Q2Q1Q0r 1 A 2 0 2
+INmux 5 Q2rQ1Q0
+Aload 5 Q2rQ1Q0 1 Q2Q1rQ0
+JNZmux 5 Q2Q1Q0r
+OutE 5 Q2Q1rQ0r
+Halt 5 Q2Q1Q0
+(e)
+FIGURE 8.4 Control unit for the EC-1: (a) state diagram; (b) next-state (implementation) table;
+(c) next-state equations; (d) control words and output table; (e) output equations; (f) circuit.
+(continued on next page)
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+372
+
+CHAPTER 8
+
+D2
+
+Q2
+
+Clk
+Clear
+
+D1
+
+Q29
+
+Q1
+
+Clk
+Clear
+
+Q19
+
+geneRAl-PuRPose MICRoPRoCessoRs
+
+IRload
+PCload
+INmux
+Aload
+JNZmux
+OutE
+
+D0
+
+Q0
+
+Halt
+
+Clk
+Clear
+
+Clock
+Reset
+
+Q09
+
+(A ≠ 0)
+IR7
+IR6
+IR5
+(f)
+
+FIGURE 8.4 Control unit for the EC-1: (a) state diagram; (b) next-state (implementation) table;
+(c) next-state equations; (d) control words and output table; (e) output equations; (f) circuit.
+
+for the input instruction to read in the correct value, the input value must be set up
+first before resetting the CPU. Furthermore, because the Input state does not wait for
+an Enter key signal, only one value can be read in, even if there are multiple input
+statements. The reason for these limitations is because the FSM clock speed is very
+fast and so there is not enough time for the user to change the input value between
+input statements. The OUT A instruction simply asserts the enable signal on the output
+tri-state buffer. The DEC A instruction requires setting INmux to 0 and Aload to 1, so
+the output from the decrement unit is routed back to the accumulator and gets loaded
+in. Control words 3 to 5 in the output table shown in Figure 8.4(d) show the assertions
+of these control signals.
+The JNZ instruction asserts the JNZmux signal to route the four address bits from
+the IR, IR3-0, to the PC. Whether the PC actually gets loaded with this new address
+depends on the condition of the 1 A 2 0 2 status signal. Therefore, the PCload control
+signal is asserted only if 1 A 2 0 2 is a 1. If we use the Moore FSM model, the FSM will
+require two states for the JNZ instruction: one state for asserting the PCload signal when
+1 A 2 0 2 is true, and one state for de-asserting the PCload signal when 1 A 2 0 2 is false.
+However, if we use the Mealy FSM model by asserting the PCload signal conditionally
+based on the status signal 1 A 2 0 2 , that is, asserting the PCload signal on an edge rather
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+8.2 tHe eC-1 geneRAl-PuRPose MICRoPRoCessoR
+
+373
+
+than in a state, then only one state is needed to execute the JNZ instruction. To do this,
+we see that in the output table shown in Figure 8.4(d), control word 6 for executing the
+JNZ instruction has a conditional value under the PCload control signal column showing
+that PCload gets a 1 only if the condition 1 A 2 0 2 is true, otherwise, it gets a 0.
+Once the FSM enters the Halt state, it unconditionally loops back to itself, giving
+the impression that the CPU has halted. In this state, we also assert the Halt signal to
+notify the external world that execution has stopped.
+With seven states, three flip-flops are needed for the state memory of the control
+unit. The next-state table shown in Figure 8.4(b) lists the current state with the three
+flip-flops Q2, Q1, and Q0. The entries in the table are the next-state values Q2next, Q1next,
+and Q0next. By using D flip-flops for the state memory, the next-state values 1 Qnext 2 will
+be the same as the implementation values (D) because the characteristic equation for the
+D flip-flop is Qnext 5 D. Notice that the next-state entries in the table are quite simple
+to follow because almost all of them are unconditional, that is, the same value across
+each row. Only the Decode state has conditional edges that depend on the opcode bits.
+There is one next-state equation for each of the three D flip-flops used. The three
+next-state equations, as derived from the next-state table, are shown in Figure 8.4(c).
+The derivation of the next-state equations is fairly easy, because most of the entries
+in the next-state table are 0s. The output equations shown in Figure 8.4(e) are derived
+directly from the output table shown in Figure 8.4(d).
+Finally, we can derive the circuit for the control unit based on the next-state equations
+and the output equations. The complete control unit circuit for the EC-1 general-purpose
+microprocessor is shown in Figure 8.4(f).
+
+8.2.4 Complete Circuit
+The complete circuit for the EC-1 general-purpose microprocessor shown in Figure 8.5
+is constructed by connecting the datapath from Figure 8.3 and the control unit from
+Figure 8.4(f) together using the designated control and status signals. The complete
+schematic circuit and HDL code for the EC-1 microprocessor can be downloaded from
+the book website.
+
+8.2.5 Sample Program
+Dedicated microprocessors, as discussed in Chapter 7, have the algorithm built into the
+hardware circuit of the microprocessor. General-purpose microprocessors, on the other
+hand, do not have a built-in algorithm. They are designed only to execute program
+instructions fetched from the memory. Therefore, in order to test the EC-1 computer,
+we need to write a program using the instructions available in the instruction set, and
+have this program loaded into the memory.
+Only five instructions are defined in the EC-1 instruction set, as shown in
+Figure 8.2. For our sample program, we will use these five instructions to write a
+countdown program to input a number and then count down from this input number
+to 0. The program is shown in Figure 8.6(a).
+Because we do not have a compiler for the EC-1, we need to manually compile
+this program. The binary executable code for this program is shown in Figure 8.6(b).
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+374
+
+CHAPTER 8
+
+geneRAl-PuRPose MICRoPRoCessoRs
+
+Input
+8
+Input
+IRload
+PCload
+INmux
+CU
+Aload
+JNZmux
+OutE
+Clock
+Reset
+
+Clock
+Reset
+
+IR7-5
+(A 0)
+
+Control
+Signals
+
+Status
+Signals
+
+IRload
+PCload
+INmux
+Aload
+JNZmux
+OutE
+
+DP
+
+IR7-5
+(A 0)
+
+Clock
+Reset
+Output
+
+Halt
+
+8
+Halt
+
+Output
+
+FIGURE 8.5 Complete circuit for the EC-1 general-purpose microprocessor.
+
+loop:
+
+IN A
+OUT A
+DEC A
+JNZ loop
+HALT
+
+-- input a value into the A register
+-- output the value from the A register
+-- decrement A by one
+-- go back to loop if A is not zero
+-- halt
+
+(a)
+memory
+address
+0000
+0001
+0010
+0011
+0100
+
+instruction
+encoding
+01100000;
+10000000;
+10100000;
+11000001;
+11111111;
+
+-- IN A
+-- OUT A
+-- DEC A
+-- JNZ 0001
+-- HALT
+
+(b)
+FIGURE 8.6 Countdown program to run on the EC-1: (a) assembly code; (b) binary
+executable code.
+
+The binary code is obtained by replacing each instruction with its corresponding 3-bit
+opcode, as listed in Figure 8.2, followed by five bits for the operand. None of the
+instructions, except for the JNZ instruction, uses these five operand bits, so either a 0
+or a 1 can be used. From Figure 8.2, we find that the opcode for the IN A instruction is
+011; therefore, the encoding for this first instruction is 01100000. Similarly, the opcode
+for the OUT A instruction is 100; therefore, the encoding used is 10000000.
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+8.2 tHe eC-1 geneRAl-PuRPose MICRoPRoCessoR
+
+375
+
+For the JNZ instruction, the four least significant bits represent the memory address
+to jump to if the condition is true. In the example, we have put the first instruction, IN
+A, in memory location 0000. Because the JNZ instruction jumps to the second instruction, OUT A, which is stored in memory location 0001, therefore, the four address bits
+for the JNZ instruction are 0001. The opcode for the JNZ instruction is 110, therefore,
+the encoding for the complete JNZ instruction is 11000001.
+Typically, with the memory being external to the CPU, the computer (with the
+help of the operating system) will provide means to independently load the program
+instructions into the memory. However, to keep our design simple, we have included
+the memory as part of the CPU inside the datapath. Furthermore, we do not have
+an operating system for loading the instructions into the memory separately. In our
+EC-1 design, we have chosen to use a simple ROM for the memory that already has
+been initialized with the countdown program instructions. Refer to Section 5.14.1 for
+a full discussion and HDL code of the ROM with the program instructions built in.
+Because the program is synthesized together with the ROM, each time you change the
+program, you will have to re-synthesize the whole system.
+
+8.2.6 Simulation
+Figure 8.7 shows a sample simulation of the EC-1, showing the countdown from the
+input 3 on the Output signal.
+
+8.2.7 Hardware Implementation
+A complete computer system includes not only the microprocessor but also the memory, input, and output devices. So far, we have constructed the general-purpose microprocessor with the built-in memory, as shown in Figure 8.5. To see our own EC-1
+microprocessor work, we need to connect it to input and output devices.
+Figure 8.8 shows the interface between the EC-1 microprocessor with the input
+and output devices on an FPGA development board. The input device consists of
+eight switches, and the output device is three 7-segment LED displays. Because the
+microprocessor outputs an 8-bit binary number, we need a converter to convert the
+
+FIGURE 8.7 A sample simulation trace of the countdown program running on the EC-1 starting
+at the input 3.
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+376
+
+CHAPTER 8
+
+geneRAl-PuRPose MICRoPRoCessoRs
+
+8 Switches
+8
+
+Push Button
+50 MHz Clock
+
+Reset
+Clock Divider
+50MHz
+Clock
+
+Input
+EC-1
+Microprocessor
+
+Clock
+
+Output
+8
+
+Binary to
+Decimal
+Converter
+
+Three
+7-Segment
+LEDs
+
+Halt
+
+LED
+
+FIGURE 8.8 Hardware implementation of the EC-1 computer.
+
+8-bit binary number to three BCD (binary coded decimal) digits. With this converter,
+we will be able to see the output as a 3-digit decimal number. See Problem 3.36 for the
+HDL code for this BCD converter. The HDL code for this converter is also available
+from the book website. A single LED is connected to the Halt signal to show when the
+microprocessor has finished running the program. A push button is connected to the
+Reset signal to reset the microprocessor. A clock divider circuit is used to slow down
+the clock frequency so that we can see the program being executed, that is, to actually
+see the numbers counting down. Otherwise, the countdown will finish so quickly that
+we will see only the last number, zero, on the display. To run the program, first set up
+the binary input number on the eight switches, and then press the Reset button. The
+countdown will begin with the input number. When the countdown reaches zero, the
+program stops and the Halt light turns on.
+
+8.3 The EC-2 General-Purpose Microprocessor
+For our next example, we will design the general-purpose microprocessor for a second
+version of the EC computer, the EC-2. In this second version, we have added a few
+more instructions, and we will be able to load and store data to the memory.
+
+8.3.1 Instruction Set
+The instruction set for the EC-2 general-purpose microprocessor has eight instructions,
+as shown in Figure 8.9. We keep this number at eight so that we can still use only three
+bits to encode them.
+The LOAD instruction loads the content of the memory at the specified address
+into the accumulator A. The address is specified by the five least significant bits of
+the instruction. The STORE instruction is similar to the LOAD instruction, except that it
+stores the value in A to the memory at the specified address. The ADD and SUB instructions, respectively, add and subtract the content of A with the content in a memory
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+377
+
+8.3 tHe eC-2 geneRAl-PuRPose MICRoPRoCessoR
+
+Instruction
+
+Encoding
+
+Operation
+
+Comment
+
+LOAD A, address
+
+000 aaaaa
+
+A d M 3 aaaaa 4
+
+Load A with content of
+memory location aaaaa
+
+STORE A, address
+
+001 aaaaa
+
+M 3 aaaaa 4 d A
+
+Store A into memory location
+aaaaa
+
+ADD A, address
+
+010 aaaaa
+
+A d A 1 M 3 aaaaa 4
+
+Add A with M[aaaaa] and
+store result back into A
+
+SUB A, address
+
+011 aaaaa
+
+A d A 2 M 3 aaaaa 4
+
+Subtract A with M[aaaaa] and
+store result back into A
+
+IN A
+
+100 33333
+
+A d Input
+
+Input to A
+
+JZ address
+
+101 aaaaa
+
+IF 1 A 5 0 2 THEN PC 5 aaaaa Jump to address if A is zero
+
+JPOS address
+
+110 aaaaa
+
+IF 1 A $ 0 2 THEN PC 5 aaaaa Jump to address if A is zero or
+a positive number
+
+HALT
+
+111 33333
+
+Halt
+
+Halt execution
+
+Notations:
+A 5 accumulator
+M 5 memory
+PC 5 program counter
+aaaaa 5 five bits for specifying a memory address
+3 5 don’t cares
+FIGURE 8.9 Instruction set for the EC-2.
+
+location and store the result back into A. The IN instruction inputs a value from the
+data input port, Input, and stores it into A. The JZ (Jump if Zero) instruction loads the
+PC with the specified address if A is zero. Loading the PC with a new address causes
+the CPU to jump to this new memory location. The JPOS (Jump if Positive) instruction
+loads the PC with the specified address if A is zero or a positive number. The value in
+A is taken as a two’s complement signed number, so a positive number is one where
+the most significant bit of the number is a 0, which includes the number zero. Finally,
+the HALT instruction halts the CPU. The value in the accumulator A is continually sent
+to the output so no output instruction is necessary.
+
+8.3.2 Datapath
+The custom datapath for the EC-2 is shown in Figure 8.10. The portion of the datapath for performing the instruction cycle operations is similar to that of the EC-1, with
+the instruction register (IR), the program counter (PC), and the increment unit for
+incrementing the PC. The minor differences between the two are in the size of the PC
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+378
+
+CHAPTER 8
+
+geneRAl-PuRPose MICRoPRoCessoRs
+
+Input
+IRload
+IR7-5
+
+D7-0
+Load 8-bit Register
+Clear IR
+IR7-5 IR4-0
+
+3
+
+5
+
+8
+
+8
+
+5
+1
+
+JMPmux
+
+0
+
+5-bit
+Increment
+
+5
+PCload
+
+Meminst
+
+D4-0
+Load 5-bit Register
+Clear PC
+PC4-0
+
+1
+
+0
+
+3 2 1 0
+s1,0
+
+8
+5
+5
+
+32 locations 8 bits
+RAM
+Address4-0
+WE
+
+MemWr
+
+D7-0
+Load 8-bit Register
+Clear
+A
+A7-0
+
+Q7-0
+
+8
+
+8
+
+8
+
+D7-0
+
+Asel1-0
+Aload
+Sub
+Reset
+Clock
+(A = 0)
+(A ≥ 0)
+
+AddSub Subtract
+
+8
+1
+A7
+Output
+Instruction Cycle Operations
+
+Memory
+
+Instruction Set Operations
+
+FIGURE 8.10 Datapath for the EC-2.
+
+and the increment unit. For the EC-2, we want a memory with 32 locations, therefore,
+the memory address, the size of the PC, and the increment unit must all be 5 bits wide.
+The main modification to this portion of the datapath is the addition of a second
+2-to-1 multiplexer that is connected between the output of the PC and the memory
+address input. One input of this multiplexer comes from the PC, and the other input
+comes from the five least significant bits of the IR, IR4-0. The reason for this is because
+there are now two different types of operations that can access the memory. The first
+is still for the fetch operation, where the memory address is given by the content of
+the PC. The second type is for the four instructions, LOAD, STORE, ADD, and SUB, where
+they use the memory as an operand. The memory address for these four instructions is
+from the five least significant bits of the IR, IR4-0. The select signal for this multiplexer
+is Meminst.
+The memory size for the EC-2 is increased to 32 locations, thus requiring five
+address bits. The memory is still included as part of the datapath rather than as an
+independent external unit to the CPU. The memory also has separate read and write
+data ports so that a bidirectional data bus is not required. In order to accommodate
+the STORE instruction for storing the value of A into the memory, we need to use
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+8.3 tHe eC-2 geneRAl-PuRPose MICRoPRoCessoR
+
+379
+
+a RAM instead of a ROM as in the EC-1. To realize this operation, the output of
+the accumulator A is connected to the memory data input, D7-0. The signal MemWr,
+when asserted, causes the memory to write the value from register A into the location
+specified by the address in the instruction.
+The output of the memory at Q7-0 is connected to both the input of the IR and
+to the input of the accumulator, A, through a 4-to-1 multiplexer. The connection to
+the IR is for the fetch operation just like in the EC-1 design. The connection to the
+accumulator is to perform the LOAD instruction, where the content of the memory is
+loaded into A. Because the memory is only one source among two other sources that
+are loaded into A, the multiplexer is needed. The construction of this RAM was discussed in Section 5.14.2.
+The portion of the datapath for performing the instruction set operations includes
+the 8-bit accumulator A, an 8-bit adder-subtractor combination unit, and a 4-to-1
+multiplexer. The adder-subtractor unit performs the ADD and SUB instructions. The
+Sub signal, when asserted, selects the subtraction operation, and when de-asserted, it
+selects the addition operation. The 4-to-1 multiplexer allows the accumulator input to
+come from one of three sources. For the ADD and SUB instructions, the A input comes
+from the output of the adder-subtractor unit. For the IN instruction, the A input comes
+from the data input port, Input. For the LOAD instruction, the A input comes from the
+output of the memory, Q7-0. The selection of this multiplexer is through the two signal
+lines, Asel1-0. The fourth input of the multiplexer is not used.
+The output of the accumulator is connected directly to the output port, so the
+value of the accumulator is always available at the output port. Therefore, no specific
+output instruction is necessary to output the value in A.
+For the two conditional jump instructions JZ and JPOS, the datapath provides the
+two status signals 1 A 5 0 2 and 1 A $ 0 2 , respectively, that are generated from two
+comparators. The 1 A 5 0 2 status signal outputs a 1 if the value in A is a 0, so an
+8-input NOR gate is used. The 1 A $ 0 2 status signal outputs a 1 if the value in A, which
+is treated as a two’s complement signed number, is a zero or positive number. Because
+for a two’s complement signed number, a leading 0 means positive and a leading 1
+means negative, the condition 1 A $ 0 2 is simply the negated value of bit A7 (the most
+significant bit of A).
+The control word for this custom datapath has eight control signals, IRload,
+JMPmux, PCload, Meminst, MemWr, Asel1-0, Aload, and Sub, but requires nine bits
+because Asel1-0 has two bits. The datapath provides three status signals IR7-5, 1 A 5 0 2 ,
+and 1 A $ 0 2 to the control unit. The three IR bits, IR7-5, which forms the opcode, are
+sent to the control unit for the instruction decode operation (Step 2 of the instruction
+cycle). The control words for executing the instruction cycle operations and the instruction set operations are discussed in the next section.
+
+8.3.3 Control Unit
+The state diagram for the control unit is shown in Figure 8.11(a), and the actions that
+are executed, specifically the control signals that are asserted in each state, are shown
+in Figure 8.11(d). States for executing the instructions are given the same name as the
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+380
+
+geneRAl-PuRPose MICRoPRoCessoRs
+
+CHAPTER 8
+
+Start
+0000
+
+Fetch
+0001
+
+Decode
+0010
+
+(IR7-5 = 000)
+
+Load
+1000
+
+(IR7-5 = 001)
+
+Store
+1001
+
+(IR7-5 = 010) (IR7-5 = 011) (IR7-5 = 100)
+
+Add
+1010
+
+Sub
+1011
+
+(IR7-5 = 101)
+
+(IR7-5 = 110)
+
+(IR7-5 = 111)
+
+Jz
+1101
+
+Jpos
+1110
+
+Halt
+1111
+
+Input
+1100
+Enter
+
+Enter'
+
+(a)
+
+Current
+State
+Q3Q2Q1Q0
+
+Next State (Implementation)
+Q3nextQ2nextQ1nextQ0next (D3D2D1D0)
+IR7, IR6, IR5
+
+Enter
+
+000
+
+001
+
+010
+
+011
+
+100
+
+101
+
+110
+
+111
+
+LOAD
+
+STORE
+
+ADD
+
+SUB
+
+INPUT
+
+JZ
+
+JPOS
+
+HALT
+
+0000 Start
+
+0001
+
+0001
+
+0001
+
+0001
+
+0001
+
+0001
+
+0001
+
+0001
+
+0001 Fetch
+
+0010
+
+0010
+
+0010
+
+0010
+
+0010
+
+0010
+
+0010
+
+0010
+
+0010 Decode
+
+1000
+
+1001
+
+1010
+
+1011
+
+1100
+
+1101
+
+1110
+
+1111
+
+1000 Load
+
+0000
+
+0000
+
+0000
+
+0000
+
+0000
+
+0000
+
+0000
+
+0000
+
+1001 Store
+
+0000
+
+0000
+
+0000
+
+0000
+
+0000
+
+0000
+
+0000
+
+0000
+
+1010 Add
+
+0000
+
+0000
+
+0000
+
+0000
+
+0000
+
+0000
+
+0000
+
+0000
+
+1011 Sub
+
+0000
+
+0000
+
+0000
+
+0000
+
+0000
+
+0000
+
+0000
+
+0000
+
+1100 Input
+1101 Jz
+
+0000
+
+0000
+
+0000
+
+0000
+
+0000
+
+0000
+
+0000
+
+0000
+
+1110 Jpos
+
+0000
+
+0000
+
+0000
+
+0000
+
+0000
+
+0000
+
+0000
+
+0000
+
+1111 Halt
+
+1111
+
+1111
+
+1111
+
+1111
+
+1111
+
+1111
+
+1111
+
+1111
+
+0
+
+1
+
+1100
+
+0000
+
+(b)
+FIGURE 8.11 Control unit for the EC-2: (a) state diagram; (b) next-state (implementation)
+table; (c) next-state equations; (d) control word and output table; (e) output equations; (f) circuit.
+(continued on next page)
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+381
+
+8.3 tHe eC-2 geneRAl-PuRPose MICRoPRoCessoR
+
+Q3next 5 D3 5 Q3rQ2rQ1Q0r 1 Q3Q2Q1rQ0rEnterr 1 Q3Q2Q1Q0
+Q2next 5 D2 5 Q3rQ2rQ1Q0rIR7 1 Q3Q2Q1rQ0rEnterr 1 Q3Q2Q1Q0
+Q1next 5 D1 5 Q3rQ2rQ1rQ0 1 Q3rQ2rQ1Q0rIR6 1 Q3Q2Q1Q0
+Q0next 5 D0 5 Q3rQ2rQ1rQ0r 1 Q3rQ2rQ1Q0rIR5 1 Q3Q2Q1Q0
+(c)
+State
+Q3Q2Q1Q0
+
+IRload JMPmux
+
+PCload Meminst MemWr
+
+Asel1-0
+
+Aload
+
+Sub
+
+Halt
+
+0000 Start
+
+0
+
+0
+
+0
+
+0
+
+0
+
+00
+
+0
+
+0
+
+0
+
+0001 Fetch
+
+1
+
+0
+
+1
+
+0
+
+0
+
+00
+
+0
+
+0
+
+0
+
+0010 Decode
+
+0
+
+0
+
+0
+
+1
+
+0
+
+00
+
+0
+
+0
+
+0
+
+1000 Load
+
+0
+
+0
+
+0
+
+1
+
+0
+
+10
+
+1
+
+0
+
+0
+
+1001 Store
+
+0
+
+0
+
+0
+
+1
+
+1
+
+00
+
+0
+
+0
+
+0
+
+1010 Add
+
+0
+
+0
+
+0
+
+1
+
+0
+
+00
+
+1
+
+0
+
+0
+
+1011 Sub
+
+0
+
+0
+
+0
+
+1
+
+0
+
+00
+
+1
+
+1
+
+0
+
+1100 Input
+
+0
+
+0
+
+0
+
+0
+
+0
+
+01
+
+1
+
+0
+
+0
+
+1101 Jz
+
+0
+
+1
+
+1A 5 02
+
+0
+
+0
+
+00
+
+0
+
+0
+
+0
+
+1110 Jpos
+
+0
+
+1
+
+1A $ 02
+
+0
+
+0
+
+00
+
+0
+
+0
+
+0
+
+1111 Halt
+
+0
+
+0
+
+0
+
+0
+
+0
+
+00
+
+0
+
+0
+
+1
+
+(d)
+IRload 5 Q3rQ2rQ1rQ0
+JMPmux 5 Q3Q2Q1rQ0 1 Q3Q2Q1Q0r
+PCload 5 Q3rQ2rQ1rQ0 1 Q3Q2Q1rQ0 1 A 5 0 2 1 Q3Q2Q1Q0r 1 A $ 0 2
+Meminst 5 Q3rQ2rQ1Q0r 1 Q3Q2rQ1rQ0r 1 Q3Q2rQ1rQ0 1 Q3Q2rQ1
+MemWr 5 Q3Q2rQ1rQ0
+Asel1 5 Q3Q2rQ1rQ0r
+Asel0 5 Q3Q2Q1rQ0r
+Aload 5 Q3Q1rQ0r 1 Q3Q2rQ1
+Sub 5 Q3Q2rQ1Q0
+Halt 5 Q3Q2Q1Q0
+(e)
+FIGURE 8.11 Control unit for the EC-2: (a) state diagram; (b) next-state (implementation)
+table; (c) next-state equations; (d) control word and output table; (e) output equations; (f) circuit.
+(continued on next page)
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+382
+
+CHAPTER 8
+
+geneRAl-PuRPose MICRoPRoCessoRs
+
+IRload
+D3
+
+Q3
+
+Clk
+Q39
+Clear
+
+JMPmux
+PCload
+
+Enter
+D2
+
+Q2
+
+Clk
+Q29
+Clear
+
+Meminst
+MemWr
+
+D1
+
+Q1
+
+Clk
+Q19
+Clear
+
+D0
+
+Q0
+
+Clock
+Reset
+
+Asel0
+Aload
+Sub
+Halt
+
+Clk
+Clear
+
+Asel1
+
+Q09
+
+(A = 0)
+(A ≥ 0)
+IR7
+IR6
+IR5
+
+(f)
+FIGURE 8.11 Control unit for the EC-2: (a) state diagram; (b) next-state (implementation)
+table; (c) next-state equations; (d) control word and output table; (e) output equations; (f) circuit.
+
+instruction mnemonics. An extra Start state is added for timing purposes. The Decode
+state for this design needs to decode eight opcodes by branching to eight different
+states to execute the corresponding eight instructions. Like before, the decoding of the
+opcodes depends on the three most significant bits of the IR, IR7-5.
+An important timing issue for this control unit has to do with the memory accesses
+of the four instructions, LOAD, STORE, ADD, and SUB. The problem is that only after
+fetching these instructions will the address of the memory location for these instructions be available. Furthermore, only after decoding the instruction will the control
+unit know that the memory needs to be read. If we change the memory address during
+the Execute state, the memory will not have enough time to output the value for the
+instruction to operate on.
+Usually, when instructions require a memory access for one of its operands, an
+extra memory read state will be inserted between the Decode state and the Execute state.
+This way, the memory will have one clock cycle to output the data for the instruction
+to operate on in the following clock cycle. This assumes that the memory requires only
+one clock cycle for a read operation. If the memory is slower, then more clock cycles
+must be inserted.
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+8.3 tHe eC-2 geneRAl-PuRPose MICRoPRoCessoR
+
+383
+
+To minimize the number of states in our design, we use the Decode state to also
+perform the memory read. This way, when the control unit gets to the Execute state,
+the memory already will have the data ready. Whether the data from the memory actually is used will depend on the instruction being executed. If the instruction does not
+require the data from the memory, then it is simply ignored. On the other hand, if the
+instruction needs the data, then the data is there and ready to be used. This solution
+works in this design because it does not conflict with the operations for the rest of
+the instructions in our instruction set. The memory read operation performed in the
+Decode state is accomplished by asserting the Meminst signal from this state. Looking
+at the output table in Figure 8.11(d), this is reflected by the 1 under the Meminst column for the Decode state. By asserting Meminst, IR4-0 will provide the address for the
+memory, and the value from that memory location will be read and made available for
+use in the next clock cycle.
+The actual execution of each instruction is accomplished by asserting the correct
+control signals to control the operation of the datapath, as shown by the assignments
+made for the respective rows in the output table in Figure 8.11(d). At this point, you
+should be able to understand why each assignment is made by looking at the operation
+of the datapath. For example, to execute the LOAD instruction, Meminst is asserted in
+order to read from the memory location addressed by IR4-0. The Asel1 signal is asserted
+and the Asel0 signal is de-asserted in order to select input 2 of the multiplexer so that
+the output from the memory can pass to the input of the accumulator A. The actual
+loading of A is done by asserting the Aload signal. To perform the STORE instruction,
+the memory address is taken from IR4-0 by asserting Meminst. The writing into memory
+takes place when MemWr is asserted.
+The Input state for this state diagram waits for the Enter key signal before looping
+back to the Start state. In so doing, we can read in several values by having multiple
+input statements in the program. After the Enter signal is asserted, there is no state
+that waits for the Enter signal to be de-asserted (i.e., for the Enter key to be released).
+Therefore, in order for this controller to work correctly, the user must release the Enter
+key before the execution of the next input instruction. This is almost impossible to
+do if the clock speed is very fast, so we need to slow down the clock to give the user
+enough time to release the Enter key. Ideally, there should be another state to wait for
+the release of the Enter key before continuing.
+The next-state (implementation) table for the state diagram and the four next-state
+equations, as derived from the next-state table, are shown in Figures 8.11(b) and (c),
+respectively. To keep the table reasonably small, all of the possible combinations of
+the input signals are not listed. All of the states, except the Input state, depend only on
+the three IR bits, IR7-5; whereas, the Input state depends only on the Enter signal. The
+blank entries in the table, therefore, can be viewed as having all 0s. With 11 states, four
+D flip-flops are used to implement the state memory for the control unit circuit. The
+output equations shown in Figure 8.11(e) are derived directly from the output table in
+Figure 8.11(d).
+Finally, we can derive the circuit for the control unit based on the next-state equations
+and the output equations. The complete control unit circuit for the EC-2 general-purpose
+microprocessor is shown in Figure 8.11(f).
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+384
+
+CHAPTER 8
+
+geneRAl-PuRPose MICRoPRoCessoRs
+
+8.3.4 Complete Circuit
+The complete circuit for the EC-2 general-purpose microprocessor is constructed by
+connecting the datapath from Figure 8.10 and the control unit from Figure 8.11(f)
+together using the designated control and status signals as shown in Figure 8.12. The
+complete schematic circuit and HDL code for the EC-2 microprocessor can be downloaded from the book website.
+
+8.3.5 Sample Program
+The EC-2 uses an internal RAM for its memory. Refer to Section 5.14.2 for a full discussion and HDL code of the RAM. The Verilog code for the RAM, including three
+EC-2 programs, is repeated in Figure 8.13. On reset, the RAM is initialized with the
+instructions for the program to be executed. The three programs included in the code
+are: (1) COUNT, which displays the count from input n down to 0; (2) SUM, which
+evaluates the sum of all of the numbers between an input number n and 1; and (3)
+GCD, which calculates the greatest common divisor of two input numbers. The last
+two programs have been commented out in the code. To try out any one of the three
+
+Enter
+
+Input
+8
+
+Enter
+IRload
+JMPmux
+PCload
+Meminst
+MemWr
+Asel1-0
+CU Aload
+Sub
+
+Clock
+Reset
+
+Clock
+Reset
+
+IR7-5
+(A = 0)
+(A ≥ 0)
+Halt
+
+Control
+Signals
+
+Status
+Signals
+
+Input
+IRload
+JMPmux
+PCload
+Meminst
+MemWr
+Asel1-0
+DP
+Aload
+Sub
+IR7-5
+(A = 0)
+(A ≥ 0)
+
+Clock
+Reset
+Output
+
+8
+Halt
+
+Output
+
+FIGURE 8.12 Complete circuit for the EC-2 general-purpose microprocessor.
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+385
+
+8.3 tHe eC-2 geneRAl-PuRPose MICRoPRoCessoR
+
+module ram(
+#(parameter size=5)
+input Clock,
+input Reset,
+input WE,
+input [size-1:0] Address,
+input [7:0] D,
+output reg [7:0] Q
+);
+reg [7:0] ram1[2**size-1:0];
+always @(posedge Clock or posedge Reset) begin
+// this reset block and the Reset signal
+// is only needed to initialize the RAM locations
+if (Reset) begin
+// initialize RAM with EC-2 program
+////////////////////////////////////////////////////////
+// COUNT
+// Program to countdown from input n to 0
+ram1[0] = 8'b10000000; // IN A
+ram1[1] = 8'b01111111; // SUB A,11111
+ram1[2] = 8'b10100100; // JZ 00100
+ram1[3] = 8'b11000001; // JPOS 00001
+ram1[4] = 8'b11111111; // HALT
+ram1[31] = 8'b00000001; // storage for the constant 1
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/////////////////////////////////////////////////
+// SUM
+// Program to sum n downto 1 where n is an input number
+ram1[0] = 8'b00011101; // LOAD A,one
+// to zero sum
+ram1[1] = 8'b01111101; // SUB A,one
+// by doing 1 - 1
+ram1[2] = 8'b00111110; // STORE A,sum
+ram1[3] = 8'b10000000; // IN A
+ram1[4] = 8'b00111111; // STORE A,n
+ram1[5] = 8'b00011111; // loop: LOAD A,n
+ram1[6] = 8'b01011110; // ADD A,sum
+ram1[7] = 8'b00111110; // STORE A,sum
+ram1[8] = 8'b00011111; // LOAD A,n
+ram1[9] = 8'b01111101; // SUB A,one
+ram1[10]= 8'b00111111; // STORE A,n
+
+// n + sum
+
+// decrement A
+
+FIGURE 8.13 Verilog description of the RAM including three programs with which to
+initialize the RAM. (continued on next page)
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+386
+
+CHAPTER 8
+
+//
+//
+//
+//
+//
+//
+//
+//
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+geneRAl-PuRPose MICRoPRoCessoRs
+
+ram1[11] = 8'b10101101;
+ram1[12] = 8'b11000101;
+ram1[13] = 8'b00011110;
+ram1[14] = 8'b11111111;
+
+// JZ out
+// JPOS loop
+// out: LOAD A,sum
+// HALT
+
+ram1[29] = 8'b00000001;
+ram1[30] = 8'b00000000;
+ram1[31] = 8'b00000000;
+
+// storage for the constant 1
+// storage for variable sum
+// storage for variable n
+
+////////////////////////////////////////////////////////
+// GCD
+// Program to calculate the GCD of two input
+// numbers, x and y
+ram1[0] = 8'b10000000; // IN A
+// input x
+ram1[1] = 8'b00111110; // STORE A,x
+ram1[2] = 8'b10000000; // IN A
+// input y
+ram1[3] = 8'b00111111; // STORE A,y
+ram1[4] = 8'b00011110;
+ram1[5] = 8'b01111111;
+ram1[6] = 8'b10110000;
+ram1[7] = 8'b11001100;
+
+// loop: LOAD A,x
+// SUB A,y
+// JZ out
+// JPOS xgty
+
+// x=y?
+// x=y
+// x>y
+
+ram1[8] = 8'b00011111; // LOAD A,y
+ram1[9] = 8'b01111110; // SUB A,x
+ram1[10] = 8'b00111111; // STORE A,y
+ram1[11] = 8'b11000100; // JPOS loop
+
+// y>x
+// y-x
+
+ram1[12] = 8'b00011110; // xgty: LOAD A,x
+ram1[13] = 8'b01111111; // SUB A,y
+ram1[14] = 8'b00111110; // STORE A,x
+ram1[15] = 8'b11000100; // JPOS loop
+
+// x>y
+// x-y
+
+ram1[16] = 8'b00011110; // out: LOAD A,x
+ram1[17] = 8'b11111111; // HALT
+ram1[30] = 8'b00000000; // storage for variable x
+ram1[31] = 8'b00000000; // storage for variable y
+
+FIGURE 8.13 Verilog description of the RAM including three programs with which to
+initialize the RAM. (continued on next page)
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+387
+
+8.3 tHe eC-2 geneRAl-PuRPose MICRoPRoCessoR
+
+end else begin
+if (WE)
+ram1[Address] = D;
+end
+end // always
+always @ (Address) begin
+Q = ram1[Address];
+end
+endmodule
+FIGURE 8.13 Verilog description of the RAM including three programs with which to
+initialize the RAM.
+
+programs, simply uncomment the program that you want to execute and re-synthesize
+the entire microprocessor circuit.
+It is assumed that you already are familiar with writing computer programs using
+either machine language or assembly language, so we will not go into details here. The
+comments annotated throughout the three sample programs should be sufficient for
+you to understand what the programs are doing.
+
+8.3.6 Hardware Implementation
+Figure 8.14 shows the interface between the EC-2 microprocessor and the input and
+output devices on an FPGA development board. The input device consists of eight
+switches, and the output device is three 7-segment LED displays. Because the microprocessor outputs an 8-bit binary number, we need a converter to convert the 8-bit
+binary number to three BCD (binary coded decimal) digits. With this converter, we
+will be able to see the output as a 3-digit decimal number. See Problem 3.36 for the
+HDL code for this BCD converter. The HDL code for this converter is also available
+from the book website. A single LED is connected to the Halt signal to show when the
+8 Switches
+8
+Push Button
+
+Reset
+
+Push Button
+
+Enter
+
+50 MHz Clock
+
+Clock Divider
+50MHz
+Clock
+
+Clock
+
+Input
+EC-2
+Output
+Microprocessor
+
+8
+
+Binary to
+Decimal
+Converter
+
+Three
+7-Segment
+LEDs
+
+Halt
+
+LED
+
+FIGURE 8.14 Hardware implementation of the EC-2.
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+388
+
+CHAPTER 8
+
+geneRAl-PuRPose MICRoPRoCessoRs
+
+microprocessor has finished running the program. A push button is connected to the
+Reset signal to reset the microprocessor, and a second push button is used as the Enter
+key. A clock divider circuit is used to slow down the clock frequency to approximately
+1 Hz for the correct operation of the Enter key, and to see the program being executed.
+When executing the IN A instruction, the processor will stay in the Input state, allowing
+the user to set up the input number on the input switches. When the input number has
+been set up, the Enter push button needs to be pressed for the processor to read in the
+input number and then continue execution of the program.
+
+8.4 Extending the EC-2 Instruction Set
+The instruction set for the EC-2 is quite limited, so to make the EC-2 a bit more useful, we will add a few more instructions. To still keep our design simple, we will try to
+minimize the number of changes needed for the datapath and the control unit. In the
+original design, three bits are used to encode the opcode, giving only eight different
+combinations to encode the eight different instructions that we already have. So is it
+possible to add more instructions without having to add another bit for the opcode?
+The answer will depend on how many more instructions we want to add, what the
+instruction operations are that we want to add, and whether there are any unused bits
+in our current instruction encodings.
+We can see that both the HALT and IN A instructions have unused bits, so we can
+use them to encode more instructions. We can combine the HALT and IN A instructions
+to use the same 3-bit opcode, and use a fourth bit to distinguish between them.
+Because there are still unused bits, we can continue with this encoding scheme to add
+another instruction, the OUT A instruction to output the value from the accumulator.
+This new encoding scheme will work because the execution of these three instructions
+does not require any additional operands. The revised opcode encodings for these
+three instructions are shown next.
+Instruction
+
+Encoding
+
+Operation
+
+Comment
+
+IN A
+
+111 00333
+
+A d Input
+
+Input to A
+
+OUT A
+
+111 01333
+
+Output d A Output from A
+
+HALT
+
+111 13333
+
+Halt
+
+Halt execution
+
+Now that we have freed up opcode 100 that originally was assigned to the IN A
+instruction, we can use it for another new instruction that requires the use of the
+remaining five bits for its operand. A useful instruction to have is the AND instruction,
+which performs the logical AND operation, and typically is used to extract individual
+bits out from several other bits. This instruction will perform the logical AND of the
+value in the accumulator A with the content in a memory location that is specified by
+the five least significant bits of the instruction encoding. The result from the operation
+is stored back into the accumulator. The complete revised instruction set for the EC-2
+is shown in Figure 8.15.
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+389
+
+8.4 extendIng tHe eC-2 InstRuCtIon set
+
+Instruction
+
+Encoding
+
+Operation
+
+Comment
+
+LOAD A, address
+
+000 aaaaa
+
+A d M 3 aaaaa 4
+
+Load A with content of
+memory location aaaaa
+
+STORE A, address
+
+001 aaaaa
+
+M 3 aaaaa 4 d A
+
+Store A into memory location aaaaa
+
+ADD A, address
+
+010 aaaaa
+
+A d A 1 M 3 aaaaa 4
+
+Add A with M[aaaaa] and
+store result back into A
+
+SUB A, address
+
+011 aaaaa
+
+A d A 2 M 3 aaaaa 4
+
+Subtract A with M[aaaaa]
+and store result back into A
+
+AND A, address
+
+100 aaaaa
+
+A d A AND M[aaaaa]
+
+AND A with M[aaaaa] and
+store result back into A
+
+JZ address
+
+101 aaaaa
+
+IF 1 A 5 0 2 THEN PC 5 aaaaa
+
+Jump to address if A is zero
+
+JPOS address
+
+110 aaaaa
+
+IF 1 A $ 0 2 THEN PC 5 aaaaa
+
+Jump to address if A is zero
+or a positive number
+
+IN A
+
+111 00333
+
+A d Input
+
+Input to A
+
+111 01333
+
+Output d A
+
+Output from A
+
+111 13333
+
+Halt
+
+Halt execution
+
+OUT A
+HALT
+
+Notations:
+A 5 accumulator
+M 5 memory
+PC 5 program counter
+aaaaa 5 five bits for specifying a memory address
+3 5 don’t cares
+FIGURE 8.15 Revised instruction set for the EC-2.
+
+The modified datapath for the revised instruction set is shown in Figure 8.16.
+No changes in the datapath are necessary to perform the HALT and IN A instructions.
+A tri-state buffer is added between the accumulator and the output port for controlling
+the OUT A instruction. To realize the new AND instruction, we need to add a logical AND
+functional unit. The inputs to this functional unit are from the accumulator and the
+memory, and its output is connected to the currently unused input, input 3, of the
+4-input multiplexer that goes to the accumulator. Finally, to decode the IN A, OUT A,
+and HALT instructions, we need to send five bits, IR7-3, to the control unit instead of the
+original three opcode bits. These changes are highlighted in the datapath figure.
+The modified state diagram is shown in Figure 8.17 with the changes highlighted.
+The final construction of the complete control unit circuit is left as an exercise for the
+reader. (See Problem 8.5.)
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+390
+
+CHAPTER 8
+
+geneRAl-PuRPose MICRoPRoCessoRs
+
+Input
+D7-0
+Load 8-bit Register
+Clear
+IR
+IR7-3 IR4-0
+
+IRload
+
+5
+
+IR7-3
+
+5
+
+8
+
+8
+
+5
+1
+
+JMPmux
+
+0
+
+5-bit
+Increment
+
+5
+D4-0
+Load 5-bit Register
+Clear
+PC
+PC4-0
+
+PCload
+
+1
+
+Meminst
+
+0
+
+3 2 1 0
+s1,0
+
+8
+5
+5
+
+32 locations 8 bits
+RAM
+
+8
+
+Address4-0
+WE
+
+MemWr
+
+D7-0
+Load 8-bit Register
+Clear
+A
+A7-0
+
+Q7-0
+
+8
+
+8
+
+8
+
+D7-0
+
+Asel1-0
+Aload
+
+AND
+
+Sub
+Reset
+Clock
+(A = 0)
+(A ≥ 0)
+OutA
+
+AddSub Subtract
+
+8
+1
+A7
+Output
+Instruction Cycle Operations
+
+Memory
+
+Instruction Set Operations
+
+FIGURE 8.16 Modified datapath for the EC-2.
+
+Start
+0000
+
+Fetch
+0001
+(IR7-4 = 1111)
+
+Decode
+0010
+
+(IR7-5 = 000)
+
+Load
+1000
+
+Store
+1001
+
+(IR7-5 = 001)
+
+Add
+1010
+
+(IR7-5 = 010) (IR7-5 = 011) (IR7-5 = 100) (IR7-5 = 101)
+
+Sub
+1011
+
+AND
+0011
+
+Jz
+1101
+
+(IR7-5 = 110)
+
+Jpos
+1110
+
+Halt
+1111
+
+(IR7-3 = 11100) (IR7-3 = 11101)
+
+Input
+1100
+Enter
+
+Output
+0100
+Enter'
+
+FIGURE 8.17 Modified state diagram for the EC-2.
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+391
+
+8.5 usIng And InteRFACIng tHe eC-2
+
+8.5 Using and Interfacing the EC-2
+We saw in Section 8.3.5 how we can use the EC-2 to run simple machine language programs. Three sample programs were given in that section: (1) COUNT, which displays
+the count from input n down to 0; (2) SUM, which evaluates the sum of all of the
+numbers between an input number n and 1; and (3) GCD, which calculates the greatest
+common divisor of two input numbers. In this section, we will look at how to interface
+the EC-2 to control external devices. Specifically, we will use the EC-2 to control the
+elevator problem introduced in Section 6.6.5.
+Interfacing a general-purpose microprocessor to external devices requires a full
+understanding of the operations of the external device with which you want to interface, the resources available on your microprocessor, both hardware and the instruction
+set, and how the external device is connected to your microprocessor. There are usually
+many different ways of connecting the external device to the microprocessor, and the
+software program for controlling the device can be very different depending on how
+they are connected. The software program for controlling the device is usually referred
+to as the device driver for that device.
+The elevator problem controls an elevator moving between two floors. A picture
+of the elevator setup and a summary of the I/O signals are shown next.
+
+go1-0
+
+e1 e2
+
+at2
+
+led2-1
+f2
+floor 2
+
+at1
+
+led2-1
+f1
+floor 1
+
+Inputs:
+●
+●
+●
+
+f1, f2: Buttons at each floor to call the elevator. f1 is on floor 1 and f2 is on floor 2.
+e1, e2: Buttons inside the elevator to tell the elevator which floor to go to.
+at1, at2: Signals from the elevator mechanism to say which floor the elevator is on.
+Outputs:
+
+●
+●
+●
+
+go1: 0 to turn off the elevator motor and 1 to turn on the motor.
+go0: 0 to go to floor 1 and 1 to go to floor 2.
+led1, led2: LEDs on each of the two floors to show which floor the elevator is on.
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+392
+
+CHAPTER 8
+
+geneRAl-PuRPose MICRoPRoCessoRs
+
+We noted that the corresponding fi and ei input signals are basically the same and
+therefore can be combined into one signal, fi.
+The first thing we must do is to decide how to connect the I/O signals from the
+elevator to the EC-2 microprocessor. The EC-2 already has eight input lines and eight
+output lines via the Input and Output ports, respectively, so we can connect the elevator
+I/O signals to these two I/O ports on the microprocessor. Originally, these two I/O ports
+were connected to eight switches and eight LEDs for the user to enter numbers and
+to see the results from the accumulator. By changing these connections, we will not be
+able to enter numbers or see the results. If we still need this functionality, then we will
+have to modify the datapath and add another input port and output port to our EC-2
+microprocessor. We also will need to modify the control unit and the instruction set so
+that we can access the second I/O port. For the current problem, this modification is
+not necessary. We will connect the four input signals from the elevator, f2, f1, at2, and
+at1, to the first four bits, Input3-0, of the Input port of the EC-2 in this given order.
+So f2 is connected to Input3, f1 is connected to Input2, at2 is connected to Input1, and
+at1 is connected to Input0. Similarly, we will connect the four output signals from the
+elevator, go1, go0, led2, and led1, to the first four bits, Output3-0, of the Output port in
+this given order.
+Having decided on the connections between the microprocessor and the elevator,
+we are now ready to write the machine language program to control the elevator. We
+will use the extended instruction set for the modified EC-2 microprocessor as discussed
+in Section 8.4.
+The operation of the elevator is based on the state diagram derived in Section 6.6.5
+and repeated here in Figure 8.18 for convenience. The complete machine language
+program listing for controlling the elevator is shown in Figure 8.19. The logical progression of the program basically follows the state diagram. One difficulty in writing
+the program is to know how to send out the correct output signals, and how to test for
+the conditions of the input signals.
+To send out the correct output signals, we have defined four constant values stored
+in memory locations 24 to 27 (in decimal). Only the four least significant bits of these
+constants are used because the four output signals from the elevator go1, go0, led2,
+and led1 are connected to Output3-0. For example, when we are in state 00, we want to
+turn on led1 and turn off the remaining three outputs, therefore, we need to output the
+binary value 3333 0001. Because led1 is connected to Output0, sending a 1 to Output0
+will turn on led1. The other outputs are turned off. This constant value, 00000001, is
+stored in memory location 24, and the two instructions
+LOAD A, $24
+OUT A
+are executed in state 00 to turn on only led1.
+To test the conditions of the input signals, after executing the IN A instruction, we
+need to mask out the bit that we are interested in by performing the AND operation and
+then executing the conditional jump. The four constants for the four masks that we need
+are stored in memory locations 28 to 31 (in decimal). Only the four least significant bits
+of these constants are used because the four input signals from the elevator f2, f1, at2,
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+393
+
+8.5 usIng And InteRFACIng tHe eC-2
+
+( f2-1 = 00, 10, 11)
+
+led2-1 = 10
+go1-0 = 0
+
+(at2 = 0)
+
+10
+
+(at2 = 1)
+
+at floor 2
+
+( f2-1 = 01)
+
+11
+
+led2-1 = 00
+go1-0 = 11
+
+going to
+floor 2
+
+(at1 = 0)
+
+( f2-1 = 00, 01, 11)
+( f2-1 = 10)
+led2-1 = 01
+go1-0 = 0
+
+00
+
+(at1 = 1)
+
+at floor 1
+
+01
+
+led2-1 = 00
+go1-0 = 10
+
+going to
+floor 1
+
+FIGURE 8.18 State diagram for the elevator problem.
+
+memory
+instruction
+address
+// state 00 – at floor 1
+0
+00000
+LOAD A, 11000
+1
+00001
+OUT A
+2
+00010
+IN A
+3
+00011
+AND A, 11100
+4
+00100
+JZ 00000
+
+instruction Comments
+encoding
+00011000
+11101000
+11100000
+10011100
+10100000
+
+// state 11 – going to floor 2
+5
+00101
+LOAD A, 11001
+00011001
+6
+00110
+OUT A
+11101000
+7
+00111
+IN A
+11100000
+8
+01000
+AND A, 11101
+10011101
+9
+01001
+JZ 00101
+10100101
+// state 10 – at floor 2
+10 01010
+LOAD A, 11010
+
+00011010
+
+// load value to output led1
+// input
+// extract value for f2
+// repeat if f2 is not asserted
+// else go to next state 11
+// load value to output go1 and go0
+// input
+// extract value for at2
+// repeat if at2 is not asserted
+// else go to next state 10
+// load value to output led2
+
+FIGURE 8.19 Program for controlling the elevator using the EC-2 general-purpose
+microprocessor. (continued on next page)
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+394
+11
+12
+13
+14
+
+CHAPTER 8
+
+01011
+01100
+01101
+01110
+
+OUT A
+IN A
+AND A, 11110
+JZ 01010
+
+11101000
+11100000
+10011110
+10101010
+
+// state 01 – going to floor 1
+15 01111
+LOAD A, 11011
+00011011
+16 10000
+OUT A
+11101000
+17 10001
+IN A
+11100000
+18 10010
+AND A, 11111
+10011111
+19 10011
+JZ 01111
+10101111
+20
+
+10100
+
+JPOS 00000
+
+11000000
+
+geneRAl-PuRPose MICRoPRoCessoRs
+
+// input
+// extract value for f1
+// repeat if f1 is not asserted
+// else go to next state 01
+// load value to output go1 and go0
+// input
+// extract value for at1
+// repeat if at1 is not asserted
+// else go to next state 00
+// unconditional jump to state 00
+
+// output values, bits 3 to 0 = go1, go0, led2, led1
+24 11000
+00000001
+// output for state 00
+25 11001
+00001100
+// output for state 11
+26 11010
+00000010
+// output for state 10
+27 11011
+00001000
+// output for state 01
+// input values, bits 3 to 0 = f2, f1, at2, at1
+28 11100
+00001000
+// input for state 00
+29 11101
+00000010
+// input for state 11
+30 11110
+00000100
+// input for state 10
+31 11111
+00000001
+// input for state 01
+FIGURE 8.19 Program for controlling the elevator using the EC-2 general-purpose
+microprocessor.
+
+and at1 are connected to Input3-0. So for example, when we are in state 00, we want
+to test whether f2 is asserted, therefore, we need to AND the input value with the mask
+00001000. This constant mask value, 00001000, is stored in memory location 11100,
+and the three instructions
+IN A
+AND A, 11100
+JZ 00000
+are executed in state 00 to test for the input signal f2.
+The result after the AND operation will extract bit 3 of the input, which is the f2
+input signal. If f2 is a 0, then the entire result after the AND operation will be 0. On the
+other hand, if f2 is a 1, then the result after the AND operation will not be a 0. Thus, after
+the AND operation, we can execute the JZ conditional jump instruction either to stay
+in the current state or go to the next state. If the result is 0, then we need to loop back
+to the current state with the instruction JZ 00000. Otherwise, the jump is not performed
+and the program continues with the next instruction, which is to go to the next state 11.
+This elevator problem does not have any strict timing issues, so it is not necessary
+to consider the time that it takes to execute each instruction. In other problems where
+the timing for sending and receiving signals is critical, we will need to be more precise.
+For example, if we use the EC-2 to control an RS232 protocol communication, then
+we need to know exactly how long it takes to execute the instructions needed to output
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+395
+
+8.6 PIPelInIng
+
+a bit because the RS232 protocol requires a certain predetermined speed or baud rate
+to send out each bit.
+
+8.6 Pipelining
+Today’s general-purpose microprocessors, such as the Intel Core™i7 CPU, are designed
+to execute more instructions over a shorter period of time by using a technique known
+as pipelining. This is an implementation technique in which multiple instructions are
+overlapped in execution, similar to the production of devices in a factory assembly
+line. The computer pipeline is divided into stages, and each stage will perform a part
+of the instruction execution. Instructions pass through the stages as they get executed.
+As one instruction completes in one stage and moves down to the next stage, another
+instruction will move in to take its place. Because multiple instructions are in the
+pipeline at any one time, concurrent execution of instructions is achieved.
+Pipelining does not decrease the time to execute one instruction—the time from
+when an instruction first enters the pipeline until it exits the pipeline. In fact, it takes a
+little more time to execute one instruction as compared with a nonpipelined processor
+because of the overhead needed to implement pipelining. Pipelining, however, increases
+the instruction throughput rate, which is measured by how fast instructions exit the
+pipeline. With an increase in instruction throughput, a program will run faster and will
+have a lower total execution time.
+In order for pipelining to work efficiently, all of the stages must be balanced in
+terms of the time needed for each stage. If all of the stages are balanced, then they
+all can be synchronized and ready to proceed at the same time as instructions move
+from one stage to the next. If this is the case, then the time between instructions on the
+pipelined machine—assuming ideal conditions—is equal to
+Time between instructionspipelined 5
+
+Time between instructionsnonpipelined
+Number of pipeline stages
+
+In other words, the speedup from pipelining under ideal conditions is equal to the
+number of pipeline stages; so a five-stage pipeline is five times faster. However, the
+actual time per instruction in the pipelined processor will be greater than the minimum possible, and the speedup will be less than the number of pipeline stages because
+the stages usually are not balanced and overheads are involved with the addition of
+pipeline stages.
+
+8.6.1 Basic Pipelined Processor
+Based on the MIPS architecture model proposed by Hennessy and Patterson,3 the
+general steps for executing an instruction can be divided into five pipeline stages: (1)
+instruction fetch (IF); (2) instruction decode (ID); (3) execute or effective address
+3
+
+Computer Organization & Design: The Hardware/Software Interface, D. Patterson and J. Hennessy.
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+396
+
+CHAPTER 8
+
+geneRAl-PuRPose MICRoPRoCessoRs
+
+calculation (EX); (4) memory access (MEM); and (5) write back (WB) of result.
+Instructions are fetched from memory in the IF stage. In the ID stage, besides decoding
+of the instruction, the register file is accessed to read in the instruction operands. The
+reading of registers and decoding occur simultaneously. In the EX stage, the instruction is either executed, or if it is a memory access instruction, then the address of the
+memory location is calculated. If an instruction requires memory access, then after
+calculating the memory address in the EX stage, the data from that memory location
+is accessed in the MEM stage. Finally, in the WB stage, the result from executing the
+instruction is written back into a register.
+Instructions entering the pipeline start in the IF stage. At the end of the first
+clock cycle, as the instruction moves from the IF to the ID stage, a new instruction
+enters the pipeline and fills the IF stage. After five clock cycles, all of the stages will
+have a different instruction, and the first instruction will now be in the final WB stage.
+This basic pipeline execution of instructions is shown graphically in Figure 8.20. The
+clock cycles are listed across the top of the table. The sequence of instructions entering the pipeline is listed down the rows of the table. The entries in the table show the
+stage that an instruction is in during a particular clock cycle. For example, in clock
+cycle 5, instruction i12 is in the EX stage. The table clearly shows that each instruction requires five clock cycles to execute (because of the five stages), but because of
+the overlapping of instruction executions, every clock cycle starting from clock cycle
+5 will have a new instruction completing. So the throughput is one instruction per
+cycle under ideal situations.
+Because of the overlapping operations, the datapath for the pipelined machine
+needs to have enough resources to handle the parallel execution of instructions.
+Several issues need to be considered. First, note that starting from clock cycle 4 in
+Figure 8.20, every clock cycle will have both an instruction fetch (IF) and a memory
+access (MEM). If there is only a single memory, a conflict will occur between the
+instruction fetch and data memory access because both of these operations require
+the use of the memory. Thus, to resolve this problem, the datapath needs to have a
+separate instruction and data memory.
+A second issue, similar to the first, is that in every clock cycle starting from clock
+cycle 5 onward, the register file is used in two stages; first in the ID stage where a register is read, and second in the WB stage where a register is written. We need to make sure
+that the register file can handle both reading and writing within the same clock cycle.
+
+Clock Cycle
+Instruction i
+Instruction i11
+Instruction i12
+Instruction i13
+Instruction i14
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+7
+
+8
+
+IF
+
+ID
+
+EX
+
+MEM
+
+WB
+
+IF
+
+ID
+
+EX
+
+MEM
+
+WB
+
+IF
+
+ID
+
+EX
+
+MEM
+
+WB
+
+IF
+
+ID
+
+EX
+
+MEM
+
+WB
+
+IF
+
+ID
+
+EX
+
+MEM
+
+9
+
+WB
+
+FIGURE 8.20 Execution of instructions in a pipelined machine.
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+8.6 PIPelInIng
+
+397
+
+A more serious problem is that a new instruction is fetched in every clock cycle. In
+order for this to be possible, the program counter (PC) needs to be incremented and
+written back in every clock cycle during the IF stage in preparation for the next instruction. The problem arises when we consider the effect of branches, which also might
+change the PC. The PC changes when a conditional branch is taken, but whether the
+condition is true or not is not known until the EX stage, and the new branch address
+is not known until the MEM stage. As a result, the PC will not have the correct value
+in the next clock cycle.
+Finally, pipelining the datapath requires that values passed from one pipe stage to
+the next be placed in registers. These registers, known as pipeline registers, carry both
+data and control signals from one pipeline stage to the next. Any instruction is active
+in exactly one stage of the pipeline at a time; therefore, any action taken on behalf of
+an instruction occurs between a pair of pipeline registers.
+
+8.6.2 Pipeline Hazards
+In a pipelined machine, situations called hazards prevent the next instruction in the
+instruction stream from being executed in the following clock cycle. There are three
+types of hazards: (1) structural hazards; (2) data hazards; and (3) control hazards.
+When a machine is pipelined, the overlapped execution of instructions requires
+pipelining of functional units and duplication of resources to allow for all possible
+combinations of instructions in the pipeline. Structural hazards occur when instructions
+in the pipeline cannot execute because the hardware cannot support the combination
+of instructions that we want to execute in the same clock cycle. An example would be
+if two instructions in the pipeline need to use an adder to add numbers but the datapath has only one adder available. In order to resolve a structural hazard, either more
+hardware is added to the datapath, or stalls are inserted into the pipeline to delay the
+execution of the conflicting instruction by one clock cycle. A structural hazard also
+occurs if there is only one memory for storing both data and instructions. This is
+resolved, as discussed previously, by having two separate memories.
+Data hazards occur when an instruction depends on the result of a previous
+instruction that is still being executed in the pipeline. An example would be if an
+ADD instruction is followed immediately by a SUBTRACT instruction, and the
+SUBTRACT instruction requires, as one of its operands, the result from the ADD
+instruction. Because the ADD instruction is still being executed in the pipeline, its result
+is not yet available for the SUBTRACT instruction to use as shown in Figure 8.21(a).
+The result of the ADD instruction is not written into the destination register R1 until
+the WB stage in clock cycle 5. However, the value in register R1 is needed as an operand
+by the SUBTRACT instruction at the beginning of the EX stage in clock cycle 4. A naive
+solution would be to simply stall the pipeline for two clock cycles so that the SUBTRACT
+instruction does not start until clock cycle 4, as shown in Figure 8.21(b). By doing this,
+the EX stage for the SUBTRACT instruction will occur in clock cycle 6, which is after
+the WB stage for the ADD instruction in clock cycle 5.
+A better solution to resolve data hazards is a technique known as forwarding. This
+technique involves forwarding the result from the first functional unit (in this case the
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+398
+
+CHAPTER 8
+
+geneRAl-PuRPose MICRoPRoCessoRs
+
+Clock Cycle
+
+1
+
+2
+
+3
+
+4
+
+ADD R1 d R2 1 R3
+
+IF
+
+ID
+
+EX
+
+MEM
+
+WB
+
+IF
+
+ID
+
+EX
+
+MEM
+
+SUB R4 d R1 2 R5
+
+5
+
+6
+WB
+
+(a)
+Clock Cycle
+
+1
+
+2
+
+3
+
+4
+
+5
+
+ADD R1 d R2 1 R3
+
+IF
+
+ID
+
+EX
+
+MEM
+
+WB
+
+stall
+
+stall
+
+IF
+
+ID
+
+SUB R4 d R1 2 R5
+
+6
+
+7
+
+8
+
+EX
+
+MEM
+
+WB
+
+(b)
+1
+
+2
+
+3
+
+4
+
+5
+
+ADD R1 d R2 1 R3
+
+IF
+
+ID
+
+EX
+
+MEM
+
+WB
+
+IF
+
+ID
+
+EX
+
+MEM
+
+SUB R4 d R1 2 R5
+
+➞
+
+Clock Cycle
+
+6
+WB
+
+(c)
+FIGURE 8.21 Data hazard: (a) source register R1 for the subtraction does not have
+the correct value ready in clock cycle 4; (b) delaying the subtraction instruction by
+inserting two stalls; (c) the connection shows the forwarding of the result directly
+from the EX stage of the addition to the EX stage of the subtraction.
+
+adder) directly to the input of the second functional unit (in this case the subtractor)
+without going through any registers. With forwarding, no stalls are required to remove
+the data hazard as shown by the arrow in Figure 8.21(c). The result from the adder
+is available at the end of the ADD instruction’s EX stage (cycle 3), and this value is
+needed by the subtractor at the beginning of the SUBTRACT instruction’s EX stage
+(cycle 4). Therefore, the output from the adder can be routed directly to the input of
+the subtractor, and the subtraction can continue without any stalls.
+Another technique known as pipeline scheduling can also be used to remove data
+hazards. In this case, the compiler can rearrange the instructions so that two dependent
+instructions are not scheduled one after the other. This way, no data hazards will occur.
+Typically, the PC is incremented by one (assuming that each instruction occupies
+one memory location) after each instruction fetch. However, this might not be the
+case for a branch instruction. When executing a branch instruction, if the condition
+is true and the branch is taken, a new address for fetching the next instruction must
+be calculated and stored into the PC; but this new address is not known until later in
+the EX stage. In the meantime, several new instructions immediately after the branch
+instruction already will have entered the pipeline. When the branch is taken, these
+instructions (which should not have been executed) already have entered the pipeline
+and are being partially executed. Thus, they must be removed from the pipeline and
+the operations that they already have performed must be undone.
+This problem is a control hazard, and its effect creates the greatest performance
+loss for a pipelined machine. Even if we add extra hardware so that we can calculate
+the branch address and update the PC during the second ID stage, we still need to
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+8.7 veRIlog And vHdl Code FoR geneRAl-PuRPose MICRoPRoCessoRs
+
+399
+
+add one stall in the pipeline. The cost for stalls from branch instructions is too high,
+and so various branch prediction techniques have been suggested to improve on the
+performance of branch instructions. Using branch prediction techniques, if the prediction of a branch is correct, then the pipeline can proceed normally at full speed.
+The pipeline is stalled and some operations need to be undone only if the prediction
+is wrong.
+
+8.7 Verilog and VHDL Code for General-Purpose
+Microprocessors
+This section presents the Verilog and VHDL codes for the EC-2 general-purpose microprocessor using both the structural FSM1D model and the behavioral FSMD model.
+When writing HDL code using the FSM1D model, the microprocessor with its separate control unit and datapath circuits first must be designed manually, as we did in
+Section 8.3. These two separate circuits are translated to HDL code, and then combined
+together using structural level coding to form the microprocessor. In practice, we seldom want to create a microprocessor using the FSM1D model. This exercise is just to
+show how the complete HDL code is written. Section 8.7.1 lists the Verilog code using
+the FSM1D model of the EC-2 microprocessor.
+Section 8.7.2 lists both the Verilog and VHDL behavioral level code that defines
+the EC-2 microprocessor using the FSMD model. Using this model, we need to manually derive only the state diagram. From the state diagram, we easily can write the HDL
+code for the control unit at the behavioral level so that the control unit circuit can be
+generated by the synthesizer automatically. The datapath operations are embedded as
+HDL instructions within the FSM code, therefore, the name FSMD. Comparing the
+FSMD code with the FSM1D code, we can see how easier it is to construct a microprocessor circuit using the behavioral FSMD model and quickly appreciate the power
+of the HDL synthesizer.
+
+8.7.1 FSM1D Model
+Figures 8.22, 8.23, and 8.24 show the Verilog code for the EC-2 microprocessor,
+datapath, and control unit, respectively, using the FSM1D model. Figure 8.22 shows
+the structural Verilog code for connecting the datapath and the control unit to form
+the microprocessor. Figure 8.23 shows the structural Verilog code for the data-path.
+This code is based on the datapath circuit derived in Section 8.3.2 and shown in
+Figure 8.10. The code for the individual components used in the datapath can be found
+in Chapters 4 and 5. Figure 8.24 shows the behavioral Verilog code for the control unit
+as derived in Section 8.3.3. This control unit behavioral code follows the template for
+writing an FSM sequential circuit, as discussed in Section 6.7. The next-state logic
+portion of this code is based on the state diagram shown in Figure 8.11(a), and the
+output logic portion of this code is based on the output table shown in Figure 8.11(d).
+The complete FSM1D code for the EC-2 microprocessor for both Verilog and VHDL
+can be downloaded from the book website.
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+400
+
+CHAPTER 8
+
+geneRAl-PuRPose MICRoPRoCessoRs
+
+module mp (
+input Clock, Reset, Enter,
+input [7:0] Input,
+output [7:0] Output,
+output Halt,
+output [3:0] debug
+);
+wire [2:0] IR75;
+wire PCload, Meminst, MemWr, Aload;
+wire IRload, JMPmux, Sub, Aeq0, Apos;
+wire [1:0] Asel;
+dp U1(.Clock(Clock), .Reset(Reset), .IRload(IRload),
+.JMPmux(JMPmux), .PCload(PCload), .Meminst(Meminst),
+.MemWr(MemWr), .Asel(Asel), .Aload(Aload), .Sub(Sub),
+.IR75(IR75), .Apos(Apos), .Aeq0(Aeq0), .Input(Input),
+.Output(Output));
+cu U2(.Clock(Clock), .Reset(Reset), .Enter(Enter),
+.IRload(IRload), .JMPmux(JMPmux), .PCload(PCload),
+.Meminst(Meminst), .MemWr(MemWr), .Asel(Asel),
+.Aload(Aload), .Sub(Sub), .IR75(IR75), .Apos(Apos),
+.Aeq0(Aeq0), .Halt(Halt), .debug(debug));
+endmodule
+FIGURE 8.22 Structural Verilog code for the EC-2 microprocessor.
+module dp (
+input
+Clock, Reset,
+input
+IRload, JMPmux, PCload, Meminst, MemWr,
+input
+[1:0] Asel,
+input
+Aload, Sub,
+output [2:0] IR75,
+output Apos, Aeq0,
+input
+[7:0] Input,
+output [7:0] Output
+);
+wire [7:0] dp_IR, dp_RAMQ;
+wire [4:0] dp_JMPmux, dp_PC, dp_increment, dp_meminst;
+wire [7:0] dp_Amux, dp_addsub, dp_A;
+register #(8) U0_IR(.Clock(Clock), .Clear(Reset),
+.Load(IRload), .D(dp_RAMQ), .Q(dp_IR));
+mux2 #(5) U1_JMPmux(.S(JMPmux), .D1(dp_IR[4:0]),
+.D0(dp_increment), .Y(dp_JMPmux));
+register #(5) U2_PC(.Clock(Clock), .Clear(Reset),
+.Load(PCload), .D(dp_JMPmux), .Q(dp_PC));
+mux2 #(5) U3_meminst(.S(Meminst), .D1(dp_IR[4:0]),
+.D0(dp_PC), .Y(dp_meminst));
+FIGURE 8.23 Structural Verilog code for the EC-2 datapath. (continued on next page)
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+8.7 veRIlog And vHdl Code FoR geneRAl-PuRPose MICRoPRoCessoRs
+
+401
+
+increment U4_inc(.A(dp_PC), .F(dp_increment));
+ram U5_ram(.Clock(Clock), .Reset(Reset), .WE(MemWr),
+.Address(dp_meminst), .D(dp_A), .Q(dp_RAMQ));
+mux4 #(8) U6_Amux(.S(Asel), .D3(8'b00000000), .D2(dp_RAMQ),
+.D1(Input), .D0(dp_addsub), .Y(dp_Amux));
+register #(8) U7_A(.Clock(Clock), .Clear(Reset),
+.Load(Aload), .D(dp_Amux), .Q(dp_A));
+addsub #(8) U8_addsub(.S(Sub), .A(dp_A), .B(dp_RAMQ),
+.F(dp_addsub));
+assign IR75 = dp_IR[7:5];
+assign Aeq0 = (dp_A == 0)? 1:0;
+assign Apos = ~dp_A[7];
+assign Output = dp_A;
+endmodule
+FIGURE 8.23 Structural Verilog code for the EC-2 datapath.
+module cu (
+input Clock, Reset, Enter,
+output reg IRload, JMPmux, PCload, Meminst, MemWr,
+output reg [1:0] Asel,
+output reg Aload, Sub,
+input [2:0] IR75,
+input Apos, Aeq0,
+output reg Halt,
+output [3:0] debug
+);
+reg [3:0] state;
+// next state logic
+always @ (posedge Clock, posedge Reset) begin
+if (Reset) begin
+state<=4'b0000;
+end
+else
+case (state)
+4'b0000: begin // Start
+state<=4'b0001;
+end
+4'b0001: begin // Fetch
+state<=4'b0010;
+end
+4'b0010: begin // Decode
+case (IR75)
+3'b000: state<=4'b1000; // Load
+3'b001: state<=4'b1001; // Store
+FIGURE 8.24 Behavioral Verilog code for the EC-2 control unit. (continued on next
+page)
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+402
+
+CHAPTER 8
+
+geneRAl-PuRPose MICRoPRoCessoRs
+
+3'b010: state<=4'b1010; // Add
+3'b011: state<=4'b1011; // Sub
+3'b100: state<=4'b1100; // Input
+3'b101: state<=4'b1101; // Jz
+3'b110: state<=4'b1110; // Jpos
+3'b111: state<=4'b1111; // Halt
+default:state<=4'b0000; // Start
+endcase
+end
+4'b1000: begin // Load
+state<=4'b0000;
+end
+4'b1001: begin // Store
+state<=4'b0000;
+end
+4'b1010: begin // Add
+state<=4'b0000;
+end
+4'b1011: begin // Sub
+state<=4'b0000;
+end
+4'b1100: begin // Input
+if (Enter) begin
+state<=4'b0000;
+end
+else begin
+state<=4'b1100;
+end
+end
+4'b1101: begin // Jz
+state<=4'b0000;
+end
+4'b1110: begin // Jpos
+state<=4'b0000;
+end
+4'b1111: begin // Halt
+state<=4'b1111;
+end
+default: begin
+state<=4'b0000;
+end
+endcase
+end // always
+// output logic
+always @ (state) begin
+case (state)
+4'b0001: begin // Fetch
+FIGURE 8.24 Behavioral Verilog code for the EC-2 control unit. (continued on next
+page)
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+8.7 veRIlog And vHdl Code FoR geneRAl-PuRPose MICRoPRoCessoRs
+
+403
+
+IRload<=1;
+JMPmux<=0;
+PCload<=1;
+Meminst<=0;
+MemWr<=0;
+Asel<=2'b00;
+Aload<=0;
+Sub<=0;
+Halt<=0;
+end
+4'b0010: begin // Decode
+IRload<=0;
+JMPmux<=0;
+PCload<=0;
+Meminst<=1;
+MemWr<=0;
+Asel<=2'b00;
+Aload<=0;
+Sub<=0;
+Halt<=0;
+end
+4'b1000: begin // Load
+IRload<=0;
+JMPmux<=0;
+PCload<=0;
+Meminst<=1;
+MemWr<=0;
+Asel<=2'b10;
+Aload<=1;
+Sub<=0;
+Halt<=0;
+end
+4'b1001: begin // Store
+IRload<=0;
+JMPmux<=0;
+PCload<=0;
+Meminst<=1;
+MemWr<=1;
+Asel<=2'b00;
+Aload<=0;
+Sub<=0;
+Halt<=0;
+end
+4'b1010: begin // Add
+IRload<=0;
+JMPmux<=0;
+PCload<=0;
+FIGURE 8.24 Behavioral Verilog code for the EC-2 control unit. (continued on next
+page)
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+404
+
+CHAPTER 8
+
+geneRAl-PuRPose MICRoPRoCessoRs
+
+Meminst<=1;
+MemWr<=0;
+Asel<=2'b00;
+Aload<=1;
+Sub<=0;
+Halt<=0;
+end
+4'b1011: begin // Sub
+IRload<=0;
+JMPmux<=0;
+PCload<=0;
+Meminst<=1;
+MemWr<=0;
+Asel<=2'b00;
+Aload<=1;
+Sub<=1;
+Halt<=0;
+end
+4'b1100: begin // Input
+IRload<=0;
+JMPmux<=0;
+PCload<=0;
+Meminst<=0;
+MemWr<=0;
+Asel<=2'b01;
+Aload<=1;
+Sub<=0;
+Halt<=0;
+end
+4'b1101: begin // Jz
+IRload<=0;
+JMPmux<=1;
+PCload<=Aeq0; // load PC if condition is true
+Meminst<=0;
+MemWr<=0;
+Asel<=2'b00;
+Aload<=0;
+Sub<=0;
+Halt<=0;
+end
+4'b1110: begin // Jpos
+IRload<=0;
+JMPmux<=1;
+PCload<=Apos; // load PC if condition is true
+Meminst<=0;
+MemWr<=0;
+Asel<=2'b00;
+FIGURE 8.24 Behavioral Verilog code for the EC-2 control unit. (continued on next
+page)
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+8.7 veRIlog And vHdl Code FoR geneRAl-PuRPose MICRoPRoCessoRs
+
+405
+
+Aload<=0;
+Sub<=0;
+Halt<=0;
+end
+4'b1111: begin // Halt
+IRload<=0;
+JMPmux<=0;
+PCload<=0;
+Meminst<=0;
+MemWr<=0;
+Asel<=2'b00;
+Aload<=0;
+Sub<=0;
+Halt<=1;
+end
+default: begin
+IRload<=0;
+JMPmux<=0;
+PCload<=0;
+Meminst<=0;
+MemWr<=0;
+Asel<=2'b00;
+Aload<=0;
+Sub<=0;
+Halt<=0;
+end
+endcase
+end
+assign debug = state;
+endmodule
+FIGURE 8.24 Behavioral Verilog code for the EC-2 control unit.
+
+8.7.2 FSMD Model
+Figures 8.25 and 8.26 show the complete behavioral FSMD Verilog and VHDL code,
+respectively, for the EC-2 general-purpose microprocessor. The RAM used is the same
+component as shown in Figure 8.13. The three registers IR, PC, and A are declared as
+reg/SIGNAL. The always/PROCESS block is structured just like a regular FSM following
+the state diagram from Figure 8.11(a). The Decode state uses the case statement to
+check the opcode, which is the first three bits of the IR. From there, the FSM jumps
+to the state for executing the corresponding instruction. The actual execution of an
+instruction simply uses built-in operators such as A <= A + memory_data to perform the addition command. The complete FSMD code for the EC-2 general-purpose
+microprocessor written in both Verilog and VHDL can be downloaded from the book
+website.
+
+Copyright 2018 Cengage Learning. All Rights Reserved. May not be copied, scanned, or duplicated, in whole or in part. WCN 02-200-202
+
+

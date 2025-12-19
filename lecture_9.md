@@ -3,10 +3,10 @@ theme: seriph
 background: https://cover.sli.dev
 transition: fade
 layout: cover
-title: "Lecture 9 - Dedicated Microprocessors: Datapath"
+title: "Lecture 9 - Dedicated Microprocessors"
 ---
 
-# Lecture 9: Dedicated Microprocessors: Datapath
+# Lecture 9: Dedicated Microprocessors
 {{ $slidev.configs.subject }}
 
 
@@ -431,6 +431,361 @@ $$
 
 
 ---
+layout: section
+---
+
+## Control Unit (FSM)
+
+---
+
+## Recap: Datapath and Control Unit
+
+A microprocessor is partitioned into two main parts that work together.
+
+<div class="grid grid-cols-2 gap-4">
+<div>
+
+*   **Datapath:**
+    *   Performs data processing operations. Contains ALUs, registers, MUXes, etc.
+*   **Control Unit:**
+    *   A Finite State Machine that determines the sequence of datapath operations.
+    *   Generates **control signals** to tell the datapath what to do.
+    *   Receives **status signals** from the datapath to make decisions.
+
+</div>
+
+<div>
+
+<img src="/datapath_control.svg" class="rounded-lg bg-white p-4 w-full" alt="Datapath and Control Unit Interaction">
+<p class="text-center text-sm">Figure 9-3: Datapath and Control Unit Interaction</p>
+
+</div>
+</div>
+
+Our goal now is to design the **Control Unit** FSM.
+
+---
+
+## Design Example 1: Counter Control Unit
+
+Let's design the control unit for the "Count from 1 to 10" algorithm.
+
+<div class="grid grid-cols-2 gap-8">
+
+<div>
+
+**Algorithm:**
+```
+i = 0
+WHILE (i != 10) {
+  i = i + 1
+}
+```
+
+**Control Unit FSM (State Diagram):**
+*   **S₀ (Init):** Clear the counter (`i=0`).
+*   **S₁ (Count):** Increment the counter (`i=i+1`).
+*   **S₂ (Done):** Loop is finished.
+</div>
+<div>
+
+<img src="/counter_fsm.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Counter Control Unit FSM">
+<p class="text-center text-sm">Figure 9-12: Counter Control Unit FSM</p>
+
+
+</div>
+</div>
+
+
+
+---
+
+**Datapath:**
+<img src="/counter_datapath.svg" class="rounded-lg bg-white p-4 w-full h-60 object-contain mx-auto" alt="Counter Datapath">
+<p class="text-center text-sm">Figure 9-13: Counter Datapath</p>
+
+* **Status Signal:** $(i\neq10)$
+* **Control Signals:** `Clear`, `Count`
+
+---
+
+### Counter Control Unit: State & Output Tables
+
+We can now create the tables from the state diagram.
+**State Assignment:** `S₀=00`, `S₁=01`, `S₂=10`, `S₃(Halt)=11`.
+**Input:** `(i=10)` status signal.
+
+<div class="grid grid-cols-2 gap-8">
+
+<div>
+
+### Next State Table
+
+$$
+\footnotesize
+\def\arraystretch{1.5}
+\begin{array}{|c|c|c|}
+\hline
+\textbf{Current State} & \textbf{Input } (i=10) & \textbf{Next State} \\
+\hline
+Q_1Q_0 & & D_1D_0 \\
+\hline
+00 (S_0) & X & 01 (S_1) \\
+\hline
+01 (S_1) & 0 & 01 (S_1) \\
+\hline
+01 (S_1) & 1 & 10 (S_2) \\
+\hline
+10 (S_2) & X & 11 (S_3) \\
+\hline
+11 (S_3) & X & 11 (S_3) \\
+\hline
+\end{array}
+$$
+
+</div>
+
+<div>
+
+### Output Table (Moore Model)
+
+$$
+\footnotesize
+\def\arraystretch{1.5}
+\begin{array}{|c|c|c|}
+\hline
+\textbf{Current State} & \textbf{Clear} & \textbf{Count} \\
+\hline
+00 (S_0) & 1 & 0 \\
+\hline
+01 (S_1) & 0 & 1 \\
+\hline
+10 (S_2) & 0 & 0 \\
+\hline
+11 (S_3) & 0 & 0 \\
+\hline
+\end{array}
+$$
+
+</div>
+</div>
+
+From these tables, we can derive the logic equations for the FSM.
+
+
+---
+
+### Counter Control Unit: Logic Equations and Synthesis
+
+From the tables, we derive the boolean equations (where $x$ is the input $(i=10)$):
+
+<div class="grid grid-cols-2 gap-8">
+
+<div>
+
+**Next State Logic:**
+$$
+\begin{aligned}
+D_1 &= Q_1 + Q_0 \cdot x \\
+D_0 &= Q_1 + \overline{Q_0} + \overline{x}
+\end{aligned}
+$$
+
+**Output Logic:**
+$$
+\begin{aligned}
+Clear &= \overline{Q_1} \cdot \overline{Q_0} = \overline{Q_1 + Q_0} \quad (\text{NOR}) \\
+Count &= \overline{Q_1} \cdot Q_0
+\end{aligned}
+$$
+
+</div>
+
+<div>
+
+<img src="/counter_logic.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Counter Control Logic Circuit">
+<p class="text-center text-sm">Figure 9-14: Counter Control Logic Circuit</p>
+
+</div>
+</div>
+
+---
+
+## Counter Control Unit: Complete Microprocessor
+
+By combining the datapath and the synthesized control unit, we get the complete dedicated microprocessor. The control unit's logic generates the `Clear` and `Count` signals, while the `(i=10)` status signal from the datapath feeds back into the control unit's next-state logic.
+
+<img src="https://i.imgur.com/u389v4s.png" class="rounded-lg bg-white p-4 w-full" alt="Complete Counter Microprocessor">
+
+---
+
+## Design Example 2: `if-then-else` Control Unit
+
+**Algorithm:**
+```
+INPUT A
+IF (A = 5) THEN
+  B = 8
+ELSE
+  B = 13
+END IF
+OUTPUT B
+```
+
+<div class="grid grid-cols-2 gap-8">
+
+<div>
+
+**Datapath:**
+<img src="https://i.imgur.com/v8t762L.png" class="rounded-lg bg-white p-4" alt="if-then-else datapath">
+
+**Status Signal:** `(A=5)`
+**Control Signals:** `ALoad`, `BLoad`, `Muxsel`, `Out`
+
+</div>
+
+<div>
+
+**Control Unit FSM (State Diagram):**
+
+*   **S_input:** Load register A.
+*   **S_extra:** A wait state to allow register A to settle before checking its value.
+*   **S_equal:** Load B with 8.
+*   **S_notequal:** Load B with 13.
+*   **S_output:** Output the value from B.
+
+<img src="/if_then_else_fsm.svg" class="rounded-lg bg-white p-4 w-full h-60 object-contain mx-auto" alt="If-Then-Else Control Unit FSM">
+
+</div>
+</div>
+
+---
+
+## `if-then-else` Control Unit: Synthesis
+
+From the state diagram, we derive the state and output tables to synthesize the logic.
+
+**State Assignment:** `S_input=000`, `S_extra=001`, `S_notequal=010`, `S_equal=011`, `S_output=100`
+
+<div class="grid grid-cols-2 gap-8">
+
+<div>
+
+### Next State Table (Partial)
+
+$$
+\def\arraystretch{1.5}
+\begin{array}{|c|c|c|}
+\hline
+\textbf{PS} & \textbf{Input } (A=5) & \textbf{NS} \\
+\hline
+000 & X & 001 \\
+\hline
+001 & 0 & 010 \\
+\hline
+001 & 1 & 011 \\
+\hline
+010 & X & 100 \\
+\hline
+011 & X & 100 \\
+\hline
+100 & X & 100 \\
+\hline
+\end{array}
+$$
+
+</div>
+
+<div>
+
+### Output Table (Moore Model)
+
+$$
+\def\arraystretch{1.5}
+\begin{array}{|c|c|c|c|c|}
+\hline
+\textbf{State} & \textbf{ALoad} & \textbf{Muxsel} & \textbf{BLoad} & \textbf{Out} \\
+\hline
+000 & 1 & X & 0 & 0 \\
+\hline
+010 & 0 & 0 & 1 & 0 \\
+\hline
+011 & 0 & 1 & 1 & 0 \\
+\hline
+100 & 0 & X & 0 & 1 \\
+\hline
+\end{array}
+$$
+
+</div>
+</div>
+
+**Synthesized Logic (from PDF):**
+*   `ALoad = Q₂'Q₁'Q₀'`
+*   `Muxsel = Q₂'Q₁'Q₀`
+*   `BLoad = Q₂'Q₁`
+*   `Out = Q₂Q₁'Q₀'`
+
+---
+
+## Design Example 3: GCD Control Unit
+
+**Problem:** Design a control unit to find the Greatest Common Divisor (GCD) of two numbers, X and Y.
+
+<div class="grid grid-cols-2 gap-8">
+
+<div>
+
+**Algorithm:**
+```
+WHILE (X != Y) {
+  IF (X > Y) THEN
+    X = X - Y
+  ELSE
+    Y = Y - X
+}
+```
+
+**Datapath:**
+<img src="https://i.imgur.com/s64052X.png" class="rounded-lg bg-white p-4" alt="GCD Datapath">
+
+**Status Signals:** `XeqY`, `XgtY`
+
+</div>
+
+<div>
+
+**Control Unit FSM (State Diagram):**
+
+*   **S₀ (Init):** Load X and Y.
+*   **S₁ (Check):** Compare X and Y.
+*   **S₂ (X=X-Y):** Perform subtraction.
+*   **S₃ (Y=Y-X):** Perform subtraction.
+*   **S₄ (Done):** Output the result.
+
+<img src="/gcd_fsm.svg" class="rounded-lg bg-white p-4 w-full h-60 object-contain mx-auto" alt="GCD Control Unit FSM">
+
+</div>
+</div>
+
+---
+
+## FSM+D vs. FSMD
+
+There are two main methodologies for designing microprocessor systems in an HDL.
+
+### FSM+D (FSM plus Datapath)
+*   The FSM (Control Unit) and the Datapath are designed as **separate, manually constructed units**.
+*   They are then connected together in a top-level module.
+*   **Advantage:** You have full, explicit control over the datapath structure. This is useful for highly optimized or unusual datapaths. This is the method we have been following.
+
+### FSMD (FSM with Datapath)
+*   The entire design is described as a **single behavioral FSM** in an HDL.
+*   Datapath operations (like `A <= B + C;`) are embedded directly within the FSM states.
+*   The synthesis tool automatically infers and generates the necessary datapath components (registers, adders, MUXes) and connects them to the control unit.
+*   **Advantage:** Faster and simpler design process for standard operations. This is the most common modern approach.
+
+---
 
 ## Summary
 
@@ -502,4 +857,3 @@ Write the step-by-step **Control Word sequence** (similar to the Summation examp
 *   **Step 2**: `A = B`
 *   **Step 3**: `B = Temp`
 *   Define the control signals for each step.
-
