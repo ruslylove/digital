@@ -421,10 +421,14 @@ A **decoder** is a combinational circuit that converts binary information from *
 
 :: left ::
 
+<div class="text-base">
+
 *   For any given input combination, only **one** output is active (e.g., HIGH), while all others are inactive (e.g., LOW).
 *   Decoders are often called *n-to-m-line* decoders, where *m ≤ 2ⁿ*.
 
-<img src="/decoder_3to8_block.svg" class="rounded-lg bg-white p-3 w-48 mx-auto" alt="Block Diagram of 3-to-8 Decoder">
+</div>
+
+<img src="/decoder_3to8_block.svg" class="rounded-lg bg-white p-3 w-53 mx-auto" alt="Block Diagram of 3-to-8 Decoder">
 <div class="text-center text-sm opacity-50 mt-2">Figure 5-8: Block Diagram of 3-to-8 Decoder.</div>
 
 :: right ::
@@ -610,10 +614,9 @@ An **encoder** performs the inverse operation of a decoder.
 *   It has **2ⁿ** (or fewer) input lines and *n* output lines.
 *   It converts a single active input line into its corresponding binary code on the output lines.
 *   It is assumed that only **one** input line is active at a time.
-
 **Octal-to-Binary Encoder (8-to-3)**
 $$
-\small
+\footnotesize
 \begin{array}{|cccccccc|ccc|}
 \hline
 D_7 & D_6 & D_5 & D_4 & D_3 & D_2 & D_1 & D_0 & x & y & z \\
@@ -636,7 +639,7 @@ $$
 
 :: right ::
 
-<img src="/encoder_8to3_circuit.svg" class="rounded-lg bg-white p-4 mx-auto w-95" alt="Octal-to-Binary Encoder (8-to-3) Logic Diagram">
+<img src="/encoder_8to3_circuit.svg" class="rounded-lg bg-white p-4 mx-auto w-100" alt="Octal-to-Binary Encoder (8-to-3) Logic Diagram">
 <div class="text-center text-sm opacity-50 mt-2">Figure 5-13: Octal-to-Binary Encoder (8-to-3).</div>
 
 ---
@@ -645,20 +648,17 @@ layout: two-cols
 
 ## Priority Encoders
 
-<div class="text-sm">
+<div class="text-base">
 
 What happens if more than one input to a simple encoder is active? The output is undefined or incorrect.
-
 A **priority encoder** solves this by establishing an importance level (priority) for the inputs.
-
 *   If multiple inputs are active, the encoder outputs the binary code corresponding to the input with the **highest priority**.
 *   They also usually include a "Valid" output (`V`) to indicate if any input is active.
-
 **4-to-2 Priority Encoder (D₃ is highest priority)**
 
 
 $$
-\small
+\footnotesize
 \begin{array}{|cccc|ccc|}
 \hline
 D_3 & D_2 & D_1 & D_0 & x & y & V \\
@@ -686,11 +686,13 @@ $$
 
 ## Multiplexers (MUX)
 
-A **multiplexer** (or data selector) is a circuit that selects binary information from one of many input lines and directs it to a single output line.
-
 <div class="grid grid-cols-2 gap-8">
 
 <div>
+
+A **multiplexer** (or data selector) is a circuit that selects binary information from one of many input lines and directs it to a single output line.
+
+
 
 *   It has **2ⁿ** data input lines, **n** selection lines, and **one** output line.
 *   The selection lines determine which data input is connected to the output.
@@ -714,7 +716,7 @@ $$
 
 <div>
 
-<img src="/mux_4to1_logic.svg" class="rounded-lg bg-white w-62 mx-auto" alt="4-to-1 MUX Logic Diagram">
+<img src="/mux_4to1_logic.svg" class="rounded-lg bg-white w-80 mx-auto" alt="4-to-1 MUX Logic Diagram">
 <div class="text-center text-sm opacity-50 mt-2">Figure 5-15: 4-to-1 MUX Logic Diagram.</div>
 
 
@@ -793,8 +795,8 @@ A multiplexer is essentially a **universal logic circuit**. Any Boolean function
 
 ### Example: $F(A, B, C, D) = \Sigma(1, 3, 4, 11, 12, 13, 14, 15)$
 
-<div class="grid grid-cols-2 gap-8">
-<div>
+<div class="grid grid-cols-3 gap-8">
+<div class="col-span-2">
 
 **Implementation Table:**
 Group the truth table by the selection variables ($A, B, C$).
@@ -846,7 +848,7 @@ $$
 
 **Logic Diagram using 8-to-1 MUX**
 
-<img src="/mux_8to1_func.svg" class="rounded-lg bg-white p-4 w-60 mx-auto" alt="8-to-1 MUX Function Implementation">
+<img src="/mux_8to1_func.svg" class="rounded-lg bg-white p-4 w-59 mx-auto" alt="8-to-1 MUX Function Implementation">
 <div class="text-center text-sm opacity-50 mt-2">Figure 5-16: Boolean Function Implementation with 8-to-1 MUX.</div>
 
 </div>
@@ -889,7 +891,7 @@ layout: two-cols-header
 
 :: right ::
 
-<img src="/mux_tree_3var.svg" class="w-80 mx-auto" alt="Shannon Expansion MUX Tree"/>
+<img src="/mux_tree_3var.svg" class="w-75 mx-auto" alt="Shannon Expansion MUX Tree"/>
 <div class="text-center text-sm opacity-50 mt-2">Figure 5-17: 3-Variable MUX Tree.</div>
 
 ---
@@ -909,7 +911,7 @@ The **Arithmetic Logic Unit (ALU)** is a combinational circuit that performs ari
 
 :: right ::
 
-<img src="/alu_74381_block.svg" class="w-80 mx-auto" alt="74381 ALU Symbol"/>
+<img src="/alu_74381_block.svg" class="w-100 mx-auto p-4" alt="74381 ALU Symbol"/>
 <div class="text-center text-sm opacity-50 mt-2">Figure 5-18: 74381 ALU Block Diagram.</div>
 
 ---

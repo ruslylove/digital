@@ -98,7 +98,7 @@
     \draw (term0.out) -| (gtOr.in 4);
     
     % Output Node for A > B
-    \draw (gtOr.out) -- ++(0.5,0) coordinate (gtOut) node[above right] {$A > B$};
+    \draw (gtOr.out) -- ++(0.5,0) coordinate (gtOut);
 
     % ==========================
     % Output AND Logic (A = B)
@@ -112,7 +112,7 @@
     \draw (\xBUSZero, 0 |- eqAnd.in 4) to[short, *-] (eqAnd.in 4);
     
     % Output Node for A = B
-    \draw (eqAnd.out) -- ++(0.5,0) coordinate (eqOut) node[below right] {$A = B$};
+    \draw (eqAnd.out) -- ++(0.5,0) coordinate (eqOut);
     
     
     % ==========================
@@ -125,12 +125,14 @@
     % ltNor should be between them.
     
     % Route gtOr output (A > B) to NOR input 1
-    \draw (gtOut) -- ++(0.5, 0) |- (ltNor.in 1);
+    \draw (gtOut) |- (ltNor.in 1);
     
     % Route eqAnd output (A = B) to NOR input 2
-    \draw (eqOut) -- ++(1.8, 0) |- (ltNor.in 2);
+    \draw (eqOut) |- (ltNor.in 2);
     
-    \draw (ltNor.out) -- ++(0.5,0) node[right] {$A < B$};
+    \draw (ltNor.out) -- ++(0.5,0) node[right] (altOut) {$A < B$};
+    \draw (gtOut) to[short,*-] (gtOut -| altOut.west) node[right] {$A > B$};
+    \draw (eqOut) to[short,*-] (eqOut -| altOut.west) node[right] {$A = B$};
 
 \end{circuitikz}
 \end{document}
