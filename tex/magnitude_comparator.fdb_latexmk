@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1765009681.53608 "/Users/rus/development/digital/tex/magnitude_comparator.tex" "magnitude_comparator.pdf" "magnitude_comparator" 1765009683.18374 0
-  "/Users/rus/development/digital/tex/magnitude_comparator.tex" 1765009681.29337 4673 40c57779f743be39658824264d836974 ""
+["pdflatex"] 1766248944.11701 "/Users/rus/development/digital/tex/magnitude_comparator.tex" "magnitude_comparator.pdf" "magnitude_comparator" 1766248946.05624 0
+  "/Users/rus/development/digital/tex/magnitude_comparator.tex" 1766248943.86974 4752 89dfec2c9fc1b2c71aa8f8fb94b5ae96 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb" 1248133631 36299 5f9df58c2139e7edcf37c8fca4bd384d ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb" 1248133631 36281 c355509802a035cadc5f15869451dcee ""
   "/usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1248133631 35752 024fb6c41858982481f6968b5fc26508 ""
@@ -119,8 +119,8 @@
   "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1763819811 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
   "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1763819727 3345735 98e8d6ce829fe76d41a990640e1359a8 ""
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
-  "magnitude_comparator.aux" 1765009683.09942 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
-  "magnitude_comparator.tex" 1765009681.29337 4673 40c57779f743be39658824264d836974 ""
+  "magnitude_comparator.aux" 1766248945.96742 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "magnitude_comparator.tex" 1766248943.86974 4752 89dfec2c9fc1b2c71aa8f8fb94b5ae96 ""
   (generated)
   "magnitude_comparator.aux"
   "magnitude_comparator.log"
