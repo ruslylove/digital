@@ -1,0 +1,120 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{tikz}
+\usepackage{circuitikz}
+\ctikzset{logic ports=ieee}
+\usetikzlibrary{positioning, calc, decorations.markings, shapes.geometric}
+
+% Define the register style similar to counter_datapath.tex
+\tikzset{register_style/.style={muxdemux, muxdemux def={Lh=3, Rh=3, NL=2, NB=1, NT=1, w=5.0, NR=0},
+                            muxdemux label={L1=Load, L2=Clock, L3=Clear, T1=$D$, B1=$Q$}}}
+
+\begin{document}
+
+\begin{circuitikz}[
+    font=\sffamily,
+    arrow/.style={-Latex, line width=1pt},
+    label_text/.style={font=\footnotesize},
+    bus/.style={-Latex, line width=1.5pt,
+        postaction={decorate},
+        decoration={markings, mark=at position 0.5 with {
+            \draw[thick,-] (-2pt,-3pt) -- (2pt,3pt);
+            \node[above left=0.5pt] {\footnotesize $4$}; 
+        }}},
+    control_signal/.style={-Latex, line width=0.5pt},
+]
+
+    % --- Control Unit ---
+    % Inputs (Left): Clock, Reset
+    % Inputs (Right): (A=5)
+    % --- Control Unit ---
+    % Inputs (Left): Clock, Reset
+    % Inputs (Right): (A=5)
+    % Outputs (Right): ALoad, Muxsel, BLoad, Out (Reordered for routing)
+    \node[muxdemux, muxdemux def={Lh=8, Rh=8, NL=2, NR=5, NB=0, NT=0, w=8},
+          muxdemux label={L1=Clk, L2=Rst, 
+                          R1=ALoad, R2=Muxsel, R3=BLoad, R4=Out, R5={$(A=5)$}}] (CU) at (-7, 1) {Control\\Unit};
+
+    % CU Inputs
+    \draw[control_signal] ($(CU.blpin 1)+(-1,0)$) node[left] {Clock} -- (CU.blpin 1);
+    \draw[control_signal] ($(CU.blpin 2)+(-1,0)$) node[left] {Reset} -- (CU.blpin 2);
+
+    % --- Register A ---
+    \node[register_style, muxdemux label={L1=, L2=, L3=, T1=In}, 
+    muxdemux label={T1=$D$, L1=$Load$, L2={$Clock$}}, anchor=blpin 1] (RegA) at (0,4.5) {Reg A};
+    % Shift RegA slightly to align pin 1 with ALoad channel if needed, sticking to (0,4.5) to give space for Comp connection.
+    % Actually default was (0,4). Let's keep components roughly same, adjust lines.
+    
+    % Input arrow to Reg A
+    \node[above] at ($(RegA.btpin 1)+(0,1.5)$) (Input) {Input};
+    \draw[bus] (Input) -- (RegA.btpin 1);
+
+    % --- Comparator (A vs 5) ---
+    \node[muxdemux, muxdemux def={Lh=2, Rh=2, NL=0, NB=0, NT=2, w=3.5, NR=1},
+          muxdemux label={T1=$A$, T2=$B$, R1={$(A=5)$}}, anchor=btpin 1] (Comp) at ($(RegA.bpin 1)+(0,-3.4)$) {};
+    
+    % Connect Reg A to Comp A input (tpin 1 -> btpin 1)
+    \draw[bus] (RegA.bbpin 1) -- ++(0,-1.5) -| (Comp.btpin 1);
+    
+    % Connect Constant 5 to Comp B input (tpin 2 -> btpin 2)
+    \draw[bus] ($(Comp.btpin 2)+(0,1)$) node[above] {$'5'$} -- (Comp.btpin 2);
+    
+    % Status Signal: Comp (A=5) -> CU
+    % Route: Comp (0,0) -> Down to y=-2.5 -> Left -> Up to CU.R5 (y~ -2)
+    \draw[control_signal] (Comp.rpin 1) |- ++(-4, -1)  |- (CU.brpin 5);
+
+    % --- Mux (Trapezoidal 2-to-1) ---
+    \node[muxdemux, muxdemux def={Lh=6, Rh=3, NL=2, NB=1, NT=0, w=2, NR=1},
+          muxdemux label={L1=$0$, L2=$1$, B1=$Sel$},
+          rotate=-90] (Mux) at (6, 4) {Mux};
+          
+    % Mux Inputs
+    \draw[bus] ($(Mux.blpin 1)+(0,1.5)$) node[left] {$'8'$} -- (Mux.blpin 1);
+    \draw[bus] ($(Mux.blpin 2)+(0,1.5)$) node[left] {$'13'$} -- (Mux.blpin 2);
+
+    % --- Register B ---
+    \node[register_style] (RegB) at (6, 0) {Reg B};
+    
+    % Connect Mux Out to Reg B In
+    \draw[bus] (Mux.brpin 1) -- (RegB.btpin 1);
+
+    % --- Tri-state Buffer ---
+    \node[buffer port, rotate=-90, yscale=-1, scale=0.5] (Tri) at (6, -3) {};
+    
+    % Connect Reg B Out to Tri-state In
+    \draw[bus] (RegB.bbpin 1) -- (Tri.bin);
+    
+    % Tri-state Output
+    \draw[bus] (Tri.bout) -- ++(0,-1) node[below] {$Output$};
+    
+    % --- Control Signal Connections (Optimized Routing) ---
+    
+    % ALoad: CU.R1 -> RegA.L1
+    % Direct path
+    \draw[control_signal] (CU.brpin 1) -- (CU.rpin 1) -- ++(3,0) |- (RegA.blpin 1);
+    
+    % Muxsel: CU.R2 -> Mux.B1
+    % Route HIGH (y=6) to avoid RegA-Comp bus
+    \draw[control_signal] (CU.brpin 2) -- ++(0.5,0) |- ++(0, 0.5) -- ++(8,0) |- (Mux.bpin 1) -- (Mux.bbpin 1);
+    
+    % BLoad: CU.R3 -> RegB.L1
+    % Route LOW (y=-1.5) to avoid crossing data lines
+    % Target RegB is at y=0. Lpin 1 is top.
+    \draw[control_signal] (CU.brpin 3) -- ++(1.0,0) |- (0, -2.5) -| ($(RegB.blpin 1)+(-1,0)$) -- (RegB.blpin 1);
+    
+    % Out: CU.R4 -> Tri.up
+    % Route BOTTOM (y=-4)
+    \draw[control_signal] (CU.brpin 4) -- ++(0.5,0) |- (Tri.up);
+    
+    % Clock Line (Common)
+    \coordinate (clk_source) at ($(CU.blpin 1)+(-0.5,0)$);
+    \fill [black] (clk_source) circle (2pt);
+    
+    % Route Clock via very bottom or top?
+    % Let's go very bottom (y=-5)
+    \draw[control_signal] (clk_source) -- ++(0,-6) coordinate (clk_bottom) -- ++(14,0) |- (RegB.blpin 2);
+    % Connect RegB clock
+    \draw[control_signal] (RegA.lpin 2 |- clk_bottom) to[short,*-] (RegA.lpin 2) -- (RegA.blpin 2);
+
+
+\end{circuitikz}
+\end{document}

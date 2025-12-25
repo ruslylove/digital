@@ -633,6 +633,10 @@ By combining the datapath and the synthesized control unit, we get the complete 
 
 ## Design Example 2: `if-then-else` Control Unit
 
+<div class="grid grid-cols-2 gap-8">
+
+<div class="text-sm">
+
 **Algorithm:**
 ```
 INPUT A
@@ -644,32 +648,47 @@ END IF
 OUTPUT B
 ```
 
-<div class="grid grid-cols-2 gap-8">
-
-<div>
-
-**Datapath:**
-<img src="https://i.imgur.com/v8t762L.png" class="rounded-lg bg-white p-4" alt="if-then-else datapath">
-
-**Status Signal:** `(A=5)`
-**Control Signals:** `ALoad`, `BLoad`, `Muxsel`, `Out`
+* **Status Signal:** `(A=5)`
+* **Control Signals:** `ALoad`, `BLoad`, `Muxsel`, `Out`
+* **Control Word Table:**
+$$
+\scriptsize
+\def\arraystretch{1.5}
+\begin{array}{|l|c|c|c|c|}
+\hline
+\textbf{Instructions (States)} & \textbf{ALoad} & \textbf{BLoad} & \textbf{Muxsel} & \textbf{Out} \\ \hline
+\text{INPUT A} \space (S_{input})    & 1 & 0 & X & 0 \\ \hline
+\text{EXTRA} \space (S_{extra})    & 0 & 0 & X & 0 \\ \hline
+\text{B = 8} \space (S_{equal})    & 0 & 1 & 0 & 0 \\ \hline
+\text{B = 13} \space (S_{notequal}) & 0 & 1 & 1 & 0 \\ \hline
+\text{OUTPUT B} \space (S_{output})   & 0 & 0 & X & 1 \\ \hline
+\end{array}
+$$
 
 </div>
 
-<div>
+<div class="text-base">
+
+**Datapath:**
+<img src="/if_then_else_datapath.svg" class="rounded-lg bg-white p-4 w-90 object-contain mx-auto" alt="if-then-else datapath">
+<p class="text-center text-sm">Figure 9-17: if-then-else Datapath</p>
+
+</div>
+</div>
+
+
+---
 
 **Control Unit FSM (State Diagram):**
 
-*   **S_input:** Load register A.
-*   **S_extra:** A wait state to allow register A to settle before checking its value.
-*   **S_equal:** Load B with 8.
-*   **S_notequal:** Load B with 13.
-*   **S_output:** Output the value from B.
+*   **$S_{input}$:** Load register A.
+*   **$S_{extra}$:** A wait state to allow register A to settle before checking its value.
+*   **$S_{equal}$:** Load B with 8.
+*   **$S_{notequal}$:** Load B with 13.
+*   **$S_{output}$:** Output the value from B.
 
-<img src="/if_then_else_fsm.svg" class="rounded-lg bg-white p-4 w-full h-60 object-contain mx-auto" alt="If-Then-Else Control Unit FSM">
-
-</div>
-</div>
+<img src="/if_then_else_fsm.svg" class="rounded-lg bg-white p-4 w-120 object-contain mx-auto" alt="If-Then-Else Control Unit FSM">
+<p class="text-center text-sm">Figure 9-16: If-Then-Else Control Unit FSM</p>
 
 ---
 
@@ -683,13 +702,14 @@ From the state diagram, we derive the state and output tables to synthesize the 
 
 <div>
 
-### Next State Table (Partial)
+### Next State Table
 
 $$
+\footnotesize
 \def\arraystretch{1.5}
 \begin{array}{|c|c|c|}
 \hline
-\textbf{PS} & \textbf{Input } (A=5) & \textbf{NS} \\
+\textbf{Present State} & \textbf{Input } (A=5) & \textbf{Next State} \\
 \hline
 000 & X & 001 \\
 \hline
@@ -713,18 +733,21 @@ $$
 ### Output Table (Moore Model)
 
 $$
+\footnotesize
 \def\arraystretch{1.5}
-\begin{array}{|c|c|c|c|c|}
+\begin{array}{|c|l|c|c|c|c|}
 \hline
-\textbf{State} & \textbf{ALoad} & \textbf{Muxsel} & \textbf{BLoad} & \textbf{Out} \\
+\textbf{State} & \textbf{Name} & \textbf{ALoad} & \textbf{Muxsel} & \textbf{BLoad} & \textbf{Out} \\
 \hline
-000 & 1 & X & 0 & 0 \\
+000 & S_{input} & 1 & X & 0 & 0 \\
 \hline
-010 & 0 & 0 & 1 & 0 \\
+001 & S_{extra} & 0 & X & 0 & 0 \\
 \hline
-011 & 0 & 1 & 1 & 0 \\
+010 & S_{equal} & 0 & 0 & 1 & 0 \\
 \hline
-100 & 0 & X & 0 & 1 \\
+011 & S_{notequal} & 0 & 1 & 1 & 0 \\
+\hline
+100 & S_{output} & 0 & X & 0 & 1 \\
 \hline
 \end{array}
 $$
@@ -732,13 +755,97 @@ $$
 </div>
 </div>
 
-**Synthesized Logic (from PDF):**
-*   `ALoad = Q₂'Q₁'Q₀'`
-*   `Muxsel = Q₂'Q₁'Q₀`
-*   `BLoad = Q₂'Q₁`
-*   `Out = Q₂Q₁'Q₀'`
+---
+
+<div class="grid grid-cols-2 gap-8">
+
+<div>
+
+### Synthesized Logic:
+
+
+
+* **State variables:** $Q_2, Q_1, Q_0$
+* **Input:** $A=5$ (denoted as $I$)
+
+**Next State Equations (D-Flip Flop):**
+*   $D_2 = Q_2 + Q_1$
+*   $D_1 = \bar{Q_1}Q_0$
+*   $D_0 = \bar{Q_2}\bar{Q_1}(\bar{Q_0} + I)$
+
+**Output Equations:**
+*   $ALoad = \bar{Q_2}\bar{Q_1}\bar{Q_0}$
+*   $BLoad = \bar{Q_2}Q_1$
+*   $Muxsel = Q_0$
+*   $Out = Q_2$
+
+</div>
+
+<div>
+
+**VHDL Implementation (Structural):**
+
+**IfThenElseControl.vhd**
+```vhdl{*}{maxHeight:'330px',lines:true}
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity IfThenElseControl is
+    Port ( Clk      : in  STD_LOGIC;
+           Reset    : in  STD_LOGIC;
+           A_eq_5   : in  STD_LOGIC;
+           ALoad    : out STD_LOGIC;
+           BLoad    : out STD_LOGIC;
+           Muxsel   : out STD_LOGIC;
+           Out_sig  : out STD_LOGIC);
+end IfThenElseControl;
+
+architecture Structural of IfThenElseControl is
+
+    component d_ff
+        Port ( D     : in  STD_LOGIC;
+               Clk   : in  STD_LOGIC;
+               Reset : in  STD_LOGIC;
+               Q     : out STD_LOGIC);
+    end component;
+
+    signal D, Q : STD_LOGIC_VECTOR(2 downto 0);
+
+begin
+
+    -- Instantiate D Flip-Flops for State Register
+    DFF2: d_ff port map (D(2), Clk, Reset, Q(2));
+    DFF1: d_ff port map (D(1), Clk, Reset, Q(1));
+    DFF0: d_ff port map (D(0), Clk, Reset, Q(0));
+
+    -- Next State Logic
+    D(2) <= Q(2) or Q(1);
+    D(1) <= (not Q(1)) and Q(0);
+    D(0) <= (not Q(2)) and (not Q(1)) and ((not Q(0)) or A_eq_5);
+
+    -- Output Logic
+    ALoad   <= (not Q(2)) and (not Q(1)) and (not Q(0));
+    BLoad   <= (not Q(2)) and Q(1);
+    Muxsel  <= Q(0);
+    Out_sig <= Q(2);
+
+end Structural;
+```
+
+</div>
+
+</div>
 
 ---
+
+
+<img src="/if_then_else_combined.svg" class="rounded-lg bg-white p-4 h-100 object-contain mx-auto" alt="if-then-else combined">
+<p class="text-center text-sm">Figure 9-18: if-then-else Control Unit combined with Datapath</p>
+
+
+---
+
+
 
 ## Design Example 3: GCD Control Unit
 
