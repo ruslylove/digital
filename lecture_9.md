@@ -857,22 +857,35 @@ end Structural;
 
 **Algorithm:**
 ```
+INPUT X
+INPUT Y
 WHILE (X != Y) {
   IF (X > Y) THEN
     X = X - Y
   ELSE
     Y = Y - X
 }
+OUTPUT X
 ```
 
-**Datapath:**
-<img src="https://i.imgur.com/s64052X.png" class="rounded-lg bg-white p-4" alt="GCD Datapath">
 
-**Status Signals:** `XeqY`, `XgtY`
+
+* **Status Signals:** `XeqY`, `XgtY`
+* **Control Signals:** `In_X`, `In_Y`, `XLoad`, `YLoad`, `XY`, `Out`
 
 </div>
 
 <div>
+
+**Datapath:**
+<img src="/gcd_datapath.png" class="rounded-lg bg-white p-1 w-75 mx-auto" alt="GCD Datapath">
+<p class="text-center text-sm">Figure 9-19: GCD Datapath</p>
+
+</div>
+</div>
+---
+layout: two-cols
+---
 
 **Control Unit FSM (State Diagram):**
 
@@ -882,10 +895,10 @@ WHILE (X != Y) {
 *   **S₃ (Y=Y-X):** Perform subtraction.
 *   **S₄ (Done):** Output the result.
 
-<img src="/gcd_fsm.svg" class="rounded-lg bg-white p-4 w-full h-60 object-contain mx-auto" alt="GCD Control Unit FSM">
+:: right ::
 
-</div>
-</div>
+<img src="/gcd_fsm.svg" class="rounded-lg bg-white p-4 w-full object-contain mx-auto" alt="GCD Control Unit FSM">
+<p class="text-center text-sm">Figure 9-20: GCD Control Unit FSM</p>
 
 ---
 
@@ -893,16 +906,112 @@ WHILE (X != Y) {
 
 There are two main methodologies for designing microprocessor systems in an HDL.
 
+<div class="grid grid-cols-2 gap-8">
+
+<div>
+
 ### FSM+D (FSM plus Datapath)
 *   The FSM (Control Unit) and the Datapath are designed as **separate, manually constructed units**.
 *   They are then connected together in a top-level module.
 *   **Advantage:** You have full, explicit control over the datapath structure. This is useful for highly optimized or unusual datapaths. This is the method we have been following.
+
+</div>
+
+<div>
 
 ### FSMD (FSM with Datapath)
 *   The entire design is described as a **single behavioral FSM** in an HDL.
 *   Datapath operations (like `A <= B + C;`) are embedded directly within the FSM states.
 *   The synthesis tool automatically infers and generates the necessary datapath components (registers, adders, MUXes) and connects them to the control unit.
 *   **Advantage:** Faster and simpler design process for standard operations. This is the most common modern approach.
+
+</div>
+</div>
+
+---
+
+## FSMD Example: GCD Calculator
+
+<div class="grid grid-cols-2 gap-8">
+<div class="text-base">
+
+**Algorithm:**
+```
+INPUT X, Y
+WHILE (X != Y) {
+  IF (X > Y) THEN
+    X = X - Y
+  ELSE
+    Y = Y - X
+}
+OUTPUT X
+```
+
+
+
+
+**State Diagram:**
+
+<img src="/gcd_fsm.svg" class="rounded-lg bg-white w-52 mx-auto" alt="GCD State Diagram">
+
+</div>
+
+<div>
+
+**FSMD:**
+
+```vhdl {*}{maxHeight:'350px',lines:true}
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+entity GCD is
+    Port ( Clk      : in  STD_LOGIC;
+           Reset    : in  STD_LOGIC;
+           InputX   : in  UNSIGNED(7 downto 0);
+           InputY   : in  UNSIGNED(7 downto 0);
+           Output   : out UNSIGNED(7 downto 0));
+end GCD;
+
+architecture Behavioral of GCD is
+    type StateType is (S0, S1, S2, S3, S4);
+    signal State : StateType;
+    signal X, Y  : UNSIGNED(7 downto 0);
+begin
+
+    process(Clk)
+    begin
+        if rising_edge(Clk) then
+            if Reset = '1' then
+                State <= S0;
+            else
+                case State is
+                    when S0 =>  -- Init
+                        X <= InputX; Y <= InputY;
+                        State <= S1;
+                    when S1 =>  -- Check
+                        if (X = Y) then State <= S4;
+                        elsif (X > Y) then State <= S2;
+                        else State <= S3;
+                        end if;
+                    when S2 =>  -- X = X - Y
+                        X <= X - Y;
+                        State <= S1;
+                    when S3 =>  -- Y = Y - X
+                        Y <= Y - X;
+                        State <= S1;
+                    when S4 =>  -- Done
+                        Output <= X;
+                end case;
+            end if; 
+        end if; 
+    end process; 
+
+end Behavioral;
+```
+
+</div>
+</div>
 
 ---
 
