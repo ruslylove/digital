@@ -1,0 +1,149 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{tikz}
+\usepackage{circuitikz}
+\ctikzset{logic ports=ieee}
+\usetikzlibrary{positioning, calc, decorations.markings, shapes.geometric}
+
+% Define the register style
+\tikzset{register_style/.style={muxdemux, muxdemux def={Lh=3, Rh=3, NL=2, NB=1, NT=1, w=5.0, NR=0},
+                            muxdemux label={L1=Load, L2=Clock, L3=Clear, T1=$D$, B1=$Q$}}}
+
+\begin{document}
+
+\begin{circuitikz}[
+    font=\sffamily,
+    arrow/.style={-Latex, line width=1pt},
+    label_text/.style={font=\small},
+    bus/.style={-Latex, line width=1.5pt,
+        postaction={decorate},
+        decoration={markings, mark=at position 0.5 with {
+            \draw[thick,-] (-2pt,-3pt) -- (2pt,3pt);
+            %\node[above left=0.5pt] {\footnotesize $n$}; 
+        }}},
+    control_signal/.style={-Latex, line width=0.5pt, color=blue},
+]
+    % --- Layout Variables ---
+    \def\regY{4}      % Y position of Registers
+    \def\muxInY{7}    % Y position of Input Muxes
+    \def\muxOpY{0}    % Y position of Operand Muxes
+    \def\subY{-3}     % Y position of Subtractor
+    \def\colX{0}      % X column for X path
+    \def\colY{8}      % X column for Y path
+    
+    % --- Control Signals List (Left Side) ---
+    \node[anchor=north west, align=left] at (-8, 8) {
+        \textbf{Control Signals}:\\
+        \textcolor{blue}{In\_X}: $1=$ Input, $0=$ Sub\\
+        \textcolor{blue}{In\_Y}: $1=$ Input, $0=$ Sub\\
+        \textcolor{blue}{XLoad}: Load X\\
+        \textcolor{blue}{YLoad}: Load Y\\
+        \textcolor{blue}{XY}: $0=X-Y$, $1=Y-X$\\
+        \textcolor{blue}{Out}: Output Enable
+    };
+
+    % --- Input Muxes (Select: Input vs Feedback) --
+    % MuxInX
+    \node[muxdemux, muxdemux def={Lh=4, Rh=3, NL=2, NB=1, NT=0, w=2, NR=1},
+          muxdemux label={L1=$Sub$, L2=$In$, B1=$Sel$},
+          rotate=-90] (MuxInX) at (\colX, \muxInY) {Mux X};
+    % MuxInY
+    \node[muxdemux, muxdemux def={Lh=4, Rh=3, NL=2, NB=1, NT=0, w=2, NR=1},
+          muxdemux label={L1=$Sub$, L2=$In$, B1=$Sel$},
+          rotate=-90] (MuxInY) at (\colY, \muxInY) {Mux Y};
+
+    % --- Registers ---
+    \node[register_style, anchor=btpin 1] (RegX) at (\colX, \regY) {Reg X};
+    \node[register_style, anchor=btpin 1] (RegY) at (\colY, \regY) {Reg Y};
+    
+    % Connect MuxIn -> Reg
+    \draw[bus] (MuxInX.brpin 1) -- (RegX.btpin 1);
+    \draw[bus] (MuxInY.brpin 1) -- (RegY.btpin 1);
+    
+    % --- System Inputs ---
+    \draw[bus] ($(MuxInX.blpin 2)+(0,1.5)$) node[left] {Input X} -- (MuxInX.blpin 2);
+    \draw[bus] ($(MuxInY.blpin 2)+(0,1.5)$) node[left] {Input Y} -- (MuxInY.blpin 2);
+
+    % --- Output Signal Routing ---
+    \coordinate (Xout) at ($(RegX.bbpin 1)+(0,-1)$);
+    \coordinate (Yout) at ($(RegY.bbpin 1)+(0,-1)$);
+    
+    \draw[bus] (RegX.bbpin 1) -- (Xout);
+    \draw[bus] (RegY.bbpin 1) -- (Yout);
+
+    % --- Comparator ---
+    \node[muxdemux, muxdemux def={Lh=2.5, Rh=2.5, NL=0, NB=0, NT=2, w=4, NR=2},
+          muxdemux label={T1=$A$, T2=$B$, R1={$(A=B)$}, R2={$(A>B)$}}] (Comp) at (4, 2) {Comp};
+          
+    \draw[bus] (Xout) -| ($(Comp.btpin 1)+(0,0.5)$) -- (Comp.btpin 1);
+    \draw[bus] (Yout) -| ($(Comp.btpin 2)+(0,0.5)$) -- (Comp.btpin 2);
+
+    % --- Operand Muxes (For swapping) ---
+    % MuxOpA (Feeds Subtractor A)
+    % 0: X, 1: Y
+    \node[muxdemux, muxdemux def={Lh=4, Rh=3, NL=2, NB=1, NT=0, w=2, NR=1},
+          muxdemux label={L1=$X$, L2=$Y$, B1=$Sel$},
+          rotate=-90] (MuxOpA) at (2, \muxOpY) {Op A};
+          
+    % MuxOpB (Feeds Subtractor B)
+    % 0: Y, 1: X
+    \node[muxdemux, muxdemux def={Lh=4, Rh=3, NL=2, NB=1, NT=0, w=2, NR=1},
+          muxdemux label={L1=$Y$, L2=$X$, B1=$Sel$},
+          rotate=-90] (MuxOpB) at (6, \muxOpY) {Op B};
+          
+    % Routing X to MuxOpA(0) and MuxOpB(1)
+    \draw[bus] (Xout) |- ($(MuxOpA.blpin 1)+(0,1)$) -- (MuxOpA.blpin 1);
+    \draw[bus] (Xout) -- ++(0,-1.5) -| ($(MuxOpB.blpin 2)+(0,1)$) -- (MuxOpB.blpin 2);
+    
+    % Routing Y to MuxOpA(1) and MuxOpB(0)
+    \draw[bus] (Yout) -- ++(0,-1.5) -| ($(MuxOpA.blpin 2)+(0,1)$) -- (MuxOpA.blpin 2);
+    \draw[bus] (Yout) |- ($(MuxOpB.blpin 1)+(0,1)$) -- (MuxOpB.blpin 1);
+
+    % --- Subtractor ---
+    \node[muxdemux, muxdemux def={Lh=3, Rh=3, NL=0, NB=1, NT=2, w=4, NR=0},
+          muxdemux label={T1=$A$, T2=$B$, B1=$Res$}] (Sub) at (4, \subY) {Subtractor};
+          
+    \draw[bus] (MuxOpA.brpin 1) -- (Sub.btpin 1);
+    \draw[bus] (MuxOpB.brpin 1) -- (Sub.btpin 2);
+
+    % --- Feedback Loop ---
+    % Sub Output -> MuxInX(0) and MuxInY(0)
+    \draw[bus] (Sub.bbpin 1) -- ++(0,-1) coordinate (SubOut);
+    
+    % Feedback to X
+    \draw[bus] (SubOut) -| (-3, 0) |- ($(MuxInX.blpin 1)+(0,1.5)$) -- (MuxInX.blpin 1);
+    
+    % Feedback to Y
+    \draw[bus] (SubOut) -| (11, 0) |- ($(MuxInY.blpin 1)+(0,1.5)$) -- (MuxInY.blpin 1);
+
+    % --- Output Tri-state ---
+    \node[buffer port, rotate=-90, scale=0.8] (Tri) at (-2, \regY) {};
+    % Connect X to Tri in
+    \draw[bus] (RegX.lpin 1) -- ++(-1,0) -- (Tri.in);
+    \draw[bus] (Tri.out) -- ++(-1,0) node[left] {Output System};
+    
+    % --- Control Signals Drawing ---
+    
+    % In_X
+    \draw[control_signal] ($(MuxInX.bbpin 1)+(0, 0.5)$) node[right] {In\_X} -- (MuxInX.bbpin 1);
+    % In_Y
+    \draw[control_signal] ($(MuxInY.bbpin 1)+(0, 0.5)$) node[left] {In\_Y} -- (MuxInY.bbpin 1);
+    
+    % XLoad
+    \draw[control_signal] ($(RegX.blpin 1)+(-1,0)$) node[left] {XLoad} -- (RegX.blpin 1);
+    % YLoad
+    \draw[control_signal] ($(RegY.blpin 1)+(-1,0)$) node[left] {YLoad} -- (RegY.blpin 1);
+    
+    % XY Signal (Shared)
+    \coordinate (XYNode) at (4, \muxOpY);
+    \draw[control_signal] (XYNode) node[above=1.2] {XY} -- (MuxOpA.bbpin 1);
+    \draw[control_signal] (XYNode) -- (MuxOpB.bbpin 1);
+    
+    % Out Signal
+    \draw[control_signal] (Tri.up) -- ++(0, 0.5) node[above] {Out};
+    
+    % Clock
+    \draw[control_signal] (RegX.blpin 2) -- ++(-0.5,0) node[left] {Clk};
+    \draw[control_signal] (RegY.blpin 2) -- ++(-0.5,0) node[left] {Clk};
+
+\end{circuitikz}
+\end{document}
