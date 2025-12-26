@@ -13,19 +13,12 @@ title: "Lecture 10 - General-Purpose Microprocessors"
 {{ $slidev.configs.author }}
 
 ---
+hideInToc: false
+---
 
 ## Outline
 
-*   **General-Purpose vs. Dedicated Microprocessors**
-*   **Overview of CPU Design**
-    *   Instruction Set Definition
-    *   Datapath Design
-    *   Control Unit Design
-*   **The EC-1 General-Purpose Microprocessor**
-    *   Instruction Set
-    *   Datapath Construction
-    *   Control Unit FSM
-*   **Instruction Cycle: Fetch, Decode, Execute**
+<toc mode="onlySiblings" minDepth="2" columns="2"/>
 
 ---
 layout: two-cols
