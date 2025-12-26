@@ -908,7 +908,7 @@ end process;
 
 ---
 
-## Summary
+## Lecture 8 Summary
 
 *   **Finite State Machines (FSMs)** are accurate models for sequential logic.
 *   **Moore vs. Mealy:** Moore outputs depend on state only; Mealy on state and inputs.
@@ -916,3 +916,158 @@ end process;
 *   **Synthesis:** Specification $\to$ State Diagram $\to$ Logic Circuit.
 *   **Optimization:** Reduces hardware cost via state reduction and prudent encoding.
 *   **VHDL:** Implemented using standard templates separating sequential (state memory) and combinational (next state/output) logic.
+
+
+---
+layout: section
+---
+
+## Lecture 8 Exercises
+
+Here are some exercises to test your understanding of Finite State Machines.
+
+---
+
+### Exercise 8-1: Moore vs. Mealy
+
+**Question:** Identify which of the following block diagrams represents a Moore Machine and which represents a Mealy Machine.
+
+<div class="grid grid-cols-2 gap-8 mt-8">
+<div>
+<div class="border-2 border-gray-400 p-4 rounded-lg">
+
+Inputs + Present State $\to$ Next State <br>
+Present State $\to$ Output
+</div>
+<div class="mt-2 text-lg font-bold text-center"> (A) </div>
+</div>
+<div>
+<div class="border-2 border-gray-400 p-4 rounded-lg">
+
+Inputs + Present State $\to$ Next State <br>
+Inputs + Present State $\to$ Output
+</div>
+<div class="mt-2 text-lg font-bold text-center"> (B) </div>
+</div>
+</div>
+
+
+---
+
+### Exercise 8-2: State Analysis
+
+**Question:** Consider a state machine with one JK Flip-Flop.
+*   $J = x$, $K = 1$
+*   Current State $Q = 0$
+*   Input $x = 1$
+
+What is the Next State ($Q_{next}$)?
+
+
+---
+
+### Exercise 8-3: Sequence Detection (Overlapping)
+
+**Question:** Draw the State Diagram for a sequence detector that detects the sequence **"110"**.
+*   **Overlapping sequences represent valid detection.**
+*   Example Input: `0 1 1 0 1 1 0` $\to$ Output: `0 0 0 1 0 0 1`
+
+
+
+---
+
+### Exercise 8-4: Sequence Detection (Non-Overlapping)
+
+**Question:** Draw the State Diagram for a sequence detector that detects **"110"** (Non-Overlapping).
+*   Example Input: `1 1 0 1 1 0` $\to$ Output: `0 0 1 0 0 1` (Same)
+*   Example Input: `1 1 0 1 0`
+    *   Overlapping: `...1` at end of first `110` could be start of next.
+    *   Non-overlapping: After detection, reset completely to S0.
+
+---
+
+### Exercise 8-5: State Encoding
+
+**Question:** You are designing an FSM with **12 States**.
+1.  How many Flip-Flops are needed for **Binary Encoding**?
+2.  How many Flip-Flops are needed for **One-Hot Encoding**?
+
+
+---
+
+### Exercise 8-6: VHDL Syntax
+
+**Question:** Identifying errors. What is missing in the sensitivity list of this VHDL process for a synchronous FSM?
+
+```vhdl
+process(clk) -- <== LOOK HERE
+begin
+    if reset = '1' then
+        current_state <= S0;
+    elsif rising_edge(clk) then
+        current_state <= next_state;
+    end if;
+end process;
+```
+
+
+
+---
+
+### Exercise 8-7: State Table Construction
+
+**Question:** Fill in the missing Next State for **State 01** with Input **1** in this counter (Count Up).
+*   Sequence: $00 \to 01 \to 10 \to 11 \to 00$
+
+$$
+\begin{array}{|c|c|c|}
+\hline
+\text{PS} & \text{Input} & \text{NS} \\
+\hline
+01 & 0 \text{ (Hold)} & 01 \\
+01 & 1 \text{ (Count)} & \mathbf{?} \\
+\hline
+\end{array}
+$$
+
+
+
+---
+
+### Exercise 8-8: Logic Equations
+
+**Question:** From the K-Map below for $D_0$, derive the simplified boolean equation.
+
+<div class="w-40 mx-auto border border-gray-500 p-2 text-center my-4">
+  <table class="mx-auto border-collapse">
+    <tr><td></td><td>0</td><td>1</td></tr>
+    <tr><td>0</td><td class="border border-gray-400">0</td><td class="border border-gray-400">1</td></tr>
+    <tr><td>1</td><td class="border border-gray-400">0</td><td class="border border-gray-400">1</td></tr>
+  </table>
+  <div class="text-xs mt-1">Rows: Q, Cols: Input X</div>
+</div>
+
+
+
+---
+
+### Exercise 8-9: Timing Constraints
+
+**Question:** Which inequality correctly describes the constraint for the maximum fluid clock frequency ($f_{max}$) in an FSM?
+1.  $T_{clk} \ge t_{setup} + t_{hold}$
+2.  $T_{clk} \ge t_{pcq} + t_{comb} + t_{setup}$
+3.  $T_{clk} \ge t_{pcq} + t_{comb} - t_{hold}$
+
+
+
+---
+
+### Exercise 8-10: Design Challenge
+
+**Question:** Design a **2-bit Gray Code Counter**.
+*   Sequence: $00 \to 01 \to 11 \to 10 \to 00 \dots$
+*   Draw the State Diagram on paper.
+
+
+
+
