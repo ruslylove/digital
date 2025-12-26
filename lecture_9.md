@@ -252,7 +252,7 @@ $$
 <div class="col-span-2">
 
 <img src="/datapath_one_adder.png" class="rounded-lg bg-white p-4 w-full" alt="Control Word Table Example"> 
-<p class="text-center text-sm">Figure 9-8: Datapath for A = A + 3 and A = B + C</p>
+<p class="text-center text-sm">Figure 9-10: Datapath for A = A + 3 and A = B + C</p>
 </div>
 </div>
 
@@ -286,7 +286,7 @@ OUTPUT B
 <div class="col-span-1">
 
 <img src="/datapath_if_then_else.png" class="rounded-lg bg-white p-4 w-full" alt="if-then-else datapath">
-<p class="text-center text-sm">Figure 9-10: Datapath for if-then-else</p>
+<p class="text-center text-sm">Figure 9-11: Datapath for if-then-else</p>
 
 </div>
 </div>
@@ -332,7 +332,7 @@ $$
 <div class="col-span-1">
 
 <img src="/datapath_if_then_else.png" class="rounded-lg bg-white p-5 w-full mx-auto" alt="if-then-else datapath">
-<p class="text-center text-sm">Figure 9-10: Datapath for if-then-else</p>
+<p class="text-center text-sm">Figure 9-12: Datapath for if-then-else</p>
 
 </div>
 </div>
@@ -376,7 +376,7 @@ OUTPUT Sum
 :: right ::
 
 <img src="/datapath_sum_1_to_10.png" class="rounded-lg bg-white p-4 w-full" alt="Counter datapath with adder">
-<p class="text-center text-sm">Figure 9-11: Datapath for summing numbers from 1 to 10</p>
+<p class="text-center text-sm">Figure 9-13: Datapath for summing numbers from 1 to 10</p>
 
 ---
 
@@ -417,7 +417,7 @@ $$
 
 <div>
 <img src="/datapath_sum_1_to_10.png" class="rounded-lg bg-white p-1 w-full mx-auto" alt="Counter datapath with adder">
-<p class="text-center text-sm">Figure 9-11: Datapath for summing numbers from 1 to 10</p>
+<p class="text-center text-sm">Figure 9-14: Datapath for summing numbers from 1 to 10</p>
 </div>
 </div>
 
@@ -451,7 +451,7 @@ A microprocessor is partitioned into two main parts that work together.
 <div>
 
 <img src="/datapath_control.svg" class="rounded-lg bg-white p-4 w-full" alt="Datapath and Control Unit Interaction">
-<p class="text-center text-sm">Figure 9-3: Datapath and Control Unit Interaction</p>
+<p class="text-center text-sm">Figure 9-15: Datapath and Control Unit Interaction</p>
 
 </div>
 </div>
@@ -484,7 +484,7 @@ WHILE (i != 10) {
 <div>
 
 <img src="/counter_fsm.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Counter Control Unit FSM">
-<p class="text-center text-sm">Figure 9-12: Counter Control Unit FSM</p>
+<p class="text-center text-sm">Figure 9-16: Counter Control Unit FSM</p>
 
 
 </div>
@@ -496,7 +496,7 @@ WHILE (i != 10) {
 
 **Datapath:**
 <img src="/counter_datapath.svg" class="rounded-lg bg-white p-4 w-full h-60 object-contain mx-auto" alt="Counter Datapath">
-<p class="text-center text-sm">Figure 9-13: Counter Datapath</p>
+<p class="text-center text-sm">Figure 9-17: Counter Datapath</p>
 
 * **Status Signal:** $(i\neq10)$
 * **Control Signals:** `Clear`, `Count`
@@ -598,7 +598,7 @@ $$
 <div>
 
 <img src="/counter_logic.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Counter Control Logic Circuit">
-<p class="text-center text-sm">Figure 9-14: Counter Control Logic Circuit</p>
+<p class="text-center text-sm">Figure 9-18: Counter Control Logic Circuit</p>
 
 </div>
 </div>
@@ -619,7 +619,7 @@ By combining the datapath and the synthesized control unit, we get the complete 
 
 <div class="col-span-2">
 <img src="/counter_combined.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Complete Counter Microprocessor">
-<p class="text-center text-sm">Figure 9-15: Complete Counter Microprocessor</p>
+<p class="text-center text-sm">Figure 9-19: Complete Counter Microprocessor</p>
 </div>
 </div>
 
@@ -665,7 +665,7 @@ $$
 
 **Datapath:**
 <img src="/if_then_else_datapath.svg" class="rounded-lg bg-white p-4 w-90 object-contain mx-auto" alt="if-then-else datapath">
-<p class="text-center text-sm">Figure 9-17: if-then-else Datapath</p>
+<p class="text-center text-sm">Figure 9-20: if-then-else Datapath</p>
 
 </div>
 </div>
@@ -682,7 +682,7 @@ $$
 *   **$S_{output}$:** Output the value from B.
 
 <img src="/if_then_else_fsm.svg" class="rounded-lg bg-white p-4 w-120 object-contain mx-auto" alt="If-Then-Else Control Unit FSM">
-<p class="text-center text-sm">Figure 9-16: If-Then-Else Control Unit FSM</p>
+<p class="text-center text-sm">Figure 9-21: If-Then-Else Control Unit FSM</p>
 
 ---
 
@@ -834,7 +834,7 @@ end Structural;
 
 
 <img src="/if_then_else_combined.svg" class="rounded-lg bg-white p-4 h-100 object-contain mx-auto" alt="if-then-else combined">
-<p class="text-center text-sm">Figure 9-18: if-then-else Control Unit combined with Datapath</p>
+<p class="text-center text-sm">Figure 9-22: if-then-else Control Unit combined with Datapath</p>
 
 
 ---
@@ -873,7 +873,7 @@ OUTPUT X
 
 **Datapath:**
 <img src="/gcd_datapath.png" class="rounded-lg bg-white p-1 w-75 mx-auto" alt="GCD Datapath">
-<p class="text-center text-sm">Figure 9-19: GCD Datapath</p>
+<p class="text-center text-sm">Figure 9-23: GCD Datapath</p>
 
 </div>
 </div>
@@ -892,7 +892,7 @@ layout: two-cols
 :: right ::
 
 <img src="/gcd_fsm.svg" class="rounded-lg bg-white p-4 w-full object-contain mx-auto" alt="GCD Control Unit FSM">
-<p class="text-center text-sm">Figure 9-20: GCD Control Unit FSM</p>
+<p class="text-center text-sm">Figure 9-24: GCD Control Unit FSM</p>
 
 
 ---
@@ -1364,6 +1364,13 @@ begin
 
 end Structural;
 ```
+---
+
+<img src="/gcd.png" class="rounded-lg bg-white p-4 w-160 mx-auto" alt="GCD Control Unit and Datapath">
+<p class="text-center text-sm">Figure 9-25: GCD Control Unit and Datapath</p>
+
+<img src="/gcd_sim.png" class="rounded-lg bg-white p-4 w-160 mx-auto" alt="GCD Simulation">
+<p class="text-center text-sm">Figure 9-26: GCD Simulation</p>
 
 ---
 
@@ -1477,6 +1484,16 @@ end Behavioral;
 
 </div>
 </div>
+
+---
+
+<img src="/gcd_fsmd.png" class="rounded-lg bg-white w-full mx-auto" alt="GCD Logic Diagram (Synthesized)">
+<p class="text-center text-sm">Figure 9-27: GCD Logic Diagram (Synthesized)</p>
+
+---
+
+<img src="/gcd_fsmd_sim.png" class="rounded-lg bg-white w-full mx-auto" alt="GCD FSMD Simulation">
+<p class="text-center text-sm">Figure 9-28: GCD FSMD Simulation</p>
 
 ---
 
