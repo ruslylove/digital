@@ -123,6 +123,12 @@ layout: two-cols-header
 <p class="text-center text-sm">Figure 9-4: RTL Model Diagram</p>
 
 ---
+layout: section
+---
+
+## Datapath Design
+
+---
 layout: two-cols-header
 ---
 
@@ -300,10 +306,6 @@ The control unit would step through these control words based on the algorithm's
 <div class="grid grid-cols-2 gap-4">
 <div class="col-span-1 text-base">
 
-
-
-
-
 *   After step 1, the control unit checks the `(A=5)` status signal.
 *   If `(A=5)` is true, it proceeds to control word 2.
 *   If `(A=5)` is false, it proceeds to control word 3.
@@ -343,7 +345,7 @@ $$
 layout: two-cols-header
 ---
 
-## Example: Generate and sum the numbers from 1 to 10
+## Example: Sum the numbers from 1 to 10
 
 :: left ::
 
@@ -428,7 +430,9 @@ $$
 layout: section
 ---
 
-## Control Unit (FSM)
+## Control Unit (FSM) Design
+
+
 
 ---
 
@@ -1366,10 +1370,10 @@ end Structural;
 ```
 ---
 
-<img src="/gcd.png" class="rounded-lg bg-white p-4 w-160 mx-auto" alt="GCD Control Unit and Datapath">
+<img src="/gcd.png" class="rounded-lg bg-white p-1 w-170 mx-auto" alt="GCD Control Unit and Datapath">
 <p class="text-center text-sm">Figure 9-25: GCD Control Unit and Datapath</p>
 
-<img src="/gcd_sim.png" class="rounded-lg bg-white p-4 w-160 mx-auto" alt="GCD Simulation">
+<img src="/gcd_sim.png" class="rounded-lg bg-white p-1 w-full mx-auto" alt="GCD Simulation">
 <p class="text-center text-sm">Figure 9-26: GCD Simulation</p>
 
 ---
