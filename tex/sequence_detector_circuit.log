@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=latex 2025.11.22)  9 DEC 2025 22:17
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=latex 2025.11.27)  8 DEC 2025 10:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**sequence_detector_circuit.tex
-(./sequence_detector_circuit.tex
+**tex/sequence_detector_circuit.tex
+(./tex/sequence_detector_circuit.tex
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
 (/usr/local/texlive/2025/texmf-dist/tex/latex/standalone/standalone.cls
@@ -497,12 +497,12 @@ L3 programming layer <2025-01-18>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 30620 strings out of 473191
- 811667 string characters out of 5715825
- 1461803 words of memory out of 5000000
- 53622 multiletter control sequences out of 15000+600000
+ 30608 strings out of 473191
+ 811446 string characters out of 5715825
+ 1459930 words of memory out of 5000000
+ 53609 multiletter control sequences out of 15000+600000
  560660 words of font info for 42 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 117i,8n,121p,449b,943s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 117i,8n,121p,453b,944s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on sequence_detector_circuit.dvi (1 page, 28768 bytes).
+Output written on sequence_detector_circuit.dvi (1 page, 28080 bytes).

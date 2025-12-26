@@ -54,15 +54,16 @@ begin
     begin		
         -- hold reset state for 100 ns.
         Reset <= '1';
-        wait for 20 ns;	
-        Reset <= '0';
-        wait for 20 ns;
-
+        
         -- Test Case 1: GCD(15, 10) = 5
         -- 15 = 00001111
         -- 10 = 00001010
         InputX <= std_logic_vector(to_unsigned(15, 8));
         InputY <= std_logic_vector(to_unsigned(10, 8));
+        
+        wait for 20 ns;	
+        Reset <= '0';
+        wait for 20 ns;
         
         wait for 500 ns; -- Wait for computation to finish
 
