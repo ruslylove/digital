@@ -12,18 +12,12 @@ title: "Lecture 9 - Dedicated Microprocessors"
 
 {{ $slidev.configs.author }}
 ---
+hideInToc: false
+---
 
 ## Outline
 
-*   The Von Neumann Model
-*   Dedicated Microprocessors (ASICs)
-*   Datapath and Control Unit
-*   Register Transfer Level (RTL)
-*   Designing Dedicated Datapaths
-    *   Basic Operations
-    *   Combining Operations with MUXes
-    *   Handling Conditional Logic
-*   Control Words
+<toc mode="onlySiblings" minDepth="2" columns="2"/>
 
 ---
 layout: two-cols-header
@@ -900,6 +894,477 @@ layout: two-cols
 <img src="/gcd_fsm.svg" class="rounded-lg bg-white p-4 w-full object-contain mx-auto" alt="GCD Control Unit FSM">
 <p class="text-center text-sm">Figure 9-20: GCD Control Unit FSM</p>
 
+
+---
+
+### Structural VHDL: Components
+
+Common components package and implementations.
+
+```vhdl {*}{maxHeight:'380px'}
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+package gcd_components is
+    
+    component mux_2to1_8bit
+        Port ( SEL : in  STD_LOGIC;
+               A   : in  STD_LOGIC_VECTOR (7 downto 0);
+               B   : in  STD_LOGIC_VECTOR (7 downto 0);
+               Y   : out STD_LOGIC_VECTOR (7 downto 0));
+    end component;
+
+    component reg_8bit
+        Port ( D     : in  STD_LOGIC_VECTOR (7 downto 0);
+               Reset : in  STD_LOGIC;
+               Clk   : in  STD_LOGIC;
+               Load  : in  STD_LOGIC;
+               Q     : out STD_LOGIC_VECTOR (7 downto 0));
+    end component;
+
+    component subtractor_8bit
+        Port ( A    : in  STD_LOGIC_VECTOR (7 downto 0);
+               B    : in  STD_LOGIC_VECTOR (7 downto 0);
+               Diff : out STD_LOGIC_VECTOR (7 downto 0));
+    end component;
+    
+    component comparator_8bit
+        Port ( A    : in  STD_LOGIC_VECTOR (7 downto 0);
+               B    : in  STD_LOGIC_VECTOR (7 downto 0);
+               AeqB : out STD_LOGIC;
+               AgtB : out STD_LOGIC);
+    end component;
+
+    component tristate_buffer_8bit
+        Port ( Input  : in  STD_LOGIC_VECTOR (7 downto 0);
+               Enable : in  STD_LOGIC;
+               Output : out STD_LOGIC_VECTOR (7 downto 0));
+    end component;
+
+end gcd_components;
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+-- MUX 2:1 Implementation
+entity mux_2to1_8bit is
+    Port ( SEL : in  STD_LOGIC;
+           A   : in  STD_LOGIC_VECTOR (7 downto 0);
+           B   : in  STD_LOGIC_VECTOR (7 downto 0);
+           Y   : out STD_LOGIC_VECTOR (7 downto 0));
+end mux_2to1_8bit;
+
+architecture Behavioral of mux_2to1_8bit is
+begin
+    Y <= A when SEL = '0' else B;
+end Behavioral;
+
+-- Register Implementation
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+entity reg_8bit is
+    Port ( D     : in  STD_LOGIC_VECTOR (7 downto 0);
+               Reset : in  STD_LOGIC;
+               Clk   : in  STD_LOGIC;
+               Load  : in  STD_LOGIC;
+               Q     : out STD_LOGIC_VECTOR (7 downto 0));
+end reg_8bit;
+
+architecture Behavioral of reg_8bit is
+signal storage : STD_LOGIC_VECTOR(7 downto 0);
+begin
+    process(Clk)
+    begin
+        if rising_edge(Clk) then
+            if Reset = '1' then
+                storage <= (others => '0');
+            elsif Load = '1' then
+                storage <= D;
+            end if;
+        end if;
+    end process;
+    Q <= storage;
+end Behavioral;
+
+-- Subtractor Implementation
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+entity subtractor_8bit is
+    Port ( A    : in  STD_LOGIC_VECTOR (7 downto 0);
+           B    : in  STD_LOGIC_VECTOR (7 downto 0);
+           Diff : out STD_LOGIC_VECTOR (7 downto 0));
+end subtractor_8bit;
+
+architecture Behavioral of subtractor_8bit is
+begin
+    Diff <= std_logic_vector(unsigned(A) - unsigned(B));
+end Behavioral;
+
+-- Comparator Implementation
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+entity comparator_8bit is
+    Port ( A    : in  STD_LOGIC_VECTOR (7 downto 0);
+           B    : in  STD_LOGIC_VECTOR (7 downto 0);
+           AeqB : out STD_LOGIC;
+           AgtB : out STD_LOGIC);
+end comparator_8bit;
+
+architecture Behavioral of comparator_8bit is
+begin
+    AeqB <= '1' when unsigned(A) = unsigned(B) else '0';
+    AgtB <= '1' when unsigned(A) > unsigned(B) else '0';
+end Behavioral;
+
+-- Tristate Buffer Implementation
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+entity tristate_buffer_8bit is
+    Port ( Input  : in  STD_LOGIC_VECTOR (7 downto 0);
+           Enable : in  STD_LOGIC;
+           Output : out STD_LOGIC_VECTOR (7 downto 0));
+end tristate_buffer_8bit;
+
+architecture Behavioral of tristate_buffer_8bit is
+begin
+    Output <= Input when Enable = '1' else (others => 'Z');
+end Behavioral;
+```
+
+---
+
+### Structural VHDL: Datapath
+
+The structural datapath connecting components.
+
+```vhdl {*}{maxHeight:'380px'}
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+use work.gcd_components.all; -- Use the package we defined
+
+entity gcd_datapath is
+    Port ( Clk      : in  STD_LOGIC;
+           Reset    : in  STD_LOGIC;
+           InputX   : in  STD_LOGIC_VECTOR (7 downto 0);
+           InputY   : in  STD_LOGIC_VECTOR (7 downto 0);
+           
+           -- Control Signals
+           In_X     : in  STD_LOGIC; -- 1 = Load External X, 0 = Load Result
+           In_Y     : in  STD_LOGIC; -- 1 = Load External Y, 0 = Load Result
+           XLoad    : in  STD_LOGIC;
+           YLoad    : in  STD_LOGIC;
+           XY       : in  STD_LOGIC; -- 0 = X-Y, 1 = Y-X
+           Out_En   : in  STD_LOGIC;
+           
+           -- Status Signals
+           XeqY     : out STD_LOGIC;
+           XgtY     : out STD_LOGIC;
+           
+           -- Data Output
+           OutputData : out STD_LOGIC_VECTOR (7 downto 0));
+end gcd_datapath;
+
+architecture Structural of gcd_datapath is
+
+    signal X_Reg_Q, Y_Reg_Q : STD_LOGIC_VECTOR(7 downto 0);
+    signal X_Mux_Out, Y_Mux_Out : STD_LOGIC_VECTOR(7 downto 0);
+    signal Sub_A, Sub_B, Sub_Diff : STD_LOGIC_VECTOR(7 downto 0);
+
+begin
+
+    -- Register X
+    -- Input MUX for X: Selects between Subtractor Result (0) and InputX (1)
+    Mux_In_X: mux_2to1_8bit port map (
+        SEL => In_X,
+        A   => Sub_Diff,
+        B   => InputX,
+        Y   => X_Mux_Out
+    );
+
+    Reg_X: reg_8bit port map (
+        D     => X_Mux_Out,
+        Reset => Reset,
+        Clk   => Clk,
+        Load  => XLoad,
+        Q     => X_Reg_Q
+    );
+
+    -- Register Y
+    -- Input MUX for Y: Selects between Subtractor Result (0) and InputY (1)
+    Mux_In_Y: mux_2to1_8bit port map (
+        SEL => In_Y,
+        A   => Sub_Diff,
+        B   => InputY,
+        Y   => Y_Mux_Out
+    );
+
+    Reg_Y: reg_8bit port map (
+        D     => Y_Mux_Out,
+        Reset => Reset,
+        Clk   => Clk,
+        Load  => YLoad,
+        Q     => Y_Reg_Q
+    );
+
+    -- Comparator
+    Comp: comparator_8bit port map (
+        A    => X_Reg_Q,
+        B    => Y_Reg_Q,
+        AeqB => XeqY,
+        AgtB => XgtY
+    );
+
+    -- Subtractor Operand Selection (Swap Logic)
+    -- If XY=0 (X-Y): SubA=X, SubB=Y
+    -- If XY=1 (Y-X): SubA=Y, SubB=X
+    
+    Mux_Sub_A: mux_2to1_8bit port map (
+        SEL => XY,
+        A   => X_Reg_Q,
+        B   => Y_Reg_Q,
+        Y   => Sub_A
+    );
+
+    Mux_Sub_B: mux_2to1_8bit port map (
+        SEL => XY,
+        A   => Y_Reg_Q,
+        B   => X_Reg_Q,
+        Y   => Sub_B
+    );
+
+    -- Subtractor
+    Sub: subtractor_8bit port map (
+        A    => Sub_A,
+        B    => Sub_B,
+        Diff => Sub_Diff
+    );
+
+    -- Output Tristate Buffer (Outputs X)
+    Out_Buf: tristate_buffer_8bit port map (
+        Input  => X_Reg_Q,
+        Enable => Out_En,
+        Output => OutputData
+    );
+
+end Structural;
+```
+
+---
+
+### Structural VHDL: Control Unit
+
+The Finite State Machine logic.
+
+```vhdl {*}{maxHeight:'380px'}
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity gcd_control is
+    Port ( Clk      : in  STD_LOGIC;
+           Reset    : in  STD_LOGIC;
+           
+           -- Status Signals
+           XeqY     : in  STD_LOGIC;
+           XgtY     : in  STD_LOGIC;
+           
+           -- Control Signals
+           In_X     : out STD_LOGIC;
+           In_Y     : out STD_LOGIC;
+           XLoad    : out STD_LOGIC;
+           YLoad    : out STD_LOGIC;
+           XY       : out STD_LOGIC;
+           Out_En   : out STD_LOGIC);
+end gcd_control;
+
+architecture Behavioral of gcd_control is
+    type StateType is (S0, S1, S2, S3, S4);
+    signal CurrentState, NextState : StateType;
+begin
+
+    -- State Register
+    process(Clk)
+    begin
+        if rising_edge(Clk) then
+            if Reset = '1' then
+                CurrentState <= S0;
+            else
+                CurrentState <= NextState;
+            end if;
+        end if;
+    end process;
+
+    -- Next State Logic
+    process(CurrentState, XeqY, XgtY)
+    begin
+        case CurrentState is
+            when S0 => -- Init: Load X and Y
+                NextState <= S1;
+            
+            when S1 => -- Check
+                if XeqY = '1' then
+                    NextState <= S4; -- Done
+                elsif XgtY = '1' then
+                    NextState <= S2; -- X > Y
+                else
+                    NextState <= S3; -- Y > X
+                end if;
+                
+            when S2 => -- X = X - Y
+                NextState <= S1;
+                
+            when S3 => -- Y = Y - X
+                NextState <= S1;
+                
+            when S4 => -- Done
+                NextState <= S4; -- Stay here until Reset
+                
+            when others =>
+                NextState <= S0;
+        end case;
+    end process;
+
+    -- Output Logic
+    process(CurrentState)
+    begin
+        -- Default values
+        In_X   <= '0';
+        In_Y   <= '0';
+        XLoad  <= '0';
+        YLoad  <= '0';
+        XY     <= '0';
+        Out_En <= '0';
+        
+        case CurrentState is
+            when S0 => -- Load Inputs
+                In_X  <= '1'; -- Select Input
+                In_Y  <= '1'; -- Select Input
+                XLoad <= '1';
+                YLoad <= '1';
+            
+            when S1 => -- Check (No operation)
+                NULL;
+                
+            when S2 => -- X = X - Y
+                XY    <= '0'; -- X-Y
+                In_X  <= '0'; -- Select Result
+                XLoad <= '1';
+                
+            when S3 => -- Y = Y - X
+                XY    <= '1'; -- Y-X (Swap)
+                In_Y  <= '0'; -- Select Result
+                YLoad <= '1';
+                
+            when S4 => -- Output
+                Out_En <= '1';
+                
+            when others =>
+                NULL;
+        end case;
+    end process;
+
+end Behavioral;
+```
+
+---
+
+### Structural VHDL: Top Level
+
+Connecting Datapath and Control Unit.
+
+```vhdl {*}{maxHeight:'380px'}
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity gcd_top is
+    Port ( Clk    : in  STD_LOGIC;
+           Reset  : in  STD_LOGIC;
+           InputX : in  STD_LOGIC_VECTOR (7 downto 0);
+           InputY : in  STD_LOGIC_VECTOR (7 downto 0);
+           Output : out STD_LOGIC_VECTOR (7 downto 0));
+end gcd_top;
+
+architecture Structural of gcd_top is
+
+    component gcd_datapath
+        Port ( Clk      : in  STD_LOGIC;
+               Reset    : in  STD_LOGIC;
+               InputX   : in  STD_LOGIC_VECTOR (7 downto 0);
+               InputY   : in  STD_LOGIC_VECTOR (7 downto 0);
+               In_X     : in  STD_LOGIC;
+               In_Y     : in  STD_LOGIC;
+               XLoad    : in  STD_LOGIC;
+               YLoad    : in  STD_LOGIC;
+               XY       : in  STD_LOGIC;
+               Out_En   : in  STD_LOGIC;
+               XeqY     : out STD_LOGIC;
+               XgtY     : out STD_LOGIC;
+               OutputData : out STD_LOGIC_VECTOR (7 downto 0));
+    end component;
+    
+    component gcd_control
+        Port ( Clk      : in  STD_LOGIC;
+               Reset    : in  STD_LOGIC;
+               XeqY     : in  STD_LOGIC;
+               XgtY     : in  STD_LOGIC;
+               In_X     : out STD_LOGIC;
+               In_Y     : out STD_LOGIC;
+               XLoad    : out STD_LOGIC;
+               YLoad    : out STD_LOGIC;
+               XY       : out STD_LOGIC;
+               Out_En   : out STD_LOGIC);
+    end component;
+
+    -- Internal Signals
+    signal In_X, In_Y, XLoad, YLoad, XY, Out_En : STD_LOGIC;
+    signal XeqY, XgtY : STD_LOGIC;
+
+begin
+
+    -- Instantiate Datapath
+    Datapath: gcd_datapath port map (
+        Clk        => Clk,
+        Reset      => Reset,
+        InputX     => InputX,
+        InputY     => InputY,
+        In_X       => In_X,
+        In_Y       => In_Y,
+        XLoad      => XLoad,
+        YLoad      => YLoad,
+        XY         => XY,
+        Out_En     => Out_En,
+        XeqY       => XeqY,
+        XgtY       => XgtY,
+        OutputData => Output
+    );
+
+    -- Instantiate Control Unit
+    Control: gcd_control port map (
+        Clk => Clk,
+        Reset => Reset,
+        XeqY => XeqY,
+        XgtY => XgtY,
+        In_X => In_X,
+        In_Y => In_Y,
+        XLoad => XLoad,
+        YLoad => YLoad,
+        XY => XY,
+        Out_En => Out_En
+    );
+
+end Structural;
+```
+
 ---
 
 ## FSM+D vs. FSMD
@@ -1015,14 +1480,16 @@ end Behavioral;
 
 ---
 
-## Summary
+## Lecture 9 Summary
 
-*   The **Von Neumann Model** separates processing into a **Datapath** and a **Control Unit**.
-*   **Datapath**: A collection of functional units (ALUs), registers, and buses that perform data operations.
-*   **Control Unit**: Orchestrates the datapath by issuing **Control Words** (signals) based on the current state.
-*   **RTL (Register Transfer Level)**: An abstraction for designing digital circuits by defining data flow between registers.
-*   **Multiplexers (MUXes)** allow resource sharing (e.g., using one adder for multiple arithmetic operations).
-*   **Status Signals** (from comparators) enable conditional branching in algorithms (IF-THEN, loops).
+*   **Dedicated Microprocessors (ASICs)** are designed for specific tasks, optimizing speed and efficiency.
+*   **Architecture**: Divided into a **Datapath** (execution) and a **Control Unit** (decision making).
+    *   **Datapath**: Registers, MUXes, ALUs, and Comparators.
+    *   **Control Unit**: A Finite State Machine (FSM) that issues **Control Words** based on **Status Signals**.
+*   **RTL (Register Transfer Level)**: Design abstraction focusing on data flow between registers.
+*   **VHDL Implementation**:
+    *   **FSM+D (Structural)**: Manually constructing and connecting Datapath and Control Unit components.
+    *   **FSMD (Behavioral)**: describing the entire system behavior in a single FSM process, letting synthesis inference the hardware.
 
 ---
 layout: section
