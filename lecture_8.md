@@ -1038,14 +1038,8 @@ $$
 
 **Question:** From the K-Map below for $D_0$, derive the simplified boolean equation.
 
-<div class="w-40 mx-auto border border-gray-500 p-2 text-center my-4">
-  <table class="mx-auto border-collapse">
-    <tr><td></td><td>0</td><td>1</td></tr>
-    <tr><td>0</td><td class="border border-gray-400">0</td><td class="border border-gray-400">1</td></tr>
-    <tr><td>1</td><td class="border border-gray-400">0</td><td class="border border-gray-400">1</td></tr>
-  </table>
-  <div class="text-xs mt-1">Rows: Q, Cols: Input X</div>
-</div>
+<img src="/exercise_8_8_kmap.svg" class="rounded-lg bg-white p-2 w-40 mx-auto" alt="K-Map for Exercise 8-8">
+
 
 
 
