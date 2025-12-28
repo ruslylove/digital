@@ -34,7 +34,7 @@
           (DECODE) edge node [above, sloped,near end] {Op=111} (HALT);
           
     % NOP: Decode -> Fetch
-    \path (DECODE) edge [bend left=45] node [left] {Op=0xx} (FETCH);
+    \path (DECODE) edge [bend left=30, align=center] node [left] {Op=00x, \\010} (FETCH);
 
     % Operations -> Fetch (Return)
     \path (INPUT)  edge [bend left=45] node {} (FETCH)
