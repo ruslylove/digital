@@ -271,7 +271,7 @@ layout: two-cols-header
 
 $$
 \scriptsize
-\def\arraystretch{1.5}
+\def\arraystretch{1.7}
 \begin{array}{|ccc||ccc||ccc|l|}
 \hline
 Q_2 & Q_1 & Q_0 & O_2 & O_1 & O_0 & D_2 & D_1 & D_0 & \textbf{Description} \\
@@ -361,10 +361,6 @@ $$
 **EC1_Control_Unit.vhd**
 
 ```vhdl{*}{maxHeight:'350px',lines:true}
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use work.EC1_Components.ALL;
-
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use work.EC1_Components.ALL;
@@ -785,7 +781,7 @@ end Structural;
  </div>
  <div>
 
-<img src="/megafunction_rom_1_port.png" class="mx-auto p-4 w-80" alt="Megafunction ROM 1-Port" />
+<img src="/megafunction_rom_1_port.png" class="mx-auto p-4 w-85" alt="Megafunction ROM 1-Port" />
 <p class="text-center text-sm">Figure 10-2: Megafunction ROM 1-Port</p>
  </div>
 </div>
@@ -972,7 +968,7 @@ layout: two-cols-header
 
 
 ---
- layout: two-cols-header
+layout: two-cols-header
 ---
 
 ## EC-1 Programming example: Countdown from 10 to 1
@@ -1018,10 +1014,6 @@ Addr  Hex  Assembly
 ### Testbench (initializing Input of 10)
 **ec1_tb.vhd**
 ```vhdl {*}{maxHeight:'380px', lines:true}
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use work.EC1_Components.ALL;
-
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use work.EC1_Components.ALL;
@@ -1307,8 +1299,8 @@ To support the new instructions, the datapath is upgraded:
 
 ## EC-2 Datapath Diagram
 
-<div class="grid grid-cols-2 gap-4">
-<div>
+<div class="grid grid-cols-5 gap-4">
+<div class="col-span-2">
 
 **Key Control Signals:**
 *   `MemInst`: Selects address source (0=PC, 1=IR).
@@ -1318,34 +1310,23 @@ To support the new instructions, the datapath is upgraded:
 *   `JMPmux`: Controls PC update for Jumps.
 
 </div>
-<div>
+<div class="col-span-3">
 
-<div class="border-2 border-gray-400 p-4 rounded-lg bg-white text-center text-xs">
-    <strong>EC-2 Datapath Flow</strong>
-    <div class="mt-2 flex flex-col gap-2">
-        <div class="border p-2 bg-blue-50">
-            <strong>Memory Interface</strong><br>
-            Addr MUX(PC, IR) -> RAM -> Data Out
-        </div>
-        <div class="border p-2 bg-green-50">
-            <strong>ALU Section</strong><br>
-            A +/- RAM Data -> Result
-        </div>
-        <div class="border p-2 bg-yellow-50">
-            <strong>Accumulator Logic</strong><br>
-            MUX(RAM, ALU, Input) -> A Register
-        </div>
-    </div>
-</div>
-
+<img src="/ec-2_datapath.png" class="mx-auto p-4 w-full" alt="EC-2 Datapath" />
+<p class="text-center text-sm">Figure 10-3: EC-2 Datapath</p>
 </div>
 </div>
 
 ---
 
+
 ## EC-2 Control Unit
 
 The FSM is slightly more complex to handle the memory operands.
+
+<div class="grid grid-cols-3 gap-4">
+
+<div class="text-base">
 
 ### Instruction Cycle with Memory Access:
 1.  **Fetch:** `MemInst=0` (Use PC). Fetch instruction.
@@ -1354,6 +1335,523 @@ The FSM is slightly more complex to handle the memory operands.
     *   **LOAD:** `MemInst=1` (Use IR addr). Read RAM. Load A.
     *   **STORE:** `MemInst=1`. Write A to RAM (`MemWr=1`).
     *   **ADD:** `MemInst=1`. Read RAM. ALU adds A + RAM. Load A.
+
+</div>
+
+<div class="col-span-2">
+
+<img src="/ec2_fsm.svg" class="rounded-lg bg-white p-4 w-full mx-auto object-contain" alt="EC-2 Control Unit FSM">
+<p class="text-center text-sm">Figure 10-4. EC-2 Control Unit FSM</p>
+
+</div>
+</div>
+
+---
+
+## EC-2 Implementation: Control Unit & Datapath
+
+<div class="grid grid-cols-2 gap-4">
+<div>
+
+**EC2_Control_Unit.vhd**
+```vhdl{*}{maxHeight:'380px',lines:true}
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use work.EC2_Components.ALL;
+
+entity EC2_Control_Unit is
+    Port ( clk : in STD_LOGIC;
+           reset : in STD_LOGIC;
+           opcode : in STD_LOGIC_VECTOR (2 downto 0);
+           Zero_Flag : in STD_LOGIC;
+           Pos_Flag : in STD_LOGIC;
+           IRload : out STD_LOGIC;
+           PCload : out STD_LOGIC;
+           MemInst : out STD_LOGIC;
+           MemWr : out STD_LOGIC;
+           Asel : out STD_LOGIC_VECTOR(1 downto 0);
+           Aload : out STD_LOGIC;
+           Sub : out STD_LOGIC;
+           JMPmux : out STD_LOGIC;
+           Halt : out STD_LOGIC;
+           dbg_state : out STD_LOGIC_VECTOR(3 downto 0));
+end EC2_Control_Unit;
+
+architecture Structural of EC2_Control_Unit is
+    signal Q, D : std_logic_vector(3 downto 0);
+    signal Q3_n, Q2_n, Q1_n, Q0_n : std_logic;
+    
+    -- States
+    signal state_Fetch, state_Decode : std_logic;
+    signal state_Load, state_Store, state_Add, state_Sub : std_logic;
+    signal state_In, state_Jz, state_Jpos, state_Halt : std_logic;
+    
+begin
+    -- State Registers
+    FF3: d_ff port map(clk, reset, D(3), Q(3));
+    FF2: d_ff port map(clk, reset, D(2), Q(2));
+    FF1: d_ff port map(clk, reset, D(1), Q(1));
+    FF0: d_ff port map(clk, reset, D(0), Q(0));
+    
+    Q3_n <= not Q(3); Q2_n <= not Q(2); Q1_n <= not Q(1); Q0_n <= not Q(0);
+
+    state_Fetch  <= Q3_n and Q2_n and Q1_n and Q0_n; -- 0000
+    state_Decode <= Q3_n and Q2_n and Q1_n and Q(0); -- 0001
+    state_Load   <= Q3_n and Q2_n and Q(1) and Q0_n; -- 0010
+    state_Store  <= Q3_n and Q2_n and Q(1) and Q(0); -- 0011
+    state_Add    <= Q3_n and Q(2) and Q1_n and Q0_n; -- 0100
+    state_Sub    <= Q3_n and Q(2) and Q1_n and Q(0); -- 0101
+    state_In     <= Q3_n and Q(2) and Q(1) and Q0_n; -- 0110
+    state_Jz     <= Q3_n and Q(2) and Q(1) and Q(0); -- 0111
+    state_Jpos   <= Q(3) and Q2_n and Q1_n and Q0_n; -- 1000
+    state_Halt   <= Q(3) and Q2_n and Q1_n and Q(0); -- 1001
+    
+    -- Next State Logic
+    D(3) <= (state_Decode and opcode(2) and opcode(1)) or state_Halt;
+    D(2) <= state_Decode and ( (not opcode(2) and opcode(1)) or (opcode(2) and not opcode(1)) );
+    D(1) <= state_Decode and (not opcode(1));
+    D(0) <= state_Fetch or (state_Decode and opcode(0)) or state_Halt;
+
+    -- Output Logic
+    IRload <= state_Fetch;
+    PCload <= state_Fetch or (state_Jz and Zero_Flag) or (state_Jpos and Pos_Flag);
+    JMPmux <= state_Jz or state_Jpos;
+    MemInst <= state_Load or state_Store or state_Add or state_Sub;
+    MemWr <= state_Store;
+    
+    Asel(1) <= state_In;
+    Asel(0) <= state_Add or state_Sub;
+    Aload <= state_Load or state_Add or state_Sub or state_In;
+    Sub <= state_Sub;
+    Halt <= state_Halt;
+    
+    dbg_state <= Q;
+end Structural;
+```
+</div>
+<div>
+
+**EC2_Datapath.vhd**
+```vhdl{*}{maxHeight:'380px',lines:true}
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use work.EC2_Components.ALL;
+
+entity EC2_Datapath is
+    Port ( clk, reset : in STD_LOGIC;
+           input_bus : in STD_LOGIC_VECTOR(7 downto 0);
+           IRload, PCload, MemInst, MemWr : in STD_LOGIC;
+           Asel : in STD_LOGIC_VECTOR(1 downto 0);
+           Aload, Sub, JMPmux : in STD_LOGIC;
+           opcode : out STD_LOGIC_VECTOR(2 downto 0);
+           Zero_Flag : out STD_LOGIC;
+           Pos_Flag : out STD_LOGIC;
+           A_out_bus : out STD_LOGIC_VECTOR(7 downto 0);
+           dbg_PC : out STD_LOGIC_VECTOR(4 downto 0);
+           dbg_IR : out STD_LOGIC_VECTOR(7 downto 0));
+end EC2_Datapath;
+
+architecture Structural of EC2_Datapath is
+    signal IR_out, A_out, A_in : std_logic_vector(7 downto 0);
+    signal RAM_out, ALU_out : std_logic_vector(7 downto 0);
+    signal PC_out, PC_in, PC_inc : std_logic_vector(4 downto 0);
+    signal Mem_Addr : std_logic_vector(4 downto 0);
+
+begin
+    -- Program Counter Logic
+    PC_Inc_Unit: Inc5 port map(PC_out, PC_inc);
+    PC_Mux: Mux2_5 port map(JMPmux, PC_inc, IR_out(4 downto 0), PC_in);
+    PC_Reg: Reg5 port map(clk, reset, PCload, PC_in, PC_out);
+
+    -- Memory Address Mux (PC vs IR address)
+    Mem_Addr_Mux: Mux2_5 port map(MemInst, PC_out, IR_out(4 downto 0), Mem_Addr);
+
+    -- RAM
+    RAM_Unit: ram32x8 port map(
+        clk => clk,
+        we => MemWr,
+        addr => Mem_Addr,
+        din => A_out,
+        dout => RAM_out
+    );
+
+    -- Instruction Register
+    IR_Reg: Reg8 port map(clk, reset, IRload, RAM_out, IR_out);
+    opcode <= IR_out(7 downto 5);
+
+    -- ALU
+    ALU_Unit: Alu8 port map(A_out, RAM_out, Sub, ALU_out);
+
+    -- Accumulator Logic
+    -- Mux4_8: 00=RAM, 01=ALU, 10=Input, 11=X
+    Acc_Mux: Mux4_8 port map(Asel, RAM_out, ALU_out, input_bus, "00000000", A_in);
+    Acc_Reg: Reg8 port map(clk, reset, Aload, A_in, A_out);
+
+    -- Flags
+    ZC: ZeroCheck8 port map(A_out, Zero_Flag);
+    PC_Check: PosCheck8 port map(A_out, Pos_Flag);
+
+    A_out_bus <= A_out;
+    dbg_PC <= PC_out;
+    dbg_IR <= IR_out;
+end Structural;
+```
+</div>
+</div>
+
+---
+
+## EC-2 Implementation: Components & Top Level
+
+<div class="grid grid-cols-2 gap-4">
+<div>
+
+**EC2_Components.vhd (with RAM Initialization)**
+```vhdl{*|200-208}{maxHeight:'380px',lines:true}
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+package EC2_Components is
+    component d_ff
+        port(clk, reset, d : in std_logic; q : out std_logic);
+    end component;
+    component Reg8
+        port(clk, reset, load: in std_logic; D: in std_logic_vector(7 downto 0); Q: out std_logic_vector(7 downto 0));
+    end component;
+    component Reg5
+        port(clk, reset, load: in std_logic; D: in std_logic_vector(4 downto 0); Q: out std_logic_vector(4 downto 0));
+    end component;
+    component Mux2_5
+        port(sel: in std_logic; I0, I1: in std_logic_vector(4 downto 0); Y: out std_logic_vector(4 downto 0));
+    end component;
+    component Mux2_8
+        port(sel: in std_logic; I0, I1: in std_logic_vector(7 downto 0); Y: out std_logic_vector(7 downto 0));
+    end component;
+    component Mux4_8
+        port(sel: in std_logic_vector(1 downto 0); I0, I1, I2, I3: in std_logic_vector(7 downto 0); Y: out std_logic_vector(7 downto 0));
+    end component;
+    component Inc5
+        port(A: in std_logic_vector(4 downto 0); Y: out std_logic_vector(4 downto 0));
+    end component;
+    component Alu8
+        port(A, B: in std_logic_vector(7 downto 0); Sub: in std_logic; Y: out std_logic_vector(7 downto 0));
+    end component;
+    component ZeroCheck8
+        port(A: in std_logic_vector(7 downto 0); is_zero: out std_logic);
+    end component;
+    component PosCheck8
+        port(A: in std_logic_vector(7 downto 0); is_pos: out std_logic);
+    end component;
+    component ram32x8
+        port(
+            clk : in std_logic;
+            we  : in std_logic;
+            addr: in std_logic_vector(4 downto 0);
+            din : in std_logic_vector(7 downto 0);
+            dout: out std_logic_vector(7 downto 0)
+        );
+    end component;
+end EC2_Components;
+
+package body EC2_Components is
+end EC2_Components;
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+-- D Flip-Flop
+entity d_ff is
+    port(clk, reset, d : in std_logic; q : out std_logic);
+end d_ff;
+architecture Behavioral of d_ff is begin
+    process(clk, reset) begin
+        if reset='1' then q <= '0';
+        elsif rising_edge(clk) then q <= d; end if;
+    end process;
+end Behavioral;
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+-- 8-bit Register
+entity Reg8 is
+    port(clk, reset, load: in std_logic; D: in std_logic_vector(7 downto 0); Q: out std_logic_vector(7 downto 0));
+end Reg8;
+architecture Behavioral of Reg8 is begin
+    process(clk, reset) begin
+        if reset='1' then Q <= (others=>'0');
+        elsif rising_edge(clk) then if load='1' then Q <= D; end if; end if;
+    end process;
+end Behavioral;
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+-- 5-bit Register
+entity Reg5 is
+    port(clk, reset, load: in std_logic; D: in std_logic_vector(4 downto 0); Q: out std_logic_vector(4 downto 0));
+end Reg5;
+architecture Behavioral of Reg5 is begin
+    process(clk, reset) begin
+        if reset='1' then Q <= (others=>'0');
+        elsif rising_edge(clk) then if load='1' then Q <= D; end if; end if;
+    end process;
+end Behavioral;
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+-- 2-to-1 Mux (5-bit)
+entity Mux2_5 is
+    port(sel: in std_logic; I0, I1: in std_logic_vector(4 downto 0); Y: out std_logic_vector(4 downto 0));
+end Mux2_5;
+architecture Behavioral of Mux2_5 is begin
+    Y <= I1 when sel='1' else I0;
+end Behavioral;
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+-- 2-to-1 Mux (8-bit)
+entity Mux2_8 is
+    port(sel: in std_logic; I0, I1: in std_logic_vector(7 downto 0); Y: out std_logic_vector(7 downto 0));
+end Mux2_8;
+architecture Behavioral of Mux2_8 is begin
+    Y <= I1 when sel='1' else I0;
+end Behavioral;
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+-- 4-to-1 Mux (8-bit)
+entity Mux4_8 is
+    port(sel: in std_logic_vector(1 downto 0); I0, I1, I2, I3: in std_logic_vector(7 downto 0); Y: out std_logic_vector(7 downto 0));
+end Mux4_8;
+architecture Behavioral of Mux4_8 is begin
+    with sel select
+        Y <= I0 when "00",
+             I1 when "01",
+             I2 when "10",
+             I3 when "11",
+             (others => 'X') when others;
+end Behavioral;
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+-- 5-bit Incrementer
+entity Inc5 is
+    port(A: in std_logic_vector(4 downto 0); Y: out std_logic_vector(4 downto 0));
+end Inc5;
+architecture Behavioral of Inc5 is begin
+    Y <= A + 1;
+end Behavioral;
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+-- ALU 8-bit (Add/Sub)
+entity Alu8 is
+    port(A, B: in std_logic_vector(7 downto 0); Sub: in std_logic; Y: out std_logic_vector(7 downto 0));
+end Alu8;
+architecture Behavioral of Alu8 is begin
+    process(A, B, Sub)
+    begin
+        if Sub = '1' then
+            Y <= A - B;
+        else
+            Y <= A + B;
+        end if;
+    end process;
+end Behavioral;
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+-- Zero Check
+entity ZeroCheck8 is
+    port(A: in std_logic_vector(7 downto 0); is_zero: out std_logic);
+end ZeroCheck8;
+architecture Behavioral of ZeroCheck8 is begin
+    is_zero <= '1' when A = "00000000" else '0';
+end Behavioral;
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+-- Positive Check (MSB = 0)
+entity PosCheck8 is
+    port(A: in std_logic_vector(7 downto 0); is_pos: out std_logic);
+end PosCheck8;
+architecture Behavioral of PosCheck8 is begin
+    is_pos <= not A(7); -- Positive if MSB is 0 (includes 0)
+end Behavioral;
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+-- RAM 32x8
+entity ram32x8 is
+    port(
+        clk : in std_logic;
+        we  : in std_logic;
+        addr: in std_logic_vector(4 downto 0);
+        din : in std_logic_vector(7 downto 0);
+        dout: out std_logic_vector(7 downto 0)
+    );
+end ram32x8;
+
+architecture Behavioral of ram32x8 is
+    type ram_type is array (0 to 31) of std_logic_vector(7 downto 0);
+    signal RAM : ram_type := (
+        0 => x"1E", 1 => x"7F", 2 => x"AA", 3 => x"C8", -- Input inputs at 30,31.
+        4 => x"1F", 5 => x"7E", 6 => x"3F", 7 => x"C0",
+        8 => x"3E", 9 => x"C0", 10 => x"E0",
+        30 => x"0F", 31 => x"19", -- Inputs: 15 and 25
+        others => x"00"
+    );
+begin
+    process(clk)
+    begin
+        if rising_edge(clk) then
+            if we = '1' then
+                RAM(conv_integer(addr)) <= din;
+            end if;
+        end if;
+    end process;
+    dout <= RAM(conv_integer(addr));
+end Behavioral;
+
+```
+</div>
+<div>
+
+**ec2.vhd (Top Level)**
+```vhdl{*}{maxHeight:'400px',lines:true}
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use work.EC2_Components.ALL;
+
+entity ec2 is
+    Port ( clk, reset : in STD_LOGIC;
+           input_bus : in STD_LOGIC_VECTOR (7 downto 0);
+           output_bus : out STD_LOGIC_VECTOR (7 downto 0);
+           halt : out STD_LOGIC;
+           -- Debug signals
+           dbg_opcode : out STD_LOGIC_VECTOR(2 downto 0);
+           dbg_PC : out STD_LOGIC_VECTOR(4 downto 0);
+           dbg_IR : out STD_LOGIC_VECTOR(7 downto 0);
+           dbg_state : out STD_LOGIC_VECTOR(3 downto 0));
+end ec2;
+
+architecture Structural of ec2 is
+    -- Component declarations...
+    
+    signal opcode : STD_LOGIC_VECTOR(2 downto 0);
+    signal Zero_Flag, Pos_Flag, IRload, PCload, MemInst, MemWr, Aload, Sub, JMPmux, Halt_Sig : STD_LOGIC;
+    signal Asel : STD_LOGIC_VECTOR(1 downto 0);
+    signal dbg_state_sig : STD_LOGIC_VECTOR(3 downto 0);
+
+begin
+
+    CU_Inst: EC2_Control_Unit port map(
+        clk => clk, reset => reset, opcode => opcode,
+        Zero_Flag => Zero_Flag, Pos_Flag => Pos_Flag,
+        IRload => IRload, PCload => PCload,
+        MemInst => MemInst, MemWr => MemWr,
+        Asel => Asel, Aload => Aload, Sub => Sub,
+        JMPmux => JMPmux, Halt => Halt_Sig,
+        dbg_state => dbg_state_sig
+    );
+
+    DP_Inst: EC2_Datapath port map(
+        clk => clk, reset => reset, input_bus => input_bus,
+        IRload => IRload, PCload => PCload,
+        MemInst => MemInst, MemWr => MemWr,
+        Asel => Asel, Aload => Aload, Sub => Sub,
+        JMPmux => JMPmux, opcode => opcode,
+        Zero_Flag => Zero_Flag, Pos_Flag => Pos_Flag,
+        A_out_bus => output_bus,
+        dbg_PC => dbg_PC, dbg_IR => dbg_IR
+    );
+
+    dbg_opcode <= opcode;
+    dbg_state <= dbg_state_sig;
+    halt <= Halt_Sig;
+
+end Structural;
+```
+</div>
+</div>
+
+---
+
+## EC-2 GCD Testbench
+
+<div class="grid grid-cols-2 gap-4">
+<div class="col-span-2">
+
+**ec2_tb.vhd**
+```vhdl{*}{maxHeight:'380px',lines:true}
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity ec2_tb is
+end ec2_tb;
+
+architecture Behavioral of ec2_tb is
+    component ec2
+        Port ( clk, reset : in STD_LOGIC;
+               input_bus : in STD_LOGIC_VECTOR (7 downto 0);
+               output_bus : out STD_LOGIC_VECTOR (7 downto 0);
+               halt : out STD_LOGIC;
+               dbg_opcode : out STD_LOGIC_VECTOR(2 downto 0);
+               dbg_PC : out STD_LOGIC_VECTOR(4 downto 0);
+               dbg_IR : out STD_LOGIC_VECTOR(7 downto 0);
+               dbg_state : out STD_LOGIC_VECTOR(3 downto 0));
+    end component;
+
+    signal clk : STD_LOGIC := '0';
+    signal reset : STD_LOGIC := '0';
+    signal input_bus : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
+    signal output_bus : STD_LOGIC_VECTOR(7 downto 0);
+    signal halt : STD_LOGIC;
+    signal dbg_opcode : STD_LOGIC_VECTOR(2 downto 0);
+    signal dbg_PC : STD_LOGIC_VECTOR(4 downto 0);
+    signal dbg_IR : STD_LOGIC_VECTOR(7 downto 0);
+    signal dbg_state : STD_LOGIC_VECTOR(3 downto 0);
+    constant clk_period : time := 10 ns;
+
+begin
+    uut: ec2 port map (
+        clk => clk, reset => reset, input_bus => input_bus, output_bus => output_bus, halt => halt,
+        dbg_opcode => dbg_opcode, dbg_PC => dbg_PC, dbg_IR => dbg_IR, dbg_state => dbg_state
+    );
+    
+    clk_process :process
+    begin
+        clk <= '0'; wait for clk_period/2;
+        clk <= '1'; wait for clk_period/2;
+    end process;
+    
+    stim_proc: process
+    begin
+        reset <= '1'; wait for 20 ns; reset <= '0';
+        wait until halt = '1';
+        wait;
+    end process;
+end Behavioral;
+```
+</div>
+</div>
+
+
 
 ---
 
