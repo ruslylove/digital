@@ -275,13 +275,15 @@ Q_2 & Q_1 & Q_0 & O_2 & O_1 & O_0 & D_2 & D_1 & D_0 & \textbf{Description} \\
 0 & 0 & 1 & 0 & 1 & 1 & 0 & 1 & 1 & \text{Decode} \to \text{Input} \\
 0 & 0 & 1 & 1 & x & x & 1 & O_1 & O_0 & \text{Decode} \to \text{Execute} \\
 \hline
+0 & 1 & 0 & x & x & x & 0 & 0 & 0 & \text{Wait} \to \text{Fetch} \\
+\hline
 0 & 1 & 1 & x & x & x & 0 & 0 & 0 & \text{Input} \to \text{Fetch} \\
 \hline
 1 & 0 & 0 & x & x & x & 0 & 0 & 0 & \text{Output} \to \text{Fetch} \\
 \hline
 1 & 0 & 1 & x & x & x & 0 & 0 & 0 & \text{Decrement} \to \text{Fetch} \\
 \hline
-1 & 1 & 0 & x & x & x & 0 & 0 & 0 & \text{JNZ} \to \text{Fetch} \\
+1 & 1 & 0 & x & x & x & 0 & 1 & 0 & \text{JNZ} \to \text{Wait} \\
 \hline
 1 & 1 & 1 & x & x & x & 1 & 1 & 1 & \text{Halt} \to \text{Halt} \\
 \hline
@@ -308,7 +310,7 @@ $$
 \small
 \begin{aligned}
 D_2 &= \text{Decode} \cdot O_2 + \text{Halt} \\
-D_1 &= \text{Decode} \cdot O_1 \cdot (O_2 + O_0) + \text{Halt} \\
+D_1 &= \text{Decode} \cdot O_1 \cdot (O_2 + O_0) + \text{Halt} + \text{JNZ} \\
 D_0 &= \text{Fetch} + \text{Decode} \cdot O_0 \cdot (O_2 + O_1) + \text{Halt}
 \end{aligned}
 $$
@@ -355,6 +357,10 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use work.EC1_Components.ALL;
 
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use work.EC1_Components.ALL;
+
 entity EC1_Control_Unit is
     Port ( clk : in STD_LOGIC;
            reset : in STD_LOGIC;
@@ -366,14 +372,15 @@ entity EC1_Control_Unit is
            Aload : out STD_LOGIC;
            JNZmux : out STD_LOGIC;
            OutE : out STD_LOGIC;
-           Halt : out STD_LOGIC);
+           Halt : out STD_LOGIC;
+           dbg_state : out STD_LOGIC_VECTOR(2 downto 0));
 end EC1_Control_Unit;
 
 architecture Structural of EC1_Control_Unit is
     signal Q, D : std_logic_vector(2 downto 0);
     signal Q2_n, Q1_n, Q0_n : std_logic;
     signal state_Fetch, state_Decode, state_Halt : std_logic;
-    signal state_Input, state_Output, state_Dec, state_JNZ : std_logic;
+    signal state_Input, state_Output, state_Dec, state_JNZ, state_Wait : std_logic;
     
 begin
     -- State Registers
@@ -386,6 +393,7 @@ begin
     -- State Decoders
     state_Fetch <= Q2_n and Q1_n and Q0_n;
     state_Decode <= Q2_n and Q1_n and Q(0);
+    state_Wait <= Q2_n and Q(1) and Q0_n;    -- 010 (New)
     state_Input <= Q2_n and Q(1) and Q(0);
     state_Output <= Q(2) and Q1_n and Q0_n;
     state_Dec <= Q(2) and Q1_n and Q(0);
@@ -396,8 +404,8 @@ begin
     -- D2 = Decode * O2 + Halt
     D(2) <= (state_Decode and opcode(2)) or state_Halt;
     
-    -- D1 = Decode * O1 * (O2 + O0) + Halt
-    D(1) <= (state_Decode and opcode(1) and (opcode(2) or opcode(0))) or state_Halt;
+    -- D1 = Decode * O1 * (O2 + O0) + Halt + JNZ (Go to Wait logic: 110 -> 010)
+    D(1) <= (state_Decode and opcode(1) and (opcode(2) or opcode(0))) or state_Halt or state_JNZ;
     
     -- D0 = Fetch + Decode * O0 * (O2 + O1) + Halt
     D(0) <= state_Fetch or (state_Decode and opcode(0) and (opcode(2) or opcode(1))) or state_Halt;
@@ -410,6 +418,8 @@ begin
     JNZmux <= state_JNZ;
     OutE <= state_Output;
     Halt <= state_Halt;
+
+    dbg_state <= Q;
 
 end Structural;
 ```
@@ -429,19 +439,24 @@ entity EC1_Datapath is
            IRload, PCload, INmux, Aload, JNZmux, OutE : in STD_LOGIC;
            opcode : out STD_LOGIC_VECTOR(2 downto 0);
            A_out_bus : out STD_LOGIC_VECTOR(7 downto 0);
-           A_neq_0 : out STD_LOGIC);
+           A_neq_0 : out STD_LOGIC;
+           dbg_PC : out STD_LOGIC_VECTOR(3 downto 0);
+           dbg_IR : out STD_LOGIC_VECTOR(7 downto 0));
 end EC1_Datapath;
 
 architecture Structural of EC1_Datapath is
     signal IR_out, A_out, A_in, Dec_out : std_logic_vector(7 downto 0);
     signal PC_out, PC_in, PC_inc : std_logic_vector(3 downto 0);
-    signal ROM_data : std_logic_vector(7 downto 0); -- Assume external or component
+    signal ROM_data : std_logic_vector(7 downto 0); 
 
 begin
-    -- Components would be defined in a package or separate files
-    
     -- ROM (Program Memory)
-    ROM_Unit: ROM16x8 port map(clk, PC_out, ROM_data);
+    ROM_Unit: rom32x8 port map(
+        address(4) => '0',
+        address(3 downto 0) => PC_out,
+        clock => clk,
+        q => ROM_data
+    );
 
     -- Instruction Register
     IR_Reg: Reg8 port map(clk, reset, IRload, ROM_data, IR_out);
@@ -454,10 +469,7 @@ begin
 
     -- Accumulator Logic
     Dec_Unit: Dec8 port map(A_out, Dec_out);
-    A_Mux: Mux2_8 port map(INmux, Dec_out, input_bus, A_in); -- INmux=0 logic? Check table.
-    -- Table: INmux=1 -> Input. INmux=0 -> Dec. 
-    -- So I1 (sel=1) should be Input. I0 (sel=0) should be Dec_out.
-    -- Mux2_8(sel, I0, I1, Y) => (INmux, Dec_out, input_bus, A_in) Correct.
+    A_Mux: Mux2_8 port map(INmux, Dec_out, input_bus, A_in); 
     
     A_Reg: Reg8 port map(clk, reset, Aload, A_in, A_out);
     
@@ -466,6 +478,9 @@ begin
     
     -- Output Buffer
     OutBuf: TriBuf8 port map(OutE, A_out, A_out_bus);
+
+    dbg_PC <= PC_out;
+    dbg_IR <= IR_out;
 
 end Structural;
 ```
@@ -511,8 +526,12 @@ package EC1_Components is
     component TriBuf8
         port(en: in std_logic; D: in std_logic_vector(7 downto 0); Q: out std_logic_vector(7 downto 0));
     end component;
-    component ROM16x8
-        port(clk: in std_logic; addr: in std_logic_vector(3 downto 0); data: out std_logic_vector(7 downto 0));
+    component rom32x8
+        port(
+            address : in std_logic_vector(4 downto 0);
+            clock : in std_logic;
+            q : out std_logic_vector(7 downto 0)
+        );
     end component;
 end EC1_Components;
 
@@ -604,28 +623,433 @@ architecture Behavioral of TriBuf8 is begin
     Q <= D when en='1' else (others=>'Z');
 end Behavioral;
 
--- 16x8 ROM (Program Memory)
-entity ROM16x8 is
-    port(clk: in std_logic; addr: in std_logic_vector(3 downto 0); data: out std_logic_vector(7 downto 0));
-end ROM16x8;
-architecture Behavioral of ROM16x8 is
-    type rom_type is array (0 to 15) of std_logic_vector(7 downto 0);
-    constant ROM : rom_type := (
-        0 => "01100000", -- IN A
-        1 => "10100000", -- DEC A
-        2 => "11100000", -- HALT
-        others => "00000000"
-    );
-begin
-    process(clk) begin
-        if rising_edge(clk) then
-            data <= ROM(conv_integer(addr));
-        end if;
-    end process;
-end Behavioral;
+
 ```
 
+---
 
+
+
+## RAM/ROM Megafunction (IP Core)
+ 
+ FPGA vendors provide optimized Intellectual Property (IP) cores for memory.
+ 
+ **ROM: 1-PORT Configuration:**
+ *   **Type:** `altsyncram` (Intel/Altera)
+ *   **Width:** 8 bits (Data bus)
+ *   **Depth:** 32 words (Addressable locations 0-31)
+ *   **Clocking:** Single clock, registered output.
+ *   **Initialization:** Loads data from `rom_data_1.hex` at programming time.
+ 
+ > [!NOTE]
+ > Using IP cores ensures the memory maps directly to the FPGA's dedicated Block RAM resources (M9K/M10K blocks) rather than using general logic cells.
+ 
+---
+ 
+ ### ROM VHDL Component (rom32x8.vhd)
+ 
+ ```vhdl {*}{maxHeight:'380px',lines:true}
+-- megafunction wizard: %ROM: 1-PORT%
+-- GENERATION: STANDARD
+-- VERSION: WM1.0
+-- MODULE: altsyncram 
+
+-- ============================================================
+-- File Name: rom32x8.vhd
+-- Megafunction Name(s):
+-- 			altsyncram
+--
+-- Simulation Library Files(s):
+-- 			altera_mf
+-- ============================================================
+-- ************************************************************
+-- THIS IS A WIZARD-GENERATED FILE. DO NOT EDIT THIS FILE!
+--
+-- 20.1.1 Build 720 11/11/2020 SJ Lite Edition
+-- ************************************************************
+
+
+--Copyright (C) 2020  Intel Corporation. All rights reserved.
+--Your use of Intel Corporation's design tools, logic functions 
+--and other software and tools, and any partner logic 
+--functions, and any output files from any of the foregoing 
+--(including device programming or simulation files), and any 
+--associated documentation or information are expressly subject 
+--to the terms and conditions of the Intel Program License 
+--Subscription Agreement, the Intel Quartus Prime License Agreement,
+--the Intel FPGA IP License Agreement, or other applicable license
+--agreement, including, without limitation, that your use is for
+--the sole purpose of programming logic devices manufactured by
+--Intel and sold by Intel or its authorized distributors.  Please
+--refer to the applicable agreement for further details, at
+--https://fpgasoftware.intel.com/eula.
+
+
+LIBRARY ieee;
+USE ieee.std_logic_1164.all;
+
+LIBRARY altera_mf;
+USE altera_mf.altera_mf_components.all;
+
+ENTITY rom32x8 IS
+	PORT
+	(
+		address		: IN STD_LOGIC_VECTOR (4 DOWNTO 0);
+		clock		: IN STD_LOGIC  := '1';
+		q		: OUT STD_LOGIC_VECTOR (7 DOWNTO 0)
+	);
+END rom32x8;
+
+
+ARCHITECTURE SYN OF rom32x8 IS
+
+	SIGNAL sub_wire0	: STD_LOGIC_VECTOR (7 DOWNTO 0);
+
+BEGIN
+	q    <= sub_wire0(7 DOWNTO 0);
+
+	altsyncram_component : altsyncram
+	GENERIC MAP (
+		address_aclr_a => "NONE",
+		clock_enable_input_a => "BYPASS",
+		clock_enable_output_a => "BYPASS",
+		init_file => "rom_data_1.hex",
+		intended_device_family => "Cyclone V",
+		lpm_hint => "ENABLE_RUNTIME_MOD=NO",
+		lpm_type => "altsyncram",
+		numwords_a => 32,
+		operation_mode => "ROM",
+		outdata_aclr_a => "NONE",
+		outdata_reg_a => "CLOCK0",
+		widthad_a => 5,
+		width_a => 8,
+		width_byteena_a => 1
+	)
+	PORT MAP (
+		address_a => address,
+		clock0 => clock,
+		q_a => sub_wire0
+	);
+
+
+
+END SYN;
+
+-- ============================================================
+-- CNX file retrieval info
+-- ============================================================
+-- Retrieval info: PRIVATE: ADDRESSSTALL_A NUMERIC "0"
+-- Retrieval info: PRIVATE: AclrAddr NUMERIC "0"
+-- Retrieval info: PRIVATE: AclrByte NUMERIC "0"
+-- Retrieval info: PRIVATE: AclrOutput NUMERIC "0"
+-- Retrieval info: PRIVATE: BYTE_ENABLE NUMERIC "0"
+-- Retrieval info: PRIVATE: BYTE_SIZE NUMERIC "8"
+-- Retrieval info: PRIVATE: BlankMemory NUMERIC "0"
+-- Retrieval info: PRIVATE: CLOCK_ENABLE_INPUT_A NUMERIC "0"
+-- Retrieval info: PRIVATE: CLOCK_ENABLE_OUTPUT_A NUMERIC "0"
+-- Retrieval info: PRIVATE: Clken NUMERIC "0"
+-- Retrieval info: PRIVATE: IMPLEMENT_IN_LES NUMERIC "0"
+-- Retrieval info: PRIVATE: INIT_FILE_LAYOUT STRING "PORT_A"
+-- Retrieval info: PRIVATE: INIT_TO_SIM_X NUMERIC "0"
+-- Retrieval info: PRIVATE: INTENDED_DEVICE_FAMILY STRING "Cyclone V"
+-- Retrieval info: PRIVATE: JTAG_ENABLED NUMERIC "0"
+-- Retrieval info: PRIVATE: JTAG_ID STRING "NONE"
+-- Retrieval info: PRIVATE: MAXIMUM_DEPTH NUMERIC "0"
+-- Retrieval info: PRIVATE: MIFfilename STRING "rom_data_1.hex"
+-- Retrieval info: PRIVATE: NUMWORDS_A NUMERIC "32"
+-- Retrieval info: PRIVATE: RAM_BLOCK_TYPE NUMERIC "0"
+-- Retrieval info: PRIVATE: RegAddr NUMERIC "1"
+-- Retrieval info: PRIVATE: RegOutput NUMERIC "1"
+-- Retrieval info: PRIVATE: SYNTH_WRAPPER_GEN_POSTFIX STRING "0"
+-- Retrieval info: PRIVATE: SingleClock NUMERIC "1"
+-- Retrieval info: PRIVATE: UseDQRAM NUMERIC "0"
+-- Retrieval info: PRIVATE: WidthAddr NUMERIC "5"
+-- Retrieval info: PRIVATE: WidthData NUMERIC "8"
+-- Retrieval info: PRIVATE: rden NUMERIC "0"
+-- Retrieval info: LIBRARY: altera_mf altera_mf.altera_mf_components.all
+-- Retrieval info: CONSTANT: ADDRESS_ACLR_A STRING "NONE"
+-- Retrieval info: CONSTANT: CLOCK_ENABLE_INPUT_A STRING "BYPASS"
+-- Retrieval info: CONSTANT: CLOCK_ENABLE_OUTPUT_A STRING "BYPASS"
+-- Retrieval info: CONSTANT: INIT_FILE STRING "rom_data_1.hex"
+-- Retrieval info: CONSTANT: INTENDED_DEVICE_FAMILY STRING "Cyclone V"
+-- Retrieval info: CONSTANT: LPM_HINT STRING "ENABLE_RUNTIME_MOD=NO"
+-- Retrieval info: CONSTANT: LPM_TYPE STRING "altsyncram"
+-- Retrieval info: CONSTANT: NUMWORDS_A NUMERIC "32"
+-- Retrieval info: CONSTANT: OPERATION_MODE STRING "ROM"
+-- Retrieval info: CONSTANT: OUTDATA_ACLR_A STRING "NONE"
+-- Retrieval info: CONSTANT: OUTDATA_REG_A STRING "CLOCK0"
+-- Retrieval info: CONSTANT: WIDTHAD_A NUMERIC "5"
+-- Retrieval info: CONSTANT: WIDTH_A NUMERIC "8"
+-- Retrieval info: CONSTANT: WIDTH_BYTEENA_A NUMERIC "1"
+-- Retrieval info: USED_PORT: address 0 0 5 0 INPUT NODEFVAL "address[4..0]"
+-- Retrieval info: USED_PORT: clock 0 0 0 0 INPUT VCC "clock"
+-- Retrieval info: USED_PORT: q 0 0 8 0 OUTPUT NODEFVAL "q[7..0]"
+-- Retrieval info: CONNECT: @address_a 0 0 5 0 address 0 0 5 0
+-- Retrieval info: CONNECT: @clock0 0 0 0 0 clock 0 0 0 0
+-- Retrieval info: CONNECT: q 0 0 8 0 @q_a 0 0 8 0
+-- Retrieval info: GEN_FILE: TYPE_NORMAL rom32x8.vhd TRUE
+-- Retrieval info: GEN_FILE: TYPE_NORMAL rom32x8.inc FALSE
+-- Retrieval info: GEN_FILE: TYPE_NORMAL rom32x8.cmp TRUE
+-- Retrieval info: GEN_FILE: TYPE_NORMAL rom32x8.bsf FALSE
+-- Retrieval info: GEN_FILE: TYPE_NORMAL rom32x8_inst.vhd FALSE
+-- Retrieval info: LIB_FILE: altera_mf
+```
+
+---
+
+## Intel HEX Format
+ 
+ Standard text-based file format for binary data (like ROM contents).
+ 
+ **Line Structure:** `:LLAAAATT[DD...]CC`
+ 
+ *   **`:`** Start Code
+ *   **`LL`** Byte Count (Number of data bytes)
+ *   **`AAAA`** Address (16-bit starting address)
+ *   **`TT`** Record Type (`00`=Data, `01`=End of File)
+ *   **`DD`** Data Bytes
+ *   **`CC`** Checksum (Two's complement of sum of all bytes)
+ 
+ **Example:** `:050000006080A0C1E03A`
+ *   Count=`05`, Addr=`0000`, Type=`00` (Data)
+ *   Data=`60, 80, A0, C1, E0`
+ *   Checksum=`3A`
+ 
+
+
+---
+ layout: two-cols
+---
+
+ ### ROM Data (rom_data_1.hex)
+
+```text
+:100000006080A0C1E00000000000000000000000CF
+:1000100000000000000000000000000000000000E0
+:00000001FF
+```
+
+### Hex File Breakdown
+
+**Assembly Code:**
+```text
+Addr  Hex  Assembly
+00    60   IN A      ; Input to A
+01    80   OUT A     ; Output A
+02    A0   DEC A     ; Decrement A
+03    C1   JNZ 01    ; Jump to 01 if A!=0
+04    E0   HALT      ; Halt execution
+```
+:: right ::
+**Explanation:** `:100000006080A0C1E0...CF`
+*   **`:10`**: 16 bytes (0x10) of data.
+*   **`0000`**: Starting at address 0x0000.
+*   **`00`**: Data Record.
+*   **`6080A0C1E0...`**: The machine code for the program.
+*   **`CF`**: Checksum.
+
+<img src="/quartus_intel_hex.png" class="mx-auto p-4" alt="Quartus Intel HEX" />
+<p class="text-center text-sm">Figure 10-1: Intel HEX Format</p>
+---
+
+### Top Level Entity (ec1.vhd)
+
+```vhdl
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use work.EC1_Components.ALL;
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use work.EC1_Components.ALL;
+
+entity ec1 is
+    Port ( clk : in STD_LOGIC;
+           reset : in STD_LOGIC;
+           input_bus : in STD_LOGIC_VECTOR (7 downto 0);
+           output_bus : out STD_LOGIC_VECTOR (7 downto 0);
+           halt : out STD_LOGIC;
+           dbg_opcode : out STD_LOGIC_VECTOR(2 downto 0);
+           dbg_A_neq_0 : out STD_LOGIC;
+           dbg_PC : out STD_LOGIC_VECTOR(3 downto 0);
+           dbg_IR : out STD_LOGIC_VECTOR(7 downto 0);
+           dbg_state : out STD_LOGIC_VECTOR(2 downto 0));
+end ec1;
+
+architecture Structural of ec1 is
+    component EC1_Control_Unit
+        Port ( clk : in STD_LOGIC;
+               reset : in STD_LOGIC;
+               opcode : in STD_LOGIC_VECTOR (2 downto 0);
+               A_neq_0 : in STD_LOGIC;
+               IRload : out STD_LOGIC;
+               PCload : out STD_LOGIC;
+               INmux : out STD_LOGIC;
+               Aload : out STD_LOGIC;
+               JNZmux : out STD_LOGIC;
+               OutE : out STD_LOGIC;
+               Halt : out STD_LOGIC;
+               dbg_state : out STD_LOGIC_VECTOR(2 downto 0));
+    end component;
+
+    component EC1_Datapath
+        Port ( clk, reset : in STD_LOGIC;
+               input_bus : in STD_LOGIC_VECTOR(7 downto 0);
+               IRload, PCload, INmux, Aload, JNZmux, OutE : in STD_LOGIC;
+               opcode : out STD_LOGIC_VECTOR(2 downto 0);
+               A_out_bus : out STD_LOGIC_VECTOR(7 downto 0);
+               A_neq_0 : out STD_LOGIC;
+               dbg_PC : out STD_LOGIC_VECTOR(3 downto 0);
+               dbg_IR : out STD_LOGIC_VECTOR(7 downto 0));
+    end component;
+
+    signal opcode : STD_LOGIC_VECTOR(2 downto 0);
+    signal A_neq_0 : STD_LOGIC;
+    signal IRload, PCload, INmux, Aload, JNZmux, OutE : STD_LOGIC;
+    signal dbg_state_sig : STD_LOGIC_VECTOR(2 downto 0);
+
+begin
+
+    CU_Inst: EC1_Control_Unit port map(
+        clk => clk,
+        reset => reset,
+        opcode => opcode,
+        A_neq_0 => A_neq_0,
+        IRload => IRload,
+        PCload => PCload,
+        INmux => INmux,
+        Aload => Aload,
+        JNZmux => JNZmux,
+        OutE => OutE,
+        Halt => halt,
+        dbg_state => dbg_state_sig
+    );
+
+    DP_Inst: EC1_Datapath port map(
+        clk => clk,
+        reset => reset,
+        input_bus => input_bus,
+        IRload => IRload,
+        PCload => PCload,
+        INmux => INmux,
+        Aload => Aload,
+        JNZmux => JNZmux,
+        OutE => OutE,
+        opcode => opcode,
+        A_out_bus => output_bus,
+        A_neq_0 => A_neq_0,
+        dbg_PC => dbg_PC,
+        dbg_IR => dbg_IR
+    );
+
+    dbg_opcode <= opcode;
+    dbg_A_neq_0 <= A_neq_0;
+    dbg_state <= dbg_state_sig;
+
+end Structural;
+```
+
+---
+
+### Testbench (ec1_tb.vhd)
+
+```vhdl
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use work.EC1_Components.ALL;
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use work.EC1_Components.ALL;
+
+entity ec1_tb is
+end ec1_tb;
+
+architecture Behavioral of ec1_tb is
+    component ec1
+        Port ( clk : in STD_LOGIC;
+               reset : in STD_LOGIC;
+               input_bus : in STD_LOGIC_VECTOR (7 downto 0);
+               output_bus : out STD_LOGIC_VECTOR (7 downto 0);
+               halt : out STD_LOGIC;
+               dbg_opcode : out STD_LOGIC_VECTOR(2 downto 0);
+               dbg_A_neq_0 : out STD_LOGIC;
+               dbg_PC : out STD_LOGIC_VECTOR(3 downto 0);
+               dbg_IR : out STD_LOGIC_VECTOR(7 downto 0);
+               dbg_state : out STD_LOGIC_VECTOR(2 downto 0));
+    end component;
+
+    signal clk : STD_LOGIC := '0';
+    signal reset : STD_LOGIC := '0';
+    signal input_bus : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
+    signal output_bus : STD_LOGIC_VECTOR(7 downto 0);
+    signal halt : STD_LOGIC;
+    signal dbg_opcode : STD_LOGIC_VECTOR(2 downto 0);
+    signal dbg_A_neq_0 : STD_LOGIC;
+    signal dbg_PC : STD_LOGIC_VECTOR(3 downto 0);
+    signal dbg_IR : STD_LOGIC_VECTOR(7 downto 0);
+    signal dbg_state : STD_LOGIC_VECTOR(2 downto 0);
+
+    constant clk_period : time := 10 ns;
+
+begin
+
+    uut: ec1 port map (
+        clk => clk,
+        reset => reset,
+        input_bus => input_bus,
+        output_bus => output_bus,
+        halt => halt,
+        dbg_opcode => dbg_opcode,
+        dbg_A_neq_0 => dbg_A_neq_0,
+        dbg_PC => dbg_PC,
+        dbg_IR => dbg_IR,
+        dbg_state => dbg_state
+    );
+
+    clk_process :process
+    begin
+        clk <= '0';
+        wait for clk_period/2;
+        clk <= '1';
+        wait for clk_period/2;
+    end process;
+
+    stim_proc: process
+    begin
+        -- Hold reset for 20 ns
+        reset <= '1';
+        wait for 20 ns;
+        reset <= '0';
+        
+        -- Input data: 10 (0x0A)
+        input_bus <= "00001010"; 
+        
+        -- Wait until halt
+        wait until halt = '1';
+        
+        wait for 20 ns;
+        assert false report "Simulation Finished" severity failure;
+    end process;
+
+end Behavioral;
+```
+---
+
+## EC-1 RTL Viewer
+
+<img src="/rtl_viewer_ec-1.png" class="mx-auto p-4" alt="EC-1 RTL Viewer" />
+<p class="text-center text-sm">Figure 10-4: EC-1 RTL Viewer of Top Level</p>
+
+---
+
+## EC-1 Simulation
+
+<img src="/ec-1_count_10_9.png" class="mx-auto p-4" alt="EC-1 Count 10-9" />
+<p class="text-center text-sm">Figure 10-2: EC-1 Count 10-9</p>
+
+<img src="/ec-1_count_2_1.png" class="mx-auto p-4" alt="EC-1 Count 2-1" />
+<p class="text-center text-sm">Figure 10-3: EC-1 Count 2-1</p>
 
 
 ---
