@@ -20,7 +20,7 @@
     \node[state, left of=DEC, node distance=3.5cm] (OUTPUT) {OUTPUT};
     \node[state, left of=OUTPUT, node distance=3.5cm] (INPUT) {INPUT};
     \node[state, right of=DEC, node distance=3.5cm] (JNZ) {JNZ};
-    \node[state, above of=JNZ, node distance=4.5cm] (WAIT) {WAIT};
+    \node[state, right of=DECODE, node distance=4.5cm] (WAIT) {WAIT};
     \node[state, right of=JNZ, node distance=3.5cm] (HALT) {HALT};
 
     % Edges
@@ -41,7 +41,7 @@
     \path (INPUT)  edge [bend left=45] node {} (FETCH)
           (OUTPUT) edge [bend left=45] node {} (FETCH)
           (DEC)    edge [bend right=45]  node {} (FETCH) % Slightly offset to avoid overlapping straight line
-          (JNZ)    edge node {} (WAIT)
+          (JNZ)    edge [bend right=10] node {} (WAIT)
           (WAIT)   edge [bend right] node {} (FETCH);
           
     % Halt Loop
