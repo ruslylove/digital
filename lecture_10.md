@@ -1347,6 +1347,74 @@ The FSM is slightly more complex to handle the memory operands.
 </div>
 
 ---
+layout: two-cols-header
+---
+
+
+## EC-2 Programming Example: GCD
+
+Calculating the Greatest Common Divisor of two numbers located in memory.
+
+:: left ::
+
+<div class="pr-4 text-base">
+
+**Algorithm:** Euclidean algorithm (subtraction-based).
+
+```c
+while(X != Y) { 
+    if(X > Y) 
+        X -= Y; 
+    else 
+        Y -= X; 
+}
+```
+
+**Memory Map:**
+*   **30 (0x1E):** Variable X (Init: 15)
+*   **31 (0x1F):** Variable Y (Init: 25)
+
+</div>
+
+:: right ::
+
+$$
+\scriptsize
+\def\arraystretch{1.5}
+\begin{array}{|l|l|l|l|}
+\hline
+\textbf{Addr} & \textbf{Hex} & \textbf{Assembly} & \textbf{Comment} \\
+\hline
+00 & 1E & \text{LOAD A, 30} & \text{Load X} \\
+\hline
+01 & 7F & \text{SUB A, 31} & A = X - Y \\
+\hline
+02 & AA & \text{JZ 10} & \text{If } 0 \text{ (X=Y), Done} \\
+\hline
+03 & C8 & \text{JPOS 08} & \text{If Pos (X>Y), Update X} \\
+\hline
+04 & 1F & \text{LOAD A, 31} & \text{Else (X<Y), Load Y} \\
+\hline
+05 & 7E & \text{SUB A, 30} & A = Y - X \\
+\hline
+06 & 3F & \text{STORE A, 31} & \text{Save New Y} \\
+\hline
+07 & C0 & \text{JPOS 00} & \text{Loop} \\
+\hline
+08 & 3E & \text{STORE A, 30} & \text{Save New X} \\
+\hline
+09 & C0 & \text{JPOS 00} & \text{Loop} \\
+\hline
+10 & E0 & \text{HALT} & \text{Result in Mem[30]} \\
+\hline
+\end{array}
+$$
+
+
+
+
+
+---
 
 ## EC-2 Implementation: Control Unit & Datapath
 
@@ -1733,7 +1801,7 @@ end Behavioral;
 <div>
 
 **ec2.vhd (Top Level)**
-```vhdl{*}{maxHeight:'400px',lines:true}
+```vhdl{*}{maxHeight:'380px',lines:true}
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use work.EC2_Components.ALL;
@@ -1789,6 +1857,7 @@ end Structural;
 ```
 </div>
 </div>
+
 
 ---
 
