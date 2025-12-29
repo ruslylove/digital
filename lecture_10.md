@@ -782,7 +782,7 @@ end Structural;
  <div>
 
 <img src="/megafunction_rom_1_port.png" class="mx-auto p-4 w-85" alt="Megafunction ROM 1-Port" />
-<p class="text-center text-sm">Figure 10-2: Megafunction ROM 1-Port</p>
+<p class="text-center text-sm">Figure 10-3. Megafunction ROM 1-Port</p>
  </div>
 </div>
  
@@ -1006,7 +1006,7 @@ Addr  Hex  Assembly
 *   **`CF`**: Checksum.
 
 <img src="/quartus_intel_hex.png" class="mx-auto p-4" alt="Quartus Intel HEX" />
-<p class="text-center text-sm">Figure 10-1: Intel&reg; .hex editing in Quartus&reg; Prime</p>
+<p class="text-center text-sm">Figure 10-4. Intel&reg; .hex editing in Quartus&reg; Prime</p>
 </div>
 
 ---
@@ -1096,17 +1096,17 @@ end Behavioral;
 ## EC-1 RTL Viewer
 
 <img src="/rtl_viewer_ec-1.png" class="mx-auto p-4" alt="EC-1 RTL Viewer" />
-<p class="text-center text-sm">Figure 10-4: EC-1 RTL Viewer of Top Level</p>
+<p class="text-center text-sm">Figure 10-5. EC-1 RTL Viewer of Top Level</p>
 
 ---
 
 ## EC-1 Simulation: Countdown from 10 to 1
 
 <img src="/ec-1_count_10_9.png" class="mx-auto p-4" alt="EC-1 Count 10-9" />
-<p class="text-center text-sm">Figure 10-2: EC-1 Count 10, 9, ...</p>
+<p class="text-center text-sm">Figure 10-6. EC-1 Count 10, 9, ...</p>
 
 <img src="/ec-1_count_2_1.png" class="mx-auto p-4" alt="EC-1 Count 2-1" />
-<p class="text-center text-sm">Figure 10-3: EC-1 Count ..., 2, 1</p>
+<p class="text-center text-sm">Figure 10-7. EC-1 Count ..., 2, 1</p>
 
 <v-clicks every=2>
 
@@ -1136,7 +1136,7 @@ end Behavioral;
 </v-drag>
 
 <v-drag pos="392,64,91,40">
-<span class="text-xs">(A!=10)</span></v-drag>
+<span class="text-xs">(A!=0)</span></v-drag>
 
 
 
@@ -1313,7 +1313,7 @@ To support the new instructions, the datapath is upgraded:
 <div class="col-span-3">
 
 <img src="/ec-2_datapath.png" class="mx-auto p-4 w-full" alt="EC-2 Datapath" />
-<p class="text-center text-sm">Figure 10-3: EC-2 Datapath</p>
+<p class="text-center text-sm">Figure 10-8. EC-2 Datapath</p>
 </div>
 </div>
 
@@ -1341,7 +1341,7 @@ The FSM is slightly more complex to handle the memory operands.
 <div class="col-span-2">
 
 <img src="/ec2_fsm.svg" class="rounded-lg bg-white p-4 w-full mx-auto object-contain" alt="EC-2 Control Unit FSM">
-<p class="text-center text-sm">Figure 10-4. EC-2 Control Unit FSM</p>
+<p class="text-center text-sm">Figure 10-9. EC-2 Control Unit FSM</p>
 
 </div>
 </div>

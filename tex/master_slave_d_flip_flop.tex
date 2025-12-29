@@ -34,8 +34,8 @@ t6=Q}},
     \draw (clk_split) -- ++(-0.5, 0) node[left] {CLK};
     
     % Inverter logic for Slave
-    \draw (clk_split) -- ++(0, -1) coordinate (turn);
-    \draw (turn) -- ++(3, 0) node[not port, anchor=in, scale=0.8] (inv) {};
+    \draw (clk_split) to[short,*-] ++(0, -1) coordinate (turn);
+    \draw (turn) -- ++(3, 0) node[not port, anchor=in, scale=0.5] (inv) {};
     % From INV out to Slave E (pin 3 of Slave)
     \draw (inv.out) -| (Slave.pin 3);
     
