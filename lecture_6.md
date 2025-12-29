@@ -27,7 +27,7 @@ Unlike combinational circuits, **sequential circuits** have memory.
 *   **Combinational Logic**: Performs logic operations to determine outputs and the next state.
 *   **Memory Elements**: Store the current state (Present State) and are updated by the clock.
 *   **Feedback Loop**: The **Present State** is fed back to the combinational logic to influence future actions.
-*   **Outputs**: Determined by the **Present State** and/or **Inputs** (`Mealy` or `Moore` models).
+*   **Outputs**: Determined by the <span v-mark="{ at: +1, color: 'red', type: 'underline' }"> **Present State** and/or **Inputs** </span> (`Mealy` or `Moore` models).
 
 <img src="/sequential_circuit_block.svg" class="rounded-lg bg-white p-4 mx-auto w-190" alt="Sequential Circuit Diagram">
 <p class="text-sm text-center">Figure 6-1. Sequential Circuit Block Diagram.</p>
@@ -495,7 +495,7 @@ Flip-flops often have initialization pins: **Preset** (sets Q=1) and **Clear/Res
 *   **Asynchronous Behavior:** These inputs override the clock and data inputs. The output changes **immediately** when the active level is applied, without waiting for a clock edge.
 *   **Active Levels:** They are frequently **active-low** (indicated by a bubble), meaning the reset/preset occurs when the input is '0'.
 
-<img src="/d_ff_preset_reset.svg" class="rounded-lg bg-white p-4 mx-auto w-85" alt="D Flip-Flop with Preset and Reset">
+<img src="/d_ff_preset_reset.svg" class="rounded-lg bg-white p-4 mx-auto w-100" alt="D Flip-Flop with Preset and Reset">
 <p class="text-sm text-center">Figure 6-15. D Flip-Flops with Asynchronous Preset/Clear.</p>
 
 
@@ -555,6 +555,7 @@ Analysis is the process of determining the function of a sequential circuit from
 2.  Use these equations and the flip-flop characteristic equations to derive the **next state equations**.
     *   $A_{(t+1)} = D_A$ for a D flip-flop.
     *   $A_{(t+1)} = J_A A' + K_A A$ for a JK flip-flop.
+    *   $A_{(t+1)} = T_A \oplus A$ for a T flip-flop.
 3.  Construct a **state table** that lists the next state and output for every combination of present state and input.
 4.  (Optional) Draw a **state diagram**, which is a graphical representation of the state table.
 
@@ -598,17 +599,17 @@ Let's analyze the following circuit with two D flip-flops ($A$ and $B$), one inp
 $$
 \begin{array}{|c|c|c|c|}
 \hline
-\text{Present State} & \text{Input} & \text{Next State} & \text{Output} \\
-A_{(t)} \quad B_{(t)} & x & A_{(t+1)} \quad B_{(t+1)} & y \\
+\text{Present State} & \text{Input} & \text{Next State} & \text{Output} \\[0.5em]
+A_{(t)} \quad B_{(t)} & x & A_{(t+1)} \quad B_{(t+1)} & y \\[0.5em]
 \hline
-0 \quad 0 & 0 & 0 \quad 0 & 0 \\
-0 \quad 0 & 1 & 0 \quad 1 & 0 \\
-0 \quad 1 & 0 & 0 \quad 0 & 1 \\
-0 \quad 1 & 1 & 1 \quad 1 & 0 \\
-1 \quad 0 & 0 & 0 \quad 0 & 1 \\
-1 \quad 0 & 1 & 1 \quad 0 & 0 \\
-1 \quad 1 & 0 & 0 \quad 0 & 1 \\
-1 \quad 1 & 1 & 1 \quad 0 & 0 \\
+0 \quad 0 & 0 & 0 \quad 0 & 0 \\[0.4em]
+0 \quad 0 & 1 & 0 \quad 1 & 0 \\[0.4em]
+0 \quad 1 & 0 & 0 \quad 0 & 1 \\[0.4em]
+0 \quad 1 & 1 & 1 \quad 1 & 0 \\[0.4em]
+1 \quad 0 & 0 & 0 \quad 0 & 1 \\[0.4em]
+1 \quad 0 & 1 & 1 \quad 0 & 0 \\[0.4em]
+1 \quad 1 & 0 & 0 \quad 0 & 1 \\[0.4em]
+1 \quad 1 & 1 & 1 \quad 0 & 0 \\[0.4em]
 \hline
 \end{array}
 $$
@@ -783,7 +784,7 @@ Sequential circuits are classified into two models based on how their outputs ar
 
 <div class="text-base">
 
-*   The outputs are a function of both the **present state AND <span class="text-orange-500">the current inputs</span>**.
+*   The outputs are a function of both the <span v-mark.underline.orange> present state AND the current inputs</span>.
 *   The output value is written on the transition arrow in the state diagram (`input / output`).
 *   Outputs can change immediately if the input changes, even between clock edges. This can sometimes lead to momentary false outputs.
 
@@ -800,7 +801,7 @@ Sequential circuits are classified into two models based on how their outputs ar
 
 <div class="text-base">
 
-*   The outputs are a function of the **present state ONLY**.
+*   The outputs are a function of the <span v-mark.underline.red>present state ONLY</span>.
 *   The output value is written inside the state circle (`state / output`).
 *   Outputs are synchronous with the clock; they only change when the state changes.
 
@@ -984,7 +985,7 @@ $$
 
 <div>
 
-**sequence_detector.vhd**
+**sequence_detector.vhd (structural architecture)**
 ```vhdl {*}{maxHeight:'290px',lines:true}
 library ieee;
 use ieee.std_logic_1164.all;
@@ -994,32 +995,6 @@ entity sequence_detector is
            x         : in  std_logic;
            y         : out std_logic );
 end sequence_detector;
-
-architecture fsm of sequence_detector is
-    type state_type is (S0, S1, S2);
-    signal current_state, next_state : state_type;
-begin
-    -- State Register (Sequential)
-    process(clk, reset)
-    begin
-        if reset = '1' then
-            current_state <= S0;
-        elsif rising_edge(clk) then
-            current_state <= next_state;
-        end if;
-    end process;
-
-    -- Next State & Output Logic (Combinational)
-    process(current_state, x)
-    begin
-        y <= '0'; -- Default output
-        case current_state is
-            when S0 => if x = '1' then next_state <= S1; else next_state <= S0; end if;
-            when S1 => if x = '0' then next_state <= S2; else next_state <= S1; end if;
-            when S2 => if x = '1' then y <= '1'; next_state <= S1; else next_state <= S0; end if;
-        end case;
-    end process;
-end fsm;
 
 architecture structural of sequence_detector is
     component d_ff
@@ -1046,28 +1021,34 @@ end structural;
 <div>
 
 
-**d_ff.vhd**
+**behavioral architecture**
 
 ```vhdl{*}{maxHeight:'290px',lines:true}
-library ieee;
-use ieee.std_logic_1164.all;
-
-entity d_ff is
-    port ( D, clk, rst : in  std_logic;
-           Q           : out std_logic );
-end d_ff;
-
-architecture Behavioral of d_ff is
+architecture fsm of sequence_detector is
+    type state_type is (S0, S1, S2);
+    signal current_state, next_state : state_type;
 begin
-    process(clk, rst)
+    -- State Register (Sequential)
+    process(clk, reset)
     begin
-        if rst = '1' then
-            Q <= '0';
+        if reset = '1' then
+            current_state <= S0;
         elsif rising_edge(clk) then
-            Q <= D;
+            current_state <= next_state;
         end if;
     end process;
-end Behavioral;
+
+    -- Next State & Output Logic (Combinational)
+    process(current_state, x)
+    begin
+        y <= '0'; -- Default output
+        case current_state is
+            when S0 => if x = '1' then next_state <= S1; else next_state <= S0; end if;
+            when S1 => if x = '0' then next_state <= S2; else next_state <= S1; end if;
+            when S2 => if x = '1' then y <= '1'; next_state <= S1; else next_state <= S0; end if;
+        end case;
+    end process;
+end fsm;
 ```
 </div>
 </div>
@@ -1100,8 +1081,8 @@ $$
 
 ---
 
-<div class="grid grid-cols-3 gap-8">
-<div>
+<div class="grid grid-cols-7 gap-8">
+<div class="col-span-2">
 
 2.  **Derive Equations:**
     *   $T_{A_2} = A_1A_0$
@@ -1109,7 +1090,7 @@ $$
     *   $T_{A_0} = 1$
 
 </div>
-<div class="col-span-2">
+<div class="col-span-5">
 
 3.  **Draw the Logic Diagram:**
 
@@ -1125,9 +1106,10 @@ $$
 ## Lecture 6 Summary
 
 *   **Latches vs. Flip-Flops:**
-    *   **Latches:** Level-sensitive (transparent). Output changes immediately with input while enabled.
-    *   **Flip-Flops:** Edge-triggered. Output changes only on the clock edge.
-*   **Sequential Circuit Analysis:** The process of deriving state tables and state diagrams from logic diagrams to understand behavior.
+    *   **Latches:** <span v-mark.red>Level-triggered</span>. Output changes immediately with input while enabled.
+    *   **Flip-Flops:** <span v-mark.red>Edge-triggered</span>. Output changes only on the clock edge.
+*   **Sequential Circuit Analysis:**
+    *   Logic Diagram $\rightarrow$ Flip-Flop Input Equations $\rightarrow$ State Table $\rightarrow$ State Diagram.
 *   **Design Procedure (Synthesis):**
     *   Specification $\rightarrow$ State Diagram $\rightarrow$ State Table $\rightarrow$ Flip-Flop Input Equations $\rightarrow$ Logic Diagram.
 *   **Flip-Flop Characteristics:**
@@ -1135,8 +1117,8 @@ $$
     *   **JK:** $Q(t+1) = JQ' + K'Q$
     *   **T:** $Q(t+1) = T \oplus Q$
 *   **Mealy vs. Moore Models:**
-    *   **Mealy:** Output depends on both **Present State** and **Input**.
-    *   **Moore:** Output depends only on the **Present State**.
+    *   **Mealy:** Output depends on both <span v-mark.underline.red>Present State AND Input</span>.
+    *   **Moore:** Output depends only on the <span v-mark.underline.red>Present State</span>.
 
 ---
 layout: section
