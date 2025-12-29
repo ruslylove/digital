@@ -18,7 +18,7 @@ hideInToc: false
 
 ## Outline
 
-<toc mode="onlySiblings" minDepth="2" columns="2"/>
+<toc mode="onlySiblings" minDepth="2" columns="3"/>
 
 ---
 
@@ -122,7 +122,7 @@ $$
 
 ---
 
-## EC-1 Datapath Design
+## EC-1 Datapath Overview
 
 The datapath must support fetching instructions and executing data operations.
 
@@ -197,7 +197,7 @@ The Control Unit orchestrates the datapath. It transitions through generic state
 layout: two-cols-header
 ---
 
-## Instruction Cycle Details
+## EC-1 Instruction Cycle
 
 :: left ::
 
@@ -764,25 +764,34 @@ end Structural;
 
 ---
 
-
-
-## RAM/ROM Megafunction (IP Core)
+## Intel(r)/Altera(r) Megafunction (IP Core)
  
  FPGA vendors provide optimized Intellectual Property (IP) cores for memory.
- 
+
+<div class="grid grid-cols-2 gap-4">
+<div>
+
  **ROM: 1-PORT Configuration:**
  *   **Type:** `altsyncram` (Intel/Altera)
  *   **Width:** 8 bits (Data bus)
  *   **Depth:** 32 words (Addressable locations 0-31)
- *   **Clocking:** Single clock, registered output.
+ *   **Clocking:** Single clock, unregistered output.
  *   **Initialization:** Loads data from `rom_data_1.hex` at programming time.
  
+ <br>
+
  > [!NOTE]
  > Using IP cores ensures the memory maps directly to the FPGA's dedicated Block RAM resources (M9K/M10K blocks) rather than using general logic cells.
+ </div>
+ <div>
+
+<img src="/megafunction_rom_1_port.png" class="mx-auto p-4 w-80" alt="Megafunction ROM 1-Port" />
+<p class="text-center text-sm">Figure 10-2: Megafunction ROM 1-Port</p>
+ </div>
+</div>
  
 ---
-layout: two-cols
----
+
 
  ### ROM Component (Synthesized)
 **rom32x8.vhd**
@@ -933,16 +942,12 @@ END SYN;
 -- Retrieval info: LIB_FILE: altera_mf
 ```
 
-:: right ::
-
-<img src="/megafunction_rom_1_port.png" class="mx-auto p-4" alt="Megafunction ROM 1-Port" />
-<p class="text-center text-sm">Figure 10-2: Megafunction ROM 1-Port</p>
 
 ---
 layout: two-cols-header
 ---
 
-## Intel HEX Format
+## Intel(r) HEX Format
  
  Standard text-based file format for binary data (like ROM contents).
  
@@ -1005,7 +1010,7 @@ Addr  Hex  Assembly
 *   **`CF`**: Checksum.
 
 <img src="/quartus_intel_hex.png" class="mx-auto p-4" alt="Quartus Intel HEX" />
-<p class="text-center text-sm">Figure 10-1: Intel HEX Format</p>
+<p class="text-center text-sm">Figure 10-1: Intel&reg; .hex editing in Quartus&reg; Prime</p>
 </div>
 
 ---
@@ -1103,7 +1108,7 @@ end Behavioral;
 
 ---
 
-## EC-1 Simulation: Count down from 10 to 1
+## EC-1 Simulation: Countdown from 10 to 1
 
 <img src="/ec-1_count_10_9.png" class="mx-auto p-4" alt="EC-1 Count 10-9" />
 <p class="text-center text-sm">Figure 10-2: EC-1 Count 10, 9, ...</p>
@@ -1111,6 +1116,93 @@ end Behavioral;
 <img src="/ec-1_count_2_1.png" class="mx-auto p-4" alt="EC-1 Count 2-1" />
 <p class="text-center text-sm">Figure 10-3: EC-1 Count ..., 2, 1</p>
 
+<v-clicks every=2>
+
+<v-drag pos="266,214,40,40,33">
+<Arrow x1="0" y1="50" x2="3" y2="0" color="red" width="1" />
+</v-drag>
+
+<v-drag pos="235,237,40,40">
+<span class="text-xs">Fetch</span></v-drag>
+
+<v-drag pos="309,221,40,40,33">
+<Arrow x1="0" y1="50" x2="3" y2="0" color="red" width="1" />
+</v-drag>
+
+<v-drag pos="275,243,40,40">
+<span class="text-xs">Decode</span></v-drag>
+
+<v-drag pos="353,217,40,40,33">
+<Arrow x1="0" y1="50" x2="3" y2="0" color="red" width="1" />
+</v-drag>
+
+<v-drag pos="319,238,91,40">
+<span class="text-xs">Execute (IN A)</span></v-drag>
+
+<v-drag pos="353,134,40,40,197">
+<Arrow x1="0" y1="90" x2="3" y2="0" color="red" width="1" />
+</v-drag>
+
+<v-drag pos="392,64,91,40">
+<span class="text-xs">(A!=10)</span></v-drag>
+
+
+
+<v-drag pos="447,219,40,40,19">
+<Arrow x1="0" y1="30" x2="3" y2="0" color="red" width="1" />
+</v-drag>
+
+
+
+<v-drag pos="410,229,99,40">
+<span class="text-xs">Execute (OUT A)</span></v-drag>
+
+<v-drag pos="549,218,40,40,19">
+<Arrow x1="0" y1="30" x2="3" y2="0" color="red" width="1" />
+</v-drag>
+
+
+
+<v-drag pos="514,230,123,40">
+<span class="text-xs">Execute (DEC A)</span></v-drag>
+
+<v-drag pos="656,217,40,40,19">
+<Arrow x1="0" y1="30" x2="3" y2="0" color="red" width="1" />
+</v-drag>
+
+<v-drag pos="621,229,114,40">
+<span class="text-xs">Execute (JNZ 01)</span></v-drag>
+
+<v-drag pos="717,183,40,40,-26">
+<Arrow x1="0" y1="50" x2="3" y2="0" color="red" width="1" />
+</v-drag>
+
+<v-drag pos="725,230,49,40">
+<span class="text-xs">PC = 01</span></v-drag>
+
+<v-drag pos="676,387,40,40,-26">
+<Arrow x1="0" y1="50" x2="3" y2="0" color="red" width="1" />
+</v-drag>
+
+<v-drag pos="680,433,49,40">
+<span class="text-xs">A = 0</span></v-drag>
+
+<v-drag pos="718,398,40,40,-26">
+<Arrow x1="0" y1="50" x2="3" y2="0" color="red" width="1" />
+</v-drag>
+
+<v-drag pos="718,442,76,40">
+<span class="text-xs">PC = PC+1</span></v-drag>
+
+<v-drag pos="839,433,40,40,19">
+<Arrow x1="0" y1="30" x2="3" y2="0" color="red" width="1" />
+</v-drag>
+
+<v-drag pos="807,443,97,40">
+<span class="text-xs">Execute (HALT)</span></v-drag>
+
+
+</v-clicks>
 
 ---
 
@@ -1118,7 +1210,7 @@ end Behavioral;
 
 **Requirement:** Students must show the waveform simulation as results.
 
-**Challenge 1: Sawtooth Wave Generator**
+### Challenge 1: Sawtooth Wave Generator
 *   **Goal:** Continuously output a value that counts down from `Input` to `0`, then repeats.
 *   **Application:** Connect Output to a DAC to generate a sawtooth waveform.
 *   **Code:**
@@ -1131,7 +1223,7 @@ end Behavioral;
     ```
 ---
 
-**Challenge 2: Odd/Even Parity Detector**
+### Challenge 2: Odd/Even Parity Detector
 *   **Goal:** Determine if an input number is **Odd** or **Even**.
 *   **Constraint:** You cannot essentially check bit 0 directly.
 *   **Hint:** "Ping-pong" between two states.
