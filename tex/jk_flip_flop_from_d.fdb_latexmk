@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1765075353.94128 "/Users/rusleesutthaweekul/Development/digital/tex/jk_flip_flop_from_d.tex" "jk_flip_flop_from_d.pdf" "jk_flip_flop_from_d" 1765075354.6542 0
-  "/Users/rusleesutthaweekul/Development/digital/tex/jk_flip_flop_from_d.tex" 1765075353.71973 2177 89ac85b2e61cfe2009113a79ea820432 ""
+["pdflatex"] 1767022341.25601 "/Users/rus/development/digital/tex/jk_flip_flop_from_d.tex" "jk_flip_flop_from_d.pdf" "jk_flip_flop_from_d" 1767022343.02409 0
+  "/Users/rus/development/digital/tex/jk_flip_flop_from_d.tex" 1767022340.0796 2177 2590029b20ff3b0b49496a84f860cb23 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmmi6.tfm" 1136768653 1512 f21f83efb36853c0b70002322c1ab3ad ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/cm/cmmi9.tfm" 1136768653 1524 d89e2d087a9828407a196f428428ef4a ""
@@ -121,11 +121,11 @@
   "/usr/local/texlive/2025/texmf-dist/tex/latex/xcolor/xcolor.sty" 1727642399 55384 b454dec21c2d9f45ec0b793f0995b992 ""
   "/usr/local/texlive/2025/texmf-dist/tex/latex/xkeyval/xkeyval.sty" 1655411236 4937 4ce600ce9bd4ec84d0250eb6892fcf4f ""
   "/usr/local/texlive/2025/texmf-dist/web2c/texmf.cnf" 1739380943 42148 61becc7c670cd061bb319c643c27fdd4 ""
-  "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1764216609 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
-  "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1764216530 3345742 bfc9e175fbdb167fd74bb9dc10be6426 ""
+  "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1763819811 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
+  "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1763819727 3345735 98e8d6ce829fe76d41a990640e1359a8 ""
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
-  "jk_flip_flop_from_d.aux" 1765075354.62431 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
-  "jk_flip_flop_from_d.tex" 1765075353.71973 2177 89ac85b2e61cfe2009113a79ea820432 ""
+  "jk_flip_flop_from_d.aux" 1767022342.94254 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "jk_flip_flop_from_d.tex" 1767022340.0796 2177 2590029b20ff3b0b49496a84f860cb23 ""
   (generated)
   "jk_flip_flop_from_d.aux"
   "jk_flip_flop_from_d.log"

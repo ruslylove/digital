@@ -3,7 +3,7 @@ theme: seriph
 background: https://cover.sli.dev
 transition: fade
 layout: cover
-title: Lecture 6 - Sequential Logic
+title: Lecture 6 - Latches, Flip-flops, & Synchronous Sequential Logic
 ---
 
 # Lecture 6: Latches, Flip-flops, & Synchronous Sequential Logic
@@ -27,7 +27,7 @@ Unlike combinational circuits, **sequential circuits** have memory.
 *   **Combinational Logic**: Performs logic operations to determine outputs and the next state.
 *   **Memory Elements**: Store the current state (Present State) and are updated by the clock.
 *   **Feedback Loop**: The **Present State** is fed back to the combinational logic to influence future actions.
-*   **Outputs**: Determined by the <span v-mark="{ at: +1, color: 'red', type: 'underline' }"> **Present State** and/or **Inputs** </span> (`Mealy` or `Moore` models).
+*   **Outputs**: Determined by the **Present State** and/or **Inputs** (`Mealy` or `Moore` models).
 
 <img src="/sequential_circuit_block.svg" class="rounded-lg bg-white p-4 mx-auto w-190" alt="Sequential Circuit Diagram">
 <p class="text-sm text-center">Figure 6-1. Sequential Circuit Block Diagram.</p>
@@ -260,13 +260,11 @@ The output Q only changes on the **falling edge** of the clock.
 <p class="text-sm text-center">Figure 6-9. D Flip-Flop with Negative Edge Triggered.</p>
 
 ---
-layout: two-cols-header
----
 
 ## JK Flip-Flop
 JK flip-flop can be constructed from a D flip-flop and external gates.
-
-:: left ::
+<div class="grid grid-cols-3 gap-4 items-start">
+<div>
 
 *   Inputs $J$ (like Set) and $K$ (like Reset).
 *   $J=0, K=0$: Holds state.
@@ -276,13 +274,19 @@ JK flip-flop can be constructed from a D flip-flop and external gates.
 *   **Characteristic Equation:** 
     * $Q(t+1) = JQ' + K'Q$
 
-:: right ::
+</div>
 
-<img src="/jk_flip_flop_from_d.svg" class="rounded-lg bg-white p-1 mx-auto w-100" alt="JK Flip-Flop from D Flip-Flop">
+<div class="col-span-2">
+
+<img src="/jk_flip_flop_from_d.svg" class="rounded-lg bg-white p-2 mx-auto w-110" alt="JK Flip-Flop from D Flip-Flop">
 <p class="text-sm text-center">Figure 6-10. Logic Diagram of a JK Flip-Flop from a D Flip-Flop.</p>
 
-<img src="/jk_flip_flop_symbol.svg" class="rounded-lg bg-white p-1 mx-auto w-70" alt="JK Flip-Flop Symbol">
+<img src="/jk_flip_flop_symbol.svg" class="rounded-lg bg-white p-2 mx-auto w-65" alt="JK Flip-Flop Symbol">
 <p class="text-sm text-center">Figure 6-11. JK Flip-Flop Symbol.</p>
+
+</div>
+
+</div>
 
 ---
 layout: two-cols-header
@@ -324,7 +328,10 @@ These define the next state $Q_{(t+1)}$ based on the current inputs and current 
 <div>
 
 ### SR Flip-Flop
+<div class="border-2 rounded-lg text-center border-gray-300 mt-3">
+
 $Q_{(t+1)} = S + R'Q$
+</div>
 
 $$
 \begin{array}{cc|c}
@@ -342,7 +349,10 @@ $$
 <div>
 
 ### D Flip-Flop
+<div class="border-2 rounded-lg text-center border-gray-300 mt-3">
+
 $Q_{(t+1)} = D$
+</div>
 
 $$
 \begin{array}{c|c}
@@ -357,7 +367,10 @@ $$
 <div>
 
 ### T Flip-Flop
+<div class="border-2 rounded-lg text-center border-gray-300 mt-3">
+
 $Q_{(t+1)} = T \oplus Q$
+</div>
 
 $$
 \begin{array}{c|c}
@@ -373,7 +386,10 @@ $$
 <div>
 
 ### JK Flip-Flop
+<div class="border-2 rounded-lg text-center border-gray-300 mt-3">
+
 $Q_{(t+1)} = JQ' + K'Q$
+</div>
 
 $$
 \begin{array}{cc|c}
@@ -554,10 +570,10 @@ Analysis is the process of determining the function of a sequential circuit from
 1.  Determine the **flip-flop input equations** (also called excitation equations) and the **output equations** from the combinational logic part of the circuit.
 2.  Use these equations and the flip-flop characteristic equations to derive the **next state equations**.
     *   $A_{(t+1)} = D_A$ for a D flip-flop.
-    *   $A_{(t+1)} = J_A A' + K_A A$ for a JK flip-flop.
+    *   $A_{(t+1)} = J_A A' + K_A' A$ for a JK flip-flop.
     *   $A_{(t+1)} = T_A \oplus A$ for a T flip-flop.
 3.  Construct a **state table** that lists the next state and output for every combination of present state and input.
-4.  (Optional) Draw a **state diagram**, which is a graphical representation of the state table.
+4.  Draw a **state diagram**, which is a graphical representation of the state table.
 
 ---
 
@@ -570,7 +586,7 @@ Let's analyze the following circuit with two D flip-flops ($A$ and $B$), one inp
 
 <div class="col-span-2">
 
-<img src="/sequential_analysis_example.svg" class="mx-auto rounded-lg bg-white p-4 w-130" alt="Sequential Circuit for Analysis">
+<img src="/sequential_analysis_example.svg" class="mx-auto rounded-lg bg-white p-5 w-130" alt="Sequential Circuit for Analysis">
 <p class="text-sm text-center">Figure 6-16. Sequential Circuit for Analysis.</p>
 
 </div>
@@ -669,13 +685,14 @@ The procedure is similar, but we use the JK flip-flop's characteristic equation:
 
 ---
 
-<div class="grid grid-cols-3 gap-4">
+<div class="grid grid-cols-5 gap-4">
 
-<div class="col-span-2">
+<div class="col-span-3">
 
 3.  **State Table:**
 
 $$
+\small
 \begin{array}{|c|c|cccc|c|}
 \hline
 \text{PS} & \text{Input} & J_A & K_A & J_B & K_B & \text{NS} \\
@@ -695,7 +712,7 @@ $$
 
 </div>
 
-<div>
+<div class="col-span-2">
 
 4.  **State Diagram:**
 
@@ -784,7 +801,7 @@ Sequential circuits are classified into two models based on how their outputs ar
 
 <div class="text-base">
 
-*   The outputs are a function of both the <span v-mark.underline.orange> present state AND the current inputs</span>.
+*   The outputs are a function of both the <span v-mark.underline.orange> <b>present state</b> AND  <b>current inputs</b></span>.
 *   The output value is written on the transition arrow in the state diagram (`input / output`).
 *   Outputs can change immediately if the input changes, even between clock edges. This can sometimes lead to momentary false outputs.
 
@@ -801,7 +818,7 @@ Sequential circuits are classified into two models based on how their outputs ar
 
 <div class="text-base">
 
-*   The outputs are a function of the <span v-mark.underline.red>present state ONLY</span>.
+*   The outputs are a function of the <span v-mark.underline.red>present state <b>ONLY</b></span>.
 *   The output value is written inside the state circle (`state / output`).
 *   Outputs are synchronous with the clock; they only change when the state changes.
 
