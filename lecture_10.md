@@ -71,8 +71,16 @@ Designing a Central Processing Unit (CPU) involves three main steps.
     3.  **Execute:** Perform the operation.
 
 ---
+layout: section
+---
 
 ## The EC-1 Microprocessor
+
+A simple general-purpose microprocessor.
+
+---
+
+## EC-1 Overview
 
 To understand the design process, we will build a simple 8-bit general-purpose microprocessor called the **EC-1**.
 
@@ -268,24 +276,24 @@ $$
 \hline
 Q_2 & Q_1 & Q_0 & O_2 & O_1 & O_0 & D_2 & D_1 & D_0 & \textbf{Description} \\
 \hline
-0 & 0 & 0 & x & x & x & 0 & 0 & 1 & \text{Fetch} \to \text{Decode} \\
+0 & 0 & 0 & \times & \times & \times & 0 & 0 & 1 & \text{Fetch} \to \text{Decode} \\
 \hline
-0 & 0 & 1 & 0 & 0 & x & 0 & 0 & 0 & \text{Decode} \to \text{Fetch (NOP)} \\
+0 & 0 & 1 & 0 & 0 & \times & 0 & 0 & 0 & \text{Decode} \to \text{Fetch (NOP)} \\
 0 & 0 & 1 & 0 & 1 & 0 & 0 & 0 & 0 & \text{Decode} \to \text{Fetch (NOP)} \\
 0 & 0 & 1 & 0 & 1 & 1 & 0 & 1 & 1 & \text{Decode} \to \text{Input} \\
-0 & 0 & 1 & 1 & x & x & 1 & O_1 & O_0 & \text{Decode} \to \text{Execute} \\
+0 & 0 & 1 & 1 & \times & \times & 1 & \times & \times & \text{Decode} \to \text{Execute} \\
 \hline
-0 & 1 & 0 & x & x & x & 0 & 0 & 0 & \text{Wait} \to \text{Fetch} \\
+0 & 1 & 0 & \times & \times & \times & 0 & 0 & 0 & \text{Wait} \to \text{Fetch} \\
 \hline
-0 & 1 & 1 & x & x & x & 0 & 0 & 0 & \text{Input} \to \text{Fetch} \\
+0 & 1 & 1 & \times & \times & \times & 0 & 0 & 0 & \text{Input} \to \text{Fetch} \\
 \hline
-1 & 0 & 0 & x & x & x & 0 & 0 & 0 & \text{Output} \to \text{Fetch} \\
+1 & 0 & 0 & \times & \times & \times & 0 & 0 & 0 & \text{Output} \to \text{Fetch} \\
 \hline
-1 & 0 & 1 & x & x & x & 0 & 0 & 0 & \text{Decrement} \to \text{Fetch} \\
+1 & 0 & 1 & \times & \times & \times & 0 & 0 & 0 & \text{Decrement} \to \text{Fetch} \\
 \hline
-1 & 1 & 0 & x & x & x & 0 & 1 & 0 & \text{JNZ} \to \text{Wait} \\
+1 & 1 & 0 & \times & \times & \times & 0 & 1 & 0 & \text{JNZ} \to \text{Wait} \\
 \hline
-1 & 1 & 1 & x & x & x & 1 & 1 & 1 & \text{Halt} \to \text{Halt} \\
+1 & 1 & 1 & \times & \times & \times & 1 & 1 & 1 & \text{Halt} \to \text{Halt} \\
 \hline
 \end{array}
 $$
@@ -492,7 +500,7 @@ end Structural;
 
 ### VHDL Components
 
-**components.vhd**
+**EC1_Components.vhd**
 
 ```vhdl{*}{maxHeight:'380px',lines:true}
 library IEEE;
@@ -553,6 +561,10 @@ architecture Behavioral of d_ff is begin
     end process;
 end Behavioral;
 
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
 -- 8-bit Register
 entity Reg8 is
     port(clk, reset, load: in std_logic; D: in std_logic_vector(7 downto 0); Q: out std_logic_vector(7 downto 0));
@@ -563,6 +575,10 @@ architecture Behavioral of Reg8 is begin
         elsif rising_edge(clk) then if load='1' then Q <= D; end if; end if;
     end process;
 end Behavioral;
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 -- 4-bit Register
 entity Reg4 is
@@ -575,6 +591,10 @@ architecture Behavioral of Reg4 is begin
     end process;
 end Behavioral;
 
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
 -- 2-to-1 Mux (8-bit)
 entity Mux2_8 is
     port(sel: in std_logic; I0, I1: in std_logic_vector(7 downto 0); Y: out std_logic_vector(7 downto 0));
@@ -582,6 +602,10 @@ end Mux2_8;
 architecture Behavioral of Mux2_8 is begin
     Y <= I1 when sel='1' else I0;
 end Behavioral;
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 -- 2-to-1 Mux (4-bit)
 entity Mux2_4 is
@@ -591,6 +615,10 @@ architecture Behavioral of Mux2_4 is begin
     Y <= I1 when sel='1' else I0;
 end Behavioral;
 
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
 -- 4-bit Incrementer
 entity Inc4 is
     port(A: in std_logic_vector(3 downto 0); Y: out std_logic_vector(3 downto 0));
@@ -599,6 +627,9 @@ architecture Behavioral of Inc4 is begin
     Y <= A + 1;
 end Behavioral;
 
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
 -- 8-bit Decrementer
 entity Dec8 is
     port(A: in std_logic_vector(7 downto 0); Y: out std_logic_vector(7 downto 0));
@@ -607,6 +638,9 @@ architecture Behavioral of Dec8 is begin
     Y <= A - 1;
 end Behavioral;
 
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
 -- Zero Check
 entity ZeroCheck8 is
     port(A: in std_logic_vector(7 downto 0); is_not_zero: out std_logic);
@@ -615,6 +649,9 @@ architecture Behavioral of ZeroCheck8 is begin
     is_not_zero <= '1' when A /= "00000000" else '0';
 end Behavioral;
 
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
 -- Tri-state Buffer
 entity TriBuf8 is
     port(en: in std_logic; D: in std_logic_vector(7 downto 0); Q: out std_logic_vector(7 downto 0));
@@ -645,10 +682,12 @@ end Behavioral;
  > Using IP cores ensures the memory maps directly to the FPGA's dedicated Block RAM resources (M9K/M10K blocks) rather than using general logic cells.
  
 ---
- 
- ### ROM VHDL Component (rom32x8.vhd)
- 
- ```vhdl {*}{maxHeight:'380px',lines:true}
+layout: two-cols
+---
+
+ ### ROM Component (Synthesized)
+**rom32x8.vhd**
+```vhdl {*}{maxHeight:'380px',lines:true}
 -- megafunction wizard: %ROM: 1-PORT%
 -- GENERATION: STANDARD
 -- VERSION: WM1.0
@@ -720,7 +759,7 @@ BEGIN
 		numwords_a => 32,
 		operation_mode => "ROM",
 		outdata_aclr_a => "NONE",
-		outdata_reg_a => "CLOCK0",
+		outdata_reg_a => "UNREGISTERED",
 		widthad_a => 5,
 		width_a => 8,
 		width_byteena_a => 1
@@ -777,7 +816,7 @@ END SYN;
 -- Retrieval info: CONSTANT: NUMWORDS_A NUMERIC "32"
 -- Retrieval info: CONSTANT: OPERATION_MODE STRING "ROM"
 -- Retrieval info: CONSTANT: OUTDATA_ACLR_A STRING "NONE"
--- Retrieval info: CONSTANT: OUTDATA_REG_A STRING "CLOCK0"
+-- Retrieval info: CONSTANT: OUTDATA_REG_A STRING "UNREGISTERED"
 -- Retrieval info: CONSTANT: WIDTHAD_A NUMERIC "5"
 -- Retrieval info: CONSTANT: WIDTH_A NUMERIC "8"
 -- Retrieval info: CONSTANT: WIDTH_BYTEENA_A NUMERIC "1"
@@ -795,12 +834,21 @@ END SYN;
 -- Retrieval info: LIB_FILE: altera_mf
 ```
 
+:: right ::
+
+<img src="/megafunction_rom_1_port.png" class="mx-auto p-4" alt="Megafunction ROM 1-Port" />
+<p class="text-center text-sm">Figure 10-2: Megafunction ROM 1-Port</p>
+
+---
+layout: two-cols-header
 ---
 
 ## Intel HEX Format
  
  Standard text-based file format for binary data (like ROM contents).
  
+:: left ::
+
  **Line Structure:** `:LLAAAATT[DD...]CC`
  
  *   **`:`** Start Code
@@ -810,6 +858,8 @@ END SYN;
  *   **`DD`** Data Bytes
  *   **`CC`** Checksum (Two's complement of sum of all bytes)
  
+:: right ::
+
  **Example:** `:050000006080A0C1E03A`
  *   Count=`05`, Addr=`0000`, Type=`00` (Data)
  *   Data=`60, 80, A0, C1, E0`
@@ -841,6 +891,8 @@ Addr  Hex  Assembly
 04    E0   HALT      ; Halt execution
 ```
 :: right ::
+<div class="text-base">
+
 **Explanation:** `:100000006080A0C1E0...CF`
 *   **`:10`**: 16 bytes (0x10) of data.
 *   **`0000`**: Starting at address 0x0000.
@@ -850,15 +902,13 @@ Addr  Hex  Assembly
 
 <img src="/quartus_intel_hex.png" class="mx-auto p-4" alt="Quartus Intel HEX" />
 <p class="text-center text-sm">Figure 10-1: Intel HEX Format</p>
+</div>
+
 ---
 
-### Top Level Entity (ec1.vhd)
-
-```vhdl
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use work.EC1_Components.ALL;
-
+### Top Level Entity 
+**ec1.vhd**
+```vhdl {*}{maxHeight:'380px', lines:true}
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use work.EC1_Components.ALL;
@@ -949,11 +999,14 @@ begin
 end Structural;
 ```
 
+
+
+
 ---
 
-### Testbench (ec1_tb.vhd)
-
-```vhdl
+### Testbench
+**ec1_tb.vhd**
+```vhdl {*}{maxHeight:'380px', lines:true}
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use work.EC1_Components.ALL;
@@ -1043,14 +1096,47 @@ end Behavioral;
 
 ---
 
-## EC-1 Simulation
+## EC-1 Simulation: Count down from 10 to 1
 
 <img src="/ec-1_count_10_9.png" class="mx-auto p-4" alt="EC-1 Count 10-9" />
-<p class="text-center text-sm">Figure 10-2: EC-1 Count 10-9</p>
+<p class="text-center text-sm">Figure 10-2: EC-1 Count 10, 9, ...</p>
 
 <img src="/ec-1_count_2_1.png" class="mx-auto p-4" alt="EC-1 Count 2-1" />
-<p class="text-center text-sm">Figure 10-3: EC-1 Count 2-1</p>
+<p class="text-center text-sm">Figure 10-3: EC-1 Count ..., 2, 1</p>
 
+
+---
+
+## EC-1 Programming Exercises
+
+**Requirement:** Students must show the waveform simulation as results.
+
+**Challenge 1: Sawtooth Wave Generator**
+*   **Goal:** Continuously output a value that counts down from `Input` to `0`, then repeats.
+*   **Application:** Connect Output to a DAC to generate a sawtooth waveform.
+*   **Code:**
+    ```text
+    00: IN A    ; Load Peak
+    01: OUT A   ; Output
+    02: DEC A   ; Ramp down
+    03: JNZ 01  ; Loop
+    04: HALT    ; Done
+    ```
+---
+
+**Challenge 2: Odd/Even Parity Detector**
+*   **Goal:** Determine if an input number is **Odd** or **Even**.
+*   **Constraint:** You cannot essentially check bit 0 directly.
+*   **Hint:** "Ping-pong" between two states.
+    ```text
+    00: IN A
+    01: DEC A
+    02: JNZ 04
+    03: HALT    ; Halts here if Odd
+    04: DEC A
+    05: JNZ 01
+    06: HALT    ; Halts here if Even
+    ```
 
 ---
 layout: section
