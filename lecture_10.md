@@ -2100,9 +2100,9 @@ end Behavioral;
 ## EC-2 Simulation: GCD Calculation of 25 and 15
 
 <img src="/ec2_sim_1.png" class="rounded-lg bg-white py-8 w-full object-contain mx-auto" alt="EC-2 Testbench">
-<p class="text-center text-sm">Figure 10-14. Timing Simulation: 1 of 4</p>
+<p class="text-center text-sm">Figure 10-14. EC-2 Simulation: 1 of 4</p>
 <img src="/ec2_sim_2.png" class="rounded-lg bg-white py-8 w-full object-contain mx-auto" alt="EC-2 Testbench">
-<p class="text-center text-sm">Figure 10-15. Timing Simulation: 2 of 4</p>
+<p class="text-center text-sm">Figure 10-15. EC-2 Simulation: 2 of 4</p>
 
 <v-clicks every=2>
 
@@ -2216,9 +2216,9 @@ end Behavioral;
 ---
 
 <img src="/ec2_sim_3.png" class="rounded-lg bg-white py-5 w-full object-contain mx-auto" alt="EC-2 Testbench">
-<p class="text-center text-sm">Figure 10-16. Timing Simulation: 3 of 4</p>
+<p class="text-center text-sm">Figure 10-16. EC-2 Simulation: 3 of 4</p>
 <img src="/ec2_sim_4.png" class="rounded-lg bg-white py-5 w-full object-contain mx-auto" alt="EC-2 Testbench">
-<p class="text-center text-sm">Figure 10-17. Timing Simulation: 4 of 4</p>
+<p class="text-center text-sm">Figure 10-17. EC-2 Simulation: 4 of 4</p>
 
 <v-clicks every=2>
 

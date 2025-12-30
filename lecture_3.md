@@ -28,15 +28,7 @@ hideInToc: false
 
 In our design flow, after deriving a Boolean expression from a truth table (e.g., using minterms), the next step is often **optimization**. The goal is to simplify the expression to create a more efficient circuit.
 
-```mermaid
-graph LR
-  A[Specification] --> B[Truth Table];
-  B --> C(Initial<br>Boolean Expression);
-  C --> D{"Optimization<br>(e.g. K-Map)"};
-  D --> E(Simplified<br>Boolean Expression);
-  E --> F[Logic Circuit];
-  style D fill:#f9f,stroke:#333,stroke-width:2px,color:black
-```
+<img src="/combinational_design_flow.svg" class="mx-auto w-full p-4" />
 
 <p class="text-sm text-center">Figure 3-1. Design Flow.</p>
 
@@ -762,41 +754,43 @@ $F = (A ⊕ B ⊕ C)' = Σm(0,3,5,6)$
 <p class="text-sm text-center">Figure 3-24. Even Function Logic.</p>
 
 ---
-layout: two-cols-header
----
+
 
 ## Application: Parity Generation and Checking
 
 XOR gates are ideal for error detection circuits. **Parity** is an extra bit added to a binary message to ensure the total number of $1$s is either even (even parity) or odd (odd parity).
 
-<img src="/parity_system.svg" class="rounded-lg bg-white p-2 w-full" alt="Parity System">
+<img src="/parity_system.svg" class="rounded-lg bg-white p-4 w-full" alt="Parity System">
+<p class="text-sm text-center">Figure 3-25. Parity System.</p>
 
-::left::
+---
+layout: two-cols
+---
 
 ### Even Parity Generator
 
 <div class="pr-4 text-sm">
 
-This circuit generates a parity bit $P$ for a 3-bit message ($x,y,z$). The output $P$ is chosen so that the total number of $1$s in the 4-bit message ($x,y,z,P$) is even.
+This circuit generates a parity bit $P$ for a 3-bit message ($x,y,z$). The output $P$ is chosen so that the total number of $1$s in the 4-bit message $(x,y,z,P)$ is even.
 
 - $P = x ⊕ y ⊕ z$
 
-<img src="/logic_parity_generator.svg" class="rounded-lg bg-white pt-5 w-90 mx-auto" alt="3-bit even parity generator">
-<p class="text-sm text-center">Figure 3-25. Parity Generator.</p>
+<img src="/logic_parity_generator.svg" class="rounded-lg bg-white py-8 w-full mx-auto" alt="3-bit even parity generator">
+<p class="text-sm text-center">Figure 3-26. Parity Generator.</p>
 
 </div>
 
-::right::
+:: right ::
 
 ### Even Parity Checker
 <div class="pr-4 text-sm">
 
-This circuit checks a 4-bit message ($x,y,z,P$) for errors. If the number of $1$s is even, the output $C$ (Check) is $0$. If the number of $1$s is odd, $C$ is $1$, indicating an error.
+This circuit checks a 4-bit message $(x,y,z,P)$ for errors. If the number of $1$s is even, the output $C$ (Check) is $0$. If the number of $1$s is odd, $C$ is $1$, indicating an error.
 
 - $C = x ⊕ y ⊕ z ⊕ P$
 
-<img src="/logic_parity_checker.svg" class="rounded-lg bg-white pt-5 w-80 mx-auto" alt="4-bit even parity checker">
-<p class="text-sm text-center">Figure 3-26. Parity Checker.</p>
+<img src="/logic_parity_checker.svg" class="rounded-lg bg-white py-6 w-full mx-auto" alt="4-bit even parity checker">
+<p class="text-sm text-center">Figure 3-27. Parity Checker.</p>
 
 </div>
 
