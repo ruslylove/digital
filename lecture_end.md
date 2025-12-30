@@ -57,7 +57,7 @@ layout: end
 
 ## Congratulations on completing the course!
 
-Happy DigitalLogic Designing!
+Happy Digital Logic Designing!
 
 <v-clicks>
 
