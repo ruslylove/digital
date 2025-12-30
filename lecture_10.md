@@ -219,7 +219,7 @@ The Control Unit orchestrates the datapath. It transitions through generic state
 
 :: right ::
 
-<img src="/ec1_fsm.svg" class="rounded-lg bg-white p-2 w-full object-contain mx-auto" alt="EC-1 Control Unit FSM">
+<img src="/ec1_fsm_no_wait.svg" class="rounded-lg bg-white p-2 w-full object-contain mx-auto" alt="EC-1 Control Unit FSM">
 <p class="text-center text-sm">Figure 10-2. EC-1 Control Unit FSM</p>
 
 ---
@@ -1485,6 +1485,8 @@ while(X != Y) {
 </div>
 
 :: right ::
+
+**Assembly Code:**
 
 $$
 \scriptsize
