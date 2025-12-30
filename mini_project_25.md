@@ -1,4 +1,3 @@
-
 ---
 theme: seriph
 background: https://cover.sli.dev
