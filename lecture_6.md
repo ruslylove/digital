@@ -1127,15 +1127,15 @@ $$
     *   **Latches:** <span v-mark.red>Level-triggered</span>. Output changes immediately with input while enabled.
     *   **Flip-Flops:** <span v-mark.red>Edge-triggered</span>. Output changes only on the clock edge.
 *   **Sequential Circuit Analysis:**
-    *   Logic Diagram $\rightarrow$ Flip-Flop Input Equations $\rightarrow$ State Table $\rightarrow$ State Diagram.
+    *   Logic Diagram $\rightarrow$ Flip-Flop Input Equations $\rightarrow$ State Table $\rightarrow$ <span v-mark.circle.red>State Diagram</span>.
 *   **Design Procedure (Synthesis):**
-    *   Specification $\rightarrow$ State Diagram $\rightarrow$ State Table $\rightarrow$ Flip-Flop Input Equations $\rightarrow$ Logic Diagram.
+    *   Specification $\rightarrow$ State Diagram $\rightarrow$ State Table $\rightarrow$ Flip-Flop Input Equations $\rightarrow$ <span v-mark.circle.red>Logic Diagram</span>.
 *   **Flip-Flop Characteristics:**
     *   **D:** $Q(t+1) = D$
-    *   **JK:** $Q(t+1) = JQ' + K'Q$
-    *   **T:** $Q(t+1) = T \oplus Q$
+    *   <span v-mark.red>**JK:** $Q(t+1) = JQ' + K'Q$</span>
+    *   <span v-mark.red>**T:** $Q(t+1) = T \oplus Q$</span>
 *   **Mealy vs. Moore Models:**
-    *   **Mealy:** Output depends on both <span v-mark.underline.red>Present State AND Input</span>.
+    *   **Mealy:** Output depends on both <span v-mark.underline.red>Present State <b>AND</b> Input</span>.
     *   **Moore:** Output depends only on the <span v-mark.underline.red>Present State</span>.
 
 ---

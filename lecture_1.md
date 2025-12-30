@@ -327,7 +327,7 @@ layout: two-cols-header
 
 :: right ::
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/First_Computer_Bug%2C_1945.jpg/2560px-First_Computer_Bug%2C_1945.jpg" class="rounded-lg mx-auto w-60"/>
+<img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/First_Computer_Bug%2C_1947.jpg" class="rounded-lg mx-auto w-60"/>
 <p class="text-sm text-center">Figure 1-17. The First Computer Bug Log.</p>
 
 <img src="/first_bug.jpg" class="rounded-lg mt-4 mx-auto w-40" />
@@ -660,29 +660,7 @@ This phase transforms the abstract design into a physical, manufacturable layout
 
 :: right ::
 
-```mermaid 
-flowchart LR;
-
-    subgraph Design[Design Phase]
-      direction TB
-      A[Problem Specification] --> B{Design Entry};
-      B -->|"HDL (Verilog/VHDL)"| C[RTL Design];
-      B -->|Schematic| C;
-      C --> D[Functional Simulation];
-    end
-
-    Design -- "realization (hardware)" ---> Implementation
-   
-
-    subgraph Implementation[Implementation Phase]
-      direction TB
-    E{Synthesis};
-    E --> F[Post-Synthesis Simulation];
-    F --> G[Implementation / P&R];
-    G --> H[Timing Simulation];
-    H --> I[Hardware Verification];
-    end
-```
+<img src="/design_implementation_flow.svg" class="rounded-lg mt-4 w-80 mx-auto" alt="Design and Implementation Flow">
 <p class="text-sm text-center">Figure 1-39. A Development Flow of Digtial Circuit.</p>
 
 

@@ -5,7 +5,7 @@ theme: seriph
 # like them? see https://unsplash.com/collections/94734566/slidev
 background: https://cover.sli.dev
 # some information about your slides (markdown enabled)
-title: Top-level
+title: Welcome to 010113025 Digital Circuit & Logic Design
 transition: fade
 # enable MDC Syntax: https://sli.dev/features/mdc
 mdc: true
