@@ -1237,16 +1237,31 @@ layout: section
 
 A more advanced general-purpose microprocessor.
 
+
+---
+layout: two-cols-header
 ---
 
 ## EC-2 Overview
 
-The **EC-2** improves upon the EC-1 by adding more instructions and capabilities.
+The **EC-2** improves upon the EC-1 by adding more instructions and capabilities, moving towards a **Von Neumann Architecture**.
 
-*   **Expanded Instruction Set:** 8 Instructions (utilizing all 3 opcode bits).
-*   **Memory:** 32 x 8-bit **RAM** (Read/Write capabilities).
+:: left ::
+
+*   **Expanded Instruction Set:** 8 Instructions.
+*   **Memory:** 32 x 8-bit **RAM**.
+    *   Unified storage for **Code** and **Data**.
 *   **Addressing:** 5-bit address bus.
 *   **ALU:** Adder/Subtractor unit.
+*   **Key Concept:** "Stored-Program Computer".
+
+:: right ::
+
+<img src="/von_neumann.svg" class="mx-auto w-90 p-4" alt="Von Neumann Architecture Block Diagram" />
+<p class="text-center text-sm">Figure 10-8. Von Neumann Architecture Block Diagram</p>
+
+
+
 
 ---
 
@@ -1347,6 +1362,87 @@ The FSM is slightly more complex to handle the memory operands.
 </div>
 
 ---
+
+### EC-2 Control Unit State Table
+
+$$
+\scriptsize
+\def\arraystretch{1.3}
+\begin{array}{|l|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{State} & \textbf{Code} & \textbf{Opcode} & \textbf{Next State} & \textbf{IRload} & \textbf{PCload} & \textbf{MemInst} & \textbf{MemWr} & \textbf{Asel} & \textbf{Aload} & \textbf{Sub} & \textbf{JMPmux} & \textbf{Halt} \\
+\hline
+\text{Fetch} & 0000 & - & \text{Dec} & 1 & 1 & 0 & 0 & - & 0 & 0 & 0 & 0 \\
+\hline
+\text{Decode} & 0001 & 000 & \text{Load} & 0 & 0 & 0 & 0 & - & 0 & 0 & 0 & 0 \\
+\text{Decode} & 0001 & 001 & \text{Store} & 0 & 0 & 0 & 0 & - & 0 & 0 & 0 & 0 \\
+\text{Decode} & 0001 & 010 & \text{Add} & 0 & 0 & 0 & 0 & - & 0 & 0 & 0 & 0 \\
+\text{Decode} & 0001 & 011 & \text{Sub} & 0 & 0 & 0 & 0 & - & 0 & 0 & 0 & 0 \\
+\text{Decode} & 0001 & 100 & \text{In} & 0 & 0 & 0 & 0 & - & 0 & 0 & 0 & 0 \\
+\text{Decode} & 0001 & 101 & \text{Jz} & 0 & 0 & 0 & 0 & - & 0 & 0 & 0 & 0 \\
+\text{Decode} & 0001 & 110 & \text{Jpos} & 0 & 0 & 0 & 0 & - & 0 & 0 & 0 & 0 \\
+\text{Decode} & 0001 & 111 & \text{Halt} & 0 & 0 & 0 & 0 & - & 0 & 0 & 0 & 0 \\
+\hline
+\text{Load} & 0010 & - & \text{Fetch} & 0 & 0 & 1 & 0 & 00 & 1 & 0 & 0 & 0 \\
+\hline
+\text{Store} & 0011 & - & \text{Fetch} & 0 & 0 & 1 & 1 & - & 0 & 0 & 0 & 0 \\
+\hline
+\text{Add} & 0100 & - & \text{Fetch} & 0 & 0 & 1 & 0 & 01 & 1 & 0 & 0 & 0 \\
+\hline
+\text{Sub} & 0101 & - & \text{Fetch} & 0 & 0 & 1 & 0 & 01 & 1 & 1 & 0 & 0 \\
+\hline
+\text{In} & 0110 & - & \text{Fetch} & 0 & 0 & 0 & 0 & 10 & 1 & 0 & 0 & 0 \\
+\hline
+\text{Jz} & 0111 & - & \text{Fetch} & 0 & Z & 0 & 0 & - & 0 & 0 & 1 & 0 \\
+\hline
+\text{Jpos} & 1000 & - & \text{Fetch} & 0 & P & 0 & 0 & - & 0 & 0 & 1 & 0 \\
+\hline
+\text{Halt} & 1001 & - & \text{Halt} & 0 & 0 & 0 & 0 & - & 0 & 0 & 0 & 1 \\
+\hline
+\end{array}
+$$
+
+---
+layout: two-cols-header
+---
+
+### EC-2 State Equations & Output Logic
+
+:: left ::
+
+#### State Equations ($D_n$)
+
+$$
+\small
+\begin{aligned}
+D_3 &= \text{Decode} \cdot O_2 \cdot O_1 + \text{Halt} \\
+D_2 &= \text{Decode} \cdot (O_2 \oplus O_1) \\
+D_1 &= \text{Decode} \cdot \overline{O_1} \\
+D_0 &= \text{Fetch} + \text{Decode} \cdot O_0 + \text{Halt}
+\end{aligned}
+$$
+
+:: right ::
+
+#### Output Equations
+
+$$
+\small
+\begin{aligned}
+\text{IRload} &= \text{Fetch} \\
+\text{PCload} &= \text{Fetch} + \text{Jz} \cdot Z + \text{Jpos} \cdot P \\
+\text{JMPmux} &= \text{Jz} + \text{Jpos} \\
+\text{MemInst} &= \text{Load} + \text{Store} + \text{Add} + \text{Sub} \\
+\text{MemWr} &= \text{Store} \\
+\text{Asel}_1 &= \text{In} \\
+\text{Asel}_0 &= \text{Add} + \text{Sub} \\
+\text{Aload} &= \text{Load} + \text{Add} + \text{Sub} + \text{In} \\
+\text{Sub} &= \text{Sub} \\
+\text{Halt} &= \text{Halt}
+\end{aligned}
+$$
+
+---
 layout: two-cols-header
 ---
 
@@ -1413,6 +1509,29 @@ $$
 
 
 
+
+---
+
+---
+layout: two-cols-header
+---
+
+## EC-2 Memory Wait States & Timing
+
+The EC-2 is a **Multi-Cycle Processor**. Each instruction takes multiple cycles, utilizing specific states as "Wait States" for memory access.
+
+:: left ::
+
+*   **Fetch Cycle (State 0):** Used to read the instruction from ROM/RAM. The entire cycle is a "wait" for the instruction to be fetched.
+*   **Execute Cycle (State X):**
+    *   **Async Read (`LOAD`, `ADD`, `SUB`):** These states drive the address bus and wait for RAM data. Captured by registers at cycle end.
+    *   **Sync Write (`STORE`):** Sets up address/data and asserts `MemWr`. RAM writes on the clock edge.
+*   **Why Wait?** Ensures signal stability (Address Decode -> Data Out).
+
+:: right ::
+
+<img src="/ec2_wait_state.svg" class="mx-auto w-full p-4" alt="EC-2 Wait State FSM Diagram" />
+<p class="text-center text-sm">Figure 10-9. Multi-Cycle Memory Access</p>
 
 ---
 
@@ -1572,6 +1691,65 @@ end Structural;
 ## EC-2 Implementation: Components & Top Level
 
 <div class="grid grid-cols-2 gap-4">
+<div>
+
+**ec2.vhd (Top Level)**
+```vhdl{*}{maxHeight:'380px',lines:true}
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use work.EC2_Components.ALL;
+
+entity ec2 is
+    Port ( clk, reset : in STD_LOGIC;
+           input_bus : in STD_LOGIC_VECTOR (7 downto 0);
+           output_bus : out STD_LOGIC_VECTOR (7 downto 0);
+           halt : out STD_LOGIC;
+           -- Debug signals
+           dbg_opcode : out STD_LOGIC_VECTOR(2 downto 0);
+           dbg_PC : out STD_LOGIC_VECTOR(4 downto 0);
+           dbg_IR : out STD_LOGIC_VECTOR(7 downto 0);
+           dbg_state : out STD_LOGIC_VECTOR(3 downto 0));
+end ec2;
+
+architecture Structural of ec2 is
+    -- Component declarations...
+    
+    signal opcode : STD_LOGIC_VECTOR(2 downto 0);
+    signal Zero_Flag, Pos_Flag, IRload, PCload, MemInst, MemWr, Aload, Sub, JMPmux, Halt_Sig : STD_LOGIC;
+    signal Asel : STD_LOGIC_VECTOR(1 downto 0);
+    signal dbg_state_sig : STD_LOGIC_VECTOR(3 downto 0);
+
+begin
+
+    CU_Inst: EC2_Control_Unit port map(
+        clk => clk, reset => reset, opcode => opcode,
+        Zero_Flag => Zero_Flag, Pos_Flag => Pos_Flag,
+        IRload => IRload, PCload => PCload,
+        MemInst => MemInst, MemWr => MemWr,
+        Asel => Asel, Aload => Aload, Sub => Sub,
+        JMPmux => JMPmux, Halt => Halt_Sig,
+        dbg_state => dbg_state_sig
+    );
+
+    DP_Inst: EC2_Datapath port map(
+        clk => clk, reset => reset, input_bus => input_bus,
+        IRload => IRload, PCload => PCload,
+        MemInst => MemInst, MemWr => MemWr,
+        Asel => Asel, Aload => Aload, Sub => Sub,
+        JMPmux => JMPmux, opcode => opcode,
+        Zero_Flag => Zero_Flag, Pos_Flag => Pos_Flag,
+        A_out_bus => output_bus,
+        dbg_PC => dbg_PC, dbg_IR => dbg_IR
+    );
+
+    dbg_opcode <= opcode;
+    dbg_state <= dbg_state_sig;
+    halt <= Halt_Sig;
+
+end Structural;
+```
+
+</div>
 <div>
 
 **EC2_Components.vhd (with RAM Initialization)**
@@ -1797,67 +1975,45 @@ begin
 end Behavioral;
 
 ```
+
 </div>
-<div>
+</div>
 
-**ec2.vhd (Top Level)**
-```vhdl{*}{maxHeight:'380px',lines:true}
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use work.EC2_Components.ALL;
+---
+layout: two-cols-header
+---
 
-entity ec2 is
-    Port ( clk, reset : in STD_LOGIC;
-           input_bus : in STD_LOGIC_VECTOR (7 downto 0);
-           output_bus : out STD_LOGIC_VECTOR (7 downto 0);
-           halt : out STD_LOGIC;
-           -- Debug signals
-           dbg_opcode : out STD_LOGIC_VECTOR(2 downto 0);
-           dbg_PC : out STD_LOGIC_VECTOR(4 downto 0);
-           dbg_IR : out STD_LOGIC_VECTOR(7 downto 0);
-           dbg_state : out STD_LOGIC_VECTOR(3 downto 0));
-end ec2;
+## Program Loading (Bootstrapping)
 
-architecture Structural of ec2 is
-    -- Component declarations...
-    
-    signal opcode : STD_LOGIC_VECTOR(2 downto 0);
-    signal Zero_Flag, Pos_Flag, IRload, PCload, MemInst, MemWr, Aload, Sub, JMPmux, Halt_Sig : STD_LOGIC;
-    signal Asel : STD_LOGIC_VECTOR(1 downto 0);
-    signal dbg_state_sig : STD_LOGIC_VECTOR(3 downto 0);
+Alternative to hardcoding the RAM initialization, we can use a bootloader to load the program into RAM (In real systems, an OS "Kernel" loads programs from storage (HDD/SSD) into RAM).
+*   **Challenge:** EC-2 lacks **Indirect Addressing** (pointers). We cannot easily write to `RAM[i]`.
+*   **Solution:** **Self-Modifying Code**. The program modifies its own `STORE` instruction to change the destination address.
 
-begin
+:: left ::
 
-    CU_Inst: EC2_Control_Unit port map(
-        clk => clk, reset => reset, opcode => opcode,
-        Zero_Flag => Zero_Flag, Pos_Flag => Pos_Flag,
-        IRload => IRload, PCload => PCload,
-        MemInst => MemInst, MemWr => MemWr,
-        Asel => Asel, Aload => Aload, Sub => Sub,
-        JMPmux => JMPmux, Halt => Halt_Sig,
-        dbg_state => dbg_state_sig
-    );
+### Bootloader Logic
+1.  Read byte from Input.
+2.  Store it at Target Address.
+3.  Read the `STORE` instruction (at `01`).
+4.  Add `1` to it (incrementing the address part).
+5.  Save modified `STORE` back to `01`.
+6.  Loop.
 
-    DP_Inst: EC2_Datapath port map(
-        clk => clk, reset => reset, input_bus => input_bus,
-        IRload => IRload, PCload => PCload,
-        MemInst => MemInst, MemWr => MemWr,
-        Asel => Asel, Aload => Aload, Sub => Sub,
-        JMPmux => JMPmux, opcode => opcode,
-        Zero_Flag => Zero_Flag, Pos_Flag => Pos_Flag,
-        A_out_bus => output_bus,
-        dbg_PC => dbg_PC, dbg_IR => dbg_IR
-    );
+:: right ::
 
-    dbg_opcode <= opcode;
-    dbg_state <= dbg_state_sig;
-    halt <= Halt_Sig;
+### Bootloader Assembly
 
-end Structural;
+```text
+00: IN A            ; Read byte from Storage
+01: STORE A, 10     ; Write to Addr 10 (Target) <--- Modifying this!
+02: LOAD A, 01      ; Load the instruction at 01 ("STORE A, 10")
+03: ADD A, 06       ; Add 1 to address (Constant at 06)
+04: STORE A, 01     ; Save modified instruction ("STORE A, 11")
+05: JPOS 00         ; Loop for next byte
+06: 01              ; Constant 1
+...
+10: XX              ; Program Destination Start
 ```
-</div>
-</div>
-
 
 ---
 
@@ -1922,12 +2078,29 @@ end Behavioral;
 
 
 
+
 ---
 
-## Summary
+---
 
-*   **General-purpose microprocessors** execute a sequence of instructions stored in memory.
-*   The **Instruction Cycle** consists of **Fetch**, **Decode**, and **Execute** phases.
-*   The **Datapath** supports specific structural requirements (PC, IR) and functional units.
-*   **EC-1** demonstrates a minimal 5-instruction set and 8-bit architecture.
-*   **EC-2** extends this with memory-reference instructions (Load/Store), RAM, and more complex addressing.
+## EC-1 vs EC-2 Design Evolution
+
+Comparing the architectural leap from a simple register machine to a simplified Von Neumann computer.
+
+| Feature | EC-1 (Basic) | EC-2 (Advanced) |
+| :--- | :--- | :--- |
+| **Architecture** | Hardwired Control, Register-Based | Von Neumann, Memory-Reference |
+| **Memory** | None (Internal Registers only) | 32 x 8-bit RAM (Unified Code/Data) |
+| **Instruction Set** | 5 Instructions (ALU + Jump) | 8 Instructions (Load/Store, Cond Jumps) |
+| **Addressing** | Immediate / Direct to Reg | Direct Memory Addressing (5-bit) |
+| **Data Path** | 4-bit Address, 8-bit Data | 5-bit Address, 8-bit Data, Shared Bus |
+| **FSM Complexity** | Simple Cycle (Fetch-Decode-Ex) | Multi-state Mem Access (Wait States) |
+
+---
+
+## Lecture 10 Summary
+
+*   **The Processor is an Interpreter:** The "CPU" is essentially a hardware interpreter for software instructions. The FSM's job is to translate opcodes into control signals.
+*   **Code is Data:** By moving from ROM (EC-1) to RAM (EC-2), we unlocked the **Von Neumann Architecture**, where programs can modify themselves (Bootloaders) and coexist with data.
+*   **Cost of Flexibility:** General-purpose flexibility comes at the cost of FSM complexity. Supporting memory operands required splitting the instruction cycle into multi-step Fetch/Decode/Execute phases.
+*   **The Bus Bottleneck:** As we saw with `MemInst` and `MemWr`, sharing the address bus between PC (Fetch) and ALU (Execute) is the fundamental design constraint of modern computing.
