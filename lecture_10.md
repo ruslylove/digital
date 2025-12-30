@@ -72,6 +72,7 @@ Designing a Central Processing Unit (CPU) involves three main steps.
 
 ---
 layout: section
+hideInToc: true
 ---
 
 ## The EC-1 Microprocessor
@@ -138,7 +139,7 @@ The datapath must support fetching instructions and executing data operations.
 
 ---
 
-## EC-1 Datapath Diagram
+## EC-1 Datapath
 
 <div class="grid grid-cols-2 gap-4">
 <div class="text-base">
@@ -165,6 +166,34 @@ The datapath must support fetching instructions and executing data operations.
 
 
 </div>
+</div>
+
+---
+
+## ROM Implementation
+ 
+ FPGA vendors provide optimized Intellectual Property (IP) cores for memory.
+
+<div class="grid grid-cols-2 gap-4">
+<div>
+
+ **ROM: 1-PORT Configuration:**
+ *   **Type:** `altsyncram` (Intel/Altera)
+ *   **Width:** 8 bits (Data bus)
+ *   **Depth:** 32 words (Addressable locations 0-31)
+ *   **Clocking:** Single clock, unregistered output.
+ *   **Initialization:** Loads data from `any_filename.hex` at programming time.
+ 
+ <br>
+
+ > [!NOTE]
+ > Using IP cores ensures the memory maps directly to the FPGA's dedicated Block RAM resources (M9K/M10K blocks) rather than using general logic cells.
+ </div>
+ <div>
+
+<img src="/megafunction_rom_1_port.png" class="mx-auto p-4 w-85" alt="Megafunction ROM 1-Port" />
+<p class="text-center text-sm">Figure 10-3. Megafunction ROM 1-Port</p>
+ </div>
 </div>
 
 ---
@@ -259,6 +288,42 @@ $$
 
 </div>
 
+
+---
+layout: two-cols-header
+---
+
+### EC-1 Control Unit: Wait State needed
+
+:: left ::
+<div class="text-base">
+
+**Synchronous Memory Timing**
+*  The EC-1 uses <span v-mark.red>**Synchronous ROM**</span> (IP Core).
+*  The address is sampled at the **rising edge** of the clock.
+*  The Address (PC) must be **stable** before the clock edge to read the correct data for the next cycle.
+
+**Normal Fetch (No Jump)**
+1.  **Execute Phase:** PC is stable (it hasn't changed since the previous Fetch).
+2.  **Next Fetch:** ROM samples the stable PC address correctly at the start of the Fetch cycle.
+
+</div>
+:: right ::
+
+<div class="text-sm pl-5">
+
+**JNZ Operation (Jump Taken)**
+1.  **PC Update:** PC is updated to the `Target` address at the **end** of the JNZ state (Rising Edge).
+2.  **Hazard:** If we transitioned immediately to **Fetch**, the Memory would sample the PC at the **same edge** it is changing.
+    *   **Result:** The Memory would likely read the **Old PC** address (Race condition) instead of the new Target.
+
+**The Wait State Solution**
+*   **JNZ $\to$ Wait:** Update PC to `Target`.
+*   **Wait State:** A buffer cycle where control signals are idle. PC becomes stable at `Target`.
+*   **Wait $\to$ Fetch:** Memory safely samples the stable `Target` address.
+
+</div>
+
 ---
 layout: two-cols-header
 ---
@@ -302,7 +367,10 @@ $$
 
 :: right ::
 
-<img src="/ec1_fsm.svg" class="rounded-lg bg-white pl-10 w-full h-80 object-contain mx-auto" alt="EC-1 Control Unit FSM">
+<img src="/ec1_fsm.svg" class="rounded-lg bg-white pl-10 w-full object-contain mx-auto" alt="EC-1 Control Unit FSM">
+<p class="text-center text-sm">Figure 10-4. EC-1 Control Unit FSM with <b>"Wait"</b> state </p>
+
+
 
 ---
 layout: two-cols-header
@@ -758,33 +826,7 @@ end Structural;
 
 
 
----
 
-## Intel(r)/Altera(r) Megafunction (IP Core)
- 
- FPGA vendors provide optimized Intellectual Property (IP) cores for memory.
-
-<div class="grid grid-cols-2 gap-4">
-<div>
-
- **ROM: 1-PORT Configuration:**
- *   **Type:** `altsyncram` (Intel/Altera)
- *   **Width:** 8 bits (Data bus)
- *   **Depth:** 32 words (Addressable locations 0-31)
- *   **Clocking:** Single clock, unregistered output.
- *   **Initialization:** Loads data from `rom_data_1.hex` at programming time.
- 
- <br>
-
- > [!NOTE]
- > Using IP cores ensures the memory maps directly to the FPGA's dedicated Block RAM resources (M9K/M10K blocks) rather than using general logic cells.
- </div>
- <div>
-
-<img src="/megafunction_rom_1_port.png" class="mx-auto p-4 w-85" alt="Megafunction ROM 1-Port" />
-<p class="text-center text-sm">Figure 10-3. Megafunction ROM 1-Port</p>
- </div>
-</div>
  
 ---
 
@@ -1196,41 +1238,11 @@ end Behavioral;
 
 </v-clicks>
 
----
 
-## EC-1 Programming Exercises
-
-**Requirement:** Students must show the waveform simulation as results.
-
-### Challenge 1: Sawtooth Wave Generator
-*   **Goal:** Continuously output a value that counts down from `Input` to `0`, then repeats.
-*   **Application:** Connect Output to a DAC to generate a sawtooth waveform.
-*   **Code:**
-    ```text
-    00: IN A    ; Load Peak
-    01: OUT A   ; Output
-    02: DEC A   ; Ramp down
-    03: JNZ 01  ; Loop
-    04: HALT    ; Done
-    ```
----
-
-### Challenge 2: Odd/Even Parity Detector
-*   **Goal:** Determine if an input number is **Odd** or **Even**.
-*   **Constraint:** You cannot essentially check bit 0 directly.
-*   **Hint:** "Ping-pong" between two states.
-    ```text
-    00: IN A
-    01: DEC A
-    02: JNZ 04
-    03: HALT    ; Halts here if Odd
-    04: DEC A
-    05: JNZ 01
-    06: HALT    ; Halts here if Even
-    ```
 
 ---
 layout: section
+hideInToc: true
 ---
 
 ## The EC-2 Microprocessor
@@ -1507,13 +1519,9 @@ $$
 $$
 
 
-
-
-
----
-
 ---
 layout: two-cols-header
+hide: true
 ---
 
 ## EC-2 Memory Wait States & Timing
@@ -2077,9 +2085,176 @@ end Behavioral;
 </div>
 
 
+---
 
+## EC-2 Simulation: GCD Calculation of 25 and 15
+
+<img src="/ec2_sim_1.png" class="rounded-lg bg-white py-8 w-full object-contain mx-auto" alt="EC-2 Testbench">
+<p class="text-center text-sm">Figure 10-11. Timing Simulation: 1 of 4</p>
+<img src="/ec2_sim_2.png" class="rounded-lg bg-white py-8 w-full object-contain mx-auto" alt="EC-2 Testbench">
+<p class="text-center text-sm">Figure 10-12. Timing Simulation: 2 of 4</p>
+
+<v-clicks every=2>
+
+<v-drag pos="291,193,40,40,-11">
+<Arrow x1="0" y1="20" x2="20" y2="0" color="red" width="1" />
+</v-drag>
+
+<v-drag pos="261,210,73,40">
+<span class="text-xs">Load A, [30]</span></v-drag>
+
+<v-drag pos="325,102,40,40,156">
+<Arrow x1="0" y1="30" x2="20" y2="0" color="red" width="1" />
+</v-drag>
+
+<v-drag pos="341,76,79,40">
+<span class="text-xs">X=15</span></v-drag>
+
+<v-drag pos="371,194,40,40,-12">
+<Arrow x1="0" y1="30" x2="20" y2="0" color="red" width="1" />
+</v-drag>
+
+<v-drag pos="341,217,123,40">
+<span class="text-xs">SUB A, [31]; -- X=X-Y</span></v-drag>
+
+<v-drag pos="394,105,40,40,156">
+<Arrow x1="0" y1="30" x2="20" y2="0" color="red" width="1" />
+</v-drag>
+
+<v-drag pos="417,78,79,40">
+<span class="text-xs">X=negative!</span></v-drag>
+
+<v-drag pos="482,186,40,40,-34">
+<Arrow x1="0" y1="20" x2="20" y2="0" color="red" width="1" />
+</v-drag>
+
+<v-drag pos="459,203,80,40">
+<span class="text-xs">JZ (no jump)</span></v-drag>
+
+<v-drag pos="551,188,40,40,-22">
+<Arrow x1="0" y1="20" x2="20" y2="0" color="red" width="1" />
+</v-drag>
+
+<v-drag pos="533,204,90,40">
+<span class="text-xs">JPOS (no jump)</span></v-drag>
+
+<v-drag pos="649,189,40,40,-11">
+<Arrow x1="0" y1="20" x2="20" y2="0" color="red" width="1" />
+</v-drag>
+
+<v-drag pos="626,203,73,40">
+<span class="text-xs">Load A, [31]</span></v-drag>
+
+<v-drag pos="660,103,40,40,156">
+<Arrow x1="0" y1="30" x2="20" y2="0" color="red" width="1" />
+</v-drag>
+
+<v-drag pos="679,78,79,40">
+<span class="text-xs">Y=25</span></v-drag>
+
+<v-drag pos="732,191,40,40,-16">
+<Arrow x1="0" y1="30" x2="20" y2="0" color="red" width="1" />
+</v-drag>
+
+<v-drag pos="685,220,123,40">
+<span class="text-xs">SUB A, [30]; -- Y=Y-X</span></v-drag>
+
+<v-drag pos="742,104,40,40,156">
+<Arrow x1="0" y1="30" x2="20" y2="0" color="red" width="1" />
+</v-drag>
+
+<v-drag pos="763,79,79,40">
+<span class="text-xs">Y=10</span></v-drag>
+
+<v-drag pos="821,178,40,40,-61">
+<Arrow x1="0" y1="30" x2="20" y2="0" color="red" width="1" />
+</v-drag>
+
+<v-drag pos="812,208,160,40">
+<span class="text-xs">STORE A, [31]; -- [31]=Y</span></v-drag>
+
+<v-drag pos="275,405,40,40,-22">
+<Arrow x1="0" y1="20" x2="20" y2="0" color="red" width="1" />
+</v-drag>
+
+<v-drag pos="247,423,90,40">
+<span class="text-xs">JPOS [0]</span></v-drag>
+
+<v-drag pos="319,399,40,40,-22">
+<Arrow x1="0" y1="30" x2="20" y2="0" color="red" width="1" />
+</v-drag>
+
+<v-drag pos="309,426,168,40">
+<span class="text-xs">PC = 0 (Now Program repeats)</span></v-drag>
+
+<v-drag pos="459,323,40,40,156">
+<Arrow x1="0" y1="30" x2="20" y2="0" color="red" width="1" />
+</v-drag>
+
+<v-drag pos="478,298,79,40">
+<span class="text-xs">X=5</span></v-drag>
+
+<v-drag pos="706,397,40,40,-61">
+<Arrow x1="0" y1="30" x2="20" y2="0" color="red" width="1" />
+</v-drag>
+
+<v-drag pos="680,431,160,40">
+<span class="text-xs">STORE A, [30]; -- [30]=X</span></v-drag>
+
+</v-clicks>
 
 ---
+
+<img src="/ec2_sim_3.png" class="rounded-lg bg-white py-5 w-full object-contain mx-auto" alt="EC-2 Testbench">
+<p class="text-center text-sm">Figure 10-13. Timing Simulation: 3 of 4</p>
+<img src="/ec2_sim_4.png" class="rounded-lg bg-white py-5 w-full object-contain mx-auto" alt="EC-2 Testbench">
+<p class="text-center text-sm">Figure 10-14. Timing Simulation: 4 of 4</p>
+
+<v-clicks every=2>
+
+<v-drag pos="632,65,40,40,129">
+<Arrow x1="0" y1="40" x2="20" y2="0" color="red" width="1" />
+</v-drag>
+
+<v-drag pos="631,29,40,40">
+<span class="text-xs">Y=10</span></v-drag>
+
+<v-drag pos="739,57,40,40,171">
+<Arrow x1="0" y1="40" x2="20" y2="0" color="red" width="1" />
+</v-drag>
+
+<v-drag pos="774,31,59,40">
+<span class="text-xs">Y=Y-X=5</span></v-drag>
+
+<v-drag pos="224,257,40,40,180">
+<Arrow x1="0" y1="40" x2="20" y2="0" color="red" width="1" />
+</v-drag>
+
+<v-drag pos="250,229,40,40">
+<span class="text-xs">X=5</span></v-drag>
+
+<v-drag pos="495,254,40,40,171">
+<Arrow x1="0" y1="40" x2="20" y2="0" color="red" width="1" />
+</v-drag>
+
+<v-drag pos="530,229,118,40">
+<span class="text-xs">X=X-Y=0 (Finished)</span></v-drag>
+
+<v-drag pos="562,333,40,40,-34">
+<Arrow x1="0" y1="20" x2="20" y2="0" color="red" width="1" />
+</v-drag>
+
+<v-drag pos="531,352,80,40">
+<span class="text-xs">JZ [10]</span></v-drag>
+
+<v-drag pos="632,336,40,40,-34">
+<Arrow x1="0" y1="20" x2="20" y2="0" color="red" width="1" />
+</v-drag>
+
+<v-drag pos="616,357,80,40">
+<span class="text-xs">HALT (End)</span></v-drag>
+
+</v-clicks>
 
 ---
 
@@ -2104,3 +2279,66 @@ Comparing the architectural leap from a simple register machine to a simplified 
 *   **Code is Data:** By moving from ROM (EC-1) to RAM (EC-2), we unlocked the **Von Neumann Architecture**, where programs can modify themselves (Bootloaders) and coexist with data.
 *   **Cost of Flexibility:** General-purpose flexibility comes at the cost of FSM complexity. Supporting memory operands required splitting the instruction cycle into multi-step Fetch/Decode/Execute phases.
 *   **The Bus Bottleneck:** As we saw with `MemInst` and `MemWr`, sharing the address bus between PC (Fetch) and ALU (Execute) is the fundamental design constraint of modern computing.
+
+
+---
+layout: section
+---
+
+## Lecture 10 Exercises
+
+---
+
+### EC-1 Programming Exercises
+
+**Requirement:** Students must show the waveform simulation as results.
+
+### Challenge 1: Sawtooth Wave Generator
+*   **Goal:** Continuously output a value that counts down from `Input` to `0`, then repeats.
+*   **Application:** Connect Output to a DAC to generate a sawtooth waveform.
+*   **Code:**
+    ```text
+    00: IN A    ; Load Peak
+    01: OUT A   ; Output
+    02: DEC A   ; Ramp down
+    03: JNZ 01  ; Loop
+    04: HALT    ; Done
+    ```
+---
+
+### Challenge 2: Odd/Even Parity Detector
+*   **Goal:** Determine if an input number is **Odd** or **Even**.
+*   **Constraint:** You cannot essentially check bit 0 directly.
+*   **Hint:** "Ping-pong" between two states.
+    ```text
+    00: IN A
+    01: DEC A
+    02: JNZ 04
+    03: HALT    ; Halts here if Odd
+    04: DEC A
+    05: JNZ 01
+    06: HALT    ; Halts here if Even
+    ```
+
+---
+
+### EC-2 Programming Exercises
+
+**Requirement:** Implement these algorithms using the minimal EC-2 instruction set.
+
+### Challenge 3: Integer Multiplication ($A \times B$)
+*   **Goal:** Calculate the product of two numbers stored in memory `[30]` and `[31]`.
+*   **Method:** Use **Repeated Addition**.
+    *   Initialize `Sum = 0`.
+    *   Loop: Add `A` to `Sum`, Decrement `B`.
+    *   Stop when `B = 0`.
+
+---
+
+### Challenge 4: Absolute Difference ($|A - B|$)
+*   **Goal:** Calculate $|A - B|$ and store the result in `[31]`.
+*   **Logic:**
+    *   Load `A`, Subtract `B`.
+    *   Check flags:
+        *   If result is **Positive** (or Zero), store it.
+        *   If result is **Negative**, compute `B - A` instead (or Negate `A-B` if instruction exists, else reload and subtract reverse).
