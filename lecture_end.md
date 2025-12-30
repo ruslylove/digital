@@ -3,7 +3,8 @@ theme: seriph
 background: https://cover.sli.dev
 transition: fade
 layout: section
-title: "Ending"
+routeAlias: lecture_end
+hideInToc: true
 ---
 
 # End of Course
