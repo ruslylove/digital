@@ -1,9 +1,10 @@
 ---
 layout: section
 transition: fade
+title: Course Information & Introduction
 ---
 
-## Welcome to 010113025 Digital Circuit & Logic Design
+## Welcome to {{ $slidev.configs.subject }}
 
 {{ $slidev.configs.author }}
 ---

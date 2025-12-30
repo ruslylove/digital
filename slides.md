@@ -5,7 +5,7 @@ theme: seriph
 # like them? see https://unsplash.com/collections/94734566/slidev
 background: https://cover.sli.dev
 # some information about your slides (markdown enabled)
-title: Welcome to 010113025 Digital Circuit & Logic Design
+title: Top-level
 transition: fade
 # enable MDC Syntax: https://sli.dev/features/mdc
 mdc: true
@@ -17,7 +17,7 @@ favicon: '/img/60348.jpg'
 author: Dr. Ruslee Sutthaweekul
 semester: 2/2025
 subject: 010113025 Digital Circuit & Logic Design
-
+hideInToc: true
 # Digital Circuit and Logic Design
 ---
 # {{ $slidev.configs.subject }}
