@@ -4,6 +4,7 @@ background: https://cover.sli.dev
 transition: fade
 layout: cover
 title: "Lecture 9 - Dedicated Microprocessors"
+routeAlias: lecture_9
 ---
 
 # Lecture 9: Dedicated Microprocessors

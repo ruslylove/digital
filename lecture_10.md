@@ -4,6 +4,7 @@ background: https://cover.sli.dev
 transition: fade
 layout: cover
 title: "Lecture 10 - General-Purpose Microprocessors"
+routeAlias: lecture_10
 ---
 
 # Lecture 10: General-Purpose Microprocessors

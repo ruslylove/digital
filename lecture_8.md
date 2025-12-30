@@ -4,6 +4,7 @@ background: https://cover.sli.dev
 transition: fade
 layout: cover
 title: Lecture 8 - Finite State Machines
+routeAlias: lecture_8
 ---
 
 # Lecture 8: Finite State Machines

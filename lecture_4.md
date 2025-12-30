@@ -4,6 +4,7 @@ background: https://cover.sli.dev
 transition: fade
 layout: cover
 title: Lecture 4 - Number Representation & Arithmetic Circuits
+routeAlias: lecture_4
 ---
 
 # Lecture 4: Number Representation & Arithmetic Circuits
