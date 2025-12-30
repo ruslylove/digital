@@ -4,6 +4,7 @@ background: https://cover.sli.dev
 transition: fade
 layout: cover
 title: Lecture 5 - Combinational Circuit Building Blocks
+routeAlias: lecture_5
 ---
 
 # Lecture 5: Combinational Circuit Building Blocks

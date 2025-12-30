@@ -4,6 +4,7 @@ background: https://cover.sli.dev
 transition: fade
 layout: cover
 title: Lecture 6 - Latches, Flip-flops, & Synchronous Sequential Logic
+routeAlias: lecture_6
 ---
 
 # Lecture 6: Latches, Flip-flops, & Synchronous Sequential Logic

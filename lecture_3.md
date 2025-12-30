@@ -4,6 +4,7 @@ background: https://cover.sli.dev
 transition: fade
 layout: cover
 title: Lecture 3 - Logic Optimization
+routeAlias: lecture_3
 ---
 
 # Lecture 3: Logic Optimization using Karnaugh Maps

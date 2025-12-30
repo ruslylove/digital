@@ -4,6 +4,7 @@ background: https://cover.sli.dev
 transition: fade
 layout: cover
 title: Lecture 7 - Registers and Counters
+routeAlias: lecture_7
 ---
 
 # Lecture 7: Registers and Counters

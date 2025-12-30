@@ -4,6 +4,7 @@ background: https://cover.sli.dev
 transition: fade
 layout: cover
 title: Lecture 2 - Logic Circuits
+routeAlias: lecture_2
 ---
 
 # Lecture 2: Logic Circuits
