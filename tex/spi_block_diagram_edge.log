@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=latex 2025.11.22)  3 JAN 2026 13:46
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=latex 2025.11.22)  3 JAN 2026 14:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**spi_block_diagram.tex
-(./spi_block_diagram.tex
+**spi_block_diagram_edge.tex
+(./spi_block_diagram_edge.tex
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
 (/usr/local/texlive/2025/texmf-dist/tex/latex/standalone/standalone.cls
@@ -484,8 +484,8 @@ File: l3backend-dvips.def 2024-05-08 L3 backend support: dvips
 \g__pdf_backend_link_int=\count308
 \g__pdf_backend_link_sf_int=\count309
 )
-(./spi_block_diagram.aux)
-\openout1 = `spi_block_diagram.aux'.
+(./spi_block_diagram_edge.aux)
+\openout1 = `spi_block_diagram_edge.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 6.
 LaTeX Font Info:    ... okay on input line 6.
@@ -505,19 +505,19 @@ LaTeX Font Info:    ... okay on input line 6.
 
 [1
 
-] (./spi_block_diagram.aux)
+] (./spi_block_diagram_edge.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 13878 strings out of 473191
- 291985 string characters out of 5715825
- 706651 words of memory out of 5000000
- 36904 multiletter control sequences out of 15000+600000
- 562182 words of font info for 48 fonts, out of 8000000 for 9000
+ 13889 strings out of 473191
+ 292221 string characters out of 5715825
+ 708666 words of memory out of 5000000
+ 36914 multiletter control sequences out of 15000+600000
+ 562481 words of font info for 49 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 102i,8n,107p,418b,905s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 102i,8n,107p,423b,905s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on spi_block_diagram.dvi (1 page, 23896 bytes).
+Output written on spi_block_diagram_edge.dvi (1 page, 26416 bytes).

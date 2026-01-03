@@ -5,25 +5,21 @@ class: text-center
 highlighter: shiki
 lineNumbers: false
 info: |
-    ## SPI Packet Detector Design
-    Mini Project 2025 Design Proposal
+  ## SPI Packet Detector Design
+  Mini Project 2025 Design Proposal
 drawings:
-    persist: false
+  persist: false
 transition: fade
 title: Mini Project 2025 - SPI Packet Detector Design
 layout: cover
 ---
 
-# SPI Packet Detector
-## Mini Project 2025
+
+# Mini Project 2025
+## SPI Packet Detector
 
 Design & Implementation of a Sequence Detector FSM
 
-<div class="pt-12">
-  <span class="px-2 py-1 rounded cursor-pointer" hover="bg-white bg-opacity-10">
-    Press Space for next page <carbon:arrow-right class="inline"/>
-  </span>
-</div>
 
 ---
 layout: default
@@ -33,7 +29,7 @@ layout: default
 
 The goal is to design a digital circuit that monitors the **SPI (Serial Peripheral Interface)** bus and detects a specific 6-bit binary sequence unique to your Student ID.
 
-<div class="grid grid-cols-2 gap-4">
+<div class="grid grid-cols-2 gap-4 text-sm">
 
 <div>
 
@@ -54,6 +50,10 @@ The goal is to design a digital circuit that monitors the **SPI (Serial Peripher
 </div>
 
 </div>
+
+<img src="/spi_system_block.svg" class="rounded-lg bg-white p-2 w-90 mx-auto" alt="SPI Packet Detector System Block">
+
+<br>
 
 > **Core Logic:** The system is essentially a **Sequence Detector** implemented as a Finite State Machine (FSM).
 
@@ -107,8 +107,12 @@ The design is divided into three distinct modules ("Boxes").
 </div>
 </div>
 
+---
+
 <img src="/spi_block_diagram.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="SPI Packet Detector Block Diagram">
-<div class="text-center text-sm opacity-50 mt-2">Figure 2: System Block Diagram</div>
+<div class="text-center text-sm opacity-50 mt-2">Figure 2: System Block Diagram (High Level)</div>
+
+
 
 
 
@@ -120,7 +124,8 @@ The design begins with a Mealy/Moore State Machine diagram.
 
   * **States:** Represent the progress of matching the sequence (e.g., $S_0$ start, $S_1$ 1st bit matched, etc.)
   * **Transitions:**
-      * Driven by `MOSI` and `SCLK`.
+      * **CS (Chip Select):** Active Low. When `CS=1`, FSM resets to $S_0$ (Asynchronous Reset).
+      * **MOSI & SCLK:** Drive transitions when `CS=0`.
       * Must account for correct bits (advance state) and incorrect bits (reset/partial reset).
   * **Validation:** Verify transition lines for all input combinations ($2^n$ lines per state).
 
@@ -132,11 +137,43 @@ The design begins with a Mealy/Moore State Machine diagram.
 
 ---
 
+## Problem: SCLK vs System CLK Synchronization
+<br>
+
+> The system uses a fast `System CLK` (e.g., 50 MHz) while `MOSI` changes on the edge of a much slower `SCLK`.
+
+**The Issue:**
+*   If we use `SCLK` directly as a clock for flip-flops, we cross clock domains, leading to metastability or timing violations.
+*   If we use `SCLK` as a simple input condition (`if SCLK = '1'`), the fast system clock will sample it as '1' for *many* cycles, causing the FSM to advance through multiple states erroneously in a single `SCLK` period.
+
+**The Solution: Edge Detection**
+*   We treat `SCLK` as a data input and synchronize it.
+*   An **Edge Detector** circuit generates a single-cycle pulse (`SCLK_pulse`) exactly when `SCLK` transitions from 0 to 1.
+*   The FSM transitions only when `SCLK_pulse = '1'`.
+
+---
+
+  <img src="/spi_block_diagram_edge.svg" class="rounded-lg bg-white p-4 w-full" alt="SPI Block Diagram with Edge Detector">
+  <div class="text-center text-sm opacity-50 mt-2">Figure 3: System Block Diagram (Break down SCLK)</div>
+
+  <img src="/edge_detector_fsm.svg" class="rounded-lg bg-white p-4 w-90 mx-auto" alt="Edge Detector FSM">
+  <div class="text-center text-sm opacity-50 mt-2">Figure 4: Edge Detector State Machine</div>
+
+---
+
 <img src="/spi_sequence_fsm.svg" class="rounded-lg bg-white p-4 w-180 mx-auto" alt="State Diagram Example: 101011">
 <div class="text-center text-sm opacity-50 mt-2">Figure 1: Example State Diagram for Sequence 101011</div>
 
 
+---
 
+## Output Modulator Logic
+<br>
+
+> The output triggers only when the system is in the "Match" state and modulated by a slower clock.
+
+  <img src="/output_modulator.svg" class="rounded-lg bg-white p-4 w-full" alt="Output Modulator Circuit">
+  <div class="text-center text-sm opacity-50 mt-2">Figure 5: Output Modulator Logic Circuit</div>
 ---
 
 ## Step 2: State Table & Minimization

@@ -21,6 +21,9 @@
     % Left Box: Combinational Logic
     \node[cloud_logic, left=3cm of memory] (logic) {Next State\\\&\\Output Logic};
 
+    % Edge Detector
+    \node[block, fill=orange!10, left=2.0cm of logic.180, align=center, font=\footnotesize, minimum height=1.5cm, minimum width=2.2cm] (edge_det) {SCLK Edge\\Detector};
+
     % Right Box: Output Interface
     \node[block, right=3cm of memory, fill=red!10, minimum width=2.5cm, minimum height=2cm] (output_interface) {Output\\Modulator};
 
@@ -29,11 +32,17 @@
 
     % Inputs to Logic
     \node[left=1.5cm of logic.140] (mosi) {MOSI};
-    \node[left=1.5cm of logic.180] (sclk) {SCLK};
-    \node[left=1.5cm of logic.220] (cs) {$\overline{\text{CS}}$};
+    \node[left=1.0cm of edge_det] (sclk) {SCLK};
+    % CS moved to point to Memory
+    \node[below=1.4cm of sclk] (cs) {$\overline{\text{CS}}$};
+
     \draw[->, thick] (mosi) -- (logic.140);
-    \draw[->, thick] (sclk) -- (logic.180);
-    \draw[->, thick] (cs) -- (logic.220);
+    \draw[->, thick] (sclk) -- (edge_det);
+    \draw[->, thick] (edge_det.east) -- node[above, font=\tiny, sloped] {$SCLK\_rise$} (logic.180);
+    
+    % Route CS to Memory (Async Clear)
+    % Pass under the Logic block
+    \draw[->, thick, dashed] (cs) -- ++(10.5,0) |- ([yshift=-5mm]memory.west) node[right, font=\tiny] {CLR};
 
     % Logic to Memory (Next State D)
     \draw[->, thick] (logic.east) -- node[above, font=\small] {Next State ($D_n$)} (memory.west);
@@ -48,6 +57,7 @@
     % Clock to Memory
     \node[above=1cm of memory] (clk) {System CLK};
     \draw[->, thick] (clk) -- (memory.north);
+    \draw[->, thick] (clk) -| (edge_det.north);
 
     % Output Interface Inputs
     % Needs modulation clock?
@@ -67,7 +77,7 @@
     
     \begin{scope}[on background layer]
         % Left Box
-        \node[container, fit=(logic) (mosi) (sclk) (cs), label={[anchor=north west, font=\bfseries\color{blue!70!black}, inner sep=5pt]north west:Left Box (Combinational)}] (box_left) {};
+        \node[container, fit=(logic) (mosi) (sclk) (edge_det), label={[anchor=north west, font=\bfseries\color{blue!70!black}, inner sep=5pt]north west:Left Box (Combinational)}] (box_left) {};
         
         % Middle Box
         \node[container, fit=(memory) (clk), label={[anchor=north, font=\bfseries\color{orange!70!black}]north:Middle Box (Sequential)}] (box_mid) {};
