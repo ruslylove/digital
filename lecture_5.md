@@ -70,7 +70,7 @@ layout: two-cols-header
 ::right::
 
 <div class="text-center">
-<img src="/combinational_logic_circuit.svg" class="rounded-lg bg-white p-4 w-full" alt="Combinational Logic Circuit Diagram">
+<img src="/lect_5_combinational_logic_circuit.svg" class="rounded-lg bg-white p-4 w-full" alt="Combinational Logic Circuit Diagram">
 <div class="text-center text-sm opacity-50 mt-2">Figure 5-1: Combinational Logic Circuit Diagram.</div>
 </div>
 
@@ -109,7 +109,7 @@ Let's analyze the circuit below to find the functions for $F₁$ and $F₂$.
 
 
 
-<img src="/analysis_example_circuit.svg" class="rounded-lg bg-white w-92" alt="Circuit for Analysis Example">
+<img src="/lect_5_analysis_example_circuit.svg" class="rounded-lg bg-white w-92" alt="Circuit for Analysis Example">
 <div class="text-center text-sm opacity-50 mt-2">Figure 5-2: Circuit for Analysis Example.</div>
 
 </div>
@@ -207,7 +207,7 @@ Design is the process of creating a circuit that meets a given set of specificat
 1.  **Problem:** Design a circuit that converts a 4-bit Binary-Coded Decimal (BCD) digit to a 4-bit Excess-3 code.
 2.  **Inputs/Outputs:** 4 input lines (for BCD) and 4 output lines (for Excess-3).
 3.  **Symbols:** Inputs $A, B, C, D$; Outputs $w, x, y, z$.
-<img src="/bcd_to_excess3_block.svg" class="rounded-lg bg-white p-4 w-60 mx-auto" alt="BCD to Excess-3 Block Diagram">
+<img src="/lect_5_bcd_to_excess3_block.svg" class="rounded-lg bg-white p-4 w-60 mx-auto" alt="BCD to Excess-3 Block Diagram">
 <div class="text-center text-sm opacity-50 mt-2">Figure 5-3: BCD to Excess-3 Block Diagram.</div>
 
 4.  **Truth Table:** Excess-3 code is found by adding 3 to the BCD value. BCD inputs from 10 to 15 are "don't care" conditions as they are not valid BCD digits.
@@ -243,11 +243,11 @@ $$
 
 <div class="grid grid-cols-2">
 <div>
-<img src="/bcd_kmaps_wx.svg" class="rounded-lg bg-white p-2" alt="K-Maps for w and x">
+<img src="/lect_5_bcd_kmaps_wx.svg" class="rounded-lg bg-white p-2" alt="K-Maps for w and x">
 <div class="text-center text-sm opacity-50 mt-2">Figure 5-4: K-Maps for w and x.</div>
 </div>
 <div>
-<img src="/bcd_kmaps_yz.svg" class="rounded-lg bg-white p-2 w-104" alt="K-Maps for y and z">
+<img src="/lect_5_bcd_kmaps_yz.svg" class="rounded-lg bg-white p-2 w-104" alt="K-Maps for y and z">
 <div class="text-center text-sm opacity-50 mt-2">Figure 5-5: K-Maps for y and z.</div>
 
 </div>
@@ -269,7 +269,7 @@ $$
 <div class="grid grid-cols-2 gap-4">
 
 <div>
-<img src="/bcd_to_excess3_circuit.svg" class="rounded-lg bg-white p-5" alt="Logic Diagram for BCD to Excess-3 Converter">
+<img src="/lect_5_bcd_to_excess3_circuit.svg" class="rounded-lg bg-white p-5" alt="Logic Diagram for BCD to Excess-3 Converter">
 <div class="text-center text-sm opacity-50 mt-2">Figure 5-6: Logic Diagram for BCD to Excess-3 Converter.</div>
 </div>
 
@@ -369,7 +369,7 @@ $$
 
 ---
 
-<img src="/bcd_adder.svg" class="rounded-lg bg-white p-4 w-100 mx-auto" alt="BCD Adder Block Diagram">
+<img src="/lect_5_bcd_adder.svg" class="rounded-lg bg-white p-4 w-100 mx-auto" alt="BCD Adder Block Diagram">
 <div class="text-center text-sm opacity-50 mt-2">Figure 5-7: BCD Adder Block Diagram.</div>
 
 ---
@@ -429,7 +429,7 @@ A **decoder** is a combinational circuit that converts binary information from *
 
 </div>
 
-<img src="/decoder_3to8_block.svg" class="rounded-lg bg-white p-3 w-53 mx-auto" alt="Block Diagram of 3-to-8 Decoder">
+<img src="/lect_5_decoder_3to8_block.svg" class="rounded-lg bg-white p-3 w-53 mx-auto" alt="Block Diagram of 3-to-8 Decoder">
 <div class="text-center text-sm opacity-50 mt-2">Figure 5-8: Block Diagram of 3-to-8 Decoder.</div>
 
 :: right ::
@@ -467,7 +467,7 @@ $$
 
 ### Logic Diagram
 
-<img src="/decoder_3to8_circuit.svg" class="rounded-lg bg-white p-3 w-80 mx-auto" alt="Logic Diagram of 3-to-8 Decoder">
+<img src="/lect_5_decoder_3to8_circuit.svg" class="rounded-lg bg-white p-3 w-80 mx-auto" alt="Logic Diagram of 3-to-8 Decoder">
 <div class="text-center text-sm opacity-50 mt-2">Figure 5-9: Logic Diagram of 3-to-8 Decoder.</div>
 
 </div>
@@ -539,7 +539,7 @@ $$
 </div>
 
 <div>
-<img src="/decoder_3to8_enable_circuit.svg" class="rounded-lg bg-white p-4 w-85 mx-auto" alt="3-to-8 Decoder with Enable Input Logic Diagram">
+<img src="/lect_5_decoder_3to8_enable_circuit.svg" class="rounded-lg bg-white p-4 w-85 mx-auto" alt="3-to-8 Decoder with Enable Input Logic Diagram">
 <div class="text-center text-sm opacity-50 mt-2">Figure 5-10: 3-to-8 Decoder with Enable Input.</div>
 </div>
 
@@ -549,7 +549,7 @@ $$
 
 This allows us to cascade decoders to build larger ones. For example, two 3-to-8 decoders with an enable input can be used to create a 4-to-16 decoder.
 
-<img src="/decoder_4to16_block.svg" class="rounded-lg bg-white p-4 w-65 mx-auto" alt="4-to-16 Decoder using two 3-to-8 Decoders">
+<img src="/lect_5_decoder_4to16_block.svg" class="rounded-lg bg-white p-4 w-65 mx-auto" alt="4-to-16 Decoder using two 3-to-8 Decoders">
 <div class="text-center text-sm opacity-50 mt-2">Figure 5-11: 4-to-16 Decoder using two 3-to-8 Decoders.</div>
 
 
@@ -598,7 +598,7 @@ $$
 ---
 
 <div>
-<img src="/demux_1to4.svg" class="rounded-lg bg-white p-4 w-100 mx-auto" alt="1-to-4 Demultiplexer Logic Diagram">
+<img src="/lect_5_demux_1to4.svg" class="rounded-lg bg-white p-4 w-100 mx-auto" alt="1-to-4 Demultiplexer Logic Diagram">
 <div class="text-center text-sm opacity-50 mt-2">Figure 5-12: 1-to-4 Demultiplexer Logic Diagram.</div>
 </div>
 
@@ -640,7 +640,7 @@ $$
 
 :: right ::
 
-<img src="/encoder_8to3_circuit.svg" class="rounded-lg bg-white p-4 mx-auto w-100" alt="Octal-to-Binary Encoder (8-to-3) Logic Diagram">
+<img src="/lect_5_encoder_8to3_circuit.svg" class="rounded-lg bg-white p-4 mx-auto w-100" alt="Octal-to-Binary Encoder (8-to-3) Logic Diagram">
 <div class="text-center text-sm opacity-50 mt-2">Figure 5-13: Octal-to-Binary Encoder (8-to-3).</div>
 
 ---
@@ -678,7 +678,7 @@ $$
 
 :: right ::
 
-<img src="/priority_encoder_circuit.svg" class="rounded-lg bg-white p-4 mx-auto w-92" alt="4-to-2 Priority Encoder Logic Diagram">
+<img src="/lect_5_priority_encoder_circuit.svg" class="rounded-lg bg-white p-4 mx-auto w-92" alt="4-to-2 Priority Encoder Logic Diagram">
 <div class="text-center text-sm opacity-50 mt-2">Figure 5-14: 4-to-2 Priority Encoder.</div>
 
 
@@ -717,7 +717,7 @@ $$
 
 <div>
 
-<img src="/mux_4to1_logic.svg" class="rounded-lg bg-white w-80 mx-auto" alt="4-to-1 MUX Logic Diagram">
+<img src="/lect_5_mux_4to1_logic.svg" class="rounded-lg bg-white w-80 mx-auto" alt="4-to-1 MUX Logic Diagram">
 <div class="text-center text-sm opacity-50 mt-2">Figure 5-15: 4-to-1 MUX Logic Diagram.</div>
 
 
@@ -849,7 +849,7 @@ $$
 
 **Logic Diagram using 8-to-1 MUX**
 
-<img src="/mux_8to1_func.svg" class="rounded-lg bg-white p-4 w-59 mx-auto" alt="8-to-1 MUX Function Implementation">
+<img src="/lect_5_mux_8to1_func.svg" class="rounded-lg bg-white p-4 w-59 mx-auto" alt="8-to-1 MUX Function Implementation">
 <div class="text-center text-sm opacity-50 mt-2">Figure 5-16: Boolean Function Implementation with 8-to-1 MUX.</div>
 
 </div>
@@ -892,7 +892,7 @@ layout: two-cols-header
 
 :: right ::
 
-<img src="/mux_tree_3var.svg" class="w-75 mx-auto" alt="Shannon Expansion MUX Tree"/>
+<img src="/lect_5_mux_tree_3var.svg" class="w-75 mx-auto" alt="Shannon Expansion MUX Tree"/>
 <div class="text-center text-sm opacity-50 mt-2">Figure 5-17: 3-Variable MUX Tree.</div>
 
 ---
@@ -912,7 +912,7 @@ The **Arithmetic Logic Unit (ALU)** is a combinational circuit that performs ari
 
 :: right ::
 
-<img src="/alu_74381_block.svg" class="w-100 mx-auto p-4" alt="74381 ALU Symbol"/>
+<img src="/lect_5_alu_74381_block.svg" class="w-100 mx-auto p-4" alt="74381 ALU Symbol"/>
 <div class="text-center text-sm opacity-50 mt-2">Figure 5-18: 74381 ALU Block Diagram.</div>
 
 ---
@@ -958,7 +958,7 @@ Each bit of the ALU contains logic to perform the selected operation and generat
 </div>
 <div class="col-span-2">
 
-<img src="/alu_74381_logic.svg" class="w-120 mx-auto" alt="1-Bit ALU Slice Logic"/>
+<img src="/lect_5_alu_74381_logic.svg" class="w-120 mx-auto" alt="1-Bit ALU Slice Logic"/>
 <div class="text-center text-sm opacity-50 mt-2">Figure 5-19: Simplified 1-Bit ALU Slice.</div>
 
 </div>
@@ -977,7 +977,7 @@ A **three-state gate** (or tri-state buffer) exhibits three possible output stat
 2.  Logic **1** (HIGH)
 3.  **High-Impedance (Hi-Z)**
 
-<img src="/tri_state_buffer.svg" class="rounded-lg bg-white p-4 w-80 mt-8 mx-auto" alt="Three-State Buffer">
+<img src="/lect_5_tri_state_buffer.svg" class="rounded-lg bg-white p-4 w-80 mt-8 mx-auto" alt="Three-State Buffer">
 <div class="text-center text-sm opacity-50 mt-2">Figure 5-20: Three-State Buffer.</div>
 
 :: right ::
@@ -1045,7 +1045,7 @@ $$
 ---
 
 ### Logic Diagram of 4-bit Magnitude Comparator
-<img src="/magnitude_comparator.svg" class="rounded-lg bg-white p-4 w-150 mx-auto" alt="4-bit Magnitude Comparator Logic Diagram">
+<img src="/lect_5_magnitude_comparator.svg" class="rounded-lg bg-white p-4 w-150 mx-auto" alt="4-bit Magnitude Comparator Logic Diagram">
 <div class="text-center text-sm opacity-50 mt-2">Figure 5-21: 4-bit Magnitude Comparator.</div>
 
 ---

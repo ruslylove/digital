@@ -1,0 +1,68 @@
+\documentclass[border=10pt]{standalone}
+\usepackage[american]{circuitikz}
+\usetikzlibrary{calc}
+
+\begin{document}
+\begin{circuitikz}
+    \ctikzset{logic ports=ieee, scale=0.7}
+
+    % Define nodes for inputs at the top
+    \node (data) at (0, 4) {Input ($D$)};
+    \node (sel1) at (-3, 4) {$S_1$};
+    \node (sel0) at (-6, 4) {$S_0$};
+
+    % Vertical Rails
+    % Data Rail
+    \draw (data) -- (0, -10);
+    
+    % S1 Rail and Inverter
+    %\draw (sel1) -- (0.5, 2);
+    \draw (sel1) -- ++(0, -1) node[circ] (s1_tap) {};
+    \draw (s1_tap) -- ++(0,-0.5) node[not port, scale=0.5, rotate=-90, anchor=in] (not1) {}; 
+    \draw (s1_tap) -- ++ (-1,0) coordinate (s1) {};
+    \draw (s1) -- ++ (0,-13);
+    \draw (not1.out) -- (-3, -10); % S1' inverse
+    
+    % S0 Rail and Inverter
+    \draw (sel0) -- ++(0, -1) node[circ] (s0_tap) {};
+    \draw (s0_tap) -- ++(0,-0.5) node[not port, rotate=-90, scale=0.5,anchor=in] (not0) {}; 
+    \draw (s0_tap) -- ++ (-1,0) coordinate (s0) {};
+    \draw (s0) -- ++ (0,-13);
+    \draw (not0.out) -- (-6, -10);
+    % Labels for rails (optional, skipping for cleanliness)
+
+    % AND Gates
+    % Y0 = D . S1' . S0' (Inputs: D, S1', S0')
+    \node[and port, number inputs=3] (and0) at (5, 0) {};
+    \draw (and0.in 1) to[short, -*] (and0.in 1 -|data);
+    \draw (and0.in 2) to[short, -*] (and0.in 2 -|s0_tap);
+    \draw (and0.in 3) to[short, -*] (and0.in 3 -|s1_tap);
+
+    % Y1 = D . S1' . S0  (Inputs: D, S1', S0)
+    \node[and port, draw, number inputs=3] (and1) at (5, -3) {};
+    \draw (and1.in 1) to[short, -*] (and1.in 1 -|data);
+    \draw (and1.in 2) to[short, -*] (and1.in 2 -|s0_tap);
+    \draw (and1.in 3) to[short, -*] (and1.in 3 -|s1);
+    % Y2 = D . S1 . S0'  (Inputs: D, S1, S0')
+    \node[and port, draw, number inputs=3] (and2) at (5, -6) {};
+    \draw (and2.in 1) to[short, -*] (and2.in 1 -|data);
+    \draw (and2.in 2) to[short, -*] (and2.in 2 -|s0_tap);
+    \draw (and2.in 3) to[short, -*] (and2.in 3 -|s1);
+    % Y3 = D . S1 . S0   (Inputs: D, S1, S0)
+    \node[and port, draw, number inputs=3] (and3) at (5, -9) {};
+    \draw (and3.in 1) to[short, -*] (and3.in 1 -|data);
+    \draw (and3.in 2) to[short, -*] (and3.in 2 -|s0);
+    \draw (and3.in 3) to[short, -*] (and3.in 3 -|s1);
+
+    % Outputs
+    \draw (and0.out) -- ++(0.5,0) node[right] {$Y_0$};
+    \draw (and1.out) -- ++(0.5,0) node[right] {$Y_1$};
+    \draw (and2.out) -- ++(0.5,0) node[right] {$Y_2$};
+    \draw (and3.out) -- ++(0.5,0) node[right] {$Y_3$};
+
+    % Connections
+    
+    
+
+\end{circuitikz}
+\end{document}

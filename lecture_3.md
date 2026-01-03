@@ -28,7 +28,7 @@ hideInToc: false
 
 In our design flow, after deriving a Boolean expression from a truth table (e.g., using minterms), the next step is often **optimization**. The goal is to simplify the expression to create a more efficient circuit.
 
-<img src="/combinational_design_flow.svg" class="mx-auto w-full p-4" />
+<img src="/lect_3_combinational_design_flow.svg" class="mx-auto w-full p-4" />
 
 <p class="text-sm text-center">Figure 3-1. Design Flow.</p>
 
@@ -59,7 +59,7 @@ The key idea is to leverage the human brain's pattern-recognition ability to sim
 
 :: right ::
 
-<img src="/kmap_example.svg" class="w-full bg-white p-2 mx-auto rounded-lg"/>
+<img src="/lect_3_kmap_example.svg" class="w-full bg-white p-2 mx-auto rounded-lg"/>
 <p class="text-sm text-center">Figure 3-2. Karnaugh Map Example.</p>
 
 
@@ -91,25 +91,25 @@ A two-variable map contains 2² = 4 squares, one for each possible minterm.
 <div>
 
 **Minterm Layout**
-<img src="/kmap_2var_minterm.svg" class="rounded-lg bg-white p-2" alt="2-variable K-map layout">
+<img src="/lect_3_kmap_2var_minterm.svg" class="rounded-lg bg-white p-2" alt="2-variable K-map layout">
 
 </div>
 <div>
 
 **Variable Layout**
-<img src="/kmap_2var_variable.svg" class="rounded-lg bg-white p-2" alt="2-variable K-map with variables">
+<img src="/lect_3_kmap_2var_variable.svg" class="rounded-lg bg-white p-2" alt="2-variable K-map with variables">
 
 </div>
 <div>
 
 **Plot for $f = xy$**
-<img src="/kmap_x_and_y.svg" class="rounded-lg bg-white p-2" alt="K-map for xy">
+<img src="/lect_3_kmap_x_and_y.svg" class="rounded-lg bg-white p-2" alt="K-map for xy">
 
 </div>
 <div>
 
 **Plot for $f = x + y$**
-<img src="/kmap_x_or_y.svg" class="rounded-lg bg-white p-2" alt="K-map for x+y">
+<img src="/lect_3_kmap_x_or_y.svg" class="rounded-lg bg-white p-2" alt="K-map for x+y">
 
 </div>
 </div>
@@ -132,7 +132,7 @@ A three-variable map contains $2³ = 8$ squares. The columns are arranged in a *
 
 :: right ::
 
-<img src="/kmap_3var_structure.svg" class="rounded-lg bg-white p-4 mt-4 w-100" alt="3-variable K-map layout">
+<img src="/lect_3_kmap_3var_structure.svg" class="rounded-lg bg-white p-4 mt-4 w-100" alt="3-variable K-map layout">
 <p class="text-sm text-center">Figure 3-3. Three-variable K-map structure.</p>
 
 ---
@@ -206,7 +206,7 @@ Note that $m₄$ could also be grouped with $m₅$ if there was a $1$ there, but
 </div>
 ::right::
 
-<img src="/kmap_3var_ex2.svg" class="rounded-lg bg-white p-4 w-100" alt="K-map for F(x,y,z) = Σm(3,4,6,7)">
+<img src="/lect_3_kmap_3var_ex2.svg" class="rounded-lg bg-white p-4 w-100" alt="K-map for F(x,y,z) = Σm(3,4,6,7)">
 <p class="text-sm text-center">Figure 3-5. K-map from Example 2.</p>
 
 ---
@@ -240,7 +240,7 @@ $F = z'$
 
 ::right::
 
-<img src="/kmap_3var_ex3.svg" class="rounded-lg bg-white p-4 w-100" alt="K-map for F(x,y,z) = Σm(0,2,4,6)">
+<img src="/lect_3_kmap_3var_ex3.svg" class="rounded-lg bg-white p-4 w-100" alt="K-map for F(x,y,z) = Σm(0,2,4,6)">
 <p class="text-sm text-center">Figure 3-6. K-map from Example 3.</p>
 
 ---
@@ -305,7 +305,7 @@ A four-variable map contains $2⁴ = 16$ squares. The structure is extended from
 
 :: right ::
 
-<img src="/kmap_4x4_structure.svg" class="rounded-lg bg-white p-2 mt-2 w-80 mx-auto" alt="4-variable K-map layout">
+<img src="/lect_3_kmap_4x4_structure.svg" class="rounded-lg bg-white p-2 mt-2 w-80 mx-auto" alt="4-variable K-map layout">
 <p class="text-sm text-center">Figure 3-8. Four-variable K-map structure.</p>
 
 
@@ -345,7 +345,7 @@ $F = y' + w'z' + xz'$
 
 </div>
 
-<img src="/kmap_4x4_ex5.svg" class="w-60 mx-auto bg-white p-2 rounded-lg" alt="K-map for F(w,x,y,z) = Σ(0,1,2,4,5,6,8,9,12,13,14)">
+<img src="/lect_3_kmap_4x4_ex5.svg" class="w-60 mx-auto bg-white p-2 rounded-lg" alt="K-map for F(w,x,y,z) = Σ(0,1,2,4,5,6,8,9,12,13,14)">
 <p class="text-sm text-center">Figure 3-9. K-map from Example 5.</p>
 
 
@@ -376,7 +376,7 @@ Sometimes, a function can have more than one minimal sum-of-products expression.
 :: right ::
 4.  **Cover Remaining 1s:** The remaining $1$s ($m₁, m₉$) can be covered in two ways, leading to two minimal solutions.
 
-<img src="/kmap_4x4_ex6_1.svg" class="mx-auto w-50 pt-4 p-2 rounded-lg bg-white"/>
+<img src="/lect_3_kmap_4x4_ex6_1.svg" class="mx-auto w-50 pt-4 p-2 rounded-lg bg-white"/>
 <p class="text-sm text-center">Figure 3-10. K-map from Example 6.</p>
 
 ---
@@ -391,7 +391,7 @@ Group $m₀,m₁,m₈,m₉$ to get $B'C'$.
 
 $F = BD + B'D' + B'C'$
 
-<img src="/kmap_4x4_ex6_sol_1.svg" class="rounded-lg bg-white p-4 w-55 mx-auto" alt="K-map solution 1">
+<img src="/lect_3_kmap_4x4_ex6_sol_1.svg" class="rounded-lg bg-white p-4 w-55 mx-auto" alt="K-map solution 1">
 <p class="text-sm text-center">Figure 3-11. K-map Solution 1.</p>
 
 </div>
@@ -403,7 +403,7 @@ Group $m₁,m₅,m₉,m₁₃$ to get $C'D$.
 
 $F = BD + B'D' + C'D$
 
-<img src="/kmap_4x4_ex6_sol_2.svg" class="rounded-lg bg-white p-4 w-55 mx-auto" alt="K-map solution 1">
+<img src="/lect_3_kmap_4x4_ex6_sol_2.svg" class="rounded-lg bg-white p-4 w-55 mx-auto" alt="K-map solution 1">
 <p class="text-sm text-center">Figure 3-12. K-map Solution 2.</p>
 </div>
 </div>
@@ -458,7 +458,7 @@ $F = yz + w'x'$
 
 <div>
 
-<img src="/kmap_dontcare.svg" class="rounded-lg bg-white p-5 mx-auto w-full" alt="K-map with Don't Cares">
+<img src="/lect_3_kmap_dontcare.svg" class="rounded-lg bg-white p-5 mx-auto w-full" alt="K-map with Don't Cares">
 <p class="text-sm text-center">Figure 3-13. Don't Care condition K-map.</p>
 
 </div>
@@ -487,7 +487,7 @@ For functions with more than four variables, the K-map method becomes more compl
 
 **Example:** A group of 4 $1$s in the same position on both maps (e.g., $m₀, m₁₆$ and $m₁, m₁₇$) would eliminate the variable $a$ and $e$.
 
-<img src="/kmap_5var.svg" class="rounded-lg bg-white p-4 w-100"/>
+<img src="/lect_3_kmap_5var.svg" class="rounded-lg bg-white p-4 w-100"/>
 <p class="text-sm text-center">Figure 3-14. Five-variable K-map.</p>
 
 ---
@@ -506,7 +506,7 @@ layout: two-cols-header
 
 :: right ::
 
-<img src="/kmap_6var.svg" class="rounded-lg bg-white p-4 w-95 mx-auto" alt="6-variable K-map layout">
+<img src="/lect_3_kmap_6var.svg" class="rounded-lg bg-white p-4 w-95 mx-auto" alt="6-variable K-map layout">
 <p class="text-sm text-center">Figure 3-15. Six-variable K-map.</p>
 
 ---
@@ -558,7 +558,7 @@ Let's find the POS form by grouping the $0$s ($m₃, m₄, m₆, m₇, m₁₁, 
 $F = (A' + B') · (C' + D') · (B' + D)$
 
 :: right ::
-<img src="/kmap_pos.svg" class="rounded-lg bg-white p-4 w-80 mx-auto" alt="K-map for POS Simplification">
+<img src="/lect_3_kmap_pos.svg" class="rounded-lg bg-white p-4 w-80 mx-auto" alt="K-map for POS Simplification">
 <p class="text-sm text-center">Figure 3-16. POS Simplification graph.</p>
 
 ---
@@ -576,13 +576,13 @@ NAND and NOR gates are known as **universal gates** because any other logic gate
 
 
 **NOT**
-<img src="/nand_as_not.svg" class="rounded-lg bg-white p-2 w-60" alt="NOT from NAND">
+<img src="/lect_3_nand_as_not.svg" class="rounded-lg bg-white p-2 w-60" alt="NOT from NAND">
 
 **AND**
-<img src="/nand_as_and.svg" class="rounded-lg bg-white p-2 w-70" alt="AND from NAND">
+<img src="/lect_3_nand_as_and.svg" class="rounded-lg bg-white p-2 w-70" alt="AND from NAND">
 
 **OR**
-<img src="/nand_as_or.svg" class="rounded-lg bg-white p-2 w-80" alt="OR from NAND">
+<img src="/lect_3_nand_as_or.svg" class="rounded-lg bg-white p-2 w-80" alt="OR from NAND">
 
 
 
@@ -592,13 +592,13 @@ NAND and NOR gates are known as **universal gates** because any other logic gate
 
 
 **NOT**
-<img src="/nor_as_not.svg" class="rounded-lg bg-white p-2 w-60" alt="NOT from NOR">
+<img src="/lect_3_nor_as_not.svg" class="rounded-lg bg-white p-2 w-60" alt="NOT from NOR">
 
 **OR**
-<img src="/nor_as_or.svg" class="rounded-lg bg-white p-2 w-70" alt="OR from NOR">
+<img src="/lect_3_nor_as_or.svg" class="rounded-lg bg-white p-2 w-70" alt="OR from NOR">
 
 **AND**
-<img src="/nor_as_and.svg" class="rounded-lg bg-white p-2 w-80" alt="AND from NOR">
+<img src="/lect_3_nor_as_and.svg" class="rounded-lg bg-white p-2 w-80" alt="AND from NOR">
 
 
 
@@ -625,10 +625,10 @@ This is a very common and efficient way to implement logic from a K-map.
 </div>
 <div class="col-span-3">
 
-<img src="/two_level_sop.svg" class="rounded-lg bg-white w-75 p-1" alt="AND-OR circuit">
+<img src="/lect_3_two_level_sop.svg" class="rounded-lg bg-white w-75 p-1" alt="AND-OR circuit">
 <p class="text-sm text-center">Figure 3-17. AND-OR Circuit.</p>
 
-<img src="/two_level_sop_nand.svg" class="rounded-lg bg-white w-75 p-1" alt="NAND-NAND circuit">
+<img src="/lect_3_two_level_sop_nand.svg" class="rounded-lg bg-white w-75 p-1" alt="NAND-NAND circuit">
 <p class="text-sm text-center">Figure 3-18. NAND-NAND Circuit.</p>
 
 </div>
@@ -659,10 +659,10 @@ This is the standard implementation method when starting from a POS expression (
 </div>
 <div class="col-span-3">
 
-<img src="/two_level_pos.svg" class="rounded-lg bg-white w-80 p-1" alt="OR-AND circuit">
+<img src="/lect_3_two_level_pos.svg" class="rounded-lg bg-white w-80 p-1" alt="OR-AND circuit">
 <p class="text-sm text-center">Figure 3-19. OR-AND Circuit.</p>
 
-<img src="/two_level_pos_nor.svg" class="rounded-lg bg-white w-80 p-1" alt="NOR-NOR circuit">
+<img src="/lect_3_two_level_pos_nor.svg" class="rounded-lg bg-white w-80 p-1" alt="NOR-NOR circuit">
 <p class="text-sm text-center">Figure 3-20. NOR-NOR Circuit.</p>
 
 </div>
@@ -710,14 +710,14 @@ The XOR and XNOR functions are fundamental in arithmetic and comparison circuits
 <div>
 
 **XOR Gate**
-<img src="/xor_symbol.svg" class="rounded-lg bg-white p-4 w-100" alt="XOR Gate Symbol">
+<img src="/lect_3_xor_symbol.svg" class="rounded-lg bg-white p-4 w-100" alt="XOR Gate Symbol">
 <p class="text-sm text-center">Figure 3-21. XOR Symbol.</p>
 
 </div>
 <div>
 
 **XNOR Gate**
-<img src="/xnor_symbol.svg" class="rounded-lg bg-white p-4 w-100" alt="XNOR Gate Symbol">
+<img src="/lect_3_xnor_symbol.svg" class="rounded-lg bg-white p-4 w-100" alt="XNOR Gate Symbol">
 <p class="text-sm text-center">Figure 3-22. XNOR Symbol.</p>
 
 </div>
@@ -736,10 +736,10 @@ The checkerboard pattern of XOR/XNOR functions is easy to spot on a K-map.
 ### Odd Function (XOR)
 $F = A ⊕ B ⊕ C = Σm(1,2,4,7)$
 
-<img src="/kmap_odd.svg" class="rounded-lg bg-white p-4 w-50 mx-auto" alt="3-variable XOR K-map">
+<img src="/lect_3_kmap_odd.svg" class="rounded-lg bg-white p-4 w-50 mx-auto" alt="3-variable XOR K-map">
 
 **Logic Diagram**
-<img src="/logic_odd.svg" class="rounded-lg bg-white p-4 w-80 mx-auto" alt="3-input XOR gate">
+<img src="/lect_3_logic_odd.svg" class="rounded-lg bg-white p-4 w-80 mx-auto" alt="3-input XOR gate">
 <p class="text-sm text-center">Figure 3-23. Odd Function Logic.</p>
 
 ::right::
@@ -747,10 +747,10 @@ $F = A ⊕ B ⊕ C = Σm(1,2,4,7)$
 ### Even Function (XNOR)
 $F = (A ⊕ B ⊕ C)' = Σm(0,3,5,6)$
 
-<img src="/kmap_even.svg" class="rounded-lg bg-white p-4 w-50 mx-auto" alt="3-variable XNOR K-map">
+<img src="/lect_3_kmap_even.svg" class="rounded-lg bg-white p-4 w-50 mx-auto" alt="3-variable XNOR K-map">
 
 **Logic Diagram**
-<img src="/logic_even.svg" class="rounded-lg bg-white p-4 w-80 mx-auto" alt="3-input XNOR gate">
+<img src="/lect_3_logic_even.svg" class="rounded-lg bg-white p-4 w-80 mx-auto" alt="3-input XNOR gate">
 <p class="text-sm text-center">Figure 3-24. Even Function Logic.</p>
 
 ---
@@ -760,7 +760,7 @@ $F = (A ⊕ B ⊕ C)' = Σm(0,3,5,6)$
 
 XOR gates are ideal for error detection circuits. **Parity** is an extra bit added to a binary message to ensure the total number of $1$s is either even (even parity) or odd (odd parity).
 
-<img src="/parity_system.svg" class="rounded-lg bg-white p-4 w-full" alt="Parity System">
+<img src="/lect_3_parity_system.svg" class="rounded-lg bg-white p-4 w-full" alt="Parity System">
 <p class="text-sm text-center">Figure 3-25. Parity System.</p>
 
 ---
@@ -775,7 +775,7 @@ This circuit generates a parity bit $P$ for a 3-bit message ($x,y,z$). The outpu
 
 - $P = x ⊕ y ⊕ z$
 
-<img src="/logic_parity_generator.svg" class="rounded-lg bg-white py-8 w-full mx-auto" alt="3-bit even parity generator">
+<img src="/lect_3_logic_parity_generator.svg" class="rounded-lg bg-white py-8 w-full mx-auto" alt="3-bit even parity generator">
 <p class="text-sm text-center">Figure 3-26. Parity Generator.</p>
 
 </div>
@@ -789,13 +789,13 @@ This circuit checks a 4-bit message $(x,y,z,P)$ for errors. If the number of $1$
 
 - $C = x ⊕ y ⊕ z ⊕ P$
 
-<img src="/logic_parity_checker.svg" class="rounded-lg bg-white py-6 w-full mx-auto" alt="4-bit even parity checker">
+<img src="/lect_3_logic_parity_checker.svg" class="rounded-lg bg-white py-6 w-full mx-auto" alt="4-bit even parity checker">
 <p class="text-sm text-center">Figure 3-27. Parity Checker.</p>
 
 </div>
 
 <a href="https://circuitverse.org/simulator/embed/parity-checker-77179d3f-6da0-45d6-bb0a-e72009a519d4?theme=&display_title=false&clock_time=true&fullscreen=true&zoom_in_out=true" target="_blank" class="absolute top-10 right-5">
-  <img src="https://circuitverse.org/assets/CircuitVerse-558fed735d596318cc9b80f9d68e20fa7401c0bbb3718a64bd4f8690fcb23255.svg" class="w-30" />
+  <img src="/lect_3_CircuitVerse-558fed735d596318cc9b80f9d68e20fa7401c0bbb3718a64bd4f8690fcb23255.svg" class="w-30" />
 </a>
 
 ---

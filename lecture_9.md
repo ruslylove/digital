@@ -38,7 +38,7 @@ A computer system can be modeled with five basic components. The microprocessor 
     *   **Control Unit:** Determines the sequence of operations.
 :: right ::
 
-<img src="/von_neumann_model.svg" class="rounded-lg bg-white p-4 w-full" alt="Von Neumann Model of a Computer"/>
+<img src="/lect_9_von_neumann_model.svg" class="rounded-lg bg-white p-4 w-full" alt="Von Neumann Model of a Computer"/>
 <p class="text-center text-sm">Figure 9-1: The Von Neumann Model of a Computer</p>
 
 
@@ -56,7 +56,7 @@ layout: two-cols
 
 :: right ::
 
-<img src="/digital_hierarchy.svg" class="rounded-lg bg-white p-4 w-100 mx-auto" alt="Hierarchy of digital components"/>
+<img src="/lect_9_digital_hierarchy.svg" class="rounded-lg bg-white p-4 w-100 mx-auto" alt="Hierarchy of digital components"/>
 <p class="text-center text-sm">Figure 9-2: Hierarchy of digital components</p>
 
 ---
@@ -97,7 +97,7 @@ A microprocessor is partitioned into two main parts that work together.
 
 :: right ::
 
-<img src="/datapath_control.svg" class="rounded-lg bg-white p-4 w-full" alt="Datapath and Control Unit Interaction"/>
+<img src="/lect_9_datapath_control.svg" class="rounded-lg bg-white p-4 w-full" alt="Datapath and Control Unit Interaction"/>
 <p class="text-center text-sm">Figure 9-3: Datapath and Control Unit Interaction</p>
 
 ---
@@ -120,7 +120,7 @@ layout: two-cols-header
 
 ::right::
 
-<img src="/rtl_model.svg" class="rounded-lg bg-white p-4 w-full" alt="RTL Model Diagram">
+<img src="/lect_9_rtl_model.svg" class="rounded-lg bg-white p-4 w-full" alt="RTL Model Diagram">
 <p class="text-center text-sm">Figure 9-4: RTL Model Diagram</p>
 
 ---
@@ -145,7 +145,7 @@ This datapath loads registers B and C, adds their values, and stores the result 
 
 :: right ::
 
-<img src="/datapath_A_B_plus_C.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Datapath for A = B + C">
+<img src="/lect_9_datapath_A_B_plus_C.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Datapath for A = B + C">
 <p class="text-center text-sm">Figure 9-5: Datapath for A = B + C</p>
 
 
@@ -160,7 +160,7 @@ This datapath loads registers B and C, adds their values, and stores the result 
 
 This datapath feeds the output of register A back to one input of an adder. The other input is the constant value `3`. The result is loaded back into A.
 
-<img src="/datapath_A_plus_3.svg" class="rounded-lg bg-white p-4 w-70 mx-auto" alt="Datapath for A = A + 3">
+<img src="/lect_9_datapath_A_plus_3.svg" class="rounded-lg bg-white p-4 w-70 mx-auto" alt="Datapath for A = A + 3">
 <p class="text-center text-sm">Figure 9-6: Datapath for A = A + 3</p>
 
 ---
@@ -178,7 +178,7 @@ What if we need to perform both `A = A + 3` and `A = B + C`? We can create a mor
 
 :: right ::
 
-<img src="/datapath_combine.png" class="rounded-lg bg-white p-4 w-95 mx-auto" alt="Combined Datapath with MUX">
+<img src="/lect_9_datapath_combine.png" class="rounded-lg bg-white p-4 w-95 mx-auto" alt="Combined Datapath with MUX">
 <p class="text-center text-sm">Figure 9-7: Datapath for A = A + 3 with MUX</p>
 
 ---
@@ -197,7 +197,7 @@ To perform multiple operations using a single functional unit (the adder), we us
 </div>
 <div class="col-span-2">
 
-<img src="/datapath_one_adder.png" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Datapath for A = A + 3 and A = B + C using only one adder">
+<img src="/lect_9_datapath_one_adder.png" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Datapath for A = A + 3 and A = B + C using only one adder">
 <p class="text-center text-sm">Figure 9-8: Datapath for A = A + 3 and A = B + C using only one adder</p>
 
 </div>
@@ -221,7 +221,7 @@ To implement conditional statements like `IF (A = 0) THEN...`, the datapath must
 
 <div class="col-span-2">
 
-<img src="/datapath_if.png" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Datapath for A=0 check">
+<img src="/lect_9_datapath_if.png" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Datapath for A=0 check">
 <p class="text-center text-sm">Figure 9-9: Datapath for A=0 check; (a) Using comparator; (b) Using NOR gate</p>
 
 </div>
@@ -258,7 +258,7 @@ $$
 
 <div class="col-span-2">
 
-<img src="/datapath_one_adder.png" class="rounded-lg bg-white p-4 w-full" alt="Control Word Table Example"> 
+<img src="/lect_9_datapath_one_adder.png" class="rounded-lg bg-white p-4 w-full" alt="Control Word Table Example"> 
 <p class="text-center text-sm">Figure 9-10: Datapath for A = A + 3 and A = B + C</p>
 </div>
 </div>
@@ -292,7 +292,7 @@ OUTPUT B
 
 <div class="col-span-1">
 
-<img src="/datapath_if_then_else.png" class="rounded-lg bg-white p-4 w-full" alt="if-then-else datapath">
+<img src="/lect_9_datapath_if_then_else.png" class="rounded-lg bg-white p-4 w-full" alt="if-then-else datapath">
 <p class="text-center text-sm">Figure 9-11: Datapath for if-then-else</p>
 
 </div>
@@ -334,7 +334,7 @@ $$
 
 <div class="col-span-1">
 
-<img src="/datapath_if_then_else.png" class="rounded-lg bg-white p-5 w-full mx-auto" alt="if-then-else datapath">
+<img src="/lect_9_datapath_if_then_else.png" class="rounded-lg bg-white p-5 w-full mx-auto" alt="if-then-else datapath">
 <p class="text-center text-sm">Figure 9-12: Datapath for if-then-else</p>
 
 </div>
@@ -378,7 +378,7 @@ OUTPUT Sum
 
 :: right ::
 
-<img src="/datapath_sum_1_to_10.png" class="rounded-lg bg-white p-4 w-full" alt="Counter datapath with adder">
+<img src="/lect_9_datapath_sum_1_to_10.png" class="rounded-lg bg-white p-4 w-full" alt="Counter datapath with adder">
 <p class="text-center text-sm">Figure 9-13: Datapath for summing numbers from 1 to 10</p>
 
 ---
@@ -419,7 +419,7 @@ $$
 </div>
 
 <div>
-<img src="/datapath_sum_1_to_10.png" class="rounded-lg bg-white p-1 w-full mx-auto" alt="Counter datapath with adder">
+<img src="/lect_9_datapath_sum_1_to_10.png" class="rounded-lg bg-white p-1 w-full mx-auto" alt="Counter datapath with adder">
 <p class="text-center text-sm">Figure 9-14: Datapath for summing numbers from 1 to 10</p>
 </div>
 </div>
@@ -455,7 +455,7 @@ A microprocessor is partitioned into two main parts that work together.
 
 <div>
 
-<img src="/datapath_control.svg" class="rounded-lg bg-white p-4 w-full" alt="Datapath and Control Unit Interaction">
+<img src="/lect_9_datapath_control.svg" class="rounded-lg bg-white p-4 w-full" alt="Datapath and Control Unit Interaction">
 <p class="text-center text-sm">Figure 9-15: Datapath and Control Unit Interaction</p>
 
 </div>
@@ -488,7 +488,7 @@ WHILE (i != 10) {
 </div>
 <div>
 
-<img src="/counter_fsm.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Counter Control Unit FSM">
+<img src="/lect_9_counter_fsm.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Counter Control Unit FSM">
 <p class="text-center text-sm">Figure 9-16: Counter Control Unit FSM</p>
 
 
@@ -500,7 +500,7 @@ WHILE (i != 10) {
 ---
 
 **Datapath:**
-<img src="/counter_datapath.svg" class="rounded-lg bg-white p-4 w-full h-60 object-contain mx-auto" alt="Counter Datapath">
+<img src="/lect_9_counter_datapath.svg" class="rounded-lg bg-white p-4 w-full h-60 object-contain mx-auto" alt="Counter Datapath">
 <p class="text-center text-sm">Figure 9-17: Counter Datapath</p>
 
 * **Status Signal:** $(i\neq10)$
@@ -602,7 +602,7 @@ $$
 
 <div>
 
-<img src="/counter_logic.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Counter Control Logic Circuit">
+<img src="/lect_9_counter_logic.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Counter Control Logic Circuit">
 <p class="text-center text-sm">Figure 9-18: Counter Control Logic Circuit</p>
 
 </div>
@@ -623,7 +623,7 @@ By combining the datapath and the synthesized control unit, we get the complete 
 </div>
 
 <div class="col-span-2">
-<img src="/counter_combined.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Complete Counter Microprocessor">
+<img src="/lect_9_counter_combined.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Complete Counter Microprocessor">
 <p class="text-center text-sm">Figure 9-19: Complete Counter Microprocessor</p>
 </div>
 </div>
@@ -669,7 +669,7 @@ $$
 <div class="text-base">
 
 **Datapath:**
-<img src="/if_then_else_datapath.svg" class="rounded-lg bg-white p-4 w-90 object-contain mx-auto" alt="if-then-else datapath">
+<img src="/lect_9_if_then_else_datapath.svg" class="rounded-lg bg-white p-4 w-90 object-contain mx-auto" alt="if-then-else datapath">
 <p class="text-center text-sm">Figure 9-20: if-then-else Datapath</p>
 
 </div>
@@ -686,7 +686,7 @@ $$
 *   **$S_{notequal}$:** Load B with 13.
 *   **$S_{output}$:** Output the value from B.
 
-<img src="/if_then_else_fsm.svg" class="rounded-lg bg-white p-4 w-120 object-contain mx-auto" alt="If-Then-Else Control Unit FSM">
+<img src="/lect_9_if_then_else_fsm.svg" class="rounded-lg bg-white p-4 w-120 object-contain mx-auto" alt="If-Then-Else Control Unit FSM">
 <p class="text-center text-sm">Figure 9-21: If-Then-Else Control Unit FSM</p>
 
 ---
@@ -838,7 +838,7 @@ end Structural;
 ---
 
 
-<img src="/if_then_else_combined.svg" class="rounded-lg bg-white p-4 h-100 object-contain mx-auto" alt="if-then-else combined">
+<img src="/lect_9_if_then_else_combined.svg" class="rounded-lg bg-white p-4 h-100 object-contain mx-auto" alt="if-then-else combined">
 <p class="text-center text-sm">Figure 9-22: if-then-else Control Unit combined with Datapath</p>
 
 
@@ -877,7 +877,7 @@ OUTPUT X
 <div>
 
 **Datapath:**
-<img src="/gcd_datapath.png" class="rounded-lg bg-white p-1 w-75 mx-auto" alt="GCD Datapath">
+<img src="/lect_9_gcd_datapath.png" class="rounded-lg bg-white p-1 w-75 mx-auto" alt="GCD Datapath">
 <p class="text-center text-sm">Figure 9-23: GCD Datapath</p>
 
 </div>
@@ -896,7 +896,7 @@ layout: two-cols
 
 :: right ::
 
-<img src="/gcd_fsm.svg" class="rounded-lg bg-white p-4 w-full object-contain mx-auto" alt="GCD Control Unit FSM">
+<img src="/lect_9_gcd_fsm.svg" class="rounded-lg bg-white p-4 w-full object-contain mx-auto" alt="GCD Control Unit FSM">
 <p class="text-center text-sm">Figure 9-24: GCD Control Unit FSM</p>
 
 
@@ -1371,10 +1371,10 @@ end Structural;
 ```
 ---
 
-<img src="/gcd.png" class="rounded-lg bg-white p-1 w-170 mx-auto" alt="GCD Control Unit and Datapath">
+<img src="/lect_9_gcd.png" class="rounded-lg bg-white p-1 w-170 mx-auto" alt="GCD Control Unit and Datapath">
 <p class="text-center text-sm">Figure 9-25: GCD Control Unit and Datapath</p>
 
-<img src="/gcd_sim.png" class="rounded-lg bg-white p-1 w-full mx-auto" alt="GCD Simulation">
+<img src="/lect_9_gcd_sim.png" class="rounded-lg bg-white p-1 w-full mx-auto" alt="GCD Simulation">
 <p class="text-center text-sm">Figure 9-26: GCD Simulation</p>
 
 ---
@@ -1429,7 +1429,7 @@ OUTPUT X
 
 **State Diagram:**
 
-<img src="/gcd_fsm.svg" class="rounded-lg bg-white w-52 mx-auto" alt="GCD State Diagram">
+<img src="/lect_9_gcd_fsm.svg" class="rounded-lg bg-white w-52 mx-auto" alt="GCD State Diagram">
 
 </div>
 
@@ -1492,12 +1492,12 @@ end Behavioral;
 
 ---
 
-<img src="/gcd_fsmd.png" class="rounded-lg bg-white w-full mx-auto" alt="GCD Logic Diagram (Synthesized)">
+<img src="/lect_9_gcd_fsmd.png" class="rounded-lg bg-white w-full mx-auto" alt="GCD Logic Diagram (Synthesized)">
 <p class="text-center text-sm">Figure 9-27: GCD Logic Diagram (Synthesized)</p>
 
 ---
 
-<img src="/gcd_fsmd_sim.png" class="rounded-lg bg-white w-full mx-auto" alt="GCD FSMD Simulation">
+<img src="/lect_9_gcd_fsmd_sim.png" class="rounded-lg bg-white w-full mx-auto" alt="GCD FSMD Simulation">
 <p class="text-center text-sm">Figure 9-28: GCD FSMD Simulation</p>
 
 ---

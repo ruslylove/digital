@@ -1,0 +1,35 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+
+\ctikzset{
+logic ports=ieee,
+logic ports/scale=0.7,
+}
+
+\begin{document}
+
+\begin{circuitikz}[] % Use standard American logic gate symbols
+
+    % 1. Place the NAND gate
+    % We place it at coordinates (2,0) and name it 'NAND1'
+    \draw (1.3,0) node[nand port] (NAND1) {};
+
+    % 2. Draw the Input and Split Wire
+    % Start a wire from (-1, 0) labeled 'A'
+    % Draw it to coordinate (0.5, 0), which is where we will split it.
+    % Add a solder dot '*' at the end of this segment.
+    \draw (-0.5,0) node[left] {$A$} -- (0.5,0) node[circ] (splitPoint) {};
+
+    % 3. Connect the Split Point to the Gate Inputs
+    % Connect to input 1 (top) using vertical-then-horizontal path |-
+    \draw (splitPoint) |- (NAND1.in 1);
+    % Connect to input 2 (bottom)
+    \draw (splitPoint) |- (NAND1.in 2);
+
+    % 4. Draw the Output
+    % Draw a wire from the gate output to the right and label it.
+    \draw (NAND1.out) -- ++(1,0) node[right] {$Y = \overline{A}$};
+
+\end{circuitikz}
+
+\end{document}

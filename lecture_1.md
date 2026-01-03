@@ -67,7 +67,7 @@ hideInToc: false
 * A **digital signal** is discrete, representing information with a finite set of values (like 0s and 1s). It moves in distinct steps.
  
  
-<img src="/analog_vs_digital.svg" class="rounded-lg bg-white p-4 w-135 mt-2 mx-auto" alt="Analog vs Digital Waveforms">
+<img src="/lect_1_analog_vs_digital.svg" class="rounded-lg bg-white p-4 w-135 mt-2 mx-auto" alt="Analog vs Digital Waveforms">
 <p class="text-sm text-center">Figure 1-2. An analog signal has continuous values, while a digital signal has discrete, step-like values.</p>
 
 
@@ -79,7 +79,7 @@ layout: two-cols-header
 
 The most common digital signals are those that can have one of only two possible values, like `on` or `off` (`0` and `1`) => switch => a binary representation.
 
-<img src="/switch_binary.svg" class="w-120 mx-auto"/>
+<img src="/lect_1_switch_binary.svg" class="w-120 mx-auto"/>
 <p class="text-sm text-center">Figure 1-3. Switch and Binary Representation.</p>
 
 
@@ -91,7 +91,7 @@ A binary `1001111` is representing the number 79:
 
 <div class="text-center">
 
-<img src="/binary_rep.svg" class="mx-auto mt-4 w-200 p-5"/>
+<img src="/lect_1_binary_rep.svg" class="mx-auto mt-4 w-200 p-5"/>
 <p class="text-sm text-center">Figure 1-4. Binary representation of 79.</p>
 
 </div>
@@ -109,7 +109,7 @@ The shift from analog to digital technology has revolutionized how we create, st
 *   **Physical Medium:** Audio stored as magnetic patterns on a plastic tape.
 *   **Signal Degradation:** Prone to hiss, wow and flutter, and demagnetization over time.
 *   **Sequential Access:** Finding a specific track requires fast-forwarding or rewinding.
-<img src="https://upload.wikimedia.org/wikipedia/commons/f/f0/Compactcassette.jpg" class="rounded-lg mt-4 w-40 mx-auto" alt="Cassette Tape">
+<img src="/lect_1_Compactcassette.jpg" class="rounded-lg mt-4 w-40 mx-auto" alt="Cassette Tape">
 <p class="text-sm text-center">Figure 1-5. Cassette Tape.</p>
 
 ::right::
@@ -118,7 +118,7 @@ The shift from analog to digital technology has revolutionized how we create, st
 *   **Abstract Data:** Audio stored as binary data (pits and lands) on a polycarbonate disc.
 *   **High Fidelity & Durability:** Offers clear, consistent sound quality, less susceptible to wear than tape.
 *   **Random Access:** Tracks can be accessed instantly.
-<img src="https://www.soundandvision.com/images/styles/600_wide/public/100517_tbt_sony_cdp-101_0.jpg" class="rounded-lg mt-4 w-60 mx-auto" alt="CD Audio Disc">
+<img src="/lect_1_100517_tbt_sony_cdp-101_0.jpg" class="rounded-lg mt-4 w-60 mx-auto" alt="CD Audio Disc">
 <p class="text-sm text-center">Figure 1-6. CD Audio Disc.</p>
 
 ---
@@ -132,7 +132,7 @@ The evolution from analog to digital sensors has been a cornerstone of modern au
 ### Analog Sensor (e.g., Pressure Gauge)
 <div class="text-base pt-2">
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/7/74/MAXIMATOR-High-Pressure-Manometer-01a.jpg" class="rounded-lg mt-4 w-20" alt="Analog Pressure Gauge" style="float: left; margin-right: 25px; width: 150px;">
+<img src="/lect_1_MAXIMATOR-High-Pressure-Manometer-01a.jpg" class="rounded-lg mt-4 w-20" alt="Analog Pressure Gauge" style="float: left; margin-right: 25px; width: 150px;">
 
 *   **Continuous Signal:** Outputs a varying voltage or current (e.g., 4-20mA) that is proportional to the measured property (like pressure).
 *   **Noise Susceptibility:** The signal can be degraded by electrical noise, affecting accuracy.
@@ -143,7 +143,7 @@ The evolution from analog to digital sensors has been a cornerstone of modern au
 ### Digital Sensor (e.g., Smart Sensor)
 <div class="text-base pt-2">
 
-<img src="https://www.ifm.com/binaries/content/assets/webanimations/rotatable3d/pg1/pg_gedreht.png" class="rounded-lg w-60" alt="Digital Smart Sensor" style="float: left; margin-right: 25px; width: 150px;">
+<img src="/lect_1_pg_gedreht.png" class="rounded-lg w-60" alt="Digital Smart Sensor" style="float: left; margin-right: 25px; width: 150px;">
 
 *   **Discrete Data:** An internal ADC converts the measurement into a digital format. The sensor communicates this data via a digital protocol (e.g., IO-Link, I2C).
 *   **Noise Immunity:** Digital communication is highly resistant to electrical noise.
@@ -163,9 +163,9 @@ To convert an analog signal to digital, we perform two key steps:
 
 :: right ::
 
-<img src="/adc.png" class="mt-4 w-80 mx-auto"/>
+<img src="/lect_1_adc.png" class="mt-4 w-80 mx-auto"/>
 <p class="text-sm text-center">Figure 1-7. Sampling process.</p>
-<img src="/adc.svg" class="mt-4 w-80 mx-auto"/>
+<img src="/lect_1_adc.svg" class="mt-4 w-80 mx-auto"/>
 <p class="text-sm text-center">Figure 1-8. Quantization levels.</p>
 
 
@@ -186,7 +186,7 @@ A keypad is organized as a matrix of rows and columns. When a key is pressed, it
 
 ::right::
 
-<img src="https://circuitdigest.com/sites/default/files/inlineimages/4x4-matrix-keypad.gif" class="rounded-lg bg-white p-4" alt="Keypad Matrix Diagram">
+<img src="/lect_1_4x4-matrix-keypad.gif" class="rounded-lg bg-white p-4" alt="Keypad Matrix Diagram">
 <p class="text-sm text-center">Figure 1-9. Keypad Matrix Diagram.</p>
 
 
@@ -206,7 +206,7 @@ An ideal switch is a perfect, theoretical component, while real-world switches l
 *   **Zero** resistance when closed (ON).
 *   **Infinite** resistance when open (OFF).
 *   Consumes **no power**.
-<img src="/circuit_switch.png" class="rounded-lg mt-4 w-70"/>
+<img src="/lect_1_circuit_switch.png" class="rounded-lg mt-4 w-70"/>
 <p class="text-sm text-center">Figure 1-10. Ideal Switch Model.</p>
 
 </div>
@@ -220,8 +220,8 @@ An ideal switch is a perfect, theoretical component, while real-world switches l
 *   Very high, but **not infinite**, resistance when OFF.
 *   `Transistors` are the physical basis for digital logic.
 <div class="grid grid-cols-2 gap-4">
-<img src="/circuit_transistor.png" class="rounded-lg w-80"/>
-<img src="https://i0.wp.com/darlingevil.com/wp-content/uploads/2018/03/transistor.jpg?resize=768%2C476&ssl=1" class=" w-80 pt-7"/>
+<img src="/lect_1_circuit_transistor.png" class="rounded-lg w-80"/>
+<img src="/lect_1_transistor.jpg?resize=768%2C476&ssl=1" class=" w-80 pt-7"/>
 </div>
 <p class="text-sm text-center">Figure 1-11. Real Transistor.</p>
 
@@ -234,17 +234,17 @@ layout: two-cols
 ## Digital Hardware
 
 *   1930's Relays
-<img src="https://how2electronics.com/wp-content/uploads/2022/12/understanding-relay-pinouts-and-contacts.jpg" class="w-90"/>
+<img src="/lect_1_understanding-relay-pinouts-and-contacts.jpg" class="w-90"/>
 <p class="text-sm text-center">Figure 1-12. Electrical Relay.</p>
 :: right ::
 *   1940's VacuumTube – No moving part, Faster than Relays
 <div class="grid grid-cols-2 gap-4 items-center">
 <div>
-<img src="https://cdn-blog.adafruit.com/uploads/2017/10/37069392422_56b2c8d7b3_b.jpg" class="w-50 mt-5"/>
+<img src="/lect_1_37069392422_56b2c8d7b3_b.jpg" class="w-50 mt-5"/>
 <p class="text-sm text-center">Figure 1-13. Vacuum Tubes.</p>
 </div>
 <div>
-<img src="https://static.wixstatic.com/media/b3b6fa_502a0c330cf045a7a2ea85854d96cf69~mv2.jpg/v1/fill/w_572,h_540,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/b3b6fa_502a0c330cf045a7a2ea85854d96cf69~mv2.jpg" class="w-100 mt-5" />
+<img src="/lect_1_b3b6fa_502a0c330cf045a7a2ea85854d96cf69_mv2.jpg" class="w-100 mt-5" />
 <p class="text-sm text-center">Figure 1-14. Vacuum Tubes in ENIAC.</p>
 </div>
 </div>
@@ -264,12 +264,8 @@ layout: two-cols
 
 <div class="col-span-5">
 
-<div class="grid grid-cols-2 gap-4">
-<img src="https://cdn.sparkfun.com/assets/learn_tutorials/1/9/3/intro.png" class="rounded-lg"/>
-<img src="https://ethw.org/w/images/5/58/Logic_Gates_Dec_System_Building_Blocks_1103_Attribution.jpg?20120302164220" class="rounded-lg"/>
-<img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Agc_nor2.jpg" class="mt-1 rounded-lg" />
-<img src="https://hackster.imgix.net/uploads/attachments/1249774/_JBfBEpQNXw.blob?auto=compress&w=900&h=675&fit=min&fm=jpg" class="rounded-lg mx-auto"/>
-</div>
+<img src="/lect_1_combined_logic.png" class="rounded-lg w-95 mx-auto"/>
+<p class="text-sm text-center">Figure 1-15. Evolution of Digital Logic: From discrete transistors to complex ICs.</p>
 
 </div>
 
@@ -283,11 +279,11 @@ layout: two-cols
 
 <div class="col-span-1">
 
-<img src="https://www.aps.org/_ipx/w_828,q_90/https%3A%2F%2Fcdn.sanity.io%2Fimages%2Fi2z87pbo%2Fproduction%2Fa9132a54f148d9eef366dbf5f7a8cb5c25603971-2500x1597.webp%3Fauto%3Dformat%26fit%3Dmax%26w%3D828%26q%3D90" class="rounded-lg w-60 mt-2 mx-auto"  />
-<p class="text-sm text-center">Figure 1-15. ENIAC Computer (1946).</p>
+<img src="/lect_1_eniac_fixed.png" class="rounded-lg h-40 mt-1 mx-auto"  />
+<p class="text-sm text-center">Figure 1-16. ENIAC Computer (1946).</p>
 
-<img src="https://www.aps.org/_ipx/w_828,q_90/https%3A%2F%2Fcdn.sanity.io%2Fimages%2Fi2z87pbo%2Fproduction%2F77e84894dd3ea6d6585ab07b6e826e157b40e996-2846x1924.jpg%3Fauto%3Dformat%26fit%3Dmax%26w%3D828%26q%3D90" class="rounded-lg w-60 mt-2 mx-auto" />
-<p class="text-sm text-center">Figure 1-16. ENIAC Programming.</p>
+<img src="/lect_1_eniac_programming_fixed.jpg" class="rounded-lg h-40 mt-1 mx-auto" />
+<p class="text-sm text-center">Figure 1-17. ENIAC Programming.</p>
 
 </div>
 
@@ -327,11 +323,11 @@ layout: two-cols-header
 
 :: right ::
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/First_Computer_Bug%2C_1947.jpg" class="rounded-lg mx-auto w-60"/>
-<p class="text-sm text-center">Figure 1-17. The First Computer Bug Log.</p>
+<img src="/lect_1_First_Computer_Bug__1947.jpg" class="rounded-lg mx-auto w-60"/>
+<p class="text-sm text-center">Figure 1-18. The First Computer Bug Log.</p>
 
 <img src="/first_bug.jpg" class="rounded-lg mt-4 mx-auto w-40" />
-<p class="text-sm text-center">Figure 1-18. Grace Hopper's Moth.</p>
+<p class="text-sm text-center">Figure 1-19. Grace Hopper's Moth.</p>
 ---
 
 ## The First Transistor (1947) - A Revolution in Electronics
@@ -339,8 +335,8 @@ layout: two-cols-header
 <div class="grid grid-cols-2 gap-4 text-base">
 <div>
 
-<img src="https://www.nutsvolts.com/uploads/wygwam/NV_0419_Steber_Figure07.jpg" class="rounded-lg" />
-<p class="text-sm text-center">Figure 1-19. The First Point-Contact Transistor.</p>
+<img src="/lect_1_NV_0419_Steber_Figure07.jpg" class="rounded-lg" />
+<p class="text-sm text-center">Figure 1-20. The First Point-Contact Transistor.</p>
 
 *   The first **point-contact transistor**, invented at Bell Labs.
 *   It was a solid-state device that could amplify electrical signals, replacing bulky and unreliable vacuum tubes.
@@ -348,8 +344,8 @@ layout: two-cols-header
 </div>
 <div>
 
-<img src="https://www.nutsvolts.com/uploads/wygwam/NV_0419_Steber_Figure09.jpg" class="rounded-lg w-70 mx-auto"/>
-<p class="text-sm text-center">Figure 1-20. Bardeen, Shockley, and Brattain.</p>
+<img src="/lect_1_NV_0419_Steber_Figure09.jpg" class="rounded-lg w-70 mx-auto"/>
+<p class="text-sm text-center">Figure 1-21. Bardeen, Shockley, and Brattain.</p>
 
 *   Inventors **John Bardeen, William Shockley, and Walter Brattain** were awarded the **Nobel Prize in Physics in 1956**.
 *   This invention paved the way for the development of integrated circuits and the entire modern electronics industry.
@@ -363,10 +359,10 @@ layout: two-cols-header
 <div class="grid grid-cols-2 gap-4 text-base">
 <div>
 
-<img src="https://www.allaboutcircuits.com/uploads/articles/Kilbys-Germanium-Integrated-Circuit.jpg" class="rounded-lg w-80 mx-auto pt-5" />
+<img src="/lect_1_Kilbys-Germanium-Integrated-Circuit.jpg" class="rounded-lg w-80 mx-auto pt-5" />
 
 <p class="text-sm text-center">
-Figure 1-21. Jack Kilby's first hybrid IC (1958). It was made of germanium and measured 7/16" x 1/16".
+Figure 1-22. Jack Kilby's first hybrid IC (1958). It was made of germanium and measured 7/16" x 1/16".
 </p>
 
 *   **Jack Kilby** (Texas Instruments) and **Robert Noyce** (Fairchild Semiconductor) independently invented the integrated circuit.
@@ -376,8 +372,8 @@ Figure 1-21. Jack Kilby's first hybrid IC (1958). It was made of germanium and m
 <div>
 
 
-<img src="https://www.nutsvolts.com/uploads/wygwam/NV_0222_Steber_Figure10.jpg" class="rounded-lg w-60 mx-auto"/>
-<p class="text-sm text-center">Figure 1-22. Early Monolithic Integrated Circuit.</p>
+<img src="/lect_1_NV_0222_Steber_Figure10.jpg" class="rounded-lg w-60 mx-auto"/>
+<p class="text-sm text-center">Figure 1-23. Early Monolithic Integrated Circuit.</p>
 
 *   Kilby built the first hybrid IC, while Noyce created the first monolithic IC, which was more practical for manufacturing.
 *   This invention allowed for putting all electronic components onto a single die, dramatically increasing performance and decreasing cost.
@@ -395,24 +391,24 @@ Figure 1-21. Jack Kilby's first hybrid IC (1958). It was made of germanium and m
 
 **1961:** TI and Fairchild introduced the first logic IC's (cost ~$50 in quantity!). This is a dual flip-flop with 4 transistors.
 
-<img src="/ic1.png" class="mt-4 w-50 mx-auto"/>
-<p class="text-sm text-center">Figure 1-23. First Logic IC (Dual Flip-Flop).</p>
+<img src="/lect_1_ic1.png" class="mt-4 w-50 mx-auto"/>
+<p class="text-sm text-center">Figure 1-24. First Logic IC (Dual Flip-Flop).</p>
 
 </div>
 <div>
 
 **1963:** Densities and yields are improving. This circuit has four flip flops.
 
-<img src="/ic2.png" class="mt-4 w-50 mx-auto"/>
-<p class="text-sm text-center">Figure 1-24. Four Flip-Flop IC.</p>
+<img src="/lect_1_ic2.png" class="mt-4 w-50 mx-auto"/>
+<p class="text-sm text-center">Figure 1-25. Four Flip-Flop IC.</p>
 
 </div>
 <div>
 
 **1967:** Fairchild markets the semi-custom chip shown below. Transistors could be easily rewired using a two-layer interconnect to create different circuits. This circuit contains ~150 logic gates.
 
-<img src="/ic3.png" class="mt-4 w-50 mx-auto"/>
-<p class="text-sm text-center">Figure 1-25. Fairchild Semi-Custom Chip.</p>
+<img src="/lect_1_ic3.png" class="mt-4 w-50 mx-auto"/>
+<p class="text-sm text-center">Figure 1-26. Fairchild Semi-Custom Chip.</p>
 
 </div>
 </div>
@@ -430,8 +426,8 @@ layout: two-cols
 
 ::right::
 <div class="flex flex-col items-center justify-center h-full">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Andy_Grove_Robert_Noyce_Gordon_Moore_1978_edit.jpg" class="rounded-lg w-70"/>
-  <p class="text-sm text-center">Figure 1-26. Gordon Moore (right), Robert Noyce (center), and Andy Grove (left). Noyce and Moore founded Intel, with Grove joining as the first employee. All three were instrumental in the company's growth.</p>
+  <img src="/lect_1_Andy_Grove_Robert_Noyce_Gordon_Moore_1978_edit.jpg" class="rounded-lg w-70"/>
+  <p class="text-sm text-center">Figure 1-27. Gordon Moore (right), Robert Noyce (center), and Andy Grove (left). Noyce and Moore founded Intel, with Grove joining as the first employee. All three were instrumental in the company's growth.</p>
 </div>
 
 ---
@@ -456,17 +452,17 @@ The invention of the microprocessor on a single chip led to the personal compute
 ::right::
 <div class="flex items-center gap-4 text-sm text-center">
 <div>
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Intel_C4004.jpg/1200px-Intel_C4004.jpg" class="rounded-lg w-40 mt-1 mx-auto"/>
-<p>Figure 1-27. Intel 4004.</p>
+<img src="/lect_1_1200px-Intel_C4004.jpg" class="rounded-lg w-40 mt-1 mx-auto"/>
+<p>Figure 1-28. Intel 4004.</p>
 </div>
 <div>
-<img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Busicom_141_PF_1.jpg" class="rounded-lg w-30 mt-1 mx-auto" />
-<p>Figure 1-28. Busicom Calculator.</p>
+<img src="/lect_1_Busicom_141_PF_1.jpg" class="rounded-lg w-30 mt-1 mx-auto" />
+<p>Figure 1-29. Busicom Calculator.</p>
 </div>
 </div>
 
-<img src="https://external-preview.redd.it/dRMlIwz2nWdkuj9a6NyPzmhI_KQvx553vC3dmA4Pm1I.jpg?width=640&crop=smart&auto=webp&s=41a127b251329349e99684961b3916ce0884a8af" class="rounded-lg w-40 mt-1 mx-auto"/>
-<p class="text-sm text-center">Figure 1-29. The IBM PC, powered by an Intel 8088.</p>
+<img src="/lect_1_ibm_pc.jpg" class="rounded-lg w-40 mt-1 mx-auto"/>
+<p class="text-sm text-center">Figure 1-30. The IBM PC, powered by an Intel 8088.</p>
 
 ---
 layout: two-cols-header
@@ -495,12 +491,12 @@ Processor design has evolved from simply increasing clock speed to focusing on a
 
 <div class="grid grid-cols-2">
 <div>
-<img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Intel_80386_IV_die.JPG" class="rounded-lg w-35 mt-2 mx-auto"/>
-<p class="text-sm text-center">Figure 1-30. The 80386 die.</p>
+<img src="/lect_1_Intel_80386_IV_die.JPG" class="rounded-lg w-35 mt-2 mx-auto"/>
+<p class="text-sm text-center">Figure 1-31. The 80386 die.</p>
 </div>
 <div>
-<img src="https://images.bit-tech.net/content_images/2006/07/intel_core_2_duo_processors/die-large.jpg" class="rounded-lg w-40 mt-3 mx-auto"/>
-<p class="text-sm text-center">Figure 1-31. A Core 2 Duo.</p>
+<img src="/lect_1_die-large.jpg" class="rounded-lg w-40 mt-3 mx-auto"/>
+<p class="text-sm text-center">Figure 1-32. A Core 2 Duo.</p>
 </div>
 </div>
 ---
@@ -557,8 +553,8 @@ layout: two-cols-header
 </div>
 <div class="col-span-3">
 
-![Moore's Law Graph](https://upload.wikimedia.org/wikipedia/commons/0/00/Moore%27s_Law_Transistor_Count_1970-2020.png)
-<p class="text-sm text-center">Figure 1-32. Moore's Law Graph.</p>
+![Moore's Law Graph](/lect_1_Moore_s_Law_Transistor_Count_1970-2020.png)
+<p class="text-sm text-center">Figure 1-33. Moore's Law Graph.</p>
 
 </div>
 </div>
@@ -583,18 +579,18 @@ layout: two-cols-header
 
 <div>
 
-<img src="https://mecha-tronx.com/wp-content/uploads/2022/08/IC-74HC00-2-INPUT-NAND-Gate-7400-1.jpg" class="rounded-lg w-35 mx-auto" alt="7400 NAND Gate IC">
-<p class="text-sm text-center">Figure 1-33. 74HC00 NAND Gate IC.</p>
+<img src="/lect_1_IC-74HC00-2-INPUT-NAND-Gate-7400-1.jpg" class="rounded-lg w-35 mx-auto" alt="7400 NAND Gate IC">
+<p class="text-sm text-center">Figure 1-34. 74HC00 NAND Gate IC.</p>
 </div>
 <div>
-<img src="https://www.hackatronic.com/wp-content/uploads/2025/04/7400-Quad-NAND-Gate-Pinout-Diagram.webp" class="rounded-lg bg-white p-2 mt-5 w-40" alt="7400 Logic Diagram">
-<p class="text-sm text-center">Figure 1-34. 7400 Internal Diagram.</p>
+<img src="/lect_1_7400-Quad-NAND-Gate-Pinout-Diagram.webp" class="rounded-lg bg-white p-2 mt-5 w-40" alt="7400 Logic Diagram">
+<p class="text-sm text-center">Figure 1-35. 7400 Internal Diagram.</p>
 </div>
 
 </div>
 
-<img src="https://hackaday.com/wp-content/uploads/2020/01/breadboard800.jpg"  class="rounded-lg w-80 mx-auto"/>
-<p class="text-sm text-center">Figure 1-35. A 74xx 24H Digital Quartz Clock.</p>
+<img src="/lect_1_breadboard800.jpg"  class="rounded-lg w-80 mx-auto"/>
+<p class="text-sm text-center">Figure 1-36. A 74xx 24H Digital Quartz Clock.</p>
 
 
 ---
@@ -613,12 +609,12 @@ layout: two-cols-header
 
 ::right::
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Xilinx_Spartan_FPGA_die_shot.jpg/1994px-Xilinx_Spartan_FPGA_die_shot.jpg" class="rounded-lg w-35 mt-4 mx-auto" alt="FPGA Die">
-<p class="text-sm text-center">Figure 1-36. Die of an FPGA showing logic cells and interconnection wires.</p>
+<img src="/lect_1_fpga_die.jpg" class="rounded-lg w-35 mt-4 mx-auto" alt="FPGA Die">
+<p class="text-sm text-center">Figure 1-37. Die of an FPGA showing logic cells and interconnection wires.</p>
 
 
-<img src="https://s3.amazonaws.com/iphonecde/_HDLS.GIF" class="rounded-lg w-65 mt-4 mx-auto" alt="HDL languages"/>
-<p class="text-sm text-center">Figure 1-37. VHDL and Verilog are the most popular HDLs.</p>
+<img src="/lect_1__HDLS.GIF" class="rounded-lg w-65 mt-4 mx-auto" alt="HDL languages"/>
+<p class="text-sm text-center">Figure 1-38. VHDL and Verilog are the most popular HDLs.</p>
 
 
 ---
@@ -637,8 +633,8 @@ layout: two-cols-header
 
 ::right::
 
-<img src="https://developer.nvidia.com/blog/wp-content/uploads/2018/09/image7.jpg" class="rounded-lg mt-4 w-80 mx-auto" alt="ASIC Die">
-<p class="text-sm text-center">Figure 1-38. An example of a complex ASIC: NVIDIA's Turing GPU.</p>
+<img src="/lect_1_image7.jpg" class="rounded-lg mt-4 w-80 mx-auto" alt="ASIC Die">
+<p class="text-sm text-center">Figure 1-39. An example of a complex ASIC: NVIDIA's Turing GPU.</p>
 
 
 ---
@@ -660,8 +656,8 @@ This phase transforms the abstract design into a physical, manufacturable layout
 
 :: right ::
 
-<img src="/design_implementation_flow.svg" class="rounded-lg mt-4 w-80 mx-auto" alt="Design and Implementation Flow">
-<p class="text-sm text-center">Figure 1-39. A Development Flow of Digtial Circuit.</p>
+<img src="/lect_1_design_implementation_flow.svg" class="rounded-lg mt-4 w-80 mx-auto" alt="Design and Implementation Flow">
+<p class="text-sm text-center">Figure 1-40. A Development Flow of Digtial Circuit.</p>
 
 
 ---

@@ -1,0 +1,55 @@
+\documentclass[border=10pt]{standalone}
+% We continue to use the [ieee] option for standard curved logic gates.
+\usepackage{circuitikz}
+
+\ctikzset{
+logic ports=ieee,
+logic ports/scale=1,
+}
+
+\begin{document}
+
+\begin{circuitikz}[]
+
+    % ============================
+    % 1. Place the XOR Gates
+    % ============================
+    % Gate 1: Computes (x XOR y). Placed on the left.
+    \draw (2, 2) node[xor port] (XOR1) {};
+    
+    % Gate 2: Computes (Result XOR z). Placed to the right and lower down.
+    \draw (6, 1) node[xor port] (XOR2) {};
+
+
+    % ============================
+    % 2. Draw Inputs x and y
+    % ============================
+    % Connect directly to the first XOR gate.
+    \draw (XOR1.in 1) -- ++(-1.5, 0) node[left] {$x$};
+    \draw (XOR1.in 2) -- ++(-1.5, 0) node[left] {$y$};
+
+
+    % ============================
+    % 3. Draw Input z and Inter-stage Connections
+    % ============================
+    
+    % Connection between gates:
+    % Output of XOR1 goes to the top input of XOR2.
+    % We use '-|' to draw a horizontal-then-vertical path.
+    \draw (XOR1.out) -- ++(0.5,0) -| (XOR2.in 1);
+
+    % Input z:
+    % It runs below the first gate and connects to the bottom input of XOR2.
+    % We start it aligned with the other inputs, but lower at y=0.
+    \draw (XOR2.in 2) -- ++(-5.5, 0) node[left] {$z$} ;
+
+
+
+    % ============================
+    % 4. Final Output
+    % ============================
+    \draw (XOR2.out) -- ++(1, 0) node[right] {$P = x \oplus y \oplus z$};
+
+\end{circuitikz}
+
+\end{document}

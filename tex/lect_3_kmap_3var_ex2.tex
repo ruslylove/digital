@@ -1,0 +1,27 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{karnaugh-map}
+
+\begin{document}
+
+% 3 Variables: 2 rows (x), 4 columns (yz)
+\begin{karnaugh-map}[4][2][1][$yz$][$x$]
+
+    % 1. Place Minterms
+    % m3 (011), m4 (100), m6 (110), m7 (111)
+    \minterms{3, 4, 6, 7}
+
+    % 2. Grouping
+    
+    % Group 1: Vertical Pair (3 and 7)
+    % This simplifies to: yz
+    \implicant{3}{7}
+
+    % Group 2: Bottom Row Wrap (4 and 6)
+    % We wrap the edge of the bottom row only.
+    % Left side: 4 to 4. Right side: 6 to 6.
+    % This simplifies to: xz'
+    \implicantedge{4}{4}{6}{6}
+
+\end{karnaugh-map}
+
+\end{document}

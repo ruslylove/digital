@@ -33,7 +33,7 @@ hideInToc: false
 *   The general form of a logic circuit is a **switching network**, which takes a set of discrete inputs and produces a set of discrete outputs.
 
 
-<img src="/switching_network.svg" class="rounded-lg bg-white pt-8 w-100 mx-auto p-4" alt="Logic Circuit" />
+<img src="/lect_2_switching_network.svg" class="rounded-lg bg-white pt-8 w-100 mx-auto p-4" alt="Logic Circuit" />
 <p class="text-sm text-center">Figure 2-1. Diagram of a Switching Network.</p>
 
 
@@ -47,7 +47,7 @@ The theoretical foundation of all modern digital computing was laid by George Bo
 ### George Boole (1815-1864)
 
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/George_Boole_color.jpg" style="float: left; margin-right: 35px; width: 150px;" class="rounded-lg mt-2 h-46" alt="George Boole">
+<img src="/lect_2_George_Boole_color.jpg" style="float: left; margin-right: 35px; width: 150px;" class="rounded-lg mt-2 h-46" alt="George Boole">
 
 *   Developed **Boolean algebra** in the mid-1800s.
 *   His intent was not to build circuits, but to create an algebraic system to formalize human logic and thought.
@@ -56,7 +56,7 @@ The theoretical foundation of all modern digital computing was laid by George Bo
 
 ### Claude Shannon (1916-2001)
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/9/98/C.E._Shannon._Tekniska_museet_43069_%28cropped%29.jpg" style="float: left; margin-right: 35px; width: 150px;" class="rounded-lg w-40 mt-2" alt="Claude Shannon">
+<img src="/lect_2_C.E._Shannon._Tekniska_museet_43069__cropped_.jpg" style="float: left; margin-right: 35px; width: 150px;" class="rounded-lg w-40 mt-2" alt="Claude Shannon">
 
 *   In his 1938 Master's thesis, he showed how Boolean algebra could be applied to switch-based circuits.
 *   He demonstrated that an "on" switch could be treated as $1$ (true) and an "off" switch as $0$ (false).
@@ -217,7 +217,7 @@ $$
 
 De Morgan's law can be visualized using Venn diagrams. The shaded area represents the result of the expression.
 
-<img src="/venn.svg" class="mx-auto"/>
+<img src="/lect_2_venn.svg" class="mx-auto"/>
 <p class="text-sm text-center">Figure 2-2. De Morgan's law is proved by Venn diagrams.</p>
 
 The resulting area is identical, proving the equivalence.
@@ -238,7 +238,7 @@ The light $L$ is ON ($1$) only if **both** switch $x1$ AND switch $x2$ are close
 
 $L(x1, x2) = x1 · x2$
 
-<img src="/switching_circuit_and.svg" class="rounded-lg bg-white p-2 mt-10 w-90 mx-auto " alt="AND function with series switches">
+<img src="/lect_2_switching_circuit_and.svg" class="rounded-lg bg-white p-2 mt-10 w-90 mx-auto " alt="AND function with series switches">
 <p class="text-sm text-center">Figure 2-3. Switching circuit as AND function.</p>
 ::right::
 
@@ -247,7 +247,7 @@ The light $L$ is ON ($1$) if switch $x1$ OR switch $x2$ (or both) are closed ($1
 
 $L(x1, x2) = x1 + x2$
 
-<img src="/switching_circuit_or.svg" class="rounded-lg bg-white p-2 mt-1 w-83 mx-auto" alt="OR function with parallel switches">
+<img src="/lect_2_switching_circuit_or.svg" class="rounded-lg bg-white p-2 mt-1 w-83 mx-auto" alt="OR function with parallel switches">
 <p class="text-sm text-center">Figure 2-4. Switching circuit as OR function.</p>
 
 ---
@@ -268,7 +268,7 @@ What if we want an action to occur when a switch is *opened* instead of closed? 
 
 ::right::
 
-<img src="/switching_circuit_not.svg" class="rounded-lg bg-white p-4 w-90 mx-auto" alt="NOT function with a switch">
+<img src="/lect_2_switching_circuit_not.svg" class="rounded-lg bg-white p-4 w-90 mx-auto" alt="NOT function with a switch">
 <p class="text-sm text-center">Figure 2-5. Switching circuit as NOT function.</p>
 
 ---
@@ -363,7 +363,7 @@ These are the standard symbols for the fundamental logic gates.
 
 ### AND Gate
 
-<img src="/and_symbol.svg" class="rounded-lg bg-white p-4 w-80" alt="AND Gate Symbol"/>
+<img src="/lect_2_and_symbol.svg" class="rounded-lg bg-white p-4 w-80" alt="AND Gate Symbol"/>
 
 ```vhdl
 library IEEE;
@@ -385,7 +385,7 @@ end Behavioral;
 
 ### OR Gate
 
-<img src="/or_symbol.svg" class="rounded-lg bg-white p-4 w-100" alt="OR Gate Symbol"/>
+<img src="/lect_2_or_symbol.svg" class="rounded-lg bg-white p-4 w-100" alt="OR Gate Symbol"/>
 
 ```vhdl
 library IEEE;
@@ -408,7 +408,7 @@ end Behavioral;
 
 ### NOT Gate (Inverter)
 
-<img src="/not_symbol.svg" class="rounded-lg bg-white p-3 w-100 mx-auto" alt="NOT Gate Symbol"/>
+<img src="/lect_2_not_symbol.svg" class="rounded-lg bg-white p-3 w-100 mx-auto" alt="NOT Gate Symbol"/>
 
 ```vhdl
 library IEEE;
@@ -445,7 +445,7 @@ Each basic logic operation (AND, OR, NOT) is implemented by a physical circuit e
 
 ::right::
 
-<img src="/logic_network.svg" class="rounded-lg bg-white mx-auto p-4 w-70" alt="Logic Network Diagram">
+<img src="/lect_2_logic_network.svg" class="rounded-lg bg-white mx-auto p-4 w-70" alt="Logic Network Diagram">
 <div class="text-sm text-center">
 
 Figure 2-6. A logic gate network of $f=(x_1+x_2) \cdot x_3$.
@@ -693,11 +693,11 @@ layout: two-cols
 The simplified form $x1' + x2$ requires far fewer gates.
 
 **Original Circuit for $x1'x2' + x1'x2 + x1x2$**
-<img src="/sop_circuit.svg" class="rounded-lg bg-white p-2 w-70 mx-auto" alt="Complex circuit for unsimplified function">
+<img src="/lect_2_sop_circuit.svg" class="rounded-lg bg-white p-2 w-70 mx-auto" alt="Complex circuit for unsimplified function">
 <div class="text-sm text-center">Figure 2-7. Original circuit. </div>
 
 **Simplified Circuit for $x1' + x2$**
-<img src="/simplified_circuit.svg" class="rounded-lg bg-white p-2 mt-4 w-60 mx-auto" alt="Simple circuit for simplified function">
+<img src="/lect_2_simplified_circuit.svg" class="rounded-lg bg-white p-2 mt-4 w-60 mx-auto" alt="Simple circuit for simplified function">
 <div class="text-sm text-center">Figure 2-8. Simplified circuit.</div>
 
 :: right ::
@@ -755,7 +755,7 @@ UUT : ENTITY work.Logic_Function(RTL_Simplified)
 
 ### Logisim Simulation
 
-<img src="/logisim_result.png" class="w-170 mx-auto pt-4"/>
+<img src="/lect_2_logisim_result.png" class="w-170 mx-auto pt-4"/>
 <p class="text-sm text-center">Figure 2-9. Timing Simulation result in Logisim Evolution.</p>
 
 
@@ -776,7 +776,7 @@ layout: two-cols-header
 *   Light is OFF if **two** switches are closed.
 *   Light is ON if **three** switches are closed.
 
-<img src="/doors.svg" class="w-60 mx-auto pt-5"/>
+<img src="/lect_2_doors.svg" class="w-60 mx-auto pt-5"/>
 
 <p class="text-sm text-center">Figure 2-10. Three-way light control logic circuit.</p>
 
@@ -843,13 +843,13 @@ This is the simplest SOP form for this function (also known as the XOR function)
 
 ### Circuit Implementation
 
-<img src="/three_way_light.png" class="mt-4 w-90"/>
+<img src="/lect_2_three_way_light.png" class="mt-4 w-90"/>
 <p class="text-sm text-center">Figure 2-11. Three-way light control logic circuit.</p>
 
 :: right ::
 **CircuitVerse Simulation**
 <a href="https://circuitverse.org/simulator/embed/three-way-light-control?theme=&display_title=false&clock_time=true&fullscreen=true&zoom_in_out=true" target="_blank" style="border-width:; border-style: ; border-color:;" name="myiframe" id="projectPreview" scrolling="no" frameborder="1" marginheight="0px" marginwidth="0px" height="450" width="400" allowFullScreen>
-  <img src="/Main.png" alt="Click to view full image" style="width: 400px; cursor: pointer;">
+  <img src="/lect_2_Main.png" alt="Click to view full image" style="width: 400px; cursor: pointer;">
 </a>
 
 
@@ -988,7 +988,7 @@ A **testbench** is a VHDL entity used to simulate and verify the correctness of 
 4.  **Verify Correctness:** You check the waveforms to ensure the outputs are correct. For automated checking, VHDL's `assert` statement can be used to report errors if an output does not match its expected value.
 </div>
 <div>
-<img src="/test_bench.svg" class="w-100 mx-auto bg-white p-4 rounded-lg"/>
+<img src="/lect_2_test_bench.svg" class="w-100 mx-auto bg-white p-4 rounded-lg"/>
 <p class="text-sm text-center">Figure 2-12. The relationship between the Entity and its Testbench.</p>
 
 </div>
@@ -999,7 +999,7 @@ A **testbench** is a VHDL entity used to simulate and verify the correctness of 
 
 ### Questa(r) Simulation Result
 
-<img src="/three_way_light_sim.png" class="w-180 pt-4 mx-auto" />
+<img src="/lect_2_three_way_light_sim.png" class="w-180 pt-4 mx-auto" />
 <p class="text-sm text-center">Figure 2-13. Timing Simulation result in Intel (Altera) Questa.</p>
 
 
@@ -1087,17 +1087,17 @@ layout: two-cols
 ### Circuit and Symbol
 
 **Circuit for $f = s'x_1 + sx_2$**
-<img src="/mux_2to1.svg" class="rounded-lg bg-white w-80 mx-auto p-4" alt="Circuit for 2-to-1 Multiplexer">
+<img src="/lect_2_mux_2to1.svg" class="rounded-lg bg-white w-80 mx-auto p-4" alt="Circuit for 2-to-1 Multiplexer">
 <p class="text-sm text-center">Figure 2-14. Multiplexter 2-to-1 circuit.</p>
 
 **Graphical Symbol**
-<img src="/mux_2_to_1_symbol.svg" class="rounded-lg bg-white w-28 mx-auto p-4" alt="Symbol for 2-to-1 Multiplexer">
+<img src="/lect_2_mux_2_to_1_symbol.svg" class="rounded-lg bg-white w-28 mx-auto p-4" alt="Symbol for 2-to-1 Multiplexer">
 <p class="text-sm text-center">Figure 2-15. Multiplexer 2-to-1 symbol.</p>
 
 :: right ::
 **CircuitVerse Simulation**
 <a href="https://circuitverse.org/simulator/embed/mux_2_to_1?theme=&display_title=false&clock_time=false&fullscreen=true&zoom_in_out=false" target="_blank" style="border-width:; border-style: ; border-color:;" name="myiframe" id="projectPreview" scrolling="no" frameborder="1" marginheight="0px" marginwidth="0px" height="450" width="400" allowFullScreen>
-  <img src="/mux_2_to_1_cv.png" alt="Click to view full image" style="width: 400px; cursor: pointer;">
+  <img src="/lect_2_mux_2_to_1_cv.png" alt="Click to view full image" style="width: 400px; cursor: pointer;">
 </a>
 
 ---
@@ -1111,7 +1111,7 @@ layout: two-cols
 **Problem:** Design a car safety alarm $A$ that sounds if:
 1.  The key is in ($K=1$) and the door is not closed ($D=0$), OR
 2.  The door is closed ($D=1$), the key is in ($K=1$), the driver is in the seat ($S=1$), and the seat belt is not closed ($B=0$).
-<img src="/car_alarm_sketch.svg" class="w-55 mx-auto p-4 bg-white rounded-lg"/>
+<img src="/lect_2_car_alarm_sketch.svg" class="w-55 mx-auto p-4 bg-white rounded-lg"/>
 <p class="text-sm text-center">Figure 2-16. A Car Alarm System.</p>
 
 
@@ -1151,7 +1151,7 @@ layout: two-cols
 
 The circuit is built from the simplified expression $A = K · (D' + S·B')$, which is much simpler than a circuit for the original expression.
 
-<img src="/car_alarm.svg" class="rounded-lg bg-white p-2" alt="Circuit for Car Safety Alarm">
+<img src="/lect_2_car_alarm.svg" class="rounded-lg bg-white p-2" alt="Circuit for Car Safety Alarm">
 <p class="text-sm text-center">Figure 2-17. Circuit for Car Safety Alarm.</p>
 
 :: right ::
@@ -1256,11 +1256,11 @@ layout: two-cols
 The circuit combines an XOR gate for the sum and an AND gate for the carry.
 
 **Circuit Implementation**
-<img src="/half_adder.svg" class="rounded-lg bg-white w-70 mx-auto p-2" alt="Circuit for a Half-Adder">
+<img src="/lect_2_half_adder.svg" class="rounded-lg bg-white w-70 mx-auto p-2" alt="Circuit for a Half-Adder">
 <p class="text-sm text-center">Figure 2-18. Circuit for a Half-Adder.</p>
 
 **Block Diagram**
-<img src="/half_adder_block.svg" class="rounded-lg bg-white w-60 mx-auto p-2" alt="Block Diagram for a Half-Adder">
+<img src="/lect_2_half_adder_block.svg" class="rounded-lg bg-white w-60 mx-auto p-2" alt="Block Diagram for a Half-Adder">
 <p class="text-sm text-center">Figure 2-19. Block Diagram for a Half-Adder.</p>
 
 :: right ::
@@ -1376,7 +1376,7 @@ The alarm `A` should sound (`A=1`) if the system is armed (`S=1`) **AND** either
 A robot uses three sensors (`L`, `C`, `R`) to follow a black line (`sensor=0`) on a white surface (`sensor=1`). It has two motors, `ML` (Left) and `MR` (Right).
 <div class="grid grid-cols-7 gap-4">
 <div class="text-sm col-span-4">
-<img src="/line_following_robot.svg" class="w-45 mx-auto bg-white p-4 rounded-lg" />
+<img src="/lect_2_line_following_robot.svg" class="w-45 mx-auto bg-white p-4 rounded-lg" />
 <p class="text-sm text-center">Figure 2-20. A Line-Following Robot.</p>
 
 *   **Go Forward (`ML=1, MR=1`):** When the robot is centered (`L=1, C=0, R=1`).
@@ -1420,7 +1420,7 @@ A 7-segment display is a common device for displaying decimal digits. It consist
 
 
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/7_Segment_Display_with_Labeled_Segments.svg/150px-7_Segment_Display_with_Labeled_Segments.svg.png" class="mx-auto w-25" />
+<img src="/lect_2_7_segment_labeled.svg" class="mx-auto w-25" />
 <p class="text-sm text-center">Figure 2-21. A Seven Segment LEDs.</p>
 
 Your task is to design a decoder that takes a 4-bit binary-coded decimal (BCD) input (`b3`, `b2`, `b1`, `b0`) and outputs the signals to control the seven segments (`a`, `b`, `c`, `d`, `e`, `f`, `g`) to display the corresponding decimal digit (0-9). For this exercise, assume the display is **common anode**, meaning a segment lights up when its control signal is **LOW (0)**.

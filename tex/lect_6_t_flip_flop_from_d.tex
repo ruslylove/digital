@@ -1,0 +1,35 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+\usetikzlibrary{calc}
+
+\begin{document}
+\begin{circuitikz}[american]
+    \ctikzset{logic ports=ieee}
+    
+    % D Flip-Flop
+    \node[flipflop D] (DFF) at (3,0) {};
+    
+    % XOR Gate
+    % Output aligned with D pin (pin 1 is top-left)
+    \path (DFF.pin 1) -- ++(-1.5,0) coordinate (xor_pos);
+    \node[xor port, anchor=out] (XOR) at (xor_pos) {};
+    \draw (XOR.out) -- (DFF.pin 1);
+    
+    % T Input (XOR input 1)
+    \draw (XOR.in 2) -- ++(-0.5,0) node[left] {$T$};
+    
+    % Clock
+    \draw (DFF.pin 3) -- ++(-0.5,0) -- ++(0,-1) -- ++(-3,0) node[left] {CLK};
+    
+    % Feedback Q (pin 6) to XOR input 2
+    \draw (DFF.pin 6) -- ++(0.5,0) coordinate (Q);
+    \node[right] at (Q) {$Q$};
+    
+    % Route: Right -> Down -> Left -> Up -> In
+    \draw (DFF.pin 6) to[short,*-] ++(0, 1) coordinate (bot_run) -- (bot_run -| XOR.in 1) -- (XOR.in 1);
+    
+    % Q' Output
+    \draw (DFF.pin 4) -- ++(0.5,0) node[right] {$\bar{Q}$};
+
+\end{circuitikz}
+\end{document}

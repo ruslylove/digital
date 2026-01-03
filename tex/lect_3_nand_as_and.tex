@@ -1,0 +1,32 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+
+\ctikzset{
+logic ports=ieee,
+logic ports/scale=0.7,
+}
+
+\begin{document}
+\begin{circuitikz}[]
+
+    % Gate 1: The main NAND operation
+    \draw (0,0) node[nand port] (NAND1) {};
+    
+    % Gate 2: The Inverter (NAND configured as NOT)
+    % Placed to the right of the first gate
+    \draw (2,0) node[nand port] (INV) {};
+
+    % Inputs A and B to the first gate
+    \draw (NAND1.in 1) -- ++(-1,0) node[left] {$A$};
+    \draw (NAND1.in 2) -- ++(-1,0) node[left] {$B$};
+
+    % Connect output of first gate to BOTH inputs of the inverter
+    \draw (NAND1.out) |- ++(0.5,0) coordinate[pos=1](split) -- (INV.in 1);
+    % Add solder dot at the split point and wire to the second input
+    \draw (split) node[circ]{} |-  (INV.in 2);
+
+    % Output
+    \draw (INV.out) -- ++(1,0) node[right] {$Y = A \cdot B$};
+
+\end{circuitikz}
+\end{document}

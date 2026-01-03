@@ -1,0 +1,50 @@
+\documentclass[border=10pt]{standalone}
+% We explicitly load the 'ieee' style option here.
+% This ensures strictly IEEE standard logic gates (Curved/Distinctive).
+\usepackage{circuitikz}
+
+\ctikzset{
+logic ports=ieee,
+logic ports/scale=0.7,
+}
+
+\begin{document}
+
+\begin{circuitikz}[]
+
+    % ==========================
+    % 1. XOR GATE (IEEE Shape)
+    % ==========================
+    % The 'xor port' automatically uses the IEEE distinctive shape
+    % because of the package option above.
+    \draw (0,0) node[xor port] (XOR) {};
+    
+    % Inputs
+    \draw (XOR.in 1) -- ++(-1,0) node[left] {$A$};
+    \draw (XOR.in 2) -- ++(-1,0) node[left] {$B$};
+    
+    % Output
+    \draw (XOR.out) -- ++(1,0) node[right] {$Y = A \oplus B$};
+
+    % Label
+    \node at (XOR.down) [below=0.3cm] {};
+
+    % --- XOR TRUTH TABLE ---
+    % We place a node 1.5cm below the gate label
+    \node at (0, -2.5) {
+        \begin{tabular}{|c|c|c|}
+            \hline
+            \textbf{A} & \textbf{B} & \textbf{Y} \\
+            \hline
+            0 & 0 & 0 \\
+            0 & 1 & 1 \\
+            1 & 0 & 1 \\
+            1 & 1 & 0 \\
+            \hline
+        \end{tabular}
+    };
+
+
+\end{circuitikz}
+
+\end{document}

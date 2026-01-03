@@ -1,0 +1,60 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+\usepackage{tikz}
+\usetikzlibrary{calc, positioning}
+
+\begin{document}
+\begin{circuitikz}[american, scale=1.0]
+    \ctikzset{logic ports=ieee}
+    \tikzset{block/.style={draw, rectangle, minimum height=3.5cm, minimum width=3cm, align=center}}
+
+    % --- Approach 1: Parallel Load (Preset) ---
+    % Synchronous BCD Counter: Count 0-9.
+    % Detect 9 (1001). Next clock, Load 0.
+    
+    \node [block] (cnt1) at (0, 0) {4-Bit\\Counter\\(Load)};
+    
+    % Inputs/Outputs
+    \node (clk1) at ($(cnt1.west) + (-1, -1.2)$) {CLK};
+    \draw [->] (clk1) -- ($(cnt1.west) + (0, -1.2)$);
+    
+    \node (load1) at ($(cnt1.west) + (-1, 0.5)$) {};
+    \node [above=0.3 of cnt1.west][xshift=0.5cm] {Load};
+    \draw [->] (load1) -- ($(cnt1.west) + (0, 0.5)$);
+    
+    % 4-bit Data Inputs (Top) - Load 0 (0000)
+    \foreach \i in {0,1,2,3} {
+        \node (D1_\i) at ($(cnt1.north west) + ({0.6 + \i*0.6}, 1.0)$) {$0$};
+        \draw [->] (D1_\i) -- ($(cnt1.north west) + ({0.6 + \i*0.6}, 0)$);
+    }
+    
+    % 4-bit Outputs (Right)
+    \foreach \i in {0,1,2,3} {
+        \coordinate (Q1_\i_pin) at ($(cnt1.east) + (0, {-1.0 + \i*0.6})$);
+        \draw (Q1_\i_pin) -- ++(1.5, 0) node[right] {$Q_\i$};
+    }
+    
+    % Logic for Load
+    % Detect 9 (1001) -> Q3=1, Q0=1.
+    \node [nand port, scale=0.8, anchor=out] (nand1) at ($(cnt1.west) + (-1.5, 0.5)$) {};
+    \draw (nand1.out) -- ($(cnt1.west) + (0, 0.5)$);
+    
+    % Feedback from Q3 and Q0
+    \coordinate (targetQ3) at ($(cnt1.east) + (0, {-1.0 + 0*0.6})$); % Q3
+    \coordinate (targetQ0) at ($(cnt1.east) + (0, {-1.0 + 3*0.6})$); % Q0
+    
+    \draw (targetQ3) ++(0.5, 0) coordinate (tap1_3);
+    \node [circ] at (tap1_3) {};
+    \draw (tap1_3) -- ++(0, -1.3) -| (nand1.in 2);
+    
+    \draw (targetQ0) ++(0.8, 0) coordinate (tap1_0); % Offset x
+    \node [circ] at (tap1_0) {};
+    \draw (tap1_0) -- ++(0, -3.5) -- ++(-7.4, 0) |- (nand1.in 1);
+    
+    \node [below=0.2cm of nand1] {Detect 9};
+    \node [above=1.3cm of cnt1] {Input Data (0)};
+    
+    %\node [below=2.0cm of cnt1] {(a) Using Synchronous Load (Detect 9)};
+
+\end{circuitikz}
+\end{document}

@@ -1,0 +1,68 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+\usetikzlibrary{calc}
+
+\begin{document}
+\begin{circuitikz}[american, scale=1.0]
+    \ctikzset{logic ports=ieee}
+    
+    % Main Block
+    \node[draw, rectangle, minimum width=8cm, minimum height=4cm, thick, fill=white] (Block) at (0,0) {};
+    \node at (0, 0) {\large \textbf{4-Bit Universal Shift Register}};
+    
+    % Inputs
+    % Parallel Inputs (Top)
+    \foreach \i in {3,2,1,0} {
+        \coordinate (I\i) at ($(Block.north west)!{(4-\i)/5}!(Block.north east)$);
+        \draw[thick] (I\i) -- ++(0, 0.5) node[above] {$I_\i$};
+        \node[below, font=\tiny] at (I\i) {$I_\i$};
+    }
+    
+    % Mode Select (Left Top)
+    \coordinate (S1) at ($(Block.north west)!0.2!(Block.south west)$);
+    \coordinate (S0) at ($(Block.north west)!0.3!(Block.south west)$);
+    \draw[thick] (S1) -- ++(-0.5, 0) node[left] {$s_1$};
+    \draw[thick] (S0) -- ++(-0.5, 0) node[left] {$s_0$};
+    \node[right, font=\tiny] at (S1) {$s_1$};
+    \node[right, font=\tiny] at (S0) {$s_0$};
+    
+    % Serial Inputs
+    % Shift Right Input (SIR) - Left side, near top logic or distinct?
+    % Usually associated with shifting right (MSB -> LSB). Input at MSB.
+    \coordinate (SIR) at ($(Block.north west)!0.45!(Block.south west)$);
+    \draw[thick] (SIR) -- ++(-0.5, 0) node[left] {SIR};
+    \node[right, font=\tiny] at (SIR) {SIR};
+
+    % Shift Left Input (SIL) - Right side? Or Left side?
+    % Serial inputs usually on one side, or symmetric. 
+    % Let's put SIL on the Right side (near LSB A0) to indicate direction, or strictly inputs on left.
+    % Standard block often puts all inputs left. 
+    % However, SIL implies entering from LSB side (Right).
+    \coordinate (SIL) at ($(Block.north east)!0.45!(Block.south east)$);
+    \draw[thick] (SIL) -- ++(0.5, 0) node[right] {SIL};
+    \node[left, font=\tiny] at (SIL) {SIL};
+
+    % Clock and Clear (Bottom Left or Left Bottom)
+    \coordinate (CLK) at ($(Block.north west)!0.7!(Block.south west)$);
+    \coordinate (CLR) at ($(Block.north west)!0.85!(Block.south west)$);
+    
+    \draw[thick] (CLK) -- ++(-0.5, 0) node[left] {CLK};
+    \node[shape=inputarrow, rotate=0, scale=0.7] at (CLK) {}; % Triangle inside? Or standard CLK triangle
+    % Standard block CLK triangle is inside the edge
+    \draw ($(CLK) + (0, 0.15)$) -- ($(CLK) + (0.3, 0)$) -- ($(CLK) + (0, -0.15)$);
+    
+    \draw[thick] ($(CLR) + (-0.1, 0)$) -- ++(-0.4, 0) node[left] {Clear};
+    \node[right, font=\tiny] at (CLR) {CLR};
+    % Active Low bubble?
+    \draw ($(CLR) + (-0.05, 0)$) circle (0.05);
+
+    % Outputs
+    % Parallel Outputs (Bottom)
+    \foreach \i in {3,2,1,0} {
+        \coordinate (A\i) at ($(Block.south west)!{(4-\i)/5}!(Block.south east)$);
+        \draw[thick] (A\i) -- ++(0, -0.5) node[below] {$A_\i$};
+        \node[above, font=\tiny] at (A\i) {$A_\i$};
+    }
+
+\end{circuitikz}
+\end{document}

@@ -1,0 +1,80 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{tikz}
+\usepackage{circuitikz}
+\usetikzlibrary{positioning, calc, decorations.markings}
+
+\tikzset{register/.style={muxdemux, muxdemux def={Lh=2, Rh=2, NL=2, NB=1, NT=1,w=4,NR=0},
+                            muxdemux label={L1=Load, L2=Clock, R1=right1, R2=right,T1=$D_{7..0}$,B1=$Q_{7..0}$,},},
+                 }
+
+\tikzset{adder/.style={muxdemux, muxdemux def={Lh=1, Rh=1,NL=0, NB=1, NT=2,w=2,NR=0}}}
+
+\begin{document}
+\begin{circuitikz}[
+    font=\sffamily,
+    arrow/.style={-Latex, line width=0.5pt},
+    label_text/.style={font=\footnotesize},
+    bus/.style={-Latex, line width=1.5pt,
+        postaction={decorate},
+        decoration={markings, mark=at position 0.5 with {
+            \draw[thick,-] (-2pt,-3pt) -- (2pt,3pt);
+            \node[above left] {\footnotesize $8$};
+        }}},
+    control_signal/.style={-Latex, line width=0.5pt},
+]
+
+
+    \node[register] at (3,0) (A) {$A$};
+
+    \node[left,label_text] at ($(A.blpin 1) + (-2,0)$) (ALoad) {$ALoad$};
+    \draw[control_signal] (ALoad) -- (A.blpin 1);
+    \node[left,label_text] at ($(A.blpin 2) + (-2,0)$) (AClock) {$Clock$};
+    \draw[control_signal] (AClock) -- (A.blpin 2);
+    \draw[bus] (A.bbpin 1) -- ++(0,-0.5) -| ++ (0.5,-1) coordinate (AdderInput);
+    \node[adder, box only, anchor=btpin 1] (Adder) at (AdderInput) {+};
+    \node[above,label_text] at ($(Adder.tpin 2) + (0.0,0.7)$) (three) {$'3'$}; 
+    \draw[bus] (three) -- (Adder.btpin 2);
+    \draw[bus] (Adder.south) -- ++ (0,-0.5) -| ++(-3,4.5) -| (A.north);
+
+
+    % Adder (Top)
+    % Rotate -90 so inputs are Left/Right (relative to shape) -> Up (relative to page)
+    % Actually simpler: Standard orientation. Inputs on West, Output on East.
+    % Let's use vertical flow: Inputs Top, Output Bottom.
+    % To do that with standard adder: rotate -90. 
+   
+   % \node[below=0.2cm of reg_a] {Register A};
+    
+    % Connections
+    
+    % 1. Adder Output -> Register A Input
+    % alu.east (pointing down) -> reg_a.pin 1 (D, pointing up)
+  %  \draw[arrow] (alu.east) -- (reg_a.pin 1);
+    
+    % 2. Feedback Loop: Register A Output -> Adder Input Left
+    % reg_a.pin 6 (Q, pointing down) -> Loop around -> alu.input 1 (pointing up)
+    % alu input 1 is the 'left' input if looking from west. rotated -90, it's the 'right' input on screen?
+    % Let's just use coordinates for robust inputs.
+    % alu.west is the center of inputs.
+    % alu.in1, alu.in2 might exist depending on version, but standard adder has in1/in2.
+    
+  %  \draw[arrow] (reg_a.pin 6) -- ++(0,-0.5) -- ++(-2,0) |- ($(alu.west) + (-0.3, 0)$); % Connect to left input (conceptually)
+    
+    % Wait, correct usage of adder inputs:
+    % (alu.in1) and (alu.in2)
+    % With rotate=-90:
+    % alu.in1 is West-North (Top Left on page?) No, let's trace:
+    % Standard: West inputs, East output.
+    % Rotated -90: West points North. East points South.
+    % in1 is typically 'top' input (North-West). Rotated -90 -> North-East?
+    % Let's stick to manual offsets from alu.west (which is pointing North).
+    
+    % Feedback from A to ALU
+  %  \draw[arrow] (reg_a.pin 6) -- ++(0,-0.5) coordinate(aux) -- ++(-1.5,0) |- ($(alu.west) + (0.3, 0)$);
+    
+    % reg_a.south is passing clear/preset area?
+    % rotated -90, reg_a.south is West (Left).
+    % So entering from left is good.
+
+\end{circuitikz}
+\end{document}

@@ -1,0 +1,138 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+\ctikzset{logic ports=ieee}
+
+\begin{document}
+\begin{circuitikz}
+
+    \def\dy{2.5}
+    \def\xINPUT{3}
+    
+    % Bus Coordinates
+    \def\xBUSThree{5.0}
+    \def\xBUSTwo{5.4}
+    \def\xBUSOne{5.8}
+    \def\xBUSZero{6.2}
+    
+    \def\xTERM{10}
+    \def\xOR{14}
+    \def\xEQ{14}
+    
+    \def\yTOP{10} 
+    
+    % --- Remarks ---
+    \node at (5.6, \yTOP) [above=0.6cm] {$x_i = A_i \odot B_i$};
+
+    % --- Input Bus (x3..x0) ---
+    \draw (\xBUSThree, \yTOP) node[above] {$x_3$} -- (\xBUSThree, -2);
+    \draw (\xBUSTwo, \yTOP) node[above] {$x_2$} -- (\xBUSTwo, -2);
+    \draw (\xBUSOne, \yTOP) node[above] {$x_1$} -- (\xBUSOne, -2);
+    \draw (\xBUSZero, \yTOP) node[above] {$x_0$} -- (\xBUSZero, -2);
+    
+    % ==========================
+    % Logic Terms (A > B)
+    % ==========================
+
+    % Term 3: A3 * B3' (x3 not needed)
+    \node[and port, scale=1.2] (term3) at (\xTERM, 3.5*\dy) {};
+    
+    % A3 -> Term3.in 1
+    \draw (term3.in 1) -- (\xINPUT, 0 |- term3.in 1) node[left] {$A_3$};
+    
+    % B3 -> NOT -> Term3.in 2
+    \node[not port, scale=0.4, anchor=out] (not3) at (term3.in 2) {};
+    \draw (not3.in) -- (\xINPUT, 0 |- not3.in) node[left] {$B_3$};
+
+    % Term 2: x3 * A2 * B2'
+    \node[and port, number inputs=3, scale=1.2] (term2) at (\xTERM, 2.5*\dy) {};
+    % x3 from bus (Pin 1)
+    \draw (\xBUSThree, 0 |- term2.in 1) to[short, *-] (term2.in 1);
+    
+    % A2 -> Term2.in 2
+    \draw (term2.in 2) -- (\xINPUT, 0 |- term2.in 2) node[left] {$A_2$};
+    
+    % B2 -> NOT -> Term2.in 3
+    \node[not port, scale=0.4, anchor=out] (not2) at (term2.in 3) {};
+    \draw (not2.in) -- (\xINPUT, 0 |- not2.in) node[left] {$B_2$};
+
+    % Term 1: x3 * x2 * A1 * B1'
+    \node[and port, number inputs=4, scale=1.2] (term1) at (\xTERM, 1.5*\dy) {};
+    % x3 -> Pin 1
+    \draw (\xBUSThree, 0 |- term1.in 1) to[short, *-] (term1.in 1);
+    % x2 -> Pin 2
+    \draw (\xBUSTwo, 0 |- term1.in 2) to[short, *-] (term1.in 2);
+    
+    % A1 -> Term1.in 3
+    \draw (term1.in 3) -- (\xINPUT, 0 |- term1.in 3) node[left] {$A_1$};
+    
+    % B1 -> NOT -> Term1.in 4
+    \node[not port, scale=0.4, anchor=out] (not1) at (term1.in 4) {};
+    \draw (not1.in) -- (\xINPUT, 0 |- not1.in) node[left] {$B_1$};
+
+    % Term 0: x3 * x2 * x1 * A0 * B0'
+    \node[and port, number inputs=5, scale=1.2] (term0) at (\xTERM, 0.5*\dy) {};
+    % x3 -> Pin 1
+    \draw (\xBUSThree, 0 |- term0.in 1) to[short, *-] (term0.in 1);
+    % x2 -> Pin 2
+    \draw (\xBUSTwo, 0 |- term0.in 2) to[short, *-] (term0.in 2);
+    % x1 -> Pin 3
+    \draw (\xBUSOne, 0 |- term0.in 3) to[short, *-] (term0.in 3);
+    
+    % A0 -> Term0.in 4
+    \draw (term0.in 4) -- (\xINPUT, 0 |- term0.in 4) node[left] {$A_0$};
+    
+    % B0 -> NOT -> Term0.in 5
+    \node[not port, scale=0.4, anchor=out] (not0) at (term0.in 5) {};
+    \draw (not0.in) -- (\xINPUT, 0 |- not0.in) node[left] {$B_0$};
+
+
+    % ==========================
+    % Output OR Logic (A > B)
+    % ==========================
+    % Anchor OR gate so 'in 2' aligns with 'term2.out'
+    \node[or port, number inputs=4, scale=1.2, anchor=in 2] (gtOr) at (\xOR, 0 |- term2.out) {};
+    
+    \draw (term3.out) -| (gtOr.in 1);
+    \draw (term2.out) -- (gtOr.in 2); 
+    \draw (term1.out) -- ++(1,0) |- (gtOr.in 3);
+    \draw (term0.out) -| (gtOr.in 4);
+    
+    % Output Node for A > B
+    \draw (gtOr.out) -- ++(0.5,0) coordinate (gtOut);
+
+    % ==========================
+    % Output AND Logic (A = B)
+    % ==========================
+    \node[and port, number inputs=4, scale=1.2] (eqAnd) at (\xOR, -1.0) {}; 
+    
+    % Route x3..x0 to eqAnd
+    \draw (\xBUSThree, 0 |- eqAnd.in 1) to[short, *-] (eqAnd.in 1);
+    \draw (\xBUSTwo, 0 |- eqAnd.in 2) to[short, *-] (eqAnd.in 2);
+    \draw (\xBUSOne, 0 |- eqAnd.in 3) to[short, *-] (eqAnd.in 3);
+    \draw (\xBUSZero, 0 |- eqAnd.in 4) to[short, *-] (eqAnd.in 4);
+    
+    % Output Node for A = B
+    \draw (eqAnd.out) -- ++(0.5,0) coordinate (eqOut);
+    
+    
+    % ==========================
+    % Output NOR Logic (A < B)
+    % ==========================
+    % A < B = NOR(A > B, A = B)
+    
+    \node[nor port, scale=1.2, anchor=in 2] (ltNor) at (\xOR+4, 1.5) {}; 
+    % Using rough coordinate: gtOr is at y=6.25 (approx), eqAnd at y=-1.
+    % ltNor should be between them.
+    
+    % Route gtOr output (A > B) to NOR input 1
+    \draw (gtOut) |- (ltNor.in 1);
+    
+    % Route eqAnd output (A = B) to NOR input 2
+    \draw (eqOut) |- (ltNor.in 2);
+    
+    \draw (ltNor.out) -- ++(0.5,0) node[right] (altOut) {$A < B$};
+    \draw (gtOut) to[short,*-] (gtOut -| altOut.west) node[right] {$A > B$};
+    \draw (eqOut) to[short,*-] (eqOut -| altOut.west) node[right] {$A = B$};
+
+\end{circuitikz}
+\end{document}
