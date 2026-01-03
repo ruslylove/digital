@@ -207,9 +207,9 @@ $$ Q_0 = (\overline{Q_4} \cdot \overline{Q_2} \cdot Q_0 \cdot SCLK \cdot MOSI) +
 
   * **Note:** The equations must explain *why* they are written that way. Do not just state the final result.
 
+
 ---
-layout: two-cols
----
+
 
 ## Implementation Workflow
 
@@ -222,7 +222,48 @@ layout: two-cols
       * 4th Bit Error Test.
       * Continuous Sequence Test.
 
-:: right ::
+
+---
+
+## Simulation & RTL Verification
+
+Verification of the design using Quartus RTL Viewer and Waveform Simulation.
+
+### Top Level RTL
+<img src="/spi_top_level.png" class="rounded-lg w-full mx-auto p-4" alt="Top Level RTL">
+
+---
+
+### Edge Detector
+<img src="/spi_edge.png" class="rounded-lg w-full mx-auto p-4" alt="Edge Detector RTL">
+
+
+---
+
+## RTL: FSM & Output Modulator
+
+### Main FSM
+<img src="/spi_main_fsm.png" class="rounded-lg w-150 mx-auto p-4" alt="Main FSM RTL">
+
+---
+
+### Output Modulator
+<img src="/spi_output.png" class="rounded-lg w-full mx-auto p-4" alt="Output Modulator RTL">
+
+
+---
+
+## Simulation Cycle
+
+Complete successful detection sequence simulation.
+
+<img src="/spi_sim.png" class="rounded-lg w-full" alt="Simulation Waveform">
+
+* Correct sequence
+* 6th bit error (requirement is 4th bit)
+* Continuous sequence (begin with 000...)
+
+---
 
 ### 2\. Hardware Build (Task 6 & 7)
 
@@ -250,3 +291,4 @@ layout: two-cols
 <div class="text-xl font-bold text-red-600">
 Warning: "Bird nest like is un-acceptable"
 </div>
+
