@@ -1,0 +1,44 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{tikz}
+\usepackage{circuitikz}
+\ctikzset{logic ports=ieee}
+
+\begin{document}
+\begin{circuitikz}
+    
+    % --- Frequency Divider (Counter) ---
+    \draw (0,0) node[draw, rectangle, minimum width=2cm, minimum height=1.5cm, fill=yellow!10] (counter) {};
+    \node[above, font=\footnotesize] at (counter.north) {Freq. Divider};
+    
+    % System CLK Input
+    \draw (counter.west) to[short,-o] ++(-1,0) node[left] {System CLK};
+    
+    % Mod. CLK Output
+    \draw (counter.east) -- ++(1,0) coordinate (mod_clk);
+    \node[above, font=\tiny] at (mod_clk) {Mod. CLK};
+
+
+    % --- State Minterm (Detection Logic) ---
+    % Assume state q_n lines come in. Let's abstract this as a block or inputs.
+    % The user said "final state minterm", implying logic that detects S6.
+    
+    \draw (4, 1.5) node[and port, number inputs=3] (minterm) {};
+    \node[left, font=\footnotesize] at (minterm.in 1) {$Q_2$};
+    \node[left, font=\footnotesize] at (minterm.in 2) {$Q_1$};
+    \node[left, font=\footnotesize] at (minterm.in 3) {$\overline{Q_0}$};
+    \node[above, font=\footnotesize] at (minterm.north) {Match ($S_6$)};
+    
+    % --- Final Output Modulation ---
+    \draw ($(counter.east) + (5,0)$) node[and port,anchor=in 2] (final_and) {};
+    
+    % Connect Minterm to Final AND
+    \draw (minterm.out) -| (final_and.in 1);
+    
+    % Connect Mod. CLK to Final AND
+    \draw (mod_clk) |- (final_and.in 2);
+    
+    % Final Output
+    \draw (final_and.out) to[short,-o] ++(0.5,0) node[right] {Detected};
+
+\end{circuitikz}
+\end{document}

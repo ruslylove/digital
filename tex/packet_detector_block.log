@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=latex 2025.11.22)  3 JAN 2026 13:46
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=latex 2025.11.22)  3 JAN 2026 13:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**spi_block_diagram.tex
-(./spi_block_diagram.tex
+**packet_detector_block.tex
+(./packet_detector_block.tex
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
 (/usr/local/texlive/2025/texmf-dist/tex/latex/standalone/standalone.cls
@@ -446,22 +446,6 @@ s/tikzlibrarypositioning.code.tex
 File: tikzlibrarypositioning.code.tex 2023-01-15 v3.1.10 (3.1.10)
 )
 (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
-s/tikzlibraryshapes.geometric.code.tex
-File: tikzlibraryshapes.geometric.code.tex 2023-01-15 v3.1.10 (3.1.10)
-
-(/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/libraries/shapes/pgflibrary
-shapes.geometric.code.tex
-File: pgflibraryshapes.geometric.code.tex 2023-01-15 v3.1.10 (3.1.10)
-))
-(/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
-s/tikzlibraryshapes.symbols.code.tex
-File: tikzlibraryshapes.symbols.code.tex 2023-01-15 v3.1.10 (3.1.10)
-
-(/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/libraries/shapes/pgflibrary
-shapes.symbols.code.tex
-File: pgflibraryshapes.symbols.code.tex 2023-01-15 v3.1.10 (3.1.10)
-))
-(/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
 s/tikzlibraryfit.code.tex
 File: tikzlibraryfit.code.tex 2023-01-15 v3.1.10 (3.1.10)
 )
@@ -475,6 +459,22 @@ File: tikzlibrarybackgrounds.code.tex 2023-01-15 v3.1.10 (3.1.10)
 s/tikzlibrarycalc.code.tex
 File: tikzlibrarycalc.code.tex 2023-01-15 v3.1.10 (3.1.10)
 )
+(/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/librarie
+s/tikzlibraryshapes.geometric.code.tex
+File: tikzlibraryshapes.geometric.code.tex 2023-01-15 v3.1.10 (3.1.10)
+
+(/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/libraries/shapes/pgflibrary
+shapes.geometric.code.tex
+File: pgflibraryshapes.geometric.code.tex 2023-01-15 v3.1.10 (3.1.10)
+))
+(/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/libraries/pgflibraryarrows.
+meta.code.tex
+File: pgflibraryarrows.meta.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\pgfarrowinset=\dimen259
+\pgfarrowlength=\dimen260
+\pgfarrowwidth=\dimen261
+\pgfarrowlinewidth=\dimen262
+)
 (/usr/local/texlive/2025/texmf-dist/tex/latex/l3backend/l3backend-dvips.def
 File: l3backend-dvips.def 2024-05-08 L3 backend support: dvips
 \l__pdf_internal_box=\box68
@@ -484,8 +484,8 @@ File: l3backend-dvips.def 2024-05-08 L3 backend support: dvips
 \g__pdf_backend_link_int=\count308
 \g__pdf_backend_link_sf_int=\count309
 )
-(./spi_block_diagram.aux)
-\openout1 = `spi_block_diagram.aux'.
+(./packet_detector_block.aux)
+\openout1 = `packet_detector_block.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 6.
 LaTeX Font Info:    ... okay on input line 6.
@@ -505,19 +505,19 @@ LaTeX Font Info:    ... okay on input line 6.
 
 [1
 
-] (./spi_block_diagram.aux)
+] (./packet_detector_block.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 13878 strings out of 473191
- 291985 string characters out of 5715825
- 706651 words of memory out of 5000000
- 36904 multiletter control sequences out of 15000+600000
- 562182 words of font info for 48 fonts, out of 8000000 for 9000
+ 13848 strings out of 473191
+ 292074 string characters out of 5715825
+ 704646 words of memory out of 5000000
+ 36870 multiletter control sequences out of 15000+600000
+ 563993 words of font info for 54 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 102i,8n,107p,418b,905s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 102i,8n,107p,422b,818s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on spi_block_diagram.dvi (1 page, 23896 bytes).
+Output written on packet_detector_block.dvi (1 page, 22404 bytes).

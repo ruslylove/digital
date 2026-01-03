@@ -10,13 +10,17 @@
 ]
 
     % Sequence: 101011
-    % Inputs: MOSI, SCLK
-    % Hold on SCLK=0 (X0)
-    % Transition on SCLK=1 (X1)
+    % Inputs: MOSI, SCLK_rise
+    % Hold on SCLK_rise=0 (X0)
+    % Transition on SCLK_rise=1 (X1)
     
     % States
-    \node[state, initial] (s0) {$S_0$\\ (Reset)};
-    \node[state, right of=s0] (s1) {$S_1$\\ (1)};f
+    \node[state] (s0) {$S_0$\\ (Reset)};
+    
+    % Manual Start Arrow at 135 degrees
+    \draw [<-] (s0.135) -- ++(135:1.5cm) node [anchor=south east] {$start$};
+
+    \node[state, right of=s0] (s1) {$S_1$\\ (1)};
     \node[state, right of=s1] (s2) {$S_2$\\ (10)};
     \node[state, right of=s2] (s3) {$S_3$\\ (101)};
     \node[state, below of=s3] (s4) {$S_4$\\ (1010)};
@@ -24,11 +28,15 @@
     \node[state, left of=s5, accepting] (s6) {$S_6$\\ (Match)};
 
     % Transitions for Sequence 101011
-    % Labels: MOSI, SCLK
+    % Labels: MOSI, SCLK_rise
     
     % S0: Start
-    \path (s0) edge[loop above] node {X0, 01} (s0) % Hold or MOSI=0,SCLK=1
-               edge node {11} (s1); % MOSI=1, SCLK=1
+    % S0: Start
+    \node[left=1.5cm of s0, font=\small, align=right] (reset) {Global Reset\\(CS=1)};
+    \draw[->, densely dashed, thick] (reset) -- (s0);
+
+    \path (s0) edge[loop above] node {X0, 01} (s0) % Hold or MOSI=0,SCLK_rise=1
+               edge node {11} (s1); % MOSI=1, SCLK_rise=1
                
     % S1: Got 1
     \path (s1) edge[loop above] node {X0, 11} (s1) % Hold or Stay on 1
@@ -62,8 +70,9 @@
     % Legend
     \node[draw, rectangle, fill=white, align=left, font=\scriptsize, anchor=north] at (0,-5) (legend) {
         \textbf{Legend:} \\
-        Transition Label: \textbf{MOSI, SCLK} \\
-        \textbf{X0}: Any MOSI, SCLK=0 (Hold State) \\
+        Transition Label: \textbf{MOSI, SCLK\_rise} \\
+        \textbf{X0}: Any MOSI, SCLK\_rise=0 (Hold State) \\
+        \textbf{CS=1}: Asynchronous Reset to $S_0$ \\
         \textbf{Output}: Assert 'Detected' high \\
         in state $S_6$ (Match).
     };
