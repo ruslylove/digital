@@ -60,7 +60,7 @@
     % S5: Got 10101
     \path (s5) edge node {11} (s6) % Next 1 -> Match
                edge[loop below] node {X0} (s5) % Hold
-               edge node {01} (s2); % Back to S2 (10)
+               edge[bend right] node {01} (s4); % Back to S4 (1010 on 0)
                
     % S6: Match (101011).
     \path (s6) edge[loop below] node {X0} (s6) % Hold
