@@ -1,0 +1,61 @@
+\documentclass[border=10pt]{standalone}
+\usepackage[american]{circuitikz}
+
+\begin{document}
+\begin{circuitikz}
+    \ctikzset{logic ports=ieee}
+    \tikzset{bus/.style={line width=1.2pt}}
+
+    % --- Main Blocks ---
+    \node[draw, rectangle, minimum width=2.5cm, minimum height=4cm] (pg_logic) at (0, 2) {};
+    \node at (pg_logic.center) [align=center] {Propagate \& \\ Generate \\ Logic};
+    \node at (pg_logic.west) [yshift=+0.5cm] (Ain){};
+    \node at (pg_logic.west) [yshift=-0.5cm] (B_in){};
+    \node at (pg_logic.east) [yshift=+1.5cm] (Pbus){};
+    \node at (pg_logic.east) [yshift=+1cm] (Gbus){};
+
+
+
+    \node[draw, rectangle, minimum width=2.5cm, minimum height=2cm] (cla_logic) at (4, 1) {Carry Lookahead Logic};
+    \node at (cla_logic.north) [xshift=-1.5cm] (CLA_Gbus){};
+    \node at (cla_logic.south east) [yshift=+1.0cm] (Cbus){};
+    \node at (cla_logic.south) [xshift=-1.0cm] (Cin){};
+    \node at (cla_logic.south) [xshift=1.0cm] (C_out){};
+
+    \node[draw, rectangle, minimum width=2.5cm, minimum height=4cm] (sum_logic) at (8.5, 2) {};
+    \node at (sum_logic.center) [align=center] {Sum \\ Logic};
+    \node at (sum_logic.west) [yshift=+1.5cm] (Sum_Pbus){};
+    \node at (sum_logic.south west) [yshift=+1cm] (Sum_Cbus){};
+
+    % --- Inputs to P&G Logic ---
+    \draw[bus] (pg_logic.north west |- Ain) -- ++(-1,0) node[left] {$A_{3..0}$};
+    %\node at (pg_logic.north west |- Ain) [xshift=-0.2cm, yshift=0cm] {/}; 
+    %\node at (pg_logic.north west |- Ain) [xshift=-0.3cm, yshift=0.2cm] {4};
+    \draw[bus] (pg_logic.west |- B_in) -- ++(-1,0) node[left] {$B_{3..0}$};
+    %\node at (pg_logic.south west) [xshift=0.2cm, yshift=0.2cm] {/}; \node at (pg_logic.south west) [xshift=0.1cm, yshift=0.4cm] {4};
+
+    % --- P&G outputs to other blocks ---
+    % P bus
+    \draw[bus] (pg_logic.east |- Pbus) -- (sum_logic.west |- Sum_Pbus) node[midway, above] {$P_{3..0}$};
+    %\node at (pg_logic.east |- pg_logic.north) [xshift=-0.2cm, yshift=-0.2cm] {/}; \node at (pg_logic.east |- pg_logic.north) [xshift=-0.3cm, yshift=-0.4cm] {4};
+   \draw (pg_logic.east |- Pbus) -- ++(2.5,0) coordinate (p_tap);
+    \draw[bus] (p_tap) -| (cla_logic.north);
+
+    % G bus
+    \draw[bus] (pg_logic.east |- Gbus) -| (cla_logic.north -| CLA_Gbus) node[midway, right] {$G_{3..0}$};
+    %\node at (pg_logic.east |- pg_logic.south) [xshift=-0.2cm, yshift=0.2cm] {/}; \node at (pg_logic.east |- pg_logic.south) [xshift=-0.3cm, yshift=0.4cm] {4};
+
+    % --- CLA Logic connections ---
+    \draw (cla_logic.south -| Cin) |- ++(-5,-0.5) node[left] {$C_{in}(C_0)$};
+    \draw (cla_logic.south -| C_out) |- ++(+5.6,-0.5) node[right] {$C_{out}(C_4)$};
+    \draw[bus] (cla_logic.south east |- Cbus) -- ++(0.5,0) coordinate (c_bus);
+  %  \node at (cla_logic.east) [xshift=-0.2cm, yshift=0.2cm] {/}; \node at (cla_logic.east) [xshift=-0.3cm, yshift=0.4cm] {4};
+    \node at (c_bus) [above] {$C_{3..0}$};
+    \draw[bus] (c_bus) |- (sum_logic.west |- Sum_Cbus);
+
+    % --- Final Sum Output ---
+    \draw[bus] (sum_logic.east) -- ++(1,0) node[right] {$S_{3..0}$};
+ %   \node at (sum_logic.east) [xshift=-0.2cm, yshift=-0.2cm] {/}; \node at (sum_logic.east) [xshift=-0.3cm, yshift=-0.4cm] {4};
+
+\end{circuitikz}
+\end{document}

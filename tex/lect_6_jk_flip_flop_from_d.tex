@@ -1,0 +1,60 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+\begin{document}
+\begin{circuitikz}[american, scale=1.0]
+    \ctikzset{logic ports=ieee}
+    
+    % D Flip-Flop
+    \node[flipflop D] (DFF) at (4,0) {};
+    \node[above] at (DFF.n) {D Flip-Flop};
+    
+    % OR Gate aligned with D pin (pin 1 is top-left)
+    % We want OR output to go straight to DFF pin 1
+    \path (DFF.pin 1) -- ++(-1,0) coordinate (or_pos);
+    \node[or port, anchor=out] (OR) at (or_pos) {};
+    \draw (OR.out) -- (DFF.pin 1);
+    
+    % AND Gates
+    % Top AND (J*Q') feeds OR input 1
+    \path (OR.in 1) -- ++(-1,0.5) coordinate (and1_pos);
+    \node[and port, anchor=out] (AND1) at (and1_pos) {};
+    \draw (AND1.out) -| (OR.in 1);
+    
+    % Bottom AND (K'*Q) feeds OR input 2
+    \path (OR.in 2) -- ++(-1,-0.5) coordinate (and2_pos);
+    \node[and port, anchor=out] (AND2) at (and2_pos) {};
+    \draw (AND2.out) -| (OR.in 2);
+    
+    % Inputs
+    % J Input (to AND1.in 1)
+    \draw (AND1.in 2) -- ++(-2.5,0) node[left] {$J$};
+    
+    % K Input with NOT Gate (to AND2.in 1)
+    % Place NOT gate aligned with AND2 input 2
+    \path (AND2.in 1) -- ++(-1,0) coordinate (not_pos);
+    \node[not port, anchor=out, scale=0.5] (INV) at (not_pos) {};
+    \draw (INV.out) -- (AND2.in 1);
+    \draw (INV.in) -- ++(-0.5,0) node[left] {$K$};
+    
+    % Clock
+    % Route CLK neatly below
+    \draw (DFF.pin 3) -- ++(-0.5,0) -- ++(0,-1.5) -- ++(-8,0) node[left] {CLK};
+
+    % Feedback Loops
+    % Q' (pin 4) back to Top AND (in 2)
+    \draw (DFF.pin 4) -- ++(0.6,0) coordinate (Qbar);
+    % Route: Right -> Up -> Left -> Down
+    \draw (Qbar) -- ++(0.3,0) coordinate (Qbar_up);
+    \draw (Qbar_up) -- ++(0, 3.5) coordinate (top_run) -- (top_run -| AND1.in 1) -- (AND1.in 1);
+    \draw (Qbar_up) to[short,*-] ++(0.5,0) node[right] {$\bar{Q}$};
+    % Q (pin 6) back to Bottom AND (in 1)
+    \draw (DFF.pin 6) -- ++(0.3,0) coordinate (Q);
+    \draw (Q) to[short,*-] ++(1.2,0) node[right] {$Q$};
+    % Route: Right -> Down -> Left -> Up
+    \draw (Q) -- ++(0, -2.5) coordinate (bot_run) -- (bot_run -| AND2.in 2) -- (AND2.in 2);
+
+\end{circuitikz}
+\end{document}

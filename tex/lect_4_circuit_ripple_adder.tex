@@ -1,0 +1,64 @@
+\documentclass[border=10pt]{standalone}
+\usepackage[american]{circuitikz}
+
+% Define a new component style for the Full-Adder (FA) block
+\tikzset{
+    fulladder/.style={
+        draw,
+        rectangle,
+        minimum width=1.5cm,
+        minimum height=2.5cm,
+        label=center:FA,
+        anchor=center,
+        append after command={
+            \pgfextra{\let\mainnode=\tikzlastnode}
+            % Inputs
+            node at (\mainnode.north west) [yshift=-0.5cm] (A){}
+            node at (\mainnode.north west) [yshift=-1.5cm] (B){}
+            node at (\mainnode.east) [yshift=-0.8cm] (Cin){}
+            % Outputs
+            node at (\mainnode.north east) [yshift=-0.5cm] (S){}
+            node at (\mainnode.west) [yshift=-0.8cm] (Cout){}
+        }
+    }
+}
+
+\begin{document}
+\begin{circuitikz}
+    % Place Full Adders (from right to left for conventional diagram)
+    \node[fulladder] (FA0) at (9,0) {};
+    \node[fulladder] (FA1) at (6,0) {};
+    \node[fulladder] (FA2) at (3,0) {};
+    \node[fulladder] (FA3) at (0,0) {};
+
+    % Connect inputs A and B
+    \draw (FA0.west |- A) -| ++(-1,1) node[above] {$A_0$};
+    \draw (FA0.west |- B) -| ++(-0.5,2) node[above] {$B_0$};
+    \draw (FA1.west |- A) -| ++(-1,1) node[above] {$A_1$};
+    \draw (FA1.west |- B) -| ++(-0.5,2) node[above] {$B_1$};
+    \draw (FA2.west |- A) -| ++(-1,1) node[above] {$A_2$};
+    \draw (FA2.west |- B) -| ++(-0.5,2) node[above] {$B_2$};
+    \draw (FA3.west |- A) -| ++(-1,1) node[above] {$A_3$};
+    \draw (FA3.west |- B) -| ++(-0.5,2) node[above] {$B_3$};
+
+    % Connect outputs S
+    \draw (FA0.east |- S) -| ++(0.25,-3) node[below] {$S_0$};
+    \draw (FA1.east |- S) -| ++(0.25,-3) node[below] {$S_1$};
+    \draw (FA2.east |- S) -| ++(0.25,-3) node[below] {$S_2$};
+    \draw (FA3.east |- S) -| ++(0.25,-3) node[below] {$S_3$};
+
+    % Chain the Carries
+    \draw (FA0.east |- Cin) -- ++(1,0) node[right] {$C_0$};
+    \draw (FA0.west |- Cout) |- (FA1.east |- Cin);
+    \node at (FA0.west |- Cout) [xshift=-0.5cm, yshift=-0.3cm] {$C_1$};
+    \draw (FA1.west |- Cout) |- (FA2.east |- Cin);
+    \node at (FA1.west |- Cout) [xshift=-0.5cm, yshift=-0.3cm] {$C_2$};
+
+    \draw (FA2.west |- Cout) |- (FA3.east |- Cin);
+    \node at (FA2.west |- Cout) [xshift=-0.5cm, yshift=-0.3cm] {$C_3$};
+
+
+    \draw (FA3.west |-Cout) -| ++(-0.5,-1.5) node[below] {$C_4$};
+
+\end{circuitikz}
+\end{document}

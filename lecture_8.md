@@ -53,7 +53,7 @@ An FSM consists of three main parts:
 
 </div>
 
-<img src="/fsm_general_block_diagram.svg" class="rounded-lg bg-white p-4 w-180 mx-auto mt-4" alt="FSM General Block Diagram">
+<img src="/lect_8_fsm_general_block_diagram.svg" class="rounded-lg bg-white p-4 w-180 mx-auto mt-4" alt="FSM General Block Diagram">
 <div class="text-center text-sm opacity-50 mt-2">Figure 8-1: General Block Diagram of an FSM</div>
 
 ---
@@ -114,7 +114,7 @@ layout: two-cols-header
 
 :: right ::
 
-<img src="/analysis_example_fsm.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Sequential Circuit for Analysis">
+<img src="/lect_8_analysis_example_fsm.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Sequential Circuit for Analysis">
 <div class="text-center text-sm opacity-50 mt-2">Figure 8-2: Example Circuit</div>
 
 **Equations:**
@@ -150,7 +150,7 @@ $$
 
 **State Diagram:**
 
-<img src="/analysis_example_state_diagram.svg" class="rounded-lg bg-white p-4 w-90 mx-auto" alt="Analysis Example State Diagram">
+<img src="/lect_8_analysis_example_state_diagram.svg" class="rounded-lg bg-white p-4 w-90 mx-auto" alt="Analysis Example State Diagram">
 
 
 
@@ -184,7 +184,7 @@ hide: true
 ### 1. State Diagram
 Let's assume a design requirement leads to this diagram:
 
-<img src="/fsm_example_1.svg" class="rounded-lg bg-white p-4 w-50 mx-auto" alt="State Diagram Example">
+<img src="/lect_8_fsm_example_1.svg" class="rounded-lg bg-white p-4 w-50 mx-auto" alt="State Diagram Example">
 
 ### 2. State Table
 
@@ -213,7 +213,7 @@ $$
 
 ### 4. Logic Diagram
 
-<img src="/fsm_example_1_circuit.svg" class="rounded-lg bg-white p-4 w-50 mx-auto" alt="Design Example Logic Circuit">
+<img src="/lect_8_fsm_example_1_circuit.svg" class="rounded-lg bg-white p-4 w-50 mx-auto" alt="Design Example Logic Circuit">
 
 </div>
 
@@ -263,7 +263,7 @@ $$
 
 We use K-maps to solve for $J$ and $K$ inputs:
 
-<img src="/up_down_counter_kmaps.svg" class="rounded-lg bg-white w-100 mx-auto" alt="K-Maps for Up/Down Counter">
+<img src="/lect_8_up_down_counter_kmaps.svg" class="rounded-lg bg-white w-100 mx-auto" alt="K-Maps for Up/Down Counter">
 
 </div>
 
@@ -291,7 +291,7 @@ Based on the derived equations:
 </div>
 <div class="col-span-2">
 
-<img src="/up_down_counter_circuit.svg" class="rounded-lg bg-white p-4 w-full mx-auto mt-4" alt="2-Bit Up/Down Counter Logic Diagram">
+<img src="/lect_8_up_down_counter_circuit.svg" class="rounded-lg bg-white p-4 w-full mx-auto mt-4" alt="2-Bit Up/Down Counter Logic Diagram">
 <div class="text-center text-sm opacity-50 mt-2">Figure 8-3: Logic Diagram of 2-Bit Up/Down Counter</div>
 
 </div>
@@ -318,7 +318,7 @@ layout: two-cols-header
 
 ### State Diagram
 
-<img src="/car_security_fsm.svg" class="rounded-lg bg-white p-4 w-70 mx-auto" alt="Car Security System State Diagram">
+<img src="/lect_8_car_security_fsm.svg" class="rounded-lg bg-white p-4 w-70 mx-auto" alt="Car Security System State Diagram">
 
 
 
@@ -350,7 +350,7 @@ layout: two-cols-header
 
 We derive the Next State equation from Karnaugh maps:
 
-<img src="/car_security_kmaps.svg" class="rounded-lg bg-white p2 w-60 mx-auto" alt="Car Security K-Maps">
+<img src="/lect_8_car_security_kmaps.svg" class="rounded-lg bg-white p2 w-60 mx-auto" alt="Car Security K-Maps">
 
 **Equation:**
 *   $Q_{next} = M \cdot (Q + D + V)$
@@ -360,7 +360,7 @@ We derive the Next State equation from Karnaugh maps:
 
 ### Logic Diagram
 
-<img src="/car_security_circuit.svg" class="rounded-lg bg-white p-4 w-120 mx-auto" alt="Car Security Logic Circuit">
+<img src="/lect_8_car_security_circuit.svg" class="rounded-lg bg-white p-4 w-120 mx-auto" alt="Car Security Logic Circuit">
 <div class="text-center text-sm opacity-50 mt-2">Figure 8-4: Car Security Logic Diagram</div>
 
 ---
@@ -437,7 +437,7 @@ end Behavioral;
 *   **States:** 000, 001, 010, 011, 100, 101.
 *   **Transitions:** $0 \to 1 \to 2 \to 3 \to 4 \to 5 \to 0$.
 
-<img src="/modulo_6_counter.svg" class="rounded-lg bg-white p-4 w-full mx-auto mt-4" alt="Modulo-6 Up-Counter State Diagram">
+<img src="/lect_8_modulo_6_counter.svg" class="rounded-lg bg-white p-4 w-full mx-auto mt-4" alt="Modulo-6 Up-Counter State Diagram">
 
 </div>
 <div class="text-sm">
@@ -478,7 +478,7 @@ layout: two-cols-header
 :: left ::
 
 We assume **D Flip-Flops**.
-<img src="/modulo_6_kmaps.svg" class="rounded-lg bg-white p-4 w-100 mx-auto" alt="Modulo-6 K-Maps">
+<img src="/lect_8_modulo_6_kmaps.svg" class="rounded-lg bg-white p-4 w-100 mx-auto" alt="Modulo-6 K-Maps">
 
 :: right ::
 
@@ -492,7 +492,7 @@ We assume **D Flip-Flops**.
 
 ### 3. Logic Diagram
 
-<img src="/modulo_6_circuit.svg" class="rounded-lg bg-white p-4 w-110 mx-auto" alt="Modulo-6 Logic Circuit">
+<img src="/lect_8_modulo_6_circuit.svg" class="rounded-lg bg-white p-4 w-110 mx-auto" alt="Modulo-6 Logic Circuit">
 <div class="text-center text-sm opacity-50 mt-2">Figure 8-5: Modulo-6 Counter Logic Diagram</div>
 
 ---
@@ -534,7 +534,7 @@ end process;
 ### State Diagram
 
 
-<img src="/one_shot_fsm.svg" class="rounded-lg bg-white p-4 w-100 mx-auto" alt="One-Shot Circuit State Diagram">
+<img src="/lect_8_one_shot_fsm.svg" class="rounded-lg bg-white p-4 w-100 mx-auto" alt="One-Shot Circuit State Diagram">
 
 
 
@@ -568,7 +568,7 @@ $$
 
 From the Next State table, we derive the K-maps for $D_1, D_0$ and Output $S$. Note that the unused state $11$ resets to $00$.
 
-<img src="/one_shot_kmaps.svg" class="rounded-lg bg-white p-2 w-full mx-auto" alt="One-Shot K-Maps">
+<img src="/lect_8_one_shot_kmaps.svg" class="rounded-lg bg-white p-2 w-full mx-auto" alt="One-Shot K-Maps">
 
 **Equations:**
 *   $D_1 = Q_1' Q_0 + Q_1 Q_0' B$
@@ -579,7 +579,7 @@ From the Next State table, we derive the K-maps for $D_1, D_0$ and Output $S$. N
 
 ### Logic Diagram
 
-<img src="/one_shot_circuit.svg" class="rounded-lg bg-white p-4 w-120 mx-auto" alt="One-Shot Logic Circuit">
+<img src="/lect_8_one_shot_circuit.svg" class="rounded-lg bg-white p-4 w-120 mx-auto" alt="One-Shot Logic Circuit">
 <div class="text-center text-sm opacity-50 mt-2">Figure 8-6: One-Shot Circuit Logic Diagram</div>
 
 ---
@@ -646,7 +646,7 @@ In this example, we will synthesize an FSM that illustrates what a simple contro
 <div>
 
 <!-- Placeholder for Figure 6.18(a) -->
-<img src="/simple_cpu_fsm_example.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Simple CPU FSM">
+<img src="/lect_8_simple_cpu_fsm_example.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Simple CPU FSM">
 <div class="text-center text-sm opacity-50 mt-2">Figure 8-7: Control Unit State Diagram</div>
 
 </div>
@@ -676,7 +676,7 @@ In this example, we will synthesize an FSM that illustrates what a simple contro
 <div>
 
 <!-- Elevator Setup Illustration -->
-<img src="/elevator_setup.svg" class="rounded-lg bg-white p-4 w-full mx-auto mb-4" alt="Elevator System Setup">
+<img src="/lect_8_elevator_setup.svg" class="rounded-lg bg-white p-4 w-full mx-auto mb-4" alt="Elevator System Setup">
 <div class="text-center text-sm opacity-50 mt-2 mb-8">Figure 8-8: Elevator System Setup</div>
 
 
@@ -697,7 +697,7 @@ layout: two-cols
 :: right ::
 
 <!-- Placeholder for Figure 6.19(a) (FSM Diagram) -->
-<img src="/elevator_fsm.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Elevator FSM">
+<img src="/lect_8_elevator_fsm.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Elevator FSM">
 <div class="text-center text-sm opacity-50 mt-2">Figure 8-9: Elevator Controller State Diagram</div>
 
 ---
@@ -734,7 +734,7 @@ $$
 :: right ::
 
 **Next State K-Maps**
-<img src="/elevator_moore_kmaps.svg" class="rounded-lg bg-white p-2 w-full mx-auto" alt="Moore Elevator K-Maps">
+<img src="/lect_8_elevator_moore_kmaps.svg" class="rounded-lg bg-white p-2 w-full mx-auto" alt="Moore Elevator K-Maps">
 
 **Equations:**
 *   $D_1 = Q_1'Q_0' f_2 + Q_1 Q_0 + Q_1 Q_0' f_1'$
@@ -763,7 +763,7 @@ layout: two-cols-header
 
 ### Mealy State Diagram
 
-<img src="/elevator_mealy_fsm.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Mealy Elevator State Diagram">
+<img src="/lect_8_elevator_mealy_fsm.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Mealy Elevator State Diagram">
 <div class="text-center text-sm opacity-50 mt-2">Figure 8-10: Mealy Elevator State Diagram</div>
 
 
@@ -799,7 +799,7 @@ $$
 :: right ::
 
 **Next State K-Maps**
-<img src="/elevator_mealy_kmaps.svg" class="rounded-lg bg-white p-2 w-full mx-auto" alt="Mealy Elevator K-Maps">
+<img src="/lect_8_elevator_mealy_kmaps.svg" class="rounded-lg bg-white p-2 w-full mx-auto" alt="Mealy Elevator K-Maps">
 
 ---
 
@@ -1039,7 +1039,7 @@ $$
 
 **Question:** From the K-Map below for $D_0$, derive the simplified boolean equation.
 
-<img src="/exercise_8_8_kmap.svg" class="rounded-lg bg-white p-2 w-40 mx-auto" alt="K-Map for Exercise 8-8">
+<img src="/lect_8_exercise_8_8_kmap.svg" class="rounded-lg bg-white p-2 w-40 mx-auto" alt="K-Map for Exercise 8-8">
 
 
 

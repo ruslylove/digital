@@ -1,0 +1,32 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+\usetikzlibrary{shapes, arrows, positioning, calc}
+
+\begin{document}
+\begin{circuitikz}
+
+    % Box for the Converter
+    \node[draw, rectangle, minimum width=4cm, minimum height=4cm, thick, fill=blue!10] (Block) at (0,0) {\large \begin{tabular}{c} BCD to \\ Excess-3 \\ Converter \end{tabular}};
+
+    % Inputs A, B, C, D
+    \node at ($(Block.west) + (-1, 1.5)$) [left] {$A$};
+    \draw[thick] ($(Block.west) + (0, 1.5)$) -- ++(-1, 0);
+
+    \node at ($(Block.west) + (-1, 0.5)$) [left] {$B$};
+    \draw[thick] ($(Block.west) + (0, 0.5)$) -- ++(-1, 0);
+
+    \node at ($(Block.west) + (-1, -0.5)$) [left] {$C$};
+    \draw[thick] ($(Block.west) + (0, -0.5)$) -- ++(-1, 0);
+
+    \node at ($(Block.west) + (-1, -1.5)$) [left] {$D$};
+    \draw[thick] ($(Block.west) + (0, -1.5)$) -- ++(-1, 0);
+
+
+    % Outputs w, x, y, z
+    \draw[thick] ($(Block.east) + (0, 1.5)$) -- ++(1, 0) node[right] {$w$};
+    \draw[thick] ($(Block.east) + (0, 0.5)$) -- ++(1, 0) node[right] {$x$};
+    \draw[thick] ($(Block.east) + (0, -0.5)$) -- ++(1, 0) node[right] {$y$};
+    \draw[thick] ($(Block.east) + (0, -1.5)$) -- ++(1, 0) node[right] {$z$};
+
+\end{circuitikz}
+\end{document}

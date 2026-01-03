@@ -1,0 +1,65 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+\usetikzlibrary{calc}
+
+\begin{document}
+\begin{circuitikz}[american, scale=1.0]
+    \ctikzset{logic ports=ieee}
+    \ctikzset{flipflops/scale=0.8}
+    
+    % Common Signals
+    \node (clk_in) at (-2, -1.5) {CLK};
+    \node (clr_in) at (-2, -2) {Clear};
+    %\node (serial_in) at (-2, 0) {Serial In};
+    
+    % Positioning
+    \def\ffdist{4.0}
+    
+    \foreach \i in {3,2,1,0} {
+        \pgfmathsetmacro{\xpos}{(3-\i)*\ffdist}
+        
+        % Flip-Flop
+        \node[flipflop D] (FF\i) at (\xpos, 0) {};
+        \node[above] at (FF\i.n) {$D_\i$};
+        \draw (FF\i.pin 6) -- ++(0.5, 0) coordinate (Q\i_out) node[right] {};
+        
+        % Clock
+        
+        % Clear
+        \draw (FF\i.s) -- ++(0,-0.2) coordinate (clr_pt);
+
+        \ifnum\i=0
+        \else
+        \draw (clr_pt) -- (clr_pt |- clr_in) node[circ] {};
+        \draw (FF\i.pin 3) -- (FF\i.pin 3 |- clk_in) node[circ] {};
+        \fi
+    }
+    
+    % Serial Input connection to D3
+    \draw (FF3.pin 1) -- ++(-0.3,0) node[left] {Serial In};
+    
+    % Interstage Connections (Shift Right)
+    % Q3 -> D2, Q2 -> D1, Q1 -> D0
+    %\draw (Q3_out) -- ++(0.5, 0) -- ++(0, 0.5) -- ($(FF2.pin 1) + (-0.5, 0.5)$) -- ++(0, -0.5) -- (FF2.pin 1);
+    % Actually straight line is better if aligned
+    % Q output is pin 6 (top right usually), D input is pin 1 (top left).
+    % If they are on same Y, direct connect?
+    % The node `node[right] {$Q_\i$}` might block.
+    % Let's draw below or above.
+    
+    % Let's redraw connections cleanly.
+    % FF3.pin 6 is Q. FF2.pin 1 is D.
+    % They are spaced by \ffdist.
+    \draw (FF3.pin 6) -- (FF2.pin 1);
+    \draw (FF2.pin 6) -- (FF1.pin 1);
+    \draw (FF1.pin 6) -- (FF0.pin 1);
+    
+    % Serial Output from Q0
+    \draw (FF0.pin 6) -- ++(0.5, 0) node[right] {Serial Out};
+    
+    % Finish Rails
+    \draw (clk_in)  -| (FF0.pin 3);
+    \draw (clr_in) -| (FF0.s);
+    
+\end{circuitikz}
+\end{document}

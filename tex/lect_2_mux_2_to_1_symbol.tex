@@ -1,0 +1,29 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+
+\begin{document}
+
+\begin{circuitikz}[thick]
+    \node [muxdemux, muxdemux def={Lh=4, NL=2, Rh=3, NR=1, NB=1, w=2, square pins=1}] (mux) at (0,0) {};
+    
+    % Input labels
+    \node [left] at (mux.lpin 1) {$x_1$};
+    \node [left] at (mux.lpin 2) {$x_2$};
+
+    % Pin numbers
+    \node [right][xshift=8pt] at (mux.lpin 1) {0};
+    \node [right][xshift=8pt] at (mux.lpin 2) {1};
+    
+    % Output label
+    \node [right] at (mux.rpin 1) {$f$};
+    
+    % Select label
+    \node [below] at (mux.bpin 1) {$s$};
+    
+    % Internal pin numbers (optional, matching previous style if needed, but standard symbol usually doesn't show them inside like that)
+    %\node [right, font=\tiny] at (mux.lpin 1) {0};
+    %\node [right, font=\tiny] at (mux.lpin 2) {1};
+    
+\end{circuitikz}
+
+\end{document}

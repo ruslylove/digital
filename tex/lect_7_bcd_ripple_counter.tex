@@ -1,0 +1,112 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+\usetikzlibrary{calc}
+
+\begin{document}
+\begin{circuitikz}[american, scale=1.0]
+    \ctikzset{logic ports=ieee}
+    \ctikzset{flipflops/scale=0.85}
+    
+    % Signals
+    \node (clk_in) at (-3, 0) {Clock};
+    \node (logic_1) at (-3, -3) {Logic 1};
+    
+    % Flip-Flops
+    % LSB (A0) on Left -> MSB (A3) on Right
+    % FF0: J=1, K=1
+    % FF1: J=Q3', K=1
+    % FF2: J=1, K=1
+    % FF3: J=Q1*Q2, K=1
+    
+    \def\ffdist{4.5}
+    
+    \foreach \i [count=\n from 0] in {0,1,2,3} {
+        \pgfmathsetmacro{\xpos}{\n*\ffdist}
+        
+        % JK Flip-Flop
+        \node[flipflop JK,flipflop def={nd=1,n2=1}] (FF\i) at (\xpos, 0) {};
+        
+        % Outputs
+        \node[above] at (FF\i.n) {$Q_\i$};
+        \draw (FF\i.pin 6) -- ++(0.5, 0) coordinate (Q\i_out);
+       % \draw (Q\i_out) -- ++(0.3, 0) node[circ, label={above:$Q_\i$}] {};
+        
+        % Tie K to Logic 1 for all
+        \draw (FF\i.pin 3) -- ++(-0.2, 0) coordinate (K_stub_\i);
+        \ifnum\i=3
+        \else
+        \draw (K_stub_\i) -- (K_stub_\i |- logic_1) node[circ] {};
+        \fi
+    }
+    
+    % Logic 1 Rail (Top)
+    \draw (logic_1) -| (K_stub_3);
+    
+    % Clock Connections 
+    % A0 Clock -> External Clock
+    \draw (clk_in) -- (FF0.pin 2);
+    
+    % FF1 Clock <- Q0
+   % \draw (Q0_out) -- ++(0, -3.2) coordinate (rip0);
+    \draw (Q0_out) |- (FF1.pin 2);
+    
+    % FF2 Clock <- Q1
+    \draw (Q1_out) |- (FF2.pin 2);
+    %\draw (rip1) -- (rip1 -| FF2.pin 2) -- (FF2.pin 2);
+    
+    % FF3 Clock <- Q0 (Directly from Q0)
+    % According to design, FF3 is clocked by Q0? 
+    % Wait, standard design:
+    % Q0 -> CP1
+    % Q1 -> CP2
+    % Q0 -> CP3 (Falling edge of Q0 clocks Q3)
+    
+    %\draw (rip0) -- (rip0 -| FF3.pin 2) -- (FF3.pin 2);
+    \draw (FF3.pin 2) -- ++(-1,0) -- ++(0, -2.5) -| (Q0_out |- FF1.pin 2) node[circ] {} ;
+    
+    
+    % J Inputs Logic
+    
+    % FF0: J=1
+    \draw (FF0.pin 1) -- ++(-0.2, 0) coordinate (J0_stub);
+    \draw (J0_stub) -- (J0_stub |- FF0.pin 3) node[circ] {};
+    
+    % FF1: J = Q3'
+    % Need Q3' output from FF3.
+    % Connect Q3' to J1.
+    \draw (FF3.pin 4) -- ++(0.2, 0) -- ++(0, -1) coordinate (Q3n_turn);
+    \draw (Q3n_turn) -- ($(Q3n_turn -| FF1.pin 1) + (-0.5,0)$) |- (FF1.pin 1);
+    
+    % FF2: J=1
+    \draw (FF2.pin 1) -- ++(-0.2, 0) coordinate (J2_stub);
+    \draw (J2_stub) -- (J2_stub |- FF2.pin 3) node[circ] {};
+    
+    % FF3: J = Q2 AND Q1
+    % Place AND gate before FF3 J input
+    \node[and port,scale=0.8] (AND) at ($(FF3.pin 1) + (-1, 0)$) {};
+    \draw (AND.out) -- (FF3.pin 1);
+    
+    % Inputs to AND: Q2 and Q1
+    % Since AND is near FF3, Q2 is close. Q1 is further.
+    
+    % Connect Q2 to AND input 1 (top)
+    \draw (Q2_out) ++(0.2,0) coordinate (tap_Q2);
+    
+    \draw (Q2_out) -| (AND.in 2);
+    
+    % Connect Q1 to AND input 2 (bottom)
+    % Run a line below or above? Above might cross Logic 1 rail. Below implies crossing everything.
+    % Let's run it midway or via top.
+    
+
+    % Route via top area but below logic 1 rail
+    \draw (Q1_out) to[short,*-] ++(0, +1) coordinate (route_q1);
+    \draw (route_q1) -- (route_q1 -| AND.in 1) -- (AND.in 1);
+    
+    % No explicit reset lines needed for this design (it resets via J/K logic)
+    % Remove old reset logic and pins?
+    % The user didn't ask to remove reset pins, but "reset logic" usually means the NAND gate stuff is gone.
+    % I will remove the NAND gate reset logic completely.
+    
+\end{circuitikz}
+\end{document}

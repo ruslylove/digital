@@ -1,0 +1,75 @@
+\documentclass[border=10]{standalone}
+\usepackage{circuitikz}
+\ctikzset{logic ports=ieee}
+
+\begin{document}
+\begin{circuitikz}
+
+% AND Gates
+\node[and port, number inputs=3] (and0) at (0, 4.5) {};
+\node[and port, number inputs=3] (and1) at (0, 1.5) {};
+\node[and port, number inputs=3] (and2) at (0, -1.5) {};
+\node[and port, number inputs=3] (and3) at (0, -4.5) {};
+
+% Inputs I0-I3 (Moved further left)
+\draw (and0.in 1) -- (-4.5, 0 |- and0.in 1) node[left] {$I_0$};
+\draw (and1.in 1) -- (-4.5, 0 |- and1.in 1) node[left] {$I_1$};
+\draw (and2.in 1) -- (-4.5, 0 |- and2.in 1) node[left] {$I_2$};
+\draw (and3.in 1) -- (-4.5, 0 |- and3.in 1) node[left] {$I_3$};
+
+% OR Gate (Moved right to avoid congestion)
+\node[or port, number inputs=4] (or) at (4, 0) {};
+\draw (or.out) -- ++(1,0) node[right] {$Y$};
+
+% Select Lines Structure
+% S1, S0 at top (Moved upward)
+\node[above] at (-2, 8) {$S_1$};
+\node[above] at (-3, 8) {$S_0$};
+
+% Vertical lines for Selects (S0 at x=-3, S1 at x=-2)
+% NOT gates placed high up
+% S1 Logic
+\draw (-2, 8) -- (-2, 6.5);
+\node[not port, rotate=-90, scale=0.6] (notS1) at (-1.5, 6.5) {}; 
+\draw (-2, 6.5) |- (notS1.in);
+\draw (notS1.out) -- (-1.5, -6); % S1' line
+\draw (-2, 6.5) -- (-2, -6);     % S1 line
+
+% S0 Logic
+\draw (-3, 8) -- (-3, 6.5);
+\node[not port, rotate=-90, scale=0.6] (notS0) at (-2.5, 6.5) {};
+\draw (-3, 6.5) |- (notS0.in);
+\draw (notS0.out) -- (-2.5, -6); % S0' line
+\draw (-3, 6.5) -- (-3, -6);     % S0 line
+
+% Connections
+% S1' is at x = -1.5
+% S0' is at x = -2.5
+
+% and0: I0, S1', S0'
+\draw (and0.out) -- ++(0.8,0) |- (or.in 1);
+\draw (and0.in 2) -- (-1.5, 0 |- and0.in 2) node[circ]{}; % Connect to S1'
+\draw (and0.in 3) -- (-2.5, 0 |- and0.in 3) node[circ]{}; % Connect to S0'
+
+% and1: I1, S1', S0
+% S0 is at x = -3
+\draw (and1.out) -- ++(0.5,0) |- (or.in 2);
+\draw (and1.in 2) -- (-1.5, 0 |- and1.in 2) node[circ]{}; % Connect to S1'
+\draw (and1.in 3) -- (-3, 0 |- and1.in 3) node[circ]{};   % Connect to S0
+
+% and2: I2, S1, S0'
+% S1 is at x = -2
+% S0' is at x = -2.5
+\draw (and2.out) -- ++(0.5,0) |- (or.in 3);
+\draw (and2.in 2) -- (-2, 0 |- and2.in 2) node[circ]{};   % Connect to S1
+\draw (and2.in 3) -- (-2.5, 0 |- and2.in 3) node[circ]{}; % Connect to S0'
+
+% and3: I3, S1, S0
+% S1 is at x = -2
+% S0 is at x = -3
+\draw (and3.out) -- ++(0.8,0) |- (or.in 4);
+\draw (and3.in 2) -- (-2, 0 |- and3.in 2) node[circ]{};   % Connect to S1
+\draw (and3.in 3) -- (-3, 0 |- and3.in 3) node[circ]{};   % Connect to S0
+
+\end{circuitikz}
+\end{document}

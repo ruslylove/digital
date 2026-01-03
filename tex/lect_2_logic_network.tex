@@ -1,0 +1,33 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+
+\ctikzset{
+logic ports=ieee,
+logic ports/scale=1,
+}
+
+\begin{document}
+\begin{circuitikz}[thick]
+
+    % OR gate
+    \node[or port] (G1) at (0,2) {};
+    % AND gate
+    \node[and port] (G2) at (3,1) {};
+
+    % OR gate inputs
+    \draw (G1.in 1) -- ++(-0.5,0) node[left] {$x_1$};
+    \draw (G1.in 2) -- ++(-0.5,0) node[left] {$x_2$};
+
+    % Connections
+    % OR out to AND in 1 (using horizontal then vertical segments if needed, or straight)
+    % G1.out is around (1,2), G2.in 1 is around (2, 1.2 or so). 
+    % Let's use orthogonal routing -| 
+    \draw (G1.out) -| (G2.in 1);
+    
+    % AND in 2 from x3
+    \draw (G2.in 2) -- ++(-3.5,0) node[left] {$x_3$};
+
+    % Output
+    \draw (G2.out) -- ++(0.5,0) node[right] {$f$};
+\end{circuitikz}
+\end{document}

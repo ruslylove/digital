@@ -1,0 +1,82 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+\usetikzlibrary{calc}
+
+\begin{document}
+\begin{circuitikz}[american, scale=1.0]
+    \ctikzset{logic ports=ieee}
+    
+    % Inputs
+    \node (clk_in) at (-1, -5.1) {CLK};
+    
+    % Flip-Flops
+    \node[flipflop JK] (JK_A) at (8, 2) {};
+    \node[above] at (JK_A.n) {Flip-Flop A};
+    \node[flipflop JK] (JK_B) at (8, -3) {};
+    \node[above] at (JK_B.n) {Flip-Flop B};
+
+    % Logic for JA = Bx'
+    % AND gate (B, x')
+    \path (JK_A.pin 1) -- ++(-3, 0) coordinate (ja_pos);
+    \node[and port] (AND_JA) at (ja_pos) {$Bx'$};
+    \draw (AND_JA.out) -- (JK_A.pin 1);
+
+    % Inverter for x (to get x')
+    % Place to left of AND_JA
+    \draw (AND_JA.in 2) -- ++(-1, 0) node[not port, scale=0.5, anchor=out] (NOT_x) {};
+    % Route x to NOT
+    \draw (NOT_x.in) -- ++(-0.5,0) coordinate (x_bus_top);
+    \draw (x_bus_top) to[short, *-] ++(-1,0) node[left] {$x$};
+
+    % Logic for KA = x
+    % Connect directly to x line
+    \draw (JK_A.pin 3) to[short,-*] (JK_A.pin 3 -| x_bus_top);
+    % We need to route x to here.
+    % x_bus_top is at roughly (-4, 2-ish). KA is at (8, 2-offset).
+    % Let's drop a line from x_bus_top down to KA level
+    %\draw (x_bus_top) |- (KA_in) -- (JK_A.pin 3);
+
+    % Logic for JB = x
+    \draw (JK_B.pin 1) to[short,-*] (JK_B.pin 1 -| x_bus_top);
+    %\draw (x_bus_top) |- (JB_in) -- (JK_B.pin 1);
+
+    % Logic for KB = x'
+    % Take from NOT_x output
+    
+    \path (NOT_x.out) -- ++(0.5,0) node[circ] (KB_out) {};
+    \draw (JK_B.pin 3) -| (KB_out);
+    
+    % Connect x' to AND_JA (input 2) - already done via NOT_x placement
+
+    % Feedback B to AND_JA (input 1)
+    % B is at JK_B.pin 6
+    \draw (JK_B.pin 6) -- ++(1, 0) coordinate (B_out);
+    \node[right] at (B_out) {$B$};
+    \path (JK_B.pin 6) -- ++(0.4, 0) coordinate (B_common);
+    
+    % Route B up to AND_JA
+    \draw (B_common) to[short, *-] ++(0, 6.3) coordinate (B_top) -| (AND_JA.in 1);
+
+    % Output Logic y = Ax
+    \path (JK_A.pin 6) -- ++(2, 0) coordinate (y_pos);
+    \node[and port, anchor=in 1] (AND_y) at (y_pos) {$Ax$};
+    
+    % A to AND_y
+    \draw (JK_A.pin 6) -- ++(1, 0) coordinate (A_out);
+    \node[above right] at (A_out) {$A$};
+    \draw (A_out) -| (AND_y.in 1);
+    
+    % x to AND_y
+    % Route x from far left
+    \draw (x_bus_top) -- ++(0, -7.2) -| (AND_y.in 2);
+    
+    % Output y
+    \draw (AND_y.out) -- ++(0.5, 0) node[right] {$y$};
+
+    % Clock Distribution
+    \draw (JK_B.pin 2) -- ++(-0.5, 0) node[circ] (clk_node) {};
+    \draw (clk_in) -| (clk_node);
+    \draw (clk_node) |- (JK_A.pin 2);
+
+\end{circuitikz}
+\end{document}

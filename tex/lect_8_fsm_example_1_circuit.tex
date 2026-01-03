@@ -1,0 +1,20 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+
+\begin{document}
+\begin{circuitikz}
+    % Flip Flop
+    \node[flipflop D] (FF) at (2,0) {$A$};
+    
+    % Input x
+    \draw (FF.pin 1) -- ++(-0.5,0) node[left] (x) {$x$};
+    
+    % Connections
+    \draw (x) -- (FF.pin 1); % D input
+    \draw (FF.pin 3) -- ++(-0.5, 0) node[left] {clk}; % Clock
+    
+    % Output
+    \draw (FF.pin 6) -- ++(0.5, 0) node[right] {$A$};
+    
+\end{circuitikz}
+\end{document}

@@ -1,8 +1,8 @@
-PWD /Users/rusleesutthaweekul/Development/digital/tex
+PWD /Users/rus/development/digital/tex
 INPUT /usr/local/texlive/2025/texmf.cnf
 INPUT /usr/local/texlive/2025/texmf-dist/web2c/texmf.cnf
 INPUT /usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt
-INPUT /Users/rusleesutthaweekul/Development/digital/tex/sequential_analysis_example.tex
+INPUT /Users/rus/development/digital/tex/sequential_analysis_example.tex
 OUTPUT sequential_analysis_example.log
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/standalone/standalone.cls
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/standalone/standalone.cls

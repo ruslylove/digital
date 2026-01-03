@@ -162,7 +162,7 @@ The datapath must support fetching instructions and executing data operations.
 
 <!-- Placeholder for Datapath Image - Ideally this would be an SVG -->
 
-<img src="/ec1_datapath.png" class="rounded-lg bg-white p-2 w-full object-contain mx-auto" alt="EC-1 Datapath">
+<img src="/lect_10_ec1_datapath.png" class="rounded-lg bg-white p-2 w-full object-contain mx-auto" alt="EC-1 Datapath">
 <p class="text-center text-sm">Figure 10-1. EC-1 Datapath Diagram</p>
 
 
@@ -192,7 +192,7 @@ The datapath must support fetching instructions and executing data operations.
  </div>
  <div>
 
-<img src="/megafunction_rom_1_port.png" class="mx-auto p-4 w-85" alt="Megafunction ROM 1-Port" />
+<img src="/lect_10_megafunction_rom_1_port.png" class="mx-auto p-4 w-85" alt="Megafunction ROM 1-Port" />
 <p class="text-center text-sm">Figure 10-2. Megafunction ROM 1-Port</p>
  </div>
 </div>
@@ -220,7 +220,7 @@ The Control Unit orchestrates the datapath. It transitions through generic state
 
 :: right ::
 
-<img src="/ec1_fsm_no_wait.svg" class="rounded-lg bg-white p-2 w-full object-contain mx-auto" alt="EC-1 Control Unit FSM">
+<img src="/lect_10_ec1_fsm_no_wait.svg" class="rounded-lg bg-white p-2 w-full object-contain mx-auto" alt="EC-1 Control Unit FSM">
 <p class="text-center text-sm">Figure 10-3. EC-1 Control Unit FSM</p>
 
 ---
@@ -368,7 +368,7 @@ $$
 
 :: right ::
 
-<img src="/ec1_fsm.svg" class="rounded-lg bg-white pl-2 w-full object-contain mx-auto" alt="EC-1 Control Unit FSM">
+<img src="/lect_10_ec1_fsm.svg" class="rounded-lg bg-white pl-2 w-full object-contain mx-auto" alt="EC-1 Control Unit FSM">
 <p class="text-center text-sm">Figure 10-4. EC-1 Control Unit FSM with <b>"Wait"</b> state </p>
 
 
@@ -1048,7 +1048,7 @@ Addr  Hex  Assembly
 *   **`6080A0C1E0...`**: The machine code for the program.
 *   **`CF`**: Checksum.
 
-<img src="/quartus_intel_hex.png" class="mx-auto p-4" alt="Quartus Intel HEX" />
+<img src="/lect_10_quartus_intel_hex.png" class="mx-auto p-4" alt="Quartus Intel HEX" />
 <p class="text-center text-sm">Figure 10-5. Intel&reg; .hex editing in Quartus&reg; Prime</p>
 </div>
 
@@ -1138,17 +1138,17 @@ end Behavioral;
 
 ## EC-1 RTL Viewer
 
-<img src="/rtl_viewer_ec-1.png" class="mx-auto p-4" alt="EC-1 RTL Viewer" />
+<img src="/lect_10_rtl_viewer_ec-1.png" class="mx-auto p-4" alt="EC-1 RTL Viewer" />
 <p class="text-center text-sm">Figure 10-6. EC-1 RTL Viewer of Top Level</p>
 
 ---
 
 ## EC-1 Simulation: Countdown from 10 to 1
 
-<img src="/ec-1_count_10_9.png" class="mx-auto p-4" alt="EC-1 Count 10-9" />
+<img src="/lect_10_ec-1_count_10_9.png" class="mx-auto p-4" alt="EC-1 Count 10-9" />
 <p class="text-center text-sm">Figure 10-7. EC-1 Count 10, 9, ...</p>
 
-<img src="/ec-1_count_2_1.png" class="mx-auto p-4" alt="EC-1 Count 2-1" />
+<img src="/lect_10_ec-1_count_2_1.png" class="mx-auto p-4" alt="EC-1 Count 2-1" />
 <p class="text-center text-sm">Figure 10-8. EC-1 Count ..., 2, 1</p>
 
 <v-clicks every=2>
@@ -1270,7 +1270,7 @@ The **EC-2** improves upon the EC-1 by adding more instructions and capabilities
 
 :: right ::
 
-<img src="/von_neumann.svg" class="mx-auto w-90 p-4" alt="Von Neumann Architecture Block Diagram" />
+<img src="/lect_10_von_neumann.svg" class="mx-auto w-90 p-4" alt="Von Neumann Architecture Block Diagram" />
 <p class="text-center text-sm">Figure 10-9. Von Neumann Architecture Block Diagram</p>
 
 
@@ -1340,7 +1340,7 @@ To support the new instructions, the datapath is upgraded:
 </div>
 <div class="col-span-3">
 
-<img src="/ec-2_datapath.png" class="mx-auto p-4 w-full" alt="EC-2 Datapath" />
+<img src="/lect_10_ec-2_datapath.png" class="mx-auto p-4 w-full" alt="EC-2 Datapath" />
 <p class="text-center text-sm">Figure 10-10. EC-2 Datapath</p>
 </div>
 </div>
@@ -1368,7 +1368,7 @@ The FSM is slightly more complex to handle the memory operands.
 
 <div class="col-span-2">
 
-<img src="/ec2_fsm.svg" class="rounded-lg bg-white p-4 w-full mx-auto object-contain" alt="EC-2 Control Unit FSM">
+<img src="/lect_10_ec2_fsm.svg" class="rounded-lg bg-white p-4 w-full mx-auto object-contain" alt="EC-2 Control Unit FSM">
 <p class="text-center text-sm">Figure 10-11. EC-2 Control Unit FSM</p>
 
 </div>
@@ -1541,7 +1541,7 @@ The EC-2 is a **Multi-Cycle Processor**. Each instruction takes multiple cycles,
 
 :: right ::
 
-<img src="/ec2_wait_state.svg" class="mx-auto w-full p-4" alt="EC-2 Wait State FSM Diagram" />
+<img src="/lect_10_ec2_wait_state.svg" class="mx-auto w-full p-4" alt="EC-2 Wait State FSM Diagram" />
 <p class="text-center text-sm">Figure 10-12. Multi-Cycle Memory Access</p>
 
 ---
@@ -2091,7 +2091,7 @@ end Behavioral;
 
 ## EC-2 RTL Viewer
 
-<img src="/rtl_viewer_ec2.png" class="rounded-lg bg-white py-8 w-full object-contain mx-auto" alt="EC-2 RTL Viewer">
+<img src="/lect_10_rtl_viewer_ec2.png" class="rounded-lg bg-white py-8 w-full object-contain mx-auto" alt="EC-2 RTL Viewer">
 <p class="text-center text-sm">Figure 10-13. EC-2 RTL Viewer</p>
 
 
@@ -2099,9 +2099,9 @@ end Behavioral;
 
 ## EC-2 Simulation: GCD Calculation of 25 and 15
 
-<img src="/ec2_sim_1.png" class="rounded-lg bg-white py-8 w-full object-contain mx-auto" alt="EC-2 Testbench">
+<img src="/lect_10_ec2_sim_1.png" class="rounded-lg bg-white py-8 w-full object-contain mx-auto" alt="EC-2 Testbench">
 <p class="text-center text-sm">Figure 10-14. EC-2 Simulation: 1 of 4</p>
-<img src="/ec2_sim_2.png" class="rounded-lg bg-white py-8 w-full object-contain mx-auto" alt="EC-2 Testbench">
+<img src="/lect_10_ec2_sim_2.png" class="rounded-lg bg-white py-8 w-full object-contain mx-auto" alt="EC-2 Testbench">
 <p class="text-center text-sm">Figure 10-15. EC-2 Simulation: 2 of 4</p>
 
 <v-clicks every=2>
@@ -2215,9 +2215,9 @@ end Behavioral;
 
 ---
 
-<img src="/ec2_sim_3.png" class="rounded-lg bg-white py-5 w-full object-contain mx-auto" alt="EC-2 Testbench">
+<img src="/lect_10_ec2_sim_3.png" class="rounded-lg bg-white py-5 w-full object-contain mx-auto" alt="EC-2 Testbench">
 <p class="text-center text-sm">Figure 10-16. EC-2 Simulation: 3 of 4</p>
-<img src="/ec2_sim_4.png" class="rounded-lg bg-white py-5 w-full object-contain mx-auto" alt="EC-2 Testbench">
+<img src="/lect_10_ec2_sim_4.png" class="rounded-lg bg-white py-5 w-full object-contain mx-auto" alt="EC-2 Testbench">
 <p class="text-center text-sm">Figure 10-17. EC-2 Simulation: 4 of 4</p>
 
 <v-clicks every=2>

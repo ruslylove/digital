@@ -1,0 +1,88 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+\usetikzlibrary{calc}
+
+\begin{document}
+\begin{circuitikz}[circuitikz/logic ports=ieee]
+
+    % Inputs
+    \node (A) at (0, 11) {$A$};
+    \node (B) at (0, 10.5) {$B$};
+    \node (C) at (0, 10) {$C$};
+
+    % Vertical Input Lines
+    \draw (A) -- ++(1,0) coordinate (Ain);
+    \draw (B) -- ++(1,0) coordinate (Bin);
+    \draw (C) -- ++(1,0) coordinate (Cin);
+    
+    \draw (Ain) -| ++(0, -10.5) coordinate (A_bus);
+    \draw (Bin) -| ++(0.2, -10.5) coordinate (B_bus);
+    \draw (Cin) -| ++(0.4, -10.5) coordinate (C_bus);
+
+    % --- Stage 1: Carry Logic (AB, AC, BC) ---
+    \node[and port] (AND_AB) at (4, 9) {};
+    \node[and port] (AND_AC) at (4, 7.5) {};
+    \node[and port] (AND_BC) at (4, 6) {};
+
+    % Connections for Carry Logic
+    \draw (Ain |- AND_AB.in 1) to[short, *-] (AND_AB.in 1);
+    \draw (Bin |- AND_AB.in 2) ++(0.2,0) to[short, *-] (AND_AB.in 2);
+
+    \draw (Ain |- AND_AC.in 1) to[short, *-] (AND_AC.in 1);
+    \draw (Cin |- AND_AC.in 2) ++(0.4,0) to[short, *-] (AND_AC.in 2);
+
+    \draw (Bin |- AND_BC.in 1) ++(0.2,0) to[short, *-] (AND_BC.in 1);
+    \draw (Cin |- AND_BC.in 2) ++(0.4,0) to[short, *-] (AND_BC.in 2);
+
+    % --- Stage 1: T1 (A+B+C) and T2 (ABC) ---
+    \node[or port, number inputs=3] (OR_T1) at (4, 3.5) {};
+    \node[and port, number inputs=3] (AND_T2) at (4, 1) {};
+    
+    % Connections for T1
+    \draw (Ain |- OR_T1.in 1) to[short, *-] (OR_T1.in 1);
+    \draw (Bin |- OR_T1.in 2) ++(0.2,0) to[short, *-] (OR_T1.in 2);
+    \draw (Cin |- OR_T1.in 3) ++(0.4,0) to[short, *-] (OR_T1.in 3);
+    
+    % Connections for T2
+    \draw (Ain |- AND_T2.in 1) to[short, *-] (AND_T2.in 1);
+    \draw (Bin |- AND_T2.in 2) ++(0.2,0) to[short, *-] (AND_T2.in 2);
+    \draw (Cin |- AND_T2.in 3) ++(0.4,0) to[short, *-] (AND_T2.in 3);
+
+    % Label T1 and T2
+    \draw (OR_T1.out) -- ++(0.5,0) node[above right] {$T_1$};
+    \draw (AND_T2.out) -- ++(0.5,0) node[above right] {$T_2$};
+
+    % --- Stage 2: F2 (Carry Out) ---
+    \node[or port, number inputs=3] (OR_F2) at (7, 7.5) {};
+    
+    % Connections to F2
+    \draw (AND_AB.out) |- (OR_F2.in 1);
+    \draw (AND_AC.out) -- (OR_F2.in 2);
+    \draw (AND_BC.out) |- (OR_F2.in 3); 
+
+    % Output F2
+    \draw (OR_F2.out) -- ++(4,0) node[right] {$F_2$} coordinate (F2_out);
+
+    % --- Stage 3: NOT F2 ---
+    \node[not port, scale=0.5] (NOT_F2) at (9, 5.5) {};
+    \draw (F2_out) ++(-4,0) to[short, *-] ++(0,-2) |- (NOT_F2.in);
+
+    % --- Stage 4: T3 = F2' AND T1 ---
+    \node[and port] (AND_T3) at (11, 4.5) {};
+    
+    \draw (NOT_F2.out) -| (AND_T3.in 1);
+    \draw (OR_T1.out) -- ++(3,0) |- (AND_T3.in 2);
+    
+    \draw (AND_T3.out) -- ++(0.5,0) node[above] {$T_3$};
+
+    % --- Stage 5: F1 = T3 + T2 ---
+    \node[or port] (OR_F1) at (14, 2.5) {};
+    
+    \draw (AND_T3.out) -| (OR_F1.in 1);
+    \draw (AND_T2.out) -- ++(6,0) |- (OR_F1.in 2);
+
+    % Output F1
+    \draw (OR_F1.out) -- ++(1,0) node[right] {$F_1$};
+
+\end{circuitikz}
+\end{document}

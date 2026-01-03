@@ -29,7 +29,7 @@ A **register** is a group of flip-flops, with each flip-flop capable of storing 
 *   An *n-bit* register consists of *n* flip-flops and can store an *n-bit* binary word.
 *   In addition to the flip-flops, registers may have combinational gates that control how and when new information is transferred into the register.
 
-<img src="/4bit_register_diagram.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="4-bit Register">
+<img src="/lect_7_4bit_register_diagram.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="4-bit Register">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-1: 4-bit Register built from D Flip-Flops</div>
 
 ---
@@ -42,7 +42,7 @@ Loading a register means transferring new information into it. If all bits are t
 *   **If `Load = 1`:** The data from the input lines `I₀-I₃` is transferred into the flip-flops on the next clock edge.
 *   **If `Load = 0`:** The inputs are blocked, and the flip-flops retain their current value (feedback path).
 
-<img src="/4bit_register_parallel_load.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="4-bit Register with Parallel Load">
+<img src="/lect_7_4bit_register_parallel_load.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="4-bit Register with Parallel Load">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-2: 4-bit Register with Parallel Load</div>
 
 
@@ -56,7 +56,7 @@ A **shift register** is a register capable of shifting its stored binary informa
 *   All flip-flops share a common clock.
 *   On each clock pulse, data is shifted one position down the line.
 
-<img src="/4bit_shift_register.svg" class="rounded-lg bg-white p-4 w-full" alt="4-bit Shift Register">
+<img src="/lect_7_4bit_shift_register.svg" class="rounded-lg bg-white p-4 w-full" alt="4-bit Shift Register">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-3: 4-bit Shift Register</div>
 
 
@@ -75,14 +75,14 @@ In a **serial transfer**, information is moved one bit at a time.
 *   The destination register is shifted to accept bits at its serial input.
 *   After *n* clock pulses, the *n-bit* transfer is complete.
 
-<img src="/serial_transfer.svg" class="rounded-lg bg-white p-4 w-80 mx-auto" alt="Serial Transfer Example">
+<img src="/lect_7_serial_transfer.svg" class="rounded-lg bg-white p-4 w-80 mx-auto" alt="Serial Transfer Example">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-4: Serial Transfer from Register A to Register B</div>
 
 </div>
 
 <div>
 
-<img src="/serial_transfer_timing.svg" class="rounded-lg bg-white p-4 w-full" alt="Timing Diagram">
+<img src="/lect_7_serial_transfer_timing.svg" class="rounded-lg bg-white p-4 w-full" alt="Timing Diagram">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-5: Timing Diagram for Serial Transfer</div>
 
 
@@ -125,7 +125,7 @@ A serial adder is a sequential circuit that adds two binary numbers one bit at a
 
 :: right ::
 
-<img src="/serial_adder.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Serial Adder with D Flip-Flop">
+<img src="/lect_7_serial_adder.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Serial Adder with D Flip-Flop">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-6: Serial Adder using a Full Adder and D Flip-Flop</div>
 
 
@@ -207,7 +207,7 @@ $$
 
 :: right ::
 
-<img src="/universal_shift_register_block.svg" class="rounded-lg bg-white p-4" alt="4-bit Universal Shift Register Diagram">
+<img src="/lect_7_universal_shift_register_block.svg" class="rounded-lg bg-white p-4" alt="4-bit Universal Shift Register Diagram">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-7: Block Diagram of 4-Bit Universal Shift Register</div>
 
 ---
@@ -217,7 +217,7 @@ $$
 The operation is selected by inputs $s_1$ and $s_0$. A 4x1 MUX is used for each flip-flop to select the appropriate input for the next state.
 
 
-<img src="/universal_shift_register.svg" class="rounded-lg bg-white p-4 w-full" alt="4-Bit Universal Shift Register">
+<img src="/lect_7_universal_shift_register.svg" class="rounded-lg bg-white p-4 w-full" alt="4-Bit Universal Shift Register">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-8: 4-Bit Universal Shift Register</div>
 
 
@@ -280,7 +280,7 @@ A **counter** is a register that goes through a predetermined sequence of states
 
 :: right ::
 
-<img src="/counter_block.svg" class="rounded-lg bg-white p-4 w-100 mx-auto mt-4" alt="General Counter Block Diagram">
+<img src="/lect_7_counter_block.svg" class="rounded-lg bg-white p-4 w-100 mx-auto mt-4" alt="General Counter Block Diagram">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-9: General n-Bit Counter Block Diagram</div>
 ---
 
@@ -291,7 +291,7 @@ In a ripple counter, the clock is applied only to the first flip-flop. The outpu
 *   This creates a "rippling" effect as the state change propagates through the chain of flip-flops.
 *   Simple to construct, but slower than synchronous counters due to the cumulative propagation delay.
 
-<img src="/4bit_ripple_counter.svg" class="rounded-lg bg-white mt-4 p-4 w-190 mx-auto" alt="4-bit Ripple Counter">
+<img src="/lect_7_4bit_ripple_counter.svg" class="rounded-lg bg-white mt-4 p-4 w-190 mx-auto" alt="4-bit Ripple Counter">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-10: 4-Bit Binary Ripple Counter using T Flip-Flops</div>
 
 
@@ -321,7 +321,7 @@ The fundamental characteristic of ripple counters is that flip-flops change stat
 
 :: right ::
 
-<img src="/4bit_ripple_counter_timing.svg" class="rounded-lg bg-white p-2 w-100 mx-auto" alt="Timing Diagram of Ripple Counter">
+<img src="/lect_7_4bit_ripple_counter_timing.svg" class="rounded-lg bg-white p-2 w-100 mx-auto" alt="Timing Diagram of Ripple Counter">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-11: Timing Diagram showing Accumulation Delay</div>
 
 ---
@@ -342,7 +342,7 @@ A BCD counter counts from 0 to 9 (0000 to 1001) and then resets to 0.
 
 :: right ::
 
-<img src="/bcd_state_diagram.svg" class="rounded-lg bg-white p-4 w-85 mx-auto" alt="State Diagram of BCD Counter">
+<img src="/lect_7_bcd_state_diagram.svg" class="rounded-lg bg-white p-4 w-85 mx-auto" alt="State Diagram of BCD Counter">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-12: State Diagram of BCD Counter</div>
 
 
@@ -355,7 +355,7 @@ A BCD counter counts from 0 to 9 (0000 to 1001) and then resets to 0.
     *   **Q3 Control:** The J input of the Q3 flip-flop is connected to $Q_2 \cdot Q_1$. This ensures Q3 only toggles to 1 when the count transitions from 0111 (7) to 1000 (8).
 <div class="my-8"></div>
 
-<img src="/bcd_ripple_counter.svg" class="rounded-lg bg-white p-4 w-full" alt="BCD Ripple Counter Logic Circuit">
+<img src="/lect_7_bcd_ripple_counter.svg" class="rounded-lg bg-white p-4 w-full" alt="BCD Ripple Counter Logic Circuit">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-13: BCD Ripple Counter Logic Circuit</div>
 
 ---
@@ -368,7 +368,7 @@ In a **synchronous counter**, all flip-flops are triggered simultaneously by a c
 *   This design avoids the cumulative delay of ripple counters, making them faster and more suitable for high-frequency applications.
 *   The design follows the standard procedure for synchronous sequential circuits.
 
-<img src="/4bit_synchronous_counter.svg" class="rounded-lg bg-white p-4 w-full mt-4" alt="4-bit Synchronous Binary Counter">
+<img src="/lect_7_4bit_synchronous_counter.svg" class="rounded-lg bg-white p-4 w-full mt-4" alt="4-bit Synchronous Binary Counter">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-14: 4-Bit Synchronous Binary Counter</div>
 
 
@@ -391,7 +391,7 @@ An up-down counter is capable of counting in both ascending and descending order
 :: right ::
 
 <div class="flex justify-center mt-2">
-    <img src="/4bit_up_down_counter_state_diagram.svg" class="rounded-lg bg-white w-80" alt="State Diagram of 4-bit Up-Down Counter">
+    <img src="/lect_7_4bit_up_down_counter_state_diagram.svg" class="rounded-lg bg-white w-80" alt="State Diagram of 4-bit Up-Down Counter">
 </div>
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-15: State Diagram of 4-Bit Up/Down Counter</div>
 
@@ -399,7 +399,7 @@ An up-down counter is capable of counting in both ascending and descending order
 
 ---
 
-<img src="/4bit_up_down_counter.svg" class="rounded-lg bg-white p-4 w-full" alt="4-bit Up-Down Counter">
+<img src="/lect_7_4bit_up_down_counter.svg" class="rounded-lg bg-white p-4 w-full" alt="4-bit Up-Down Counter">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-16: 4-Bit Synchronous Up/Down Binary Counter</div>
 
 
@@ -433,7 +433,7 @@ $$
 
 ---
 
-<img src="/counter_parallel_load.svg" class="rounded-lg bg-white p-4 w-125 mx-auto" alt="4-bit Counter with Parallel Load">
+<img src="/lect_7_counter_parallel_load.svg" class="rounded-lg bg-white p-4 w-125 mx-auto" alt="4-bit Counter with Parallel Load">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-17: 4-Bit Counter with Parallel Load</div>
 
 
@@ -480,7 +480,7 @@ end behavioral;
 *   A BCD counter is a Modulo-10 counter.
 *   Can be designed to follow any arbitrary sequence.
 
-<img src="/modulo_n_counter.svg" class="rounded-lg bg-white p-4 w-120 mx-auto mt-4" alt="Modulo-N Counter Block Diagram">
+<img src="/lect_7_modulo_n_counter.svg" class="rounded-lg bg-white p-4 w-120 mx-auto mt-4" alt="Modulo-N Counter Block Diagram">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-18: Modulo-N Counter Block Diagram</div>
 
 ---
@@ -498,12 +498,12 @@ Two common approaches to implement a BCD counter using a 4-bit binary counter wi
 <div class="grid grid-cols-2 gap-4 mt-4">
 
 <div class="text-center">
-<img src="/bcd_counter_sync_load.svg" class="rounded-lg bg-white p-4 w-90" alt="BCD Counter Sync Load">
+<img src="/lect_7_bcd_counter_sync_load.svg" class="rounded-lg bg-white p-4 w-90" alt="BCD Counter Sync Load">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-19: Using Synchronous Load (Detect 9)</div>
 </div>
 
 <div class="text-center">
-<img src="/bcd_counter_async_clear.svg" class="rounded-lg bg-white p-4 w-90 mt-15" alt="BCD Counter Async Clear">
+<img src="/lect_7_bcd_counter_async_clear.svg" class="rounded-lg bg-white p-4 w-90 mt-15" alt="BCD Counter Async Clear">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-20: Using Asynchronous Clear (Detect 10)</div>
 </div>
 
@@ -520,7 +520,7 @@ Two common approaches to implement a BCD counter using a 4-bit binary counter wi
 <div class="grid grid-cols-2 gap-8 items-center">
 
 <div class="text-center">
-<img src="/self_correcting_counter.svg" class="rounded-lg bg-white p-4 w-70 mx-auto" alt="State Diagram of Self-Correcting Counter">
+<img src="/lect_7_self_correcting_counter.svg" class="rounded-lg bg-white p-4 w-70 mx-auto" alt="State Diagram of Self-Correcting Counter">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-21: State Diagram of Self-Correcting Counter (Modulo-6)</div>
 </div>
 
@@ -562,7 +562,7 @@ A **ring counter** is a circular shift register where only one flip-flop is set 
 <div class="grid grid-cols-2 gap-8 items-center">
 
 <div>
-<img src="/ring_counter.svg" class="rounded-lg bg-white p-4 mx-auto" alt="Ring Counter Diagram">
+<img src="/lect_7_ring_counter.svg" class="rounded-lg bg-white p-4 mx-auto" alt="Ring Counter Diagram">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-22: Ring Counter Diagram</div>
 
 </div>
@@ -589,7 +589,7 @@ $$
 
 ### Ring Counter Timing Signals
 
-<img src="/timing_signals.svg" class="rounded-lg bg-white p-4 w-200 mt-4" alt="Timing Signals">
+<img src="/lect_7_timing_signals.svg" class="rounded-lg bg-white p-4 w-200 mt-4" alt="Timing Signals">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-23: Timing Signals</div>
 ---
 
@@ -605,7 +605,7 @@ Counters are frequently used to generate timing signals that control the sequenc
 *   Uses *N* flip-flops for *N* timing signals.
 *   Simple, requires no decoder.
 
-<img src="/ring_counter_generator.svg" class="rounded-lg bg-white p-4 w-90 mx-auto" alt="Ring Counter Generator">
+<img src="/lect_7_ring_counter_generator.svg" class="rounded-lg bg-white p-4 w-90 mx-auto" alt="Ring Counter Generator">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-24: Ring Counter Timing Generator</div>
 
 </div>
@@ -616,7 +616,7 @@ Counters are frequently used to generate timing signals that control the sequenc
 *   Uses an *n-bit* counter and an *n-to-2ⁿ* decoder to generate *N = 2ⁿ* timing signals.
 *   More efficient in terms of flip-flop count for a large number of signals.
 
-<img src="/counter_decoder_block.svg" class="rounded-lg bg-white p-4 mt-3 mx-auto" alt="Counter and Decoder">
+<img src="/lect_7_counter_decoder_block.svg" class="rounded-lg bg-white p-4 mt-3 mx-auto" alt="Counter and Decoder">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-25: Counter and Decoder Block</div>
 
 </div>

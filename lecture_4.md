@@ -89,7 +89,7 @@ There are three primary schemes for this, each with different ways of handling n
 
 <div class="col-span-5">
 
-<img src="/8bit_msb_lsb.svg" class="w110 mx-auto mt-4 mb-8 bg-white rounded-lg p-4" alt="8-bit MSB LSB Illustration"/>
+<img src="/lect_4_8bit_msb_lsb.svg" class="w110 mx-auto mt-4 mb-8 bg-white rounded-lg p-4" alt="8-bit MSB LSB Illustration"/>
 <p class="text-center text-sm">Figure 4-1: 8-bit Signed Number uses MSB as sign bit.</p>
 
 </div>
@@ -340,7 +340,7 @@ From the truth table, we can derive the logic equations:
 #### Logic Circuit
 This is implemented with one XOR gate and one AND gate.
 
-<img src="/half_adder.svg" class="h-40 mt-4 bg-white rounded-lg p-4" alt="Half Adder Circuit"/>
+<img src="/lect_2_half_adder.svg" class="h-40 mt-4 bg-white rounded-lg p-4" alt="Half Adder Circuit"/>
 <p class="text-sm text-center">Figure 4-2. Half Adder Circuit.</p>
 
 ---
@@ -350,14 +350,14 @@ This is implemented with one XOR gate and one AND gate.
 <div class="grid grid-cols-3 gap-4">
 
 <div class="col-span-2">
-<img src="/quartus_schematic_HA.png" class="w-full p-2 mx-auto bg-white rounded-lg" alt="Half Adder Schematic"/>
+<img src="/lect_4_quartus_schematic_HA.png" class="w-full p-2 mx-auto bg-white rounded-lg" alt="Half Adder Schematic"/>
 <p class="text-sm text-center">Figure 4-3. Half Adder Schematic (Block Diagram/Schematic File).</p>
-<img src="/simulation_waveform_HA.png" class="w-full p-2 mx-auto bg-white rounded-lg" alt="Half Adder Simulation"/>
+<img src="/lect_4_simulation_waveform_HA.png" class="w-full p-2 mx-auto bg-white rounded-lg" alt="Half Adder Simulation"/>
 <p class="text-sm text-center">Figure 4-4. Half Adder Simulation (University Program VWF).</p>
 </div>
 
 <div>
-<img src="/rtl_viewer_schematic_HA.png" class="w-full p-2 mx-auto bg-white rounded-lg mt-25" alt="Half Adder Schematic"/>
+<img src="/lect_4_rtl_viewer_schematic_HA.png" class="w-full p-2 mx-auto bg-white rounded-lg mt-25" alt="Half Adder Schematic"/>
 <p class="text-sm text-center">Figure 4-5. Half Adder Schematic (RTL Viewer).</p>
 </div>
 
@@ -397,10 +397,10 @@ $$
 </div>
 <div class="col-span-6 text-base">
 
-<img src="/full_adder.svg" class="p-1 w-95 mx-auto bg-white rounded-lg" alt="Full Adder Circuit"/>
+<img src="/lect_4_circuit_full_adder.svg" class="p-1 w-95 mx-auto bg-white rounded-lg" alt="Full Adder Circuit"/>
 <p class="text-sm text-center">Figure 4-6. Full Adder Circuit.</p>
 A full-adder can be constructed from two half-adders and an OR gate.
-<img src="/full_adder_from_ha.svg" class="p-1 w-95 mx-auto bg-white rounded-lg" alt="HA"/>
+<img src="/lect_4_circuit_full_adder_from_ha.svg" class="p-1 w-95 mx-auto bg-white rounded-lg" alt="HA"/>
 <p class="text-sm text-center">Figure 4-7. Full Adder from Half Adders.</p>
 
 </div>
@@ -409,9 +409,9 @@ A full-adder can be constructed from two half-adders and an OR gate.
 
 ### Quartus(r) Schematic
 
-<img src="/schematic_FA_from_HA.png" class="w-200 p-2 mx-auto bg-white rounded-lg" alt="Full Adder Schematic"/>
+<img src="/lect_4_schematic_FA_from_HA.png" class="w-200 p-2 mx-auto bg-white rounded-lg" alt="Full Adder Schematic"/>
 <p class="text-sm text-center">Figure 4-8. Full Adder from Half Adders Schematic (using Half Adder Symbol File).</p>
-<img src="/simulation_schematic_FA_from_HA.png" class="w-200 p-2 mx-auto bg-white rounded-lg" alt="Full Adder Simulation"/>
+<img src="/lect_4_simulation_schematic_FA_from_HA.png" class="w-200 p-2 mx-auto bg-white rounded-lg" alt="Full Adder Simulation"/>
 <p class="text-sm text-center">Figure 4-9. Full Adder Simulation (University Program VWF).</p>
 
 
@@ -515,7 +515,7 @@ END ARCHITECTURE structural;
 ### RTL Viewer in Quartus(r)
 
 
-<img src="/rtl_viewer_FA.png" class="p-2 w-200 mx-auto"/>
+<img src="/lect_4_rtl_viewer_FA.png" class="p-2 w-200 mx-auto"/>
 <p class="text-sm text-center">Figure 4-10. RTL Viewer: Full Adder.</p>
 
 
@@ -536,7 +536,7 @@ To add multi-bit numbers, we can cascade full-adders. The carry-out ($C_{out}$) 
 *   The initial carry-in, $C_0$, is typically set to 0 for standard addition.
 *   The main drawback is the delay; the sum bit $S_3$ is not valid until the carry has propagated through all previous stages.
 
-<img src="/ripple_adder.svg" class="w-115 mx-auto bg-white rounded-lg p-4" alt="4-bit Ripple-Carry Adder"/>
+<img src="/lect_4_circuit_ripple_adder.svg" class="w-115 mx-auto bg-white rounded-lg p-4" alt="4-bit Ripple-Carry Adder"/>
 <p class="text-sm text-center">Figure 4-11. 4-bit Ripple-Carry Adder.</p>
 
 
@@ -732,13 +732,13 @@ END;
 ### RTL Viewer in Quartus(r)
 
 
-<img src="/rtl_viewer_RA.png" class="p-1 w-160 mx-auto"/>
+<img src="/lect_4_rtl_viewer_RA.png" class="p-1 w-160 mx-auto"/>
 <p class="text-sm text-center">Figure 4-12. RTL Viewer: Ripple Adder.</p>
 
 
 ### Simulation results in ModelSim(r)
 
-<img src="/sim_result_RA.png" class="p-1 w-160 mx-auto"/>
+<img src="/lect_4_sim_result_RA.png" class="p-1 w-160 mx-auto"/>
 <p class="text-sm text-center">Figure 4-13. Simulation Result: Ripple Adder.</p>
 
 
@@ -761,7 +761,7 @@ $A - B = A + (-B) = A + B' + 1$
 
 ::right::
 
-<img src="/adder_subtractor.svg" class="w-full mx-auto bg-white rounded-lg p-4" alt="Adder/Subtractor Circuit"/>
+<img src="/lect_4_circuit_adder_subtractor.svg" class="w-full mx-auto bg-white rounded-lg p-4" alt="Adder/Subtractor Circuit"/>
 <p class="text-sm text-center">Figure 4-14. Adder/Subtractor Circuit.</p>
 
 ---
@@ -927,13 +927,13 @@ END;
 ### RTL Viewer in Quartus(r)
 
 
-<img src="/rtl_viewer_AS.png" class="p-1 w-190 mx-auto"/>
+<img src="/lect_4_rtl_viewer_AS.png" class="p-1 w-190 mx-auto"/>
 <p class="text-sm text-center">Figure 4-15. RTL Viewer: Adder/Subtractor.</p>
 
 
 ### Simulation results in ModelSim(r)
 
-<img src="/sim_result_AS.png" class="p-1 w-full mx-auto"/>
+<img src="/lect_4_sim_result_AS.png" class="p-1 w-full mx-auto"/>
 <p class="text-sm text-center">Figure 4-16. Simulation Result: Adder/Subtractor.</p>
 ---
 
@@ -945,7 +945,7 @@ The critical path (worst-case delay) in a ripple-carry adder occurs when a carry
 *   For an n-bit adder, the total delay is proportional to *n*. For a 16-bit adder, this could be **32 gate delays** or more.
 *   This linear scaling of delay is unacceptable for modern high-speed processors.
 
-<img src="/ripple_carry_delay.svg" class="w-145 mx-auto bg-white rounded-lg mt-4 p-1" alt="Ripple Carry Delay Illustration"/>
+<img src="/lect_4_ripple_carry_delay.svg" class="w-145 mx-auto bg-white rounded-lg mt-4 p-1" alt="Ripple Carry Delay Illustration"/>
 <p class="text-sm text-center">Figure 4-17. Ripple Carry Delay Illustration.</p>
 
 
@@ -956,7 +956,7 @@ The critical path (worst-case delay) in a ripple-carry adder occurs when a carry
 
 * A **Carry Lookahead Adder (CLA)** solves this by computing all the carry signals in parallel, directly from the input bits. This breaks the dependency chain and makes the adder significantly faster.
 
-<img src="/cla_4bit.svg" class="w-200 mx-auto mt-4 bg-white rounded-lg p-4" alt="Carry Lookahead Adder Block Diagram"/>
+<img src="/lect_4_circuit_cla_4bit.svg" class="w-200 mx-auto mt-4 bg-white rounded-lg p-4" alt="Carry Lookahead Adder Block Diagram"/>
 <p class="text-sm text-center">Figure 4-18. Carry Lookahead Adder Block Diagram.</p>
 
 
@@ -1173,7 +1173,7 @@ END ARCHITECTURE structural;
 ### RTL Viewer in Quartus(r)
 
 
-<img src="/rtl_viewer_cla_4bit.png" class="p-4 w-full mx-auto"/>
+<img src="/lect_4_rtl_viewer_cla_4bit.png" class="p-4 w-full mx-auto"/>
 <p class="text-sm text-center">Figure 4-19. RTL Viewer: 4-bit CLA.</p>
 
 
@@ -1185,7 +1185,7 @@ END ARCHITECTURE structural;
 
 **16-bit Adder with Cascaded CLAs**
 
-<img src="/16-bit_cla.svg" class="w-180 mx-auto mt-4 bg-white rounded-lg p-4" alt="Placeholder: 16-bit Cascaded Carry Lookahead Adder diagram"/>
+<img src="/lect_4_16-bit_cla.svg" class="w-180 mx-auto mt-4 bg-white rounded-lg p-4" alt="Placeholder: 16-bit Cascaded Carry Lookahead Adder diagram"/>
 <p class="text-sm text-center">Figure 4-20. 16-bit Cascaded Carry Lookahead Adder.</p>
 
 
@@ -1643,13 +1643,13 @@ END ARCHITECTURE behavioral;
 ### RTL Viewer in Quartus(r)
 
 
-<img src="/rtl_viewer_cla_16bit.png" class="p-1 w-120 mx-auto"/>
+<img src="/lect_4_rtl_viewer_cla_16bit.png" class="p-1 w-120 mx-auto"/>
 <p class="text-sm text-center">Figure 4-21. RTL Viewer: 16-bit CLA.</p>
 
 
 ### Simulation results in ModelSim(r)
 
-<img src="/sim_result_cla_16bit.png" class="p-1 w-140 mx-auto"/>
+<img src="/lect_4_sim_result_cla_16bit.png" class="p-1 w-140 mx-auto"/>
 <p class="text-sm text-center">Figure 4-22. Simulation Result: 16-bit CLA.</p>
 
 
@@ -1701,7 +1701,7 @@ A combinational multiplier can be built using an array of AND gates to form the 
 *   16 AND gates to form partial products.
 *   12 adders (a mix of HA and FA) to sum them.
 
-<img src="/multiplier_4x4.svg" class="p-4 w-145 mx-auto bg-white rounded-lg"/>
+<img src="/lect_4_multiplier_4x4.svg" class="p-4 w-145 mx-auto bg-white rounded-lg"/>
 <p class="text-sm text-center">Figure 4-23. 4x4 Array Multiplier.</p>
 
 
@@ -1924,13 +1924,13 @@ END ARCHITECTURE behavior;
 ### RTL Viewer in Quartus(r)
 
 
-<img src="/rtl_viewer_mul_4x4.png" class="p-2 w-160 mx-auto"/>
+<img src="/lect_4_rtl_viewer_mul_4x4.png" class="p-2 w-160 mx-auto"/>
 <p class="text-sm text-center">Figure 4-24. RTL Viewer: 4x4 Multiplier.</p>
 
 
 ### Simulation results in ModelSim(r)
 
-<img src="/sim_result_mul_4x4.png" class="p-2 w-190 mx-auto"/>
+<img src="/lect_4_sim_result_mul_4x4.png" class="p-2 w-190 mx-auto"/>
 <p class="text-sm text-center">Figure 4-25. Simulation Result: 4x4 Multiplier.</p>
 
 
@@ -2018,7 +2018,7 @@ The standard calls for a normalized mantissa, where the most significant bit is 
 </div>
 </div>
 
-<img src="/floating_point_32bit.svg" class="w-130 mx-auto bg-white rounded-lg p-2" alt="IEEE 754 32-bit Floating Point Format"/>
+<img src="/lect_4_floating_point_32bit.svg" class="w-130 mx-auto bg-white rounded-lg p-2" alt="IEEE 754 32-bit Floating Point Format"/>
 <p class="text-sm text-center">Figure 4-26. IEEE 754 32-bit Floating Point Format.</p>
 
 ---
@@ -2037,7 +2037,7 @@ The standard calls for a normalized mantissa, where the most significant bit is 
 
 </div>
 <div>
-<img src="/bcd_clock.svg" class="w-full mx-auto mt-4 p-5 mb-4 bg-white rounded-lg" alt="BCD to Digital Clock Interface"/>
+<img src="/lect_4_bcd_clock.svg" class="w-full mx-auto mt-4 p-5 mb-4 bg-white rounded-lg" alt="BCD to Digital Clock Interface"/>
 <p class="text-sm text-center">Figure 4-27. BCD to Digital Clock Interface.</p>
 
 </div>

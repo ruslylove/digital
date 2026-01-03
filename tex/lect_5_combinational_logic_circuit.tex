@@ -1,0 +1,30 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+\usetikzlibrary{shapes, arrows, positioning, calc}
+
+\begin{document}
+\begin{circuitikz}
+
+    % Box for the Combinational Circuit
+    \node[draw, rectangle, minimum width=4cm, minimum height=5cm, thick, fill=blue!10] (CC) at (0,0) {\large \begin{tabular}{c} Combinational \\ Logic \\ Circuit \end{tabular}};
+
+    % Inputs
+    \foreach \y/\i in {2/1, 1/2, -2/n} {
+        \draw[thick] ($(CC.west)+(0, \y)$) -- ++(-1.5, 0) node[left] {$Input_{\i}$};
+    }
+    % Dots for inputs
+    \node at ($(CC.west) + (-0.75, -0.2)$) {$\vdots$};
+
+
+    % Outputs
+    \foreach \y/\i in {2/1, 1/2, -2/m} {
+        \draw[thick] ($(CC.east)+(0, \y)$) -- ++(1.5, 0) node[right] {$Output_{\i}$};
+    }
+    % Dots for outputs
+    \node at ($(CC.east) + (0.75, -0.2)$) {$\vdots$};
+    
+    % Internal connection (optional visual flair)
+    % \draw[->, thick] ($(CC.west)+(0, 2)$) -- ($(CC.east)+(0, -2)$);
+
+\end{circuitikz}
+\end{document}

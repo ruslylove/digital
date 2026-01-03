@@ -1,0 +1,103 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+\usetikzlibrary{calc}
+
+\begin{document}
+\begin{circuitikz}[american, scale=1.0]
+    \ctikzset{logic ports=ieee}
+    
+    % Inputs - Leftmost, X aligned with top logic (y=2)
+   % \node (x_in) at (-2, 2) {$x$};
+    \node (clk_in) at (-1.5, -6) {CLK};
+    
+    % Flip-Flops - Far Right
+    \node[flipflop D] (DFF_A) at (10, 2) {};
+    \node[above] at (DFF_A.n) {DFF A};
+    \node[flipflop D] (DFF_B) at (10, -3) {};
+    \node[above] at (DFF_B.n) {DFF B};
+    
+    % Logic for DA = Ax + Bx
+    % OR_DA aligned with DFF_A pin 1
+    \path (DFF_A.pin 1) -- ++(-2,0) coordinate (or_da_pos);
+    \node[or port, anchor=out] (OR_DA) at (or_da_pos) {};
+    \draw (OR_DA.out) -- (DFF_A.pin 1);
+    
+    % AND_Ax (Ax) feeding OR_DA input 1
+    \path (OR_DA.in 1) -- ++(-2,0.5) coordinate (and_ax_pos);
+    \node[and port, anchor=out] (AND_Ax) at (and_ax_pos) {$Ax$};
+    \draw (AND_Ax.out) -| (OR_DA.in 1);
+    
+    % AND_Bx (Bx) feeding OR_DA input 2
+    \path (OR_DA.in 2) -- ++(-2,-0.5) coordinate (and_bx_pos);
+    \node[and port, anchor=out] (AND_Bx) at (and_bx_pos) {$Bx$};
+    \draw (AND_Bx.out) -| (OR_DA.in 2);
+    
+    % Logic for DB = xA'
+    % AND_DB aligned with DFF_B pin 1
+    \path (DFF_B.pin 1) -- ++(-2,0) coordinate (and_db_pos);
+    \node[and port, anchor=out] (AND_DB) at (and_db_pos) {$A'x$};
+    \draw (AND_DB.out) -- (DFF_B.pin 1);
+    
+    % Layout X bus
+    \draw (AND_Ax.in 2) -- ++(-2,0) node[left](x_in){$x$};
+    \path (x_in) -- ++(1,0) coordinate (x_bus);
+    \node[circ] at (x_bus) {};
+    
+    % X connections
+    %\draw (x_bus) |- (AND_Ax.in 2);
+    \draw (x_bus|-AND_Bx.in 1) to[short,*-] (AND_Bx.in 1);
+    \draw (x_bus) |- (AND_DB.in 2);
+    
+    % Output Logic y = A + Bx'
+    % OR_y aligned with DFF_A Q (y=2)
+    \path (DFF_A.pin 6) -- ++(1.5,0) coordinate (or_y_pos);
+    \node[or port, anchor=in 1] (OR_y) at (or_y_pos) {};
+    \draw (OR_y.out) -- ++(1,0) node[right] {$y$};
+    
+    % AND_y (Bx') - Moved before FFs
+    \node[and port] (AND_y) at (5.8, -5) {$Bx'$};
+    
+    % Inverter for x (aligned with AND_y input 2)
+    \draw (AND_y.in 2) -- ++(-1, 0) node[not port, scale=0.6,anchor=out] (INV_x) {};
+    \draw (x_bus |- AND_DB.in 2) to[short,*-] (x_bus |-INV_x.in) -- (INV_x.in);
+    
+    % Wiring logic for y
+   % \draw (INV_x.out) -- (AND_y.in 2); % x' to AND_y
+    
+    % Route AND_y output to OR_y
+    % Go Right (under FFs) then Up (after FFs)
+    \draw (AND_y.out) -| (OR_y.in 2);
+    
+    % Feedback Connections
+    % A (pin 6)
+    \draw (DFF_A.pin 6) -- ++(0.5,0) coordinate (A_out);
+    \node[above][xshift=0.3cm] at (A_out) {$A$};
+    
+    % A to AND_Ax (input 1)
+    \draw (A_out) to[short,*-] ++(0, 2) coordinate (A_top) -| (AND_Ax.in 1);
+    
+    % A to OR_y (input 1)
+    \draw (A_out) -| (OR_y.in 1);
+    
+    % A' (pin 4) to DB inputs (input 2)
+    \draw (DFF_A.pin 4) -- ++(0.2,0) coordinate (A_bar);
+    \draw (A_bar) -- ++(0, -2) -| (AND_DB.in 1);
+    
+    % B (pin 6)
+    \draw (DFF_B.pin 6) -- ++(0.5,0) coordinate (B_out);
+    \node[right] at (B_out) {$B$};
+    
+    % B to AND_Bx (input 1)
+    \draw (B_out) -- ++(0, 2.5) coordinate (B_mid) -| (AND_Bx.in 2);
+    
+    % B to AND_y (input 1)
+    %\draw (B_out) |- (AND_y.in 1);
+    \draw (AND_Bx.in 2 |- B_mid) to[short,*-] ++(0,0) |- (AND_y.in 1);
+    
+    % Clock
+    \draw (DFF_B.pin 3) -- ++(-0.5,0) node[circ] (clk_com) {};
+    \draw (clk_in) -| (clk_com);
+    \draw (clk_com)  |- (DFF_A.pin 3);
+
+\end{circuitikz}
+\end{document}

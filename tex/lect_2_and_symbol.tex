@@ -1,0 +1,34 @@
+\documentclass[border=10pt]{standalone}
+% We explicitly load the 'ieee' style option here.
+% This ensures strictly IEEE standard logic gates (Curved/Distinctive).
+\usepackage{circuitikz}
+
+\ctikzset{
+logic ports=ieee,
+logic ports/scale=1,
+}
+
+\begin{document}
+
+\begin{circuitikz}[]
+
+    % ==========================
+    % 1. AND GATE (IEEE Shape)
+    % ==========================
+    % The 'and port' automatically uses the IEEE distinctive shape
+    % because of the package option above.
+    \draw (0,0) node[and port] (AND) {};
+    
+    % Inputs
+    \draw (AND.in 1) -- ++(-0.5,0) node[left] {$x_1$};
+    \draw (AND.in 2) -- ++(-0.5,0) node[left] {$x_2$};
+    
+    % Output
+    \draw (AND.out) -- ++(0.5,0) node[right] {$Y = x_1 \cdot x_2$};
+    % Label
+    \node at (AND.down) [below=0.3cm] {};
+
+
+\end{circuitikz}
+
+\end{document}

@@ -1,0 +1,59 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+
+\ctikzset{
+    logic ports=ieee,
+    logic ports/scale=1,
+}
+
+\begin{document}
+
+\begin{circuitikz}[semithick]
+    % Inputs
+    \node (s) at (-0.5, 0) {$s$};
+
+    % AND Gates
+    \node[and port] (and1) at (4, 1.5) {};
+    \node[and port] (and2) at (4, -1.5) {};
+
+    \draw (and1.in 1) -- ++(-3,0) node[left] (x1) {$x_1$};
+    \draw (and2.in 2) -- ++(-3,0) node[left] (x2) {$x_2$};
+
+        % Inverter for s
+    \draw (and1.in 2) -- ++(-1,0) node[not port, scale=0.5,anchor=out] (not_s) {};
+    \draw (not_s.in) -- ++(-0.8,0) coordinate (s_bar);
+    \draw (s_bar) to[short,-*] (s_bar |- s);
+        % Connections for s and s'
+    \draw (s) -| (and2.in 1); % s line
+   % \draw (0.5, 0) -- (0.5, 1.5) -- (not_s.in); % Branch to inverter
+    %\draw (not_s.out) -- (1.5, -0.5); % s' output
+
+    % OR Gate
+    \node[or port] (or) at (7, 0) {};
+
+    % Connect x1 to AND1
+    \draw (x1) -- (and1.in 1);
+    
+    % Connect s' to AND1
+    %\draw (1.5, -0.5) -- (1.5, -1) -| (and1.in 2);
+
+    % Connect s to AND2
+   % \draw (2.5, 0) -- (2.5, -1) -| (and2.in 1);
+
+    % Connect x2 to AND2
+    \draw (x2) -- (and2.in 2);
+
+    % Connect AND outputs to OR inputs
+    \draw (and1.out) -| (or.in 1);
+    \draw (and2.out) -| (or.in 2);
+
+    % Output
+    \draw (or.out) -- ++(0.5, 0) node[right] {$f$};
+
+    % Labels
+    %\node[above] at (and1.up) {$s'x_1$};
+    %\node[below] at (and2.down) {$sx_2$};
+
+\end{circuitikz}
+
+\end{document}

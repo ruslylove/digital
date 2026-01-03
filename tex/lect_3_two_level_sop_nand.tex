@@ -1,0 +1,66 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+
+\ctikzset{
+logic ports=ieee,
+logic ports/scale=0.7,
+}
+
+\begin{document}
+\begin{circuitikz}[]
+
+    % ============================
+    % 1. FIRST LEVEL (Left Side)
+    % ============================
+    
+    % Top Gate: NAND for Inputs A and B
+    % Replaces the term (AB)
+    \draw (0, 4) node[nand port] (NAND_AB) {};
+    \draw (NAND_AB.in 1) -- ++(-1, 0) node[left] {$A$};
+    \draw (NAND_AB.in 2) -- ++(-1, 0) node[left] {$B$};
+
+    % Middle Gate: Inverter for Input E
+    % Ideally, E should enter the final NAND as E_bar to become E in the output.
+    % We use a NAND wired as a NOT gate.
+    \draw (0, 2) node[nand port] (NAND_E) {};
+    % Connect input E to both pins of this NAND
+    \draw (NAND_E.in 1) -- ++(-0.5, 0) coordinate(splitE) -- ++(-0.5, 0) node[left] {$E$};
+    \draw (splitE) node[circ]{} |- (NAND_E.in 2);
+
+    % Bottom Gate: NAND for Inputs C and D
+    % Replaces the term (CD)
+    \draw (0, 0) node[nand port] (NAND_CD) {};
+    \draw (NAND_CD.in 1) -- ++(-1, 0) node[left] {$C$};
+    \draw (NAND_CD.in 2) -- ++(-1, 0) node[left] {$D$};
+
+
+    % ============================
+    % 2. SECOND LEVEL (Right Side)
+    % ============================
+
+    % Final Gate: 3-Input NAND
+    % Replaces the final OR gate
+    \draw (3, 2) node[nand port, number inputs=3] (FINAL) {};
+
+
+    % ============================
+    % 3. CONNECTIONS
+    % ============================
+    
+    % Connect Top NAND to Final Input 1
+    \draw (NAND_AB.out) -- ++(0.5,0) |- (FINAL.in 1);
+
+    % Connect Middle NAND (Inverter) to Final Input 2
+    \draw (NAND_E.out) -- (FINAL.in 2);
+
+    % Connect Bottom NAND to Final Input 3
+    \draw (NAND_CD.out) -- ++(0.5,0) |- (FINAL.in 3);
+
+
+    % ============================
+    % 4. OUTPUT
+    % ============================
+    \draw (FINAL.out) -- ++(1, 0) node[right] {$F = AB + CD + E$};
+
+\end{circuitikz}
+\end{document}

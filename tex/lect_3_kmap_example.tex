@@ -1,0 +1,26 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{karnaugh-map}
+
+\begin{document}
+
+% 2 Variables: 2 rows (x), 2 columns (y)
+% This k-map is for the function F(x,y) = xy
+\begin{karnaugh-map}[4][2][1][$yz$][$x$]
+
+
+    \terms{0}{$x'y'z'$}
+    \terms{1}{$x'y'z$}
+    \terms{2}{$x'yz'$}
+    \terms{3}{$x'yz$}
+    \terms{4}{$xy'z'$}
+    \terms{5}{$xy'z$}
+    \terms{6}{$xyz'$}
+    \terms{7}{$xyz$}
+   
+    
+    
+
+ 
+\end{karnaugh-map}
+
+\end{document}

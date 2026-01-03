@@ -1,0 +1,55 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{circuitikz}
+
+\ctikzset{
+logic ports=ieee,
+logic ports/scale=0.7,
+}
+
+\begin{document}
+\begin{circuitikz}[]
+
+    % ============================
+    % 1. FIRST LEVEL (OR Gates)
+    % ============================
+    
+    % Top OR Gate (A+B)
+    \draw (0, 3.5) node[or port] (OR_AB) {};
+    \draw (OR_AB.in 1) -- ++(-1, 0) node[left] {$A$};
+    \draw (OR_AB.in 2) -- ++(-1, 0) node[left] {$B$};
+
+    % Bottom OR Gate (C+D)
+    \draw (0, 0.5) node[or port] (OR_CD) {};
+    \draw (OR_CD.in 1) -- ++(-1, 0) node[left] {$C$};
+    \draw (OR_CD.in 2) -- ++(-1, 0) node[left] {$D$};
+
+
+    % ============================
+    % 2. SECOND LEVEL (AND Gate)
+    % ============================
+    
+    % Final 3-Input AND Gate
+    \draw (3, 2) node[and port, number inputs=3] (FINAL) {};
+
+
+    % ============================
+    % 3. CONNECTIONS
+    % ============================
+    
+    % Connect Top OR to Final Top Input
+    \draw (OR_AB.out) -- ++(0.5,0) |- (FINAL.in 1);
+
+    % Connect Bottom OR to Final Bottom Input
+    \draw (OR_CD.out) -- ++(0.5,0) |- (FINAL.in 3);
+
+    % Connect Input E directly to the Middle Input
+    \draw (FINAL.in 2) -- ++(-4.0, 0) node[left] {$E$};
+
+
+    % ============================
+    % 4. OUTPUT
+    % ============================
+    \draw (FINAL.out) -- ++(1, 0) node[right] {$F = (A+B)(C+D)E$};
+
+\end{circuitikz}
+\end{document}
