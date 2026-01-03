@@ -20,7 +20,7 @@
     \node[state, left of=DEC, node distance=3.5cm] (OUTPUT) {OUTPUT};
     \node[state, left of=OUTPUT, node distance=3.5cm] (INPUT) {INPUT};
     \node[state, right of=DEC, node distance=3.5cm] (JNZ) {JNZ};
-    \node[state, right of=DECODE, node distance=4.5cm] (WAIT) {WAIT};
+    \node[state, right of=DECODE, node distance=4.5cm, fill=yellow!30, line width=1.5pt] (WAIT) {WAIT};
     \node[state, right of=JNZ, node distance=3.5cm] (HALT) {HALT};
 
     % Edges

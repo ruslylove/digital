@@ -344,10 +344,10 @@ Q_2 & Q_1 & Q_0 & O_2 & O_1 & O_0 & D_2 & D_1 & D_0 & \textbf{Description} \\
 \hline
 0 & 0 & 0 & \times & \times & \times & 0 & 0 & 1 & \text{Fetch} \to \text{Decode} \\
 \hline
-0 & 0 & 1 & 0 & 0 & \times & 0 & 0 & 0 & \text{Decode} \to \text{Fetch (NOP)} \\
-0 & 0 & 1 & 0 & 1 & 0 & 0 & 0 & 0 & \text{Decode} \to \text{Fetch (NOP)} \\
+0 & 0 & 1 & 0 & 0 & \times & 0 & 0 & 0 & \text{Decode} \to \text{Fetch} \\
+0 & 0 & 1 & 0 & 1 & 0 & 0 & 0 & 0 & \text{Decode} \to \text{Fetch} \\
 0 & 0 & 1 & 0 & 1 & 1 & 0 & 1 & 1 & \text{Decode} \to \text{Input} \\
-0 & 0 & 1 & 1 & \times & \times & 1 & \times & \times & \text{Decode} \to \text{Execute} \\
+0 & 0 & 1 & 1 & \times & \times & 1 & \times & \times & \text{Decode} \to \text{Exec.} \\
 \hline
 0 & 1 & 0 & \times & \times & \times & 0 & 0 & 0 & \text{Wait} \to \text{Fetch} \\
 \hline
@@ -355,7 +355,7 @@ Q_2 & Q_1 & Q_0 & O_2 & O_1 & O_0 & D_2 & D_1 & D_0 & \textbf{Description} \\
 \hline
 1 & 0 & 0 & \times & \times & \times & 0 & 0 & 0 & \text{Output} \to \text{Fetch} \\
 \hline
-1 & 0 & 1 & \times & \times & \times & 0 & 0 & 0 & \text{Decrement} \to \text{Fetch} \\
+1 & 0 & 1 & \times & \times & \times & 0 & 0 & 0 & \text{Dec} \to \text{Fetch} \\
 \hline
 1 & 1 & 0 & \times & \times & \times & 0 & 1 & 0 & \text{JNZ} \to \text{Wait} \\
 \hline
@@ -368,7 +368,7 @@ $$
 
 :: right ::
 
-<img src="/ec1_fsm.svg" class="rounded-lg bg-white pl-10 w-full object-contain mx-auto" alt="EC-1 Control Unit FSM">
+<img src="/ec1_fsm.svg" class="rounded-lg bg-white pl-2 w-full object-contain mx-auto" alt="EC-1 Control Unit FSM">
 <p class="text-center text-sm">Figure 10-4. EC-1 Control Unit FSM with <b>"Wait"</b> state </p>
 
 
