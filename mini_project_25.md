@@ -257,11 +257,15 @@ Verification of the design using Quartus RTL Viewer and Waveform Simulation.
 
 Complete successful detection sequence simulation.
 
-<img src="/spi_sim.png" class="rounded-lg w-full" alt="Simulation Waveform">
+<img src="/spi_sim_1.png" class="rounded-lg w-full mx-auto p-4" alt="Simulation Waveform">
 
 * Correct sequence
-* 6th bit error (requirement is 4th bit)
+* 6<sup>th</sup> bit error (your requirement is 4<sup>th</sup> bit)
+
+<img src="/spi_sim_2.png" class="rounded-lg w-full mx-auto p-4" alt="Simulation Waveform">
+
 * Continuous sequence (begin with 000...)
+* Overlapping sequence
 
 ---
 
