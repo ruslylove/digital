@@ -19,7 +19,37 @@ hideInToc: false
 ## Outline
 
 <toc mode="onlySiblings" minDepth="2" columns="3"/>
+
 ---
+
+## Why Sequential Circuits?
+
+
+**Combinational Logic** (e.g., adders, decoders) has a limitation: <span v-mark.red>the output depends **only** on the current input.</span>
+It has no memory of the past.
+
+<div class="grid grid-cols-2 gap-8">
+
+<div>
+
+**Real-world systems need memory:**
+*   **Vending Machine:** Needs to know how much money *was* inserted.
+*   **Combination Lock:** Needs to know if the *previous* numbers were correct.
+*   **Counter:** Needs to know the *current* count to calculate the *next* count.
+
+</div>
+<div>
+
+<img src="/simple_lock_fsm.svg" class="rounded-lg bg-white p-2 mx-auto w-full" alt="Simple Combination Lock State Diagram">
+<p class="text-sm text-center">Figure 6-1. Example: A Simple Digital Combination Lock.</p>
+
+</div>
+</div>
+
+*   To build these, we need **memory elements** (Latches & Flip-Flops) to store the <span v-mark.red.circle> **State**</span>.
+
+---
+
 
 ## Sequential Circuits
 
@@ -31,7 +61,7 @@ Unlike combinational circuits, **sequential circuits** have memory.
 *   **Outputs**: Determined by the **Present State** and/or **Inputs** (`Mealy` or `Moore` models).
 
 <img src="/lect_6_sequential_circuit_block.svg" class="rounded-lg bg-white p-4 mx-auto w-190" alt="Sequential Circuit Diagram">
-<p class="text-sm text-center">Figure 6-1. Sequential Circuit Block Diagram.</p>
+<p class="text-sm text-center">Figure 6-2. Sequential Circuit Block Diagram.</p>
 
 ---
 
@@ -70,7 +100,7 @@ A **latch** is a basic memory element that can store one bit of information. It 
 
 
 <img src="/lect_6_sr_latch_nor.svg" class="rounded-lg bg-white p-4 w-60 mx-auto" alt="SR Latch with NOR Gates">
-<p class="text-sm text-center">Figure 6-2. SR Latch with NOR Gates.</p>
+<p class="text-sm text-center">Figure 6-3. SR Latch with NOR Gates.</p>
 
 <div class="mt-4 flex justify-center text-sm">
 
@@ -109,7 +139,7 @@ The **$\bar{S}\bar{R}$ Latch** uses NAND gates instead of NOR gates. The basic b
 :: right ::
 
 <img src="/lect_6_sr_latch_nand.svg" class="rounded-lg bg-white p-4 w-60 mx-auto" alt="SR Latch with NAND Gates">
-<p class="text-sm text-center">Figure 6-3. S'R' Latch with NAND Gates.</p>
+<p class="text-sm text-center">Figure 6-4. S'R' Latch with NAND Gates.</p>
 
 <div class="mt-4 flex justify-center text-sm">
 
@@ -139,7 +169,7 @@ An SR latch can be modified to only change state when a control input `C` (or En
 <div class="grid grid-cols-2 gap-8 items-center">
 <div>
 <img src="/lect_6_gated_sr_latch.svg" class="rounded-lg bg-white p-4 mx-auto" alt="Gated SR Latch">
-<p class="text-sm text-center">Figure 6-4. Gated SR Latch Logic Diagram.</p>
+<p class="text-sm text-center">Figure 6-5. Gated SR Latch Logic Diagram.</p>
 </div>
 <div>
 $$
@@ -174,7 +204,7 @@ The D latch (Data latch) eliminates the indeterminate state of the SR latch.
 
 <div>
 <img src="/lect_6_d_latch.svg" class="rounded-lg bg-white p-4 mx-auto" alt="D Latch">
-<p class="text-sm text-center">Figure 6-5. D Latch Logic Diagram.</p>
+<p class="text-sm text-center">Figure 6-6. D Latch Logic Diagram.</p>
 </div>
 $$
 \begin{array}{|c|c|l|}
@@ -197,7 +227,7 @@ $$
 Logic symbols for the various latches discussed:
 
 <img src="/lect_6_latch_symbols.svg" class="rounded-lg bg-white p-4 mx-auto w-180" alt="Latch Symbols">
-<p class="text-sm text-center">Figure 6-6. Logic Symbols for SR, S'R', and D Latches.</p>
+<p class="text-sm text-center">Figure 6-7. Logic Symbols for SR, S'R', and D Latches.</p>
 
 
 
@@ -222,7 +252,7 @@ This edge-triggered behavior prevents the multiple-transition problem and ensure
 :: right ::
 
 <img src="/lect_6_trigger_types.svg" class="rounded-lg bg-white p-4 mx-auto" alt="Triggering types">
-<p class="text-sm text-center">Figure 6-7. Trigger Signals (Level, Positive Edge, Negative Edge).</p>
+<p class="text-sm text-center">Figure 6-8. Trigger Signals (Level, Positive Edge, Negative Edge).</p>
 
 ---
 layout: two-cols-header
@@ -254,11 +284,11 @@ The output Q only changes on the **falling edge** of the clock.
 
 :: right ::
 
-<img src="/lect_6_master_slave_d_flip_flop.svg" class="rounded-lg bg-white w-90 p-4 mx-auto" alt="Master-Slave D Flip-Flop">
-<p class="text-sm text-center">Figure 6-8. Master-Slave D Flip-Flop.</p>
+<img src="/lect_6_master_slave_d_flip_flop.svg" class="rounded-lg bg-white w-100 p-1 mx-auto" alt="Master-Slave D Flip-Flop">
+<p class="text-sm text-center">Figure 6-9. Master-Slave D Flip-Flop.</p>
 
-<img src="/lect_6_d_flip_flop_neg_edge.svg" class="rounded-lg bg-white w-45 p-4 mx-auto" alt="D Flip-Flop Negative Edge">
-<p class="text-sm text-center">Figure 6-9. D Flip-Flop with Negative Edge Triggered.</p>
+<img src="/lect_6_d_flip_flop_neg_edge.svg" class="rounded-lg bg-white w-70 p-4 mx-auto" alt="D Flip-Flop Negative Edge">
+<p class="text-sm text-center">Figure 6-10. D Flip-Flop Symbols (Positive & Negative Edge).</p>
 
 ---
 
@@ -280,10 +310,10 @@ JK flip-flop can be constructed from a D flip-flop and external gates.
 <div class="col-span-2">
 
 <img src="/lect_6_jk_flip_flop_from_d.svg" class="rounded-lg bg-white p-2 mx-auto w-110" alt="JK Flip-Flop from D Flip-Flop">
-<p class="text-sm text-center">Figure 6-10. Logic Diagram of a JK Flip-Flop from a D Flip-Flop.</p>
+<p class="text-sm text-center">Figure 6-11. Logic Diagram of a JK Flip-Flop from a D Flip-Flop.</p>
 
 <img src="/lect_6_jk_flip_flop_symbol.svg" class="rounded-lg bg-white p-2 mx-auto w-65" alt="JK Flip-Flop Symbol">
-<p class="text-sm text-center">Figure 6-11. JK Flip-Flop Symbol.</p>
+<p class="text-sm text-center">Figure 6-12. JK Flip-Flop Symbol.</p>
 
 </div>
 
@@ -306,17 +336,17 @@ layout: two-cols-header
 
 
 <img src="/lect_6_t_flip_flop_symbol.svg" class="rounded-lg bg-white p-4 mx-auto w-80 mt-7" alt="T Flip-Flop Symbol">
-<p class="text-sm text-center">Figure 6-12. T Flip-Flop Symbol.</p>
+<p class="text-sm text-center">Figure 6-13. T Flip-Flop Symbol.</p>
 
 
 :: right ::
 
 <img src="/lect_6_t_flip_flop_from_jk.svg" class="rounded-lg bg-white p-4 mx-auto w-60" alt="T Flip-Flop from JK">
-<p class="text-sm text-center">Figure 6-13. T Flip-Flop from JK Flip-Flop.</p>
+<p class="text-sm text-center">Figure 6-14. T Flip-Flop from JK Flip-Flop.</p>
 
 
 <img src="/lect_6_t_flip_flop_from_d.svg" class="rounded-lg bg-white p-2 mx-auto w-80" alt="T Flip-Flop from XOR">
-<p class="text-sm text-center">Figure 6-14. T Flip-Flop from D Flip-Flop.</p>
+<p class="text-sm text-center">Figure 6-15. T Flip-Flop from D Flip-Flop.</p>
   
 ---
 
@@ -513,7 +543,7 @@ Flip-flops often have initialization pins: **Preset** (sets Q=1) and **Clear/Res
 *   **Active Levels:** They are frequently **active-low** (indicated by a bubble), meaning the reset/preset occurs when the input is '0'.
 
 <img src="/lect_6_d_ff_preset_reset.svg" class="rounded-lg bg-white p-4 mx-auto w-100" alt="D Flip-Flop with Preset and Reset">
-<p class="text-sm text-center">Figure 6-15. D Flip-Flops with Asynchronous Preset/Clear.</p>
+<p class="text-sm text-center">Figure 6-16. D Flip-Flops with Asynchronous Preset/Clear.</p>
 
 
 ---
@@ -570,9 +600,9 @@ Analysis is the process of determining the function of a sequential circuit from
 **Procedure:**
 1.  Determine the **flip-flop input equations** (also called excitation equations) and the **output equations** from the combinational logic part of the circuit.
 2.  Use these equations and the flip-flop characteristic equations to derive the **next state equations**.
-    *   $A_{(t+1)} = D_A$ for a D flip-flop.
-    *   $A_{(t+1)} = J_A A' + K_A' A$ for a JK flip-flop.
-    *   $A_{(t+1)} = T_A \oplus A$ for a T flip-flop.
+    *   $Q_{(t+1)} = D$ for a D flip-flop.
+    *   $Q_{(t+1)} = J Q' + K' Q$ for a JK flip-flop.
+    *   $Q_{(t+1)} = T \oplus Q$ for a T flip-flop.
 3.  Construct a **state table** that lists the next state and output for every combination of present state and input.
 4.  Draw a **state diagram**, which is a graphical representation of the state table.
 
@@ -588,7 +618,7 @@ Let's analyze the following circuit with two D flip-flops ($A$ and $B$), one inp
 <div class="col-span-2">
 
 <img src="/lect_6_sequential_analysis_example.svg" class="mx-auto rounded-lg bg-white p-5 w-130" alt="Sequential Circuit for Analysis">
-<p class="text-sm text-center">Figure 6-16. Sequential Circuit for Analysis.</p>
+<p class="text-sm text-center">Figure 6-17. Sequential Circuit for Analysis.</p>
 
 </div>
 
@@ -649,7 +679,7 @@ This completes the analysis. The state diagram fully describes the circuit's beh
 :: right ::
 
 <img src="/lect_6_d_state_diagram.svg" class="rounded-lg bg-white p-4 w-75 mx-auto" alt="State Diagram for Analysis Example">
-<p class="text-sm text-center">Figure 6-17. State Diagram.</p>
+<p class="text-sm text-center">Figure 6-18. State Diagram.</p>
 
 
 
@@ -665,7 +695,7 @@ The procedure is similar, but we use the JK flip-flop's characteristic equation:
 <div class="col-span-2">
 
 <img src="/lect_6_jk_sequential_analysis.svg" class="rounded-lg bg-white p-4 w-110 mx-auto" alt="JK Flip-Flop Circuit for Analysis">
-<p class="text-sm text-center">Figure 6-18. Logic Diagram of a Sequential Circuit with JK Flip-Flops.</p>
+<p class="text-sm text-center">Figure 6-19. Logic Diagram of a Sequential Circuit with JK Flip-Flops.</p>
 
 </div>
 
@@ -718,7 +748,7 @@ $$
 4.  **State Diagram:**
 
 <img src="/lect_6_jk_state_diagram.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="State Diagram for JK Circuit">
-<p class="text-sm text-center">Figure 6-19. State Diagram.</p>
+<p class="text-sm text-center">Figure 6-20. State Diagram.</p>
 
 </div>
 
@@ -736,7 +766,7 @@ Here, we use the T flip-flop's characteristic equation: $Q(t+1) = T \oplus Q$.
 <div class="col-span-2">
 
 <img src="/lect_6_t_sequential_analysis.svg" class="rounded-lg bg-white p-4 w-full" alt="T Flip-Flop Circuit for Analysis">
-<p class="text-sm text-center">Figure 6-20. Logic Diagram of a Sequential Circuit with T Flip-Flops.</p>
+<p class="text-sm text-center">Figure 6-21. Logic Diagram of a Sequential Circuit with T Flip-Flops.</p>
 
 </div>
 
@@ -789,7 +819,7 @@ $$
     *   Edges represent transitions labeled with the `Input`.
 
 <img src="/lect_6_t_state_diagram.svg" class="rounded-lg bg-white p-4 w-90 mx-auto" alt="State Diagram for T Circuit">
-<p class="text-sm text-center">Figure 6-21. State Diagram (Moore Model).</p>
+<p class="text-sm text-center">Figure 6-22. State Diagram (Moore Model).</p>
 
 ---
 
@@ -810,7 +840,7 @@ Sequential circuits are classified into two models based on how their outputs ar
 
 
 <img src="/mealy_block.svg" class="rounded-lg bg-white p-4 w-190 mx-auto" alt="Mealy Model Block Diagram">
-<p class="text-sm text-center">Figure 6-22 - Mealy Model Block Diagram.</p>
+<p class="text-sm text-center">Figure 6-23 - Mealy Model Block Diagram.</p>
 
 
 ---
@@ -826,7 +856,7 @@ Sequential circuits are classified into two models based on how their outputs ar
 </div>
 
 <img src="/moore_block.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Moore Model Block Diagram">
-<p class="text-sm text-center">Figure 6-23. Moore Model Block Diagram.</p>
+<p class="text-sm text-center">Figure 6-24. Moore Model Block Diagram.</p>
 
 ---
 
@@ -856,7 +886,7 @@ Design is the reverse of analysis. We start with a specification and end with a 
     *   If in $S_2$ and we get a $1$, the sequence is complete, so output $1$.
 
 <img src="/lect_6_sequence_detector_state.svg" class="rounded-lg bg-white p-4 w-110 mx-auto" alt="State Diagram for Sequence Detector">
-<p class="text-sm text-center">Figure 6-23. State Diagram for '101' Sequence Detector.</p>
+<p class="text-sm text-center">Figure 6-25. State Diagram for '101' Sequence Detector.</p>
 
 ---
 
@@ -896,7 +926,7 @@ $$
 6.  **Draw the Logic Diagram:**
 
 <img src="/lect_6_sequence_detector_circuit.svg" class="rounded-lg bg-white p-4 w-170 mx-auto" alt="Final Circuit for Sequence Detector">
-<p class="text-sm text-center">Figure 6-24. Logic Diagram of '101' Sequence Detector.</p>
+<p class="text-sm text-center">Figure 6-26. Logic Diagram of '101' Sequence Detector.</p>
 
 ---
 
@@ -987,7 +1017,7 @@ $$
 3.  **Draw the Logic Diagram:**
 
 <img src="/lect_6_sequence_detector_jk_circuit.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="JK Circuit for Sequence Detector">
-<p class="text-sm text-center">Figure 6-25. Logic Diagram of Sequence Detector using JK Flip-Flops.</p>
+<p class="text-sm text-center">Figure 6-27. Logic Diagram of Sequence Detector using JK Flip-Flops.</p>
 
 </div>
 </div>
@@ -1113,7 +1143,7 @@ $$
 3.  **Draw the Logic Diagram:**
 
 <img src="/lect_6_t_3bit_counter.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="T Flip-Flop 3-bit Counter Circuit">
-<p class="text-sm text-center">Figure 6-26. Logic Diagram of T Flip-Flop 3-bit Counter.</p>
+<p class="text-sm text-center">Figure 6-28. Logic Diagram of T Flip-Flop 3-bit Counter.</p>
 
 </div>
 </div>
@@ -1131,9 +1161,9 @@ $$
 *   **Design Procedure (Synthesis):**
     *   Specification $\rightarrow$ State Diagram $\rightarrow$ State Table $\rightarrow$ Flip-Flop Input Equations $\rightarrow$ <span v-mark.circle.red>Logic Diagram</span>.
 *   **Flip-Flop Characteristics:**
-    *   **D:** $Q(t+1) = D$
-    *   <span v-mark.red>**JK:** $Q(t+1) = JQ' + K'Q$</span>
-    *   <span v-mark.red>**T:** $Q(t+1) = T \oplus Q$</span>
+    *   <span v-mark.red>**D:** $Q_{(t+1)} = D$</span>
+    *   <span v-mark.red>**JK:** $Q_{(t+1)} = JQ' + K'Q$</span>
+    *   <span v-mark.red>**T:** $Q_{(t+1)} = T \oplus Q$</span>
 *   **Mealy vs. Moore Models:**
     *   **Mealy:** Output depends on both <span v-mark.underline.red>Present State <b>AND</b> Input</span>.
     *   **Moore:** Output depends only on the <span v-mark.underline.red>Present State</span>.

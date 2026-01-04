@@ -1,24 +1,19 @@
 \documentclass[border=10pt]{standalone}
 \usepackage{circuitikz}
-% No special driver fix as requested
 
 \begin{document}
 \begin{circuitikz}[american]
     \ctikzset{logic ports=ieee}
-    \tikzset{
-        neg-d-ff/.style={flipflop, flipflop def={
-            t1=D, t6=Q, t4=\ctikztextnot{Q},
-            c3=1, n3=1 % c3=1 (wedge), n3=1 (negation bubble)
-        }}
-    }
     
-    \node[neg-d-ff] (DFF) at (0,0) {};
+    % Positive Edge D-FF
+    \node[flipflop D] (DFF1) at (0,0) {};
     
-    % Wires to show inputs clearly
-    \draw (DFF.pin 1) -- ++(-0.5,0); % D
-    \draw (DFF.pin 3) -- ++(-0.5,0) node[left] {CLK}; % Clock
-    \draw (DFF.pin 6) -- ++(0.5,0); % Q
-    \draw (DFF.pin 4) -- ++(0.5,0); % Q'
+    % Negative Edge D-FF
+    \node[flipflop D, flipflop def={n3=1}] (DFF2) at (4,0) {};
+    
+    % Labels (Optional, but helps clarify if just symbols)
+    %\node[below=1cm] at (DFF1) {Positive Edge};
+    %\node[below=1cm] at (DFF2) {Negative Edge};
     
 \end{circuitikz}
 \end{document}
