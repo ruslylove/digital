@@ -1,0 +1,9 @@
+# Fdb version 4
+["pdflatex"] 0 "exam/final_exam.tex" "final_exam.pdf" "final_exam" 0 -1
+  "exam/final_exam.tex" 0 -1 0 ""
+  "final_exam.aux" 0 -1 0 "pdflatex"
+  (generated)
+  "final_exam.aux"
+  "final_exam.log"
+  "final_exam.pdf"
+  (rewritten before read)
