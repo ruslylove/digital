@@ -75,7 +75,7 @@ In a **serial transfer**, information is moved one bit at a time.
 *   The destination register is shifted to accept bits at its serial input.
 *   After *n* clock pulses, the *n-bit* transfer is complete.
 
-<img src="/lect_7_serial_transfer.svg" class="rounded-lg bg-white p-4 w-80 mx-auto" alt="Serial Transfer Example">
+<img src="/lect_7_serial_transfer.svg" class="rounded-lg bg-white p-2 w-full mx-auto" alt="Serial Transfer Example">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-4: Serial Transfer from Register A to Register B</div>
 
 </div>
@@ -112,23 +112,30 @@ $$
 layout: two-cols-header
 ---
 
+
 ## Serial Adder
 
 A serial adder is a sequential circuit that adds two binary numbers one bit at a time.
 
-:: left ::
+<div class="grid grid-cols-3 gap-8">
+
+<div>
+
 *   It uses two shift registers to hold the numbers to be added.
 *   A single full adder (FA) performs the addition.
 *   A D flip-flop is used to store the carry-out from one bit position and use it as the carry-in for the next.
 
+</div>
 
+<div class="col-span-2">
 
-:: right ::
-
-<img src="/lect_7_serial_adder.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Serial Adder with D Flip-Flop">
+<img src="/lect_7_serial_adder.svg" class="rounded-lg bg-white p-2 w-full mx-auto" alt="Serial Adder with D Flip-Flop">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-6: Serial Adder using a Full Adder and D Flip-Flop</div>
 
 
+</div>
+
+</div>
 ---
 
 ### Serial Adder Operation Example
@@ -399,7 +406,7 @@ An up-down counter is capable of counting in both ascending and descending order
 
 ---
 
-<img src="/lect_7_4bit_up_down_counter.svg" class="rounded-lg bg-white p-4 w-full" alt="4-bit Up-Down Counter">
+<img src="/lect_7_4bit_up_down_counter.svg" class="rounded-lg bg-white p-8 w-full mx-auto" alt="4-bit Up-Down Counter">
 <div class="text-center text-sm opacity-50 mt-2">Figure 7-16: 4-Bit Synchronous Up/Down Binary Counter</div>
 
 
