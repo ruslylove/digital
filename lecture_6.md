@@ -229,7 +229,29 @@ Logic symbols for the various latches discussed:
 <img src="/lect_6_latch_symbols.svg" class="rounded-lg bg-white p-4 mx-auto w-180" alt="Latch Symbols">
 <p class="text-sm text-center">Figure 6-7. Logic Symbols for SR, S'R', and D Latches.</p>
 
+---
 
+## VHDL Implementation of D-Latch
+
+```vhdl {*}{lines:true}
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity d_latch is
+    port ( D, C : in  std_logic;
+           Q    : out std_logic );
+end d_latch;
+
+architecture behavioral of d_latch is
+begin
+    process(D, C)
+    begin
+        if C = '1' then
+            Q <= D;
+        end if;
+    end process;
+end behavioral;
+```
 
 ---
 layout: two-cols-header
