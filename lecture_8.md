@@ -498,25 +498,93 @@ We assume **D Flip-Flops**.
 ---
 
 **VHDL Implementation**
-```vhdl
-process(clk, reset)
+
+<div class="grid grid-cols-2 gap-4 text-xs">
+
+<div>
+
+**Structural (Equations)**
+
+```vhdl{*}{maxHeight:'380px',lines:true}
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity Modulo6_Struct is
+    Port ( clk, reset, C : in std_logic;
+           Y : out std_logic);
+end Modulo6_Struct;
+
+architecture Struct of Modulo6_Struct is
+    -- Internal Signals
+    signal count, D : std_logic_vector(2 downto 0);
 begin
-    if reset='1' then
-        count <= "000";
-    elsif rising_edge(clk) then
-        if C = '1' then
-            if count = "101" then
-                count <= "000";
-            else
-                count <= count + 1;
+    -- State Register Logic
+    process(clk, reset)
+    begin
+        if reset='1' then count <= "000";
+        elsif rising_edge(clk) then count <= D;
+        end if;
+    end process;
+
+    -- Next State Logic
+    D(2) <= (count(2) and not count(0)) or 
+            (count(2) and not C) or 
+            (count(1) and count(0) and C);
+            
+    D(1) <= (count(1) and not C) or 
+            (count(1) and not count(0)) or 
+            (not count(2) and not count(1) 
+             and count(0) and C);
+
+    D(0) <= count(0) xor C;
+
+    -- Output Logic
+    Y <= count(2) and not count(1) and count(0);
+end Struct;
+```
+
+</div>
+
+<div>
+
+**Behavioral**
+
+```vhdl{*}{maxHeight:'380px',lines:true}
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+entity Modulo6_Behav is
+    Port ( clk, reset, C : in std_logic;
+           Y : out std_logic);
+end Modulo6_Behav;
+
+architecture Behav of Modulo6_Behav is
+    signal count : std_logic_vector(2 downto 0);
+begin
+    process(clk, reset)
+    begin
+        if reset='1' then
+            count <= "000";
+        elsif rising_edge(clk) then
+            if C = '1' then
+                if count = "101" then
+                    count <= "000";
+                else
+                    count <= count + 1;
+                end if;
             end if;
         end if;
-    end if;
-end process;
+    end process;
 
     -- Output Logic
     Y <= '1' when count = "101" else '0';
+end Behav;
 ```
+
+</div>
+
+</div>
 
 
 ---
@@ -584,9 +652,16 @@ From the Next State table, we derive the K-maps for $D_1, D_0$ and Output $S$. N
 
 ---
 
+### Timing Diagram
+
+<img src="/lect_8_one_shot_timing.svg" class="rounded-lg bg-white p-4 h-100 mx-auto" alt="One-Shot Timing Diagram">
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-7: One-Shot Timing Response (Long Press B)</div>
+
+---
+
 ### VHDL Implementation
 
-```vhdl {9-29}{maxHeight:'420px',lines:true}
+```vhdl {*}{maxHeight:'420px',lines:true}
 entity One_Shot is
     Port ( clk, reset : in std_logic;
            B : in std_logic;
@@ -614,12 +689,34 @@ begin
         end if;
     end process;
 
-    -- Output Logic
-    S <= '1' when Q="01" else '0';
-end Behavioral;
+    -- Output Logic (Mealy: S=1 if State=00 and B=1)
+    S <= '1' when (Q="00" and B='1') else '0'; 
 ```
 
+---
 
+### Moore One-Shot Design (Exact Pulse)
+
+**Problem with Mealy:** The output pulse width depends on when the button is pressed (Async Start). It is often less than one clock cycle.
+**Solution:** Use a Moore Machine to synchronize the start and end of the pulse with the clock, ensuring an **exact** 1-cycle pulse width.
+
+**Moore State Diagram:**
+*   **S0 (Idle):** Output 0. Wait for B=1.
+*   **S1 (Pulse):** Output 1. Unconditional transition to S2.
+*   **S2 (Wait):** Output 0. Wait for B=0 (Release).
+
+<img src="/lect_8_one_shot_moore_fsm.svg" class="rounded-lg bg-white p-4 w-60 mx-auto" alt="Moore One-Shot FSM">
+
+---
+
+### Timing Comparison (Mealy vs Moore)
+
+<img src="/lect_8_one_shot_comparison.svg" class="rounded-lg bg-white p-4 h-100 mx-auto" alt="One-Shot Timing Comparison">
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-8: Mealy (Async) vs Moore (Sync) Pulse Generation</div>
+
+
+---
+hide: true
 ---
 
 ## Design Example 5: Simple Microprocessor Control Unit
@@ -741,6 +838,71 @@ $$
 *   $D_0 = Q_1'Q_0' f_2 + Q_1 Q_0 at_2' + Q_1 Q_0' f_1 + Q_1' Q_0 at_1'$
 
 ---
+
+### VHDL Implementation (Moore)
+
+```vhdl{*}{maxHeight:'400px',lines:true}
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity Elevator_Moore is
+    Port ( clk, reset : in std_logic;
+           f1, f2, at1, at2 : in std_logic;
+           go1, go0, led1, led2 : out std_logic);
+end Elevator_Moore;
+
+architecture Behavioral of Elevator_Moore is
+    type state_type is (Floor1, MovingUp, Floor2, MovingDown);
+    signal current_state, next_state : state_type;
+begin
+    -- State Register
+    process(clk, reset)
+    begin
+        if reset = '1' then
+            current_state <= Floor1;
+        elsif rising_edge(clk) then
+            current_state <= next_state;
+        end if;
+    end process;
+
+    -- Next State and Output Logic
+    process(current_state, f1, f2, at1, at2)
+    begin
+        -- Defaults
+        next_state <= current_state;
+        go1 <= '0'; go0 <= '0'; -- Motor Off
+        led1 <= '0'; led2 <= '0';
+        
+        case current_state is
+            when Floor1 =>
+                led1 <= '1';
+                if f2 = '1' then
+                    next_state <= MovingUp;
+                end if;
+                
+            when MovingUp =>
+                go1 <= '1'; go0 <= '1'; -- Move Up
+                if at2 = '1' then
+                    next_state <= Floor2;
+                end if;
+                
+            when Floor2 =>
+                led2 <= '1';
+                if f1 = '1' then
+                    next_state <= MovingDown;
+                end if;
+                
+            when MovingDown =>
+                go1 <= '1'; go0 <= '0'; -- Move Down
+                if at1 = '1' then
+                    next_state <= Floor1;
+                end if;
+        end case;
+    end process;
+end Behavioral;
+```
+
+---
 layout: two-cols-header
 ---
 
@@ -856,7 +1018,22 @@ begin
     end process;
 end Behavioral;
 ```
+---
+layout: two-cols-header
+---
 
+## Moore vs. Mealy Timing
+
+**Key Difference:**
+*   **Moore:** Output changes *synchronously* with the state (and thus the clock).
+*   **Mealy:** Output can change *asynchronously* with inputs (faster response, but potential glitches).
+
+<img src="/lect_8_elevator_timing.svg" class="rounded-lg bg-white p-4 h-70 mx-auto" alt="Elevator Timing Diagram">
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-11: Elevator Full Loop Response (Up and Down)</div>
+
+
+---
+hide: true
 ---
 
 
@@ -881,6 +1058,8 @@ begin
 end process;
 ```
 
+---
+hide: true
 ---
 
 ### Template (Next State & Output Logic)
