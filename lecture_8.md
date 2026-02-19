@@ -155,6 +155,66 @@ $$
 
 
 ---
+layout: two-cols-header
+---
+
+## Analysis Example 2: JK Flip-Flops
+
+:: left ::
+
+**Problem:** Analyze the sequential circuit with two JK flip-flops $A$ and $B$, one input $x$, and no output.
+
+### 1. Derive Flip-Flop Input Equations
+*   $J_A = B, \quad K_A = B \cdot x'$
+*   $J_B = x', \quad K_B = A \oplus x$
+
+### 2. State Transition Table
+
+We evaluate the next state using the JK characteristic equation $Q_{next} = JQ' + K'Q$, or the **JK Characteristic Table**:
+
+$$
+\begin{array}{|cc|c|l|}
+\hline
+J & K & Q_{next} & \text{Operation} \\
+\hline
+0 & 0 & Q & \text{Hold} \\
+0 & 1 & 0 & \text{Reset} \\
+1 & 0 & 1 & \text{Set} \\
+1 & 1 & Q' & \text{Toggle} \\
+\hline
+\end{array}
+$$
+
+:: right ::
+
+<div class="text-xs">
+
+$$
+\begin{array}{|c|c|cc|cc|c|}
+\hline
+\text{PS } (A B) & x & J_A & K_A & J_B & K_B & \text{NS } (A B) \\
+\hline
+0 \quad 0 & 0 & 0 & 0 & 1 & 0 & 0 \quad 1 \\
+0 \quad 0 & 1 & 0 & 0 & 0 & 1 & 0 \quad 0 \\
+\hline
+0 \quad 1 & 0 & 1 & 1 & 1 & 0 & 1 \quad 1 \\
+0 \quad 1 & 1 & 1 & 0 & 0 & 1 & 1 \quad 0 \\
+\hline
+1 \quad 0 & 0 & 0 & 0 & 1 & 1 & 1 \quad 1 \\
+1 \quad 0 & 1 & 0 & 0 & 0 & 0 & 1 \quad 0 \\
+\hline
+1 \quad 1 & 0 & 1 & 1 & 1 & 1 & 0 \quad 0 \\
+1 \quad 1 & 1 & 1 & 0 & 0 & 0 & 1 \quad 1 \\
+\hline
+\end{array}
+$$
+
+</div>
+
+<!-- State Diagram Placeholder -->
+<img src="/lect_8_jk_analysis_state_diagram.svg" class="rounded-lg bg-white p-4 h-60 mx-auto mt-4" alt="JK Analysis State Diagram">
+
+---
 
 ## FSM Synthesis (Design) Procedure
 
@@ -659,7 +719,7 @@ From the Next State table, we derive the K-maps for $D_1, D_0$ and Output $S$. N
 
 ---
 
-### VHDL Implementation
+### VHDL Implementation (Mealy)
 
 ```vhdl {*}{maxHeight:'420px',lines:true}
 entity One_Shot is
@@ -706,6 +766,55 @@ begin
 *   **S2 (Wait):** Output 0. Wait for B=0 (Release).
 
 <img src="/lect_8_one_shot_moore_fsm.svg" class="rounded-lg bg-white p-4 w-60 mx-auto" alt="Moore One-Shot FSM">
+
+---
+
+### VHDL Implementation (Moore)
+
+```vhdl{*}{maxHeight:'400px',lines:true}
+entity One_Shot_Moore is
+    Port ( clk, reset : in std_logic;
+           B : in std_logic;
+           S : out std_logic);
+end One_Shot_Moore;
+
+architecture Behavioral of One_Shot_Moore is
+    type state_type is (S0, S1, S2);
+    signal current_state, next_state : state_type;
+begin
+    -- State Register
+    process(clk, reset)
+    begin
+        if reset = '1' then
+            current_state <= S0;
+        elsif rising_edge(clk) then
+            current_state <= next_state;
+        end if;
+    end process;
+
+    -- Next State and Output Logic
+    process(current_state, B)
+    begin
+        -- Default assignments
+        next_state <= current_state; 
+        S <= '0';
+        
+        case current_state is
+            when S0 => -- Idle
+                if B='1' then 
+                    next_state <= S1; 
+                end if;
+            when S1 => -- Pulse
+                S <= '1'; -- Moore Output
+                next_state <= S2; 
+            when S2 => -- Wait
+                if B='0' then 
+                    next_state <= S0; 
+                end if;
+        end case;
+    end process;
+end Behavioral;
+```
 
 ---
 
