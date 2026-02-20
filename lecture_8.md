@@ -103,7 +103,7 @@ layout: two-cols-header
 
 ### Steps:
 1.  **Determine Logic Equations:**
-    *   Find Next State equations ($D_i, J_i, K_i, T_i$) from the circuit.
+    *   Find flip-flop input equations ($D_i, J_i, K_i, T_i$) from the circuit.
     *   Find Output equations ($Z$).
 2.  **Construct State Transition Table:**
     *   List all possible Present States and Inputs.
@@ -115,7 +115,7 @@ layout: two-cols-header
 :: right ::
 
 <img src="/lect_8_analysis_example_fsm.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Sequential Circuit for Analysis">
-<div class="text-center text-sm opacity-50 mt-2">Figure 8-2: Example Circuit</div>
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-4: Example Circuit</div>
 
 **Equations:**
 *   $D_A = A \oplus x \oplus y$
@@ -352,7 +352,7 @@ Based on the derived equations:
 <div class="col-span-2">
 
 <img src="/lect_8_up_down_counter_circuit.svg" class="rounded-lg bg-white p-4 w-full mx-auto mt-4" alt="2-Bit Up/Down Counter Logic Diagram">
-<div class="text-center text-sm opacity-50 mt-2">Figure 8-3: Logic Diagram of 2-Bit Up/Down Counter</div>
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-5: Logic Diagram of 2-Bit Up/Down Counter</div>
 
 </div>
 </div>
@@ -421,7 +421,7 @@ We derive the Next State equation from Karnaugh maps:
 ### Logic Diagram
 
 <img src="/lect_8_car_security_circuit.svg" class="rounded-lg bg-white p-4 w-120 mx-auto" alt="Car Security Logic Circuit">
-<div class="text-center text-sm opacity-50 mt-2">Figure 8-4: Car Security Logic Diagram</div>
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-6: Car Security Logic Diagram</div>
 
 ---
 
@@ -553,19 +553,17 @@ We assume **D Flip-Flops**.
 ### 3. Logic Diagram
 
 <img src="/lect_8_modulo_6_circuit.svg" class="rounded-lg bg-white p-4 w-110 mx-auto" alt="Modulo-6 Logic Circuit">
-<div class="text-center text-sm opacity-50 mt-2">Figure 8-5: Modulo-6 Counter Logic Diagram</div>
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-7: Modulo-6 Counter Logic Diagram</div>
 
 ---
 
 **VHDL Implementation**
 
 <div class="grid grid-cols-2 gap-4 text-xs">
-
 <div>
 
 **Structural (Equations)**
-
-```vhdl{*}{maxHeight:'380px',lines:true}
+```vhdl{*}{maxHeight:'360px',lines:true}
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
@@ -609,10 +607,10 @@ end Struct;
 
 **Behavioral**
 
-```vhdl{*}{maxHeight:'380px',lines:true}
+```vhdl{*}{maxHeight:'360px',lines:true}
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 entity Modulo6_Behav is
     Port ( clk, reset, C : in std_logic;
@@ -631,7 +629,7 @@ begin
                 if count = "101" then
                     count <= "000";
                 else
-                    count <= count + 1;
+                    count <= std_logic_vector(unsigned(count) + 1);
                 end if;
             end if;
         end if;
@@ -646,6 +644,54 @@ end Behav;
 
 </div>
 
+---
+
+## VHDL Type Conversions
+
+The `numeric_std` library defines the types `unsigned` and `signed` which enable arithmetic operations. We frequently need to convert between these and standard logic vectors or integers.
+
+<div class="grid grid-cols-2 gap-5 text-base mt-4">
+
+<div>
+
+**Conversion Functions:**
+
+<div class="grid grid-cols-2 gap-1 mt-2">
+<div>
+
+*   **Vector to Number**
+    *   `unsigned(slv)`
+    *   `signed(slv)`
+*   **Number to Vector**
+    *   `std_logic_vector(u)`
+    *   `std_logic_vector(s)`
+
+</div>
+<div>
+
+*   **Integer to Number**
+    *   `to_unsigned(int, size)`
+    *   `to_signed(int, size)`
+*   **Number to Integer**
+    *   `to_integer(u)`
+    *   `to_integer(s)`
+
+</div>
+</div>
+
+</div>
+
+<div>
+
+<div class="bg-white rounded-lg p-4">
+
+<img src="/lect_8_vhdl_type_conversion.svg" class="w-full mx-auto" alt="VHDL Type Conversion Diagram">
+
+</div>
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-8: VHDL Type Conversion Diagram</div>
+
+</div>
+</div>
 
 ---
 
@@ -708,14 +754,14 @@ From the Next State table, we derive the K-maps for $D_1, D_0$ and Output $S$. N
 ### Logic Diagram
 
 <img src="/lect_8_one_shot_circuit.svg" class="rounded-lg bg-white p-4 w-120 mx-auto" alt="One-Shot Logic Circuit">
-<div class="text-center text-sm opacity-50 mt-2">Figure 8-6: One-Shot Circuit Logic Diagram</div>
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-9: One-Shot Circuit Logic Diagram</div>
 
 ---
 
 ### Timing Diagram
 
 <img src="/lect_8_one_shot_timing.svg" class="rounded-lg bg-white p-4 h-100 mx-auto" alt="One-Shot Timing Diagram">
-<div class="text-center text-sm opacity-50 mt-2">Figure 8-7: One-Shot Timing Response (Long Press B)</div>
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-10: One-Shot Timing Response (Long Press B)</div>
 
 ---
 
@@ -760,12 +806,22 @@ begin
 **Problem with Mealy:** The output pulse width depends on when the button is pressed (Async Start). It is often less than one clock cycle.
 **Solution:** Use a Moore Machine to synchronize the start and end of the pulse with the clock, ensuring an **exact** 1-cycle pulse width.
 
+<div class="grid grid-cols-2 gap-5">
+<div>
+
 **Moore State Diagram:**
 *   **S0 (Idle):** Output 0. Wait for B=1.
 *   **S1 (Pulse):** Output 1. Unconditional transition to S2.
 *   **S2 (Wait):** Output 0. Wait for B=0 (Release).
 
-<img src="/lect_8_one_shot_moore_fsm.svg" class="rounded-lg bg-white p-4 w-60 mx-auto" alt="Moore One-Shot FSM">
+</div>
+<div>
+
+<img src="/lect_8_one_shot_moore_fsm.svg" class="rounded-lg bg-white p-4 w-90 mx-auto" alt="Moore One-Shot FSM">
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-11: Moore One-Shot FSM</div>
+
+</div>
+</div>
 
 ---
 
@@ -821,8 +877,20 @@ end Behavioral;
 ### Timing Comparison (Mealy vs Moore)
 
 <img src="/lect_8_one_shot_comparison.svg" class="rounded-lg bg-white p-4 h-100 mx-auto" alt="One-Shot Timing Comparison">
-<div class="text-center text-sm opacity-50 mt-2">Figure 8-8: Mealy (Async) vs Moore (Sync) Pulse Generation</div>
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-12: Mealy (Async) vs Moore (Sync) Pulse Generation</div>
 
+
+---
+
+## Comparison: VHDL Behavioral Implementation
+
+| VHDL Coding Aspect | Moore Implementation | Mealy Implementation |
+| :--- | :--- | :--- |
+| **Sensitivity List** | `process(current_state)` | `process(current_state, inputs)` |
+| **Signal Assignment** | Set outside of any input `if/else` checks within the `case` statement. | Set inside `if/else` or `case` blocks that check input values. |
+| **Process Sensitivity** | The output process only needs to wake up on state changes. | The output process MUST wake up on state OR input changes. |
+| **VHDL Code Sample** | `when S0 => A <= '1'; next_state <= S1;` | `when S0 => if X='1' then A<='1'; else A<='0'; end if;` |
+| **Timing Behavior** | Output is stable between clock cycles (via state register). | Output can change asynchronously whenever inputs change. |
 
 ---
 hide: true
@@ -853,7 +921,7 @@ In this example, we will synthesize an FSM that illustrates what a simple contro
 
 <!-- Placeholder for Figure 6.18(a) -->
 <img src="/lect_8_simple_cpu_fsm_example.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Simple CPU FSM">
-<div class="text-center text-sm opacity-50 mt-2">Figure 8-7: Control Unit State Diagram</div>
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-13: Control Unit State Diagram</div>
 
 </div>
 </div>
@@ -883,7 +951,7 @@ In this example, we will synthesize an FSM that illustrates what a simple contro
 
 <!-- Elevator Setup Illustration -->
 <img src="/lect_8_elevator_setup.svg" class="rounded-lg bg-white p-4 w-full mx-auto mb-4" alt="Elevator System Setup">
-<div class="text-center text-sm opacity-50 mt-2 mb-8">Figure 8-8: Elevator System Setup</div>
+<div class="text-center text-sm opacity-50 mt-2 mb-8">Figure 8-14: Elevator System Setup</div>
 
 
 </div>
@@ -904,7 +972,7 @@ layout: two-cols
 
 <!-- Placeholder for Figure 6.19(a) (FSM Diagram) -->
 <img src="/lect_8_elevator_fsm.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Elevator FSM">
-<div class="text-center text-sm opacity-50 mt-2">Figure 8-9: Elevator Controller State Diagram</div>
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-15: Elevator Controller State Diagram</div>
 
 ---
 layout: two-cols-header
@@ -1035,7 +1103,7 @@ layout: two-cols-header
 ### Mealy State Diagram
 
 <img src="/lect_8_elevator_mealy_fsm.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Mealy Elevator State Diagram">
-<div class="text-center text-sm opacity-50 mt-2">Figure 8-10: Mealy Elevator State Diagram</div>
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-16: Mealy Elevator State Diagram</div>
 
 
 
@@ -1138,7 +1206,7 @@ layout: two-cols-header
 *   **Mealy:** Output can change *asynchronously* with inputs (faster response, but potential glitches).
 
 <img src="/lect_8_elevator_timing.svg" class="rounded-lg bg-white p-4 h-70 mx-auto" alt="Elevator Timing Diagram">
-<div class="text-center text-sm opacity-50 mt-2">Figure 8-11: Elevator Full Loop Response (Up and Down)</div>
+<div class="text-center text-sm opacity-50 mt-2">Figure 8-17: Elevator Full Loop Response (Up and Down)</div>
 
 
 ---
