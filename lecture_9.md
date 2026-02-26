@@ -678,7 +678,28 @@ $$
 
 ---
 
-**Control Unit FSM (State Diagram):**
+**Control Unit FSM (Simplified - No Wait State):**
+
+*   **$S_{input}$:** Load register A.
+*   **$S_{equal}$:** Load B with 8.
+*   **$S_{notequal}$:** Load B with 13.
+*   **$S_{output}$:** Output the value from B.
+
+<img src="/lect_9_if_then_else_fsm_no_extra.svg" class="rounded-lg bg-white p-4 w-120 object-contain mx-auto" alt="If-Then-Else Control Unit FSM (Simplified)">
+<p class="text-center text-sm">Figure 9-21: If-Then-Else Control Unit FSM (Simplified)</p>
+
+---
+
+**Simplified FSM: Timing Problem (No Wait State)**
+
+Without the `S_extra` state, the control unit checks the status signal `(A=5)` immediately after the input is loaded. However, the output of Register A and the subsequent comparator logic may not have stabilized (propagated) yet, leading to an incorrect decision.
+
+<img src="/lect_9_if_then_else_no_wait.png" class="rounded-lg bg-white p-4 h-50 object-contain mx-auto" alt="Timing problem without wait state">
+<p class="text-center text-sm">Figure 9-22: Simulation waveform showing the timing problem without wait state</p>
+
+---
+
+**Control Unit FSM (with Wait State):**
 
 *   **$S_{input}$:** Load register A.
 *   **$S_{extra}$:** A wait state to allow register A to settle before checking its value.
@@ -687,7 +708,7 @@ $$
 *   **$S_{output}$:** Output the value from B.
 
 <img src="/lect_9_if_then_else_fsm.svg" class="rounded-lg bg-white p-4 w-120 object-contain mx-auto" alt="If-Then-Else Control Unit FSM">
-<p class="text-center text-sm">Figure 9-21: If-Then-Else Control Unit FSM</p>
+<p class="text-center text-sm">Figure 9-23: If-Then-Else Control Unit FSM</p>
 
 ---
 
@@ -839,7 +860,17 @@ end Structural;
 
 
 <img src="/lect_9_if_then_else_combined.svg" class="rounded-lg bg-white p-4 h-100 object-contain mx-auto" alt="if-then-else combined">
-<p class="text-center text-sm">Figure 9-22: if-then-else Control Unit combined with Datapath</p>
+<p class="text-center text-sm">Figure 9-24: if-then-else Control Unit combined with Datapath</p>
+
+---
+
+**Wait State: Correct Decision**
+
+With the `S_extra` state, the control unit waits for one clock cycle before checking the status signal. This gives Register A enough time to stabilize, ensuring the control unit makes the correct decision based on the actual value of A.
+
+<img src="/lect_9_if_then_else_wait_state.png" class="rounded-lg bg-white p-4 h-50 object-contain mx-auto" alt="Correct decision with wait state">
+<p class="text-center text-sm">Figure 9-25: Simulation waveform showing the correct decision with wait state</p>
+
 
 
 ---
@@ -878,7 +909,7 @@ OUTPUT X
 
 **Datapath:**
 <img src="/lect_9_gcd_datapath.png" class="rounded-lg bg-white p-1 w-75 mx-auto" alt="GCD Datapath">
-<p class="text-center text-sm">Figure 9-23: GCD Datapath</p>
+<p class="text-center text-sm">Figure 9-26: GCD Datapath</p>
 
 </div>
 </div>
@@ -897,7 +928,7 @@ layout: two-cols
 :: right ::
 
 <img src="/lect_9_gcd_fsm.svg" class="rounded-lg bg-white p-4 w-full object-contain mx-auto" alt="GCD Control Unit FSM">
-<p class="text-center text-sm">Figure 9-24: GCD Control Unit FSM</p>
+<p class="text-center text-sm">Figure 9-27: GCD Control Unit FSM</p>
 
 
 ---
@@ -1372,10 +1403,10 @@ end Structural;
 ---
 
 <img src="/lect_9_gcd.png" class="rounded-lg bg-white p-1 w-170 mx-auto" alt="GCD Control Unit and Datapath">
-<p class="text-center text-sm">Figure 9-25: GCD Control Unit and Datapath</p>
+<p class="text-center text-sm">Figure 9-28: GCD Control Unit and Datapath</p>
 
 <img src="/lect_9_gcd_sim.png" class="rounded-lg bg-white p-1 w-full mx-auto" alt="GCD Simulation">
-<p class="text-center text-sm">Figure 9-26: GCD Simulation</p>
+<p class="text-center text-sm">Figure 9-29: GCD Simulation</p>
 
 ---
 
@@ -1493,12 +1524,12 @@ end Behavioral;
 ---
 
 <img src="/lect_9_gcd_fsmd.png" class="rounded-lg bg-white w-full mx-auto" alt="GCD Logic Diagram (Synthesized)">
-<p class="text-center text-sm">Figure 9-27: GCD Logic Diagram (Synthesized)</p>
+<p class="text-center text-sm">Figure 9-30: GCD Logic Diagram (Synthesized)</p>
 
 ---
 
 <img src="/lect_9_gcd_fsmd_sim.png" class="rounded-lg bg-white w-full mx-auto" alt="GCD FSMD Simulation">
-<p class="text-center text-sm">Figure 9-28: GCD FSMD Simulation</p>
+<p class="text-center text-sm">Figure 9-31: GCD FSMD Simulation</p>
 
 ---
 
