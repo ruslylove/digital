@@ -58,6 +58,7 @@
     \node[above=1cm of memory] (clk) {System CLK};
     \draw[->, thick] (clk) -- (memory.north);
     \draw[->, thick] (clk) -| (edge_det.north);
+    \draw[->, thick] (clk) -| ([xshift=-2mm]output_interface.north west);
 
     % Output Interface Inputs
     % Needs modulation clock?
