@@ -1,0 +1,9 @@
+% Debug helper: logs natural and printed width of every \includegraphics to figreport.txt
+\newwrite\figrep
+\immediate\openout\figrep=figreport.txt
+\let\origincl\includegraphics
+\RenewDocumentCommand{\includegraphics}{O{} m}{%
+  \setbox0=\hbox{\origincl{#2}}%
+  \setbox2=\hbox{\origincl[#1]{#2}}%
+  \immediate\write\figrep{#2 \the\wd0 \the\wd2 \the\ht2 \thepage}%
+  \origincl[#1]{#2}}

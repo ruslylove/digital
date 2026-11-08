@@ -1,0 +1,75 @@
+\chapter*{Glossary}
+\addcontentsline{toc}{chapter}{Glossary}
+\markboth{Glossary}{Glossary}
+\begin{glossarylist}
+\glossaryentry{ALU (arithmetic logic unit)}{A combinational circuit that performs a selectable set of arithmetic and logic operations on its operands (\cref{sec:alu}).}
+\glossaryentry{Accumulator}{A register that holds an operand of an instruction and receives its result (\cref{sec:ec1}).}
+\glossaryentry{ASIC}{Application-specific integrated circuit: a chip customised for one application (\cref{sec:chiptypes}).}
+\glossaryentry{Asynchronous reset}{A reset that acts immediately, independently of the clock (\cref{sec:flipflops}).}
+\glossaryentry{Bit}{A binary digit, 0 or 1.}
+\glossaryentry{Boolean algebra}{The algebra of two-valued variables with the operations AND, OR and NOT; the mathematical basis of logic design (\cref{sec:boolean}).}
+\glossaryentry{BCD (binary-coded decimal)}{A code that represents each decimal digit by four bits (\cref{sec:codes}).}
+\glossaryentry{Bus}{A set of wires shared by several devices, only one of which drives it at a time (\cref{sec:tristate}).}
+\glossaryentry{Canonical form}{A sum of minterms or a product of maxterms of a function (\cref{sec:synthesis}).}
+\glossaryentry{Carry-lookahead adder}{An adder that computes all carries in parallel from generate and propagate signals (\cref{sec:cla}).}
+\glossaryentry{Characteristic equation}{The equation that gives the next state of a flip-flop as a function of its inputs and present state (\cref{sec:flipflops}).}
+\glossaryentry{Clock}{A periodic signal that synchronises the state changes of a sequential circuit.}
+\glossaryentry{Combinational circuit}{A circuit whose outputs depend only on its present inputs (\cref{ch:blocks}).}
+\glossaryentry{Control unit}{The FSM of a processor that generates control signals to sequence the datapath (\cref{sec:dpcu}).}
+\glossaryentry{Control word}{The vector of control-signal values that drives the datapath during one clock cycle (\cref{sec:datapath}).}
+\glossaryentry{Counter}{A register that goes through a prescribed sequence of states (\cref{sec:counters}).}
+\glossaryentry{Datapath}{The part of a processor that performs data operations: registers, functional units and multiplexers (\cref{sec:dpcu}).}
+\glossaryentry{Decoder}{A circuit that activates one of $2^n$ output lines according to an $n$-bit input code (\cref{sec:decoders}).}
+\glossaryentry{Don't-care}{An input combination whose output value is unspecified or irrelevant, used to simplify logic (\cref{sec:dontcare}).}
+\glossaryentry{Duality}{The principle that interchanging AND with OR and 0 with 1 in a true Boolean identity gives another true identity (\cref{sec:boolean}).}
+\glossaryentry{Edge-triggered}{Responding only at a clock edge, as a flip-flop does (\cref{sec:flipflops}).}
+\glossaryentry{Encoder}{A circuit that produces the binary code of the active input line (\cref{sec:encoders}).}
+\glossaryentry{Excitation table}{A table of the flip-flop inputs needed for each state transition (\cref{sec:seq-design}).}
+\glossaryentry{FPGA}{Field-programmable gate array: a programmable logic chip configured by the user (\cref{sec:chiptypes}).}
+\glossaryentry{Finite state machine (FSM)}{A model with a finite set of states, transitions and outputs, used to design sequential circuits (\cref{ch:fsm}).}
+\glossaryentry{Flip-flop}{An edge-triggered one-bit memory element (\cref{sec:flipflops}).}
+\glossaryentry{FSMD}{A style in which the datapath operations are written inside a behavioural FSM (\cref{sec:fsmd}).}
+\glossaryentry{Gate}{A circuit that implements a basic logic function (\cref{sec:gates}).}
+\glossaryentry{Generate and propagate}{Signals $G_i=A_iB_i$ and $P_i=A_i\oplus B_i$ used by carry-lookahead adders (\cref{sec:cla}).}
+\glossaryentry{Gray code}{A code in which successive values differ in one bit.}
+\glossaryentry{Hardware description language (HDL)}{A language, such as VHDL or Verilog, that describes digital hardware (\cref{sec:flow}).}
+\glossaryentry{Hexadecimal}{Base-16 notation, one digit per four bits.}
+\glossaryentry{High impedance (Hi-Z)}{The third state of a three-state output, in which the output is disconnected (\cref{sec:tristate}).}
+\glossaryentry{Instruction cycle}{The sequence of fetch, decode and execute performed for every instruction (\cref{sec:cpu-design}).}
+\glossaryentry{Instruction set}{The set of operations a processor can perform and their binary encoding (\cref{sec:cpu-design}).}
+\glossaryentry{Karnaugh map}{A diagram that shows the minterms of a function so that adjacent squares differ in one variable (\cref{ch:kmap}).}
+\glossaryentry{Latch}{A level-triggered one-bit memory element (\cref{sec:latches}).}
+\glossaryentry{Logic synthesis}{The generation of a logic circuit from a functional description (\cref{sec:synthesis}).}
+\glossaryentry{Maxterm}{A sum term that contains every variable once; it is 0 for exactly one input combination (\cref{sec:synthesis}).}
+\glossaryentry{Mealy machine}{An FSM whose outputs depend on the present state and the inputs (\cref{sec:models}).}
+\glossaryentry{Minterm}{A product term that contains every variable once; it is 1 for exactly one input combination (\cref{sec:synthesis}).}
+\glossaryentry{Moore machine}{An FSM whose outputs depend only on the present state (\cref{sec:models}).}
+\glossaryentry{Moore's law}{The observation that the number of transistors per chip doubles every one to two years (\cref{sec:moore}).}
+\glossaryentry{Multiplexer}{A circuit that selects one of several data inputs under the control of select lines (\cref{sec:mux}).}
+\glossaryentry{One-hot encoding}{A state encoding in which exactly one flip-flop is 1 in each state (\cref{sec:fsm-synth}).}
+\glossaryentry{Opcode}{The part of an instruction that specifies the operation.}
+\glossaryentry{Overflow}{A result that does not fit in the number of bits available (\cref{sec:overflow}).}
+\glossaryentry{Parity bit}{An extra bit that makes the number of 1s in a word even or odd, used to detect errors (\cref{sec:parity}).}
+\glossaryentry{Prime implicant}{A product term that cannot be combined with another to form a larger group (\cref{ch:kmap}).}
+\glossaryentry{Program counter (PC)}{The register that holds the address of the next instruction.}
+\glossaryentry{Register}{A group of flip-flops that stores one word (\cref{sec:registers}).}
+\glossaryentry{Register-transfer level (RTL)}{An abstraction that describes a circuit by data transfers between registers and the operations performed on them (\cref{sec:rtl}).}
+\glossaryentry{Ripple-carry adder}{An adder in which the carry propagates through a chain of full adders (\cref{sec:adders}).}
+\glossaryentry{Sampling}{Measuring a signal at regular time intervals (\cref{sec:adc}).}
+\glossaryentry{Shift register}{A register that moves its contents one position per clock pulse (\cref{sec:shift}).}
+\glossaryentry{Sign-magnitude}{A signed-number representation with a sign bit and a magnitude (\cref{sec:signed}).}
+\glossaryentry{State diagram}{A graph with states as nodes and transitions as labelled arrows (\cref{sec:seq-analysis}).}
+\glossaryentry{State table}{A table of next states and outputs for each present state and input (\cref{sec:seq-analysis}).}
+\glossaryentry{Status signal}{A signal sent from the datapath to the control unit to report a condition (\cref{sec:dpcu}).}
+\glossaryentry{Sum of products (SOP)}{An OR of AND terms (\cref{sec:synthesis}).}
+\glossaryentry{Product of sums (POS)}{An AND of OR terms (\cref{sec:synthesis}).}
+\glossaryentry{Synchronous circuit}{A sequential circuit whose state changes only at clock edges (\cref{ch:latches}).}
+\glossaryentry{Testbench}{A VHDL entity that stimulates and observes a unit under test (\cref{sec:testbench}).}
+\glossaryentry{Three-state gate}{A gate with outputs 0, 1 and high impedance (\cref{sec:tristate}).}
+\glossaryentry{Truth table}{A table that gives the output of a function for every input combination (\cref{sec:switches-logic}).}
+\glossaryentry{Two's complement}{The standard representation of signed integers, in which negation is inversion plus one (\cref{sec:signed}).}
+\glossaryentry{Universal gate}{A gate (NAND or NOR) from which any logic function can be built.}
+\glossaryentry{VHDL}{VHSIC Hardware Description Language, IEEE standard 1076~\cite{ieee1076} (\cref{app:vhdl}).}
+\glossaryentry{Von Neumann architecture}{A computer organisation in which instructions and data share one memory (\cref{sec:vonneumann}).}
+\glossaryentry{Wait state}{A state added to an FSM to give signals time to settle (\cref{ex:cu2}).}
+\end{glossarylist}

@@ -1,0 +1,14 @@
+lect_4_sim_result_RA 3
+lect_4_sim_result_AS 4
+lect_4_sim_result_cla_16bit 3
+lect_4_sim_result_mul_4x4 3
+lect_9_if_then_else_no_wait 2
+lect_9_if_then_else_wait_state 3
+lect_9_gcd_sim 5
+lect_9_gcd_fsmd_sim 4
+lect_10_ec-1_count_10_9 5
+lect_10_ec-1_count_2_1 5
+lect_10_ec2_sim_1 5
+lect_10_ec2_sim_2 5
+lect_10_ec2_sim_3 5
+lect_10_ec2_sim_4 5lect_2_three_way_light_sim 4

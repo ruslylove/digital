@@ -1,0 +1,65 @@
+% Cover illustration (own drawing): binary background, gate -> flip-flop (with clock) -> FSM -> CPU.
+% Everything sits on a grid: signal rails at y = 0 and y = +-0.5; CPU pins every 0.5 cm.
+% Width is 13.6 cm; used on the title page.
+\begin{tikzpicture}[x=1cm,y=1cm, line cap=round, line join=round,
+    trace/.style={line width=1.5pt, color=kmutnborange},
+    tracg/.style={line width=1.5pt, color=kmutnbgreen},
+    traci/.style={line width=1.5pt, color=ink},
+    pulse/.style={fill=white, draw=kmutnborange, line width=1pt, circle, inner sep=1.6pt},
+    lab/.style={font=\sffamily\bfseries\scriptsize, color=ink}]
+  % ---- faint binary background -------------------------------------------
+  \foreach \i in {0,...,39}{\foreach \j in {0,...,11}{
+     \pgfmathtruncatemacro{\b}{mod(\i*7+\j*5+\i*\j,2)}
+     \ifnum\b=1 \node[font=\ttfamily\scriptsize, text=kmutnborange!30] at (0.17+0.34*\i,-2.05+0.36*\j) {1};
+     \else      \node[font=\ttfamily\scriptsize, text=greyline!35] at (0.17+0.34*\i,-2.05+0.36*\j) {0};\fi
+  }}
+  \draw[kmutnborange!60, line width=0.6pt, rounded corners=6pt] (0.05,-1.95) rectangle (13.55,1.95);
+  % ---- AND gate: inputs enter on straight horizontal wires -------------------
+  \node[and port, scale=1.0, fill=accentlight, draw=kmutnborange, line width=1.5pt] (g) at (2.45,0) {};
+  \draw[trace] (g.in 1 -| 0.65,0) -- (g.in 1);
+  \draw[trace] (g.in 2 -| 0.65,0) -- (g.in 2);
+  \node[lab] at (g.in 1 -| 0.35,0) {A};
+  \node[lab] at (g.in 2 -| 0.35,0) {B};
+  % ---- rail y = 0: gate -> D flip-flop -> FSM ----------------------------------
+  \draw[tracg] (g.out) -- (4.75,0);
+  \draw[tracg, fill=greenlight, rounded corners=2pt] (4.75,-0.95) rectangle (6.25,0.95);
+  \node[lab, text=kmutnbgreen, anchor=west] at (4.85,0) {D};
+  \node[lab, text=kmutnbgreen, anchor=east] at (6.15,0) {Q};
+  \node[lab, text=kmutnbgreen] at (5.5,0.55) {FF};
+  \draw[tracg] (4.75,-0.55) -- (5.05,-0.7) -- (4.75,-0.85);          % clock notch on rail y = -0.7
+  \draw[tracg] (2.9,-1.2) -- (3.3,-1.2) -- (3.3,-0.7) -- (3.7,-0.7) -- (3.7,-1.2) -- (4.1,-1.2) -- (4.1,-0.7) -- (4.75,-0.7);
+  \node[lab, text=kmutnbgreen, anchor=east] at (2.8,-0.95) {clk};
+  % ---- FSM: s0 on the rail, s1 / s2 on the rails y = +-0.5 ------------------------
+  \node[circle, draw=kmutnborange, fill=accentlight, line width=1.4pt, minimum size=0.62cm, inner sep=0] (s0) at (7.6,0) {};
+  \node[circle, draw=kmutnborange, fill=accentlight, line width=1.4pt, minimum size=0.62cm, inner sep=0] (s1) at (8.6,0.5) {};
+  \node[circle, draw=kmutnborange, fill=accentlight, line width=1.4pt, minimum size=0.62cm, inner sep=0] (s2) at (8.6,-0.5) {};
+  \node[lab, text=accent] at (s0) {S0}; \node[lab, text=accent] at (s1) {S1}; \node[lab, text=accent] at (s2) {S2};
+  \draw[-{Stealth[length=2mm]}, trace] (s0) -- (s1);
+  \draw[-{Stealth[length=2mm]}, trace] (s1) -- (s2);
+  \draw[-{Stealth[length=2mm]}, trace] (s2) -- (s0);
+  \draw[tracg] (6.25,0) -- (s0.west);
+  \node[lab, text=accent] at (8.0,-1.15) {FSM};
+  % ---- rails y = +-0.5: FSM -> CPU --------------------------------------------------
+  \draw[trace] (s1.east) -- (10.5,0.5);
+  \draw[tracg] (s2.east) -- (10.5,-0.5);
+  % ---- CPU chip: body 10.5..12.9 x -1.25..1.25, pins every 0.5 cm ---------------------
+  \foreach \p in {-1.0,-0.5,0,0.5,1.0}{
+     \draw[line width=1.6pt, color=greyline] (10.2,\p) -- (10.5,\p);
+     \draw[line width=1.6pt, color=greyline] (12.9,\p) -- (13.2,\p);
+     \draw[line width=1.6pt, color=greyline] (11.7+\p*1.0+0.0,-1.55) -- (11.7+\p*1.0,-1.25);
+     \draw[line width=1.6pt, color=greyline] (11.7+\p*1.0,1.25) -- (11.7+\p*1.0,1.55);
+  }
+  \draw[trace] (10.2,0.5) -- (10.5,0.5);   % wires drawn over the pins they feed
+  \draw[tracg] (10.2,-0.5) -- (10.5,-0.5);
+  \fill[ink, rounded corners=4pt] (10.5,-1.25) rectangle (12.9,1.25);
+  \fill[white, opacity=0.12, rounded corners=3pt] (10.68,-1.07) rectangle (12.72,1.07);
+  \node[font=\sffamily\bfseries\large, text=white] at (11.7,0) {CPU};
+  \fill[kmutnborange] (10.74,1.01) circle (0.06);                   % pin-1 marker
+  \draw[traci, -{Stealth[length=2.2mm]}] (13.2,0) -- (13.5,0);
+  % ---- travelling pulses, all centred on their rails ------------------------------------
+  \node[pulse] at (g.in 1 -| 0.95,0) {};
+  \node[pulse, draw=kmutnbgreen] at (3.95,0) {};
+  \node[pulse, draw=kmutnbgreen] at (6.9,0) {};
+  \node[pulse] at (9.75,0.5) {};
+  \node[pulse, draw=kmutnbgreen] at (9.75,-0.5) {};
+\end{tikzpicture}

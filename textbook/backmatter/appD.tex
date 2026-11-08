@@ -1,0 +1,173 @@
+\chapter{Answers to Selected Exercises}\label{app:answers}
+
+Answers are given for most numerical and design exercises. For design exercises one correct solution is given; other correct solutions may exist. Verify your own answers by simulation before comparing.
+
+\newcommand{\ans}[1]{\par\noindent\textbf{#1}\enspace}
+
+\section*{Chapter 1}
+\ans{1.1} (a)~analog; (b)~digital; (c)~digital (two states); (d)~analog.
+\ans{1.2} (a)~11; (b)~50; (c)~129.
+\ans{1.3} (a)~$100101$; (b)~$1100100$; (c)~$11111111$.
+\ans{1.4} (a)~5 bits; (b)~4 bits; (c)~20 bits ($2^{20}=1\,048\,576\ge10^6$).
+\ans{1.5} $Q=3.3/256=12.9$~mV; maximum error $6.45$~mV; $1.00/0.01289=77.6$, so the code is $77=\bin{01001101}$.
+\ans{1.6} $500/0.1=5000$ levels, so 13 bits ($2^{12}=4096<5000\le8192$).
+\ans{1.8} Ratio $1.2\times10^{6}/275\,000=4.36$, $\log_2=2.12$ doublings in 4 years, i.e.\ about 1.9 years, a little faster than the long-run average of 2.3 years.
+
+\section*{Chapter 2}
+\ans{2.1} (a)~$f=1$ for rows 3, 5, 6, 7; (b)~$f=x'yz+xy'z+xyz'+xyz$; (c)~$f=xy+xz+yz$.
+\ans{2.2} $A=S(D+W)=SD+SW$.
+\ans{2.3} $M_L=L\,(C\xor R)=LCR'+LC'R$; $M_R=R\,(L\xor C)=L'CR+LC'R$.
+\ans{2.4} Segment $a$ is lit for the digits 0, 2, 3, 5, 6, 7, 8, 9 (off for 1 and 4). With don't-cares for 10--15, $a_{\mathrm{lit}}=b_3+b_1+b_2b_0+b_2'b_0'$; on a common-anode display the output is $\overline{a_{\mathrm{lit}}}$.
+\ans{2.6} (a)~$x(x'+y)=xy$; (b)~$xy+xz=x(y+z)$; (c)~$(x+y)(x'+z)(y+z)=(x+y)(x'+z)$.
+\ans{2.7} (a)~$F'=x'y'+x'z$; (b)~$F'=xy+x'y'$; (c)~$F'=a'b'+c'd'$.
+\ans{2.8} (a)~$F=x'+y$; (b)~$F=xz$ (first $(x+y)(x+y')=x$); (c)~$F=xy+x'z$ (consensus).
+\ans{2.9} (a)~$f=x'y'z'+x'yz+xy'z+xyz'$, and $f=\PM(1,2,4,7)=(x+y+z')(x+y'+z)(x'+y+z)(x'+y'+z')$; (b)~$f=1$ when the number of 1s among $x,y,z$ is even; (c)~$f'=\Sm(1,2,4,7)$.
+\ans{2.10} $f=\Sm(3,5,6)=x_1x_2x_3'+x_1x_2'x_3+x_1'x_2x_3$.
+\ans{2.11} $E=(A_1\xor B_1)'\,(A_0\xor B_0)'$.
+\ans{2.12} $2^{2^n}$: (a)~16; (b)~256.
+\ans{2.13} (a)~$f=x_1\xor x_2\xor x_3\xor x_4$; (b)~8 minterms (the odd-weight inputs).
+
+\section*{Chapter 3}
+\ans{3.1} $F=C'+A'B$.
+\ans{3.2} $F=x'y'+x'z'+xz$ (using $d(5)$ and $d(13)$ as 1s in the group $xz$).
+\ans{3.3} $F=(x'+z)(x+y'+z')$.
+\ans{3.4} Primes are 2, 3, 5, 7. $F=\Sm(2,3,5,7)+d(10\text{--}15)$ gives $F=B'C+BD$; as a NAND--NAND circuit, $F=\overline{\overline{B'C}\cdot\overline{BD}}$ (two 2-input NANDs, one inverter for $B$, one output NAND). $G=\Sm(0,3,5,6,9)+d(10\text{--}15)$ gives $G=(A'+D)(B'+C+D)(B+C'+D)(A+B+C+D')(B'+C'+D')$; as a NOR--NOR circuit, five first-level NOR gates form the complemented sum terms and one NOR gate combines them (plus inverters for the complemented literals).
+\ans{3.5} Prime implicants: $x'z'$, $x'y$, $xz$, $yz$. Essential: $x'z'$ and $xz$. Minimal SOPs: $x'z'+xz+x'y$ and $x'z'+xz+yz$.
+\ans{3.6} (a)~$x'z'$; (b)~$w'x'+wx$; (c)~$x'z'+xz$.
+\ans{3.7} (a)~$F=\overline{\overline{AB}\cdot\overline{CD'}\cdot\overline{A'C'}}$: 3 inverters ($A'$, $C'$, $D'$), three 2-input NANDs and one 3-input NAND = 7 gates. (b)~NOR-only: 3 inverters ($A'$, $B'$, $C'$), three NORs ($AB=\mathrm{NOR}(A',B')$, $CD'=\mathrm{NOR}(C',D)$, $A'C'=\mathrm{NOR}(A,C)$), a 3-input NOR and a final inverter = 8 gates.
+\ans{3.8} The odd function $A\xor B\xor C\xor D$ has 8 ones in its K-map (a checkerboard).
+\ans{3.9} $P=\overline{w\xor x\xor y\xor z}$, i.e.\ \code{p <= not (w xor x xor y xor z);}. For $\bin{0110}$, $P=1$; for $\bin{0111}$, $P=0$; for $\bin{1111}$, $P=1$.
+\ans{3.10} $\bin{1000001}$ has two 1s: (a)~even parity bit $0$; (b)~odd parity bit $1$. The received word has three 1s, so an error is detected, but the position of the error cannot be determined.
+\ans{3.11} $b_{\mathrm{lit}}=b_2'+b_1'b_0'+b_1b_0$; $c_{\mathrm{lit}}=b_2+b_1'+b_0$.
+
+\section*{Chapter 4}
+\ans{4.1} (a)~$\bin{1011\,0101}=\mathrm{B5}$; (b)~$-75$.
+\ans{4.2} $A=105$, $B=-42$. (a)~$A+B=\bin{0011\,1111}=63$, no overflow (different signs). (b)~$-B=\bin{0010\,1010}$; $A+(-B)=\bin{1001\,0011}$, which reads as $-109$: overflow, since $105+42=147>127$.
+\ans{4.3} (a)~about $16\times2t=32t$. (b)~$G_i=A_iB_i$, $P_i=A_i\xor B_i$; they let every carry be computed directly from the inputs, $C_{i+1}=G_i+P_iC_i$.
+\ans{4.4} One internal signal, the carry between the two 4-bit adders: \code{signal c4 : std_logic;}, with \code{U0: ripple_adder_4bit port map (A(3 downto 0), B(3 downto 0), Cin, S(3 downto 0), c4);} and \code{U1: ripple_adder_4bit port map (A(7 downto 4), B(7 downto 4), c4, S(7 downto 4), Cout);}.
+\ans{4.5} (a)~$182=\mathrm{B6}$; (b)~$\bin{1010\,0111}=167$; (c)~$\bin{111\,010\,101}=469$; (d)~$\bin{0.1101}$.
+\ans{4.6} $+19=\bin{010011}$, $-19=\bin{101101}$, $-32=\bin{100000}$; range $-32$ to $+31$.
+\ans{4.7} (a)~$01001+00111=10000$, overflow; (b)~$10111+11000=1\,01111\to01111=+15$, overflow; (c)~$01100+11011=1\,00111\to00111=7$, no overflow.
+\ans{4.9} $C_{out}=AB+AC_{in}+BC_{in}$ (the majority function).
+\ans{4.10} $G=(G_3G_2G_1G_0)=0100$, $P=1011$; $C_1=C_2=C_3=C_4=1$; $S=\bin{0010}$ with carry-out 1, i.e.\ $10010=18=11+6+1$.
+\ans{4.11} Partial products $0$, $\bin{10110}$, $\bin{101100}$, $0$; the sum is $22+44=66=\bin{0100\,0010}$.
+\ans{4.12} (a)~$\bin{1010.0101}=\mathrm{A5}_{16}$; (b)~$\bin{0101.1100}=5.75$; (c)~resolution $2^{-8}=0.0039$; range $0$ to $255.996$.
+\ans{4.13} (a)~$0.15625=\bin{1.01}\times2^{-3}$, $E=124$, word $\bin{0\,01111100\,0100\dots0}=\mathrm{3E200000}$; (b)~$\bin{0\,10000010\,1001\dots}=1.5625\times2^{3}=12.5$.
+\ans{4.14} (a)~$\bin{0010\,0000\,0010\,0110}$ (16 bits) versus $\bin{111\,1110\,1010}$ (11 bits). (b)~24 bits in BCD; 20 bits in binary.
+\ans{4.15} (a)~$48\ 69\ 21$; (b)~subtract $30_{16}$ (or mask with $0F$); (c)~set bit 5 (OR with $20_{16}$).
+\ans{4.16} The carry into the sign bit ($c_3$) must be available: add it as an extra output of \code{ripple\_adder\_4bit}; then $V=c_3\xor c_4$ (an XOR gate).
+
+\section*{Chapter 5}
+\ans{5.1} Three 2-to-1 multiplexers: two in the first stage (select $S_0$), one in the second (select $S_1$).
+\ans{5.2} $I_0=C$, $I_1=C$, $I_2=C$, $I_3=1$.
+\ans{5.4} $x_3=1,x_2=1,x_1=0,x_0=1$; $A>B=1$, $A=B=0$, $A<B=0$.
+\ans{5.5} $F=(A\xor B)+C$, which is 0 only for $ABC=000$ and $110$: $F=\Sm(1,2,3,4,5,7)$.
+\ans{5.6} $S=D_1+D_2+D_4+D_7$, $C_{out}=D_3+D_5+D_6+D_7$.
+\ans{5.7} $x=D_0'D_1'(D_2+D_3)$, $y=D_0'(D_1+D_2'D_3)$, $V=D_0+D_1+D_2+D_3$.
+\ans{5.8} $I_0=D'$, $I_1=D'$, $I_2=0$, $I_3=1$, $I_4=D'$, $I_5=D'$, $I_6=D$, $I_7=D$.
+\ans{5.9} $x$ is the select input; $I_1=y$, $I_0=z$.
+\ans{5.10} Four 3-to-8 decoders (with enable) and one 2-to-4 decoder whose outputs drive the four enables.
+\ans{5.11} Seven.
+\ans{5.12} (a)~$\bin{1100}$, $>9$, add $\bin{0110}$: $\bin{1\,0010}$: carry 1, digit 2 (12). (b)~$\bin{1\,0011}$ ($K=1$), add 6: $\bin{1\,1001}$: carry 1, digit 9 (19).
+\ans{5.13} $A>B=A_1B_1'+(A_1\odot B_1)A_0B_0'$; $A=B=(A_1\odot B_1)(A_0\odot B_0)$; $A<B=A_1'B_1+(A_1\odot B_1)A_0'B_0$.
+\ans{5.14} \code{g(3) <= b(3); g(2) <= b(3) xor b(2); g(1) <= b(2) xor b(1); g(0) <= b(1) xor b(0);}
+\ans{5.15} \code{bus_out <= reg_value when rd = '1' else (others => 'Z');}
+
+\section*{Chapter 6}
+\ans{6.1} $A(t+1)=Ax+Bx$, $B(t+1)=A'x$.
+\ans{6.2} $A(t+1)=T\xor A=x$: from either state the next state is $x$.
+\ans{6.3} (a)~$Q$ toggles at each clock edge; (b)~two states with an arrow each way; (c)~500~kHz.
+\ans{6.4} Moore: the output depends only on the state (the counter value).
+\ans{6.5} $Q$ after each step: $0,1,1,0,0$.
+\ans{6.7} (a)~$J=K=T$; (b)~$J=D$, $K=D'$.
+\ans{6.8} In the K-map over $S,R,Q$ the 1s are at $SR'Q'$, $SR'Q$ and $S'R'Q$, and the squares with $SR=11$ are don't-cares; grouping gives $Q(t+1)=S+R'Q$.
+\ans{6.9} Present state $AB$, input $x$ $\to$ next state, $y$: $00,0\to00,0$; $00,1\to10,0$; $01,0\to10,0$; $01,1\to00,0$; $10,0\to01,1$; $10,1\to11,1$; $11,0\to11,0$; $11,1\to01,0$. The output $y=AB'$ depends on the state only: Moore.
+\ans{6.10} States $S_0,S_1,S_2$ (no 1s, one 1, two or more 1s): $S_0\xrightarrow{1}S_1$, $S_1\xrightarrow{1}S_2$, $S_2\xrightarrow{1}S_2$, $S_1\xrightarrow{0}S_0$, $S_0\xrightarrow{0}S_0$, $S_2\xrightarrow{0/1}S_0$. With $S_0=00$, $S_1=01$, $S_2=10$: $D_A=x(A+B)$, $D_B=A'B'x$, $y=Ax'$.
+\ans{6.11} $J_i=K_i=T_i$: $J_0=K_0=1$, $J_1=K_1=Q_0$, $J_2=K_2=Q_1Q_0$.
+\ans{6.12} (a)~3; (b)~4; (c)~9.
+\ans{6.13--6.14} \begin{lstlisting}
+process (clk) begin                      -- 6.13: synchronous reset + enable
+  if rising_edge(clk) then
+    if reset = '1' then q <= '0';
+    elsif en = '1' then q <= d; end if;
+  end if;
+end process;
+
+process (clk, rstn) begin                -- 6.14: 8-bit register, async active-low reset
+  if rstn = '0' then q <= (others => '0');
+  elsif rising_edge(clk) then q <= d; end if;
+end process;\end{lstlisting}
+
+\section*{Chapter 7}
+\ans{7.1} \begin{lstlisting}
+architecture behavioral of reg_inc is
+  signal r : unsigned(3 downto 0) := (others => '0');
+begin
+  process (CLK) begin
+    if rising_edge(CLK) then
+      if    CLR = '1' then r <= (others => '0');
+      elsif LD  = '1' then r <= unsigned(I);
+      elsif INC = '1' then r <= r + 1;
+      end if;
+    end if;
+  end process;
+  Q <= std_logic_vector(r);
+end behavioral;\end{lstlisting}
+\ans{7.2} (a)~$\bin{1101}$; (b)~$\bin{1010}$; (c)~$\bin{1010}$; (d)~$\bin{1100}$.
+\ans{7.3} $J_0=K_0=1$; $J_1=Q_2'Q_0$, $K_1=Q_0$; $J_2=Q_1Q_0$, $K_2=Q_0$. State 110 goes to 111 and 111 to 000: self-correcting.
+\ans{7.4} Each output has frequency $f_{clk}/4$ (duty cycle 25\%). A Johnson counter has $2n=8$ states, and each output $f_{clk}/8$.
+\ans{7.5} After four pulses $A=\bin{1100}$ (restored) and $B=\bin{1100}$.
+\ans{7.6} $T_1$: $A=1011$, $B=1010$, $S=1$, $C=0$; $T_2$: $A=1101$, $B=0101$, $S=1$, $C=0$; $T_3$: $A=0110$, $B=1010$, $S=0$, $C=1$; $T_4$: $A=1011$, $B=0101$, $S=1$, $C=0$. Sum $=\bin{1011}=11$.
+\ans{7.7} $f_{max}<25$~MHz; the change 0111 $\to$ 1000 settles in 40~ns.
+\ans{7.8} Load condition $Q_3Q_0$ (it is 1 only for the count 9 among 0--9) with data inputs $\bin{0000}$.
+\ans{7.9} $T_0=1$; $T_1=\mathit{Up}\,Q_0+\mathit{Down}\,Q_0'$; $T_2=\mathit{Up}\,Q_1Q_0+\mathit{Down}\,Q_1'Q_0'$.
+\ans{7.10} (a)~8 flip-flops; (b)~3 flip-flops and a 3-to-8 decoder (eight 3-input AND gates and three inverters).
+\ans{7.11} $\bin{0011}\to\bin{0110}$; each shift left doubles the number ($\times2^k$ for $k$ shifts, if no 1 is lost); shifting $\bin{0110}$ right gives $\bin{0011}$.
+\ans{7.12--7.13} \begin{lstlisting}
+-- 7.12  (entity: clk, en, sin : in std_logic; sout : out std_logic)
+signal r : std_logic_vector(7 downto 0) := (others => '0');
+process (clk) begin
+  if rising_edge(clk) then
+    if en = '1' then r <= sin & r(7 downto 1); end if;
+  end if;
+end process;
+sout <= r(0);
+
+-- 7.13  (signal cnt : unsigned(3 downto 0))
+process (clk) begin
+  if rising_edge(clk) then
+    if rst = '1' or cnt = 9 then cnt <= (others => '0');
+    else cnt <= cnt + 1; end if;
+  end if;
+end process;\end{lstlisting}
+
+\section*{Chapter 8}
+\ans{8.1} (A)~Moore; (B)~Mealy.
+\ans{8.2} $Q(t+1)=JQ'+K'Q=xQ'$. For $Q=0$, $x=1$: next state 1.
+\ans{8.3--8.4} Overlapping and non-overlapping 110 detectors are identical, because no proper suffix of $110$ (namely 0 and 10) is a prefix (1, 11). States: $S_0$ (no progress), $S_1$ (seen 1), $S_2$ (seen 11); $S_0\xrightarrow{0/0}S_0$, $S_0\xrightarrow{1/0}S_1$, $S_1\xrightarrow{0/0}S_0$, $S_1\xrightarrow{1/0}S_2$, $S_2\xrightarrow{1/0}S_2$, $S_2\xrightarrow{0/1}S_0$. For 101 the overlapping machine goes $S_2\xrightarrow{1/1}S_1$ and the non-overlapping one $S_2\xrightarrow{1/1}S_0$.
+\ans{8.5} (a)~4; (b)~12.
+\ans{8.6} The reset must be in the sensitivity list: \code{process (clk, reset)}.
+\ans{8.7} 10. \quad \ans{8.8} $D_0=X$. \quad \ans{8.9} (2); $f_{max}=1/2.8\ \mathrm{ns}\approx357$~MHz.
+\ans{8.10} $D_1=Q_0$, $D_0=Q_1'$.
+\ans{8.11} Four states: $S_0$, $S_1$, $S_2$ and $S_3$ (101 seen, output 1); $S_3\xrightarrow{1}S_1$, $S_3\xrightarrow{0}S_2$; the other transitions as in \cref{fig:seqdet-state} but with the output on the state.
+
+\section*{Chapter 9}
+\ans{9.1} Registers $R_1$ and $R_2$, a subtractor with inputs $R_1$ and $R_2$ and its output to the input of $R_1$; control signals $R1Load$ (and the clock).
+\ans{9.2} $Mux1=0$ (select $B$), $Mux2=1$ (select 3), $ALoad=1$.
+\ans{9.3} A magnitude comparator of $A$ with the constant 10 produces the status signal $AGT10$.
+\ans{9.4} $CW_1$: $Temp\leftarrow A$ ($TempLoad=1$, source $A$); $CW_2$: $A\leftarrow B$ ($ALoad=1$, source $B$); $CW_3$: $B\leftarrow Temp$ ($BLoad=1$, source $Temp$).
+\ans{9.5} Six states: $S_1$ ($Sum=0$), $S_2$ ($i=1$), $S_3$ ($Sum=Sum+i$), $S_4$ ($i=i+1$), $S_{test}$ (no operation; examine $i=11$ after $i$ has been loaded), $S_5$ (output). From $S_{test}$: if $i\ne11$ go to $S_3$, else to $S_5$.
+\ans{9.6} GCD(12,18)=6 in 7 cycles ($S_0,S_1,S_3,S_1,S_2,S_1,S_4$). GCD(48,18)=6 in 11 cycles.
+\ans{9.8} $D_2=Q_2+Q_1$, $D_1=Q_1'Q_0$, $D_0=Q_2'Q_1'(Q_0'+I)$. State 101 goes to 110 and then to 100; 110 and 111 go to 100: all unused states lead to $S_{output}$.
+\ans{9.12} FSM+D, because it gives full control of the datapath structure.
+
+\section*{Chapter 10}
+\ans{10.1} \texttt{IN A; OUT A; DEC A; JNZ 01; OUT A; HALT} outputs $n,n-1,\dots,1,0$. The EC-1 has no unconditional jump, so it cannot repeat the ramp; a \texttt{JMP} instruction would be needed.
+\ans{10.2} \texttt{00: IN A; 01: DEC A; 02: JNZ 04; 03: HALT; 04: DEC A; 05: JNZ 01; 06: HALT} $=$ \texttt{60 A0 C4 E0 A0 C1 E0}. Halt at 03 means odd, at 06 even. For input 5 the program stops at 03 (odd); for input 6 at 06 (even).
+\ans{10.3} Data: $M[28]=0$ (sum), $M[29]=1$, $M[30]=a$, $M[31]=b$. Program (hex): \texttt{00:1F 01:AA 02:1C 03:5E 04:3C 05:1F 06:7D 07:3F 08:AA 09:C2 10:E0}, i.e.\ \texttt{LOAD A,31; JZ 10; LOAD A,28; ADD A,30; STORE A,28; LOAD A,31; SUB A,29; STORE A,31; JZ 10; JPOS 02; HALT}. For $3\times4$ the sum becomes 3, 6, 9, 12 while $b$ counts 3, 2, 1, 0; the product is in $M[28]$.
+\ans{10.4} \texttt{LOAD A,30; SUB A,31; JPOS 05; LOAD A,31; SUB A,30; STORE A,31; HALT} $=$ \texttt{1E 7F C5 1F 7E 3F E0}.
+\ans{10.5} (a)~\texttt{60 A0 A0 80 E0}; (b)~\texttt{05 46 27 E0}.
+\ans{10.6} \texttt{:050000006080A0C1E0DA}; end of file \texttt{:00000001FF}. (Checksum: $05+60+80+A0+C1+E0=326_{16}$; $100_{16}-26_{16}=\mathrm{DA}_{16}$.)
+\ans{10.7} States: Fetch, Decode, Input ($A=2$); Fetch, Decode, Output (out 2); Fetch, Decode, Dec ($A=1$); Fetch, Decode, JNZ (taken, $PC=01$), Wait; Fetch, Decode, Output (out 1); Fetch, Decode, Dec ($A=0$); Fetch, Decode, JNZ (not taken, $PC=04$), Wait; Fetch, Decode, Halt.
+\ans{10.10} Three cycles per instruction (fetch, decode, execute): 9 cycles until the machine is in the Halt state.
+\ans{10.13} $M[30]=6$; the instruction \texttt{SUB} is executed 6 times (the pairs $(48,18)$, $(30,18)$, $(12,18)$ with two subtractions, $(12,6)$ and $(6,6)$).

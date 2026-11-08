@@ -1,0 +1,50 @@
+\chapter*{Preface}
+\addcontentsline{toc}{chapter}{Preface}
+\markboth{Preface}{Preface}
+
+Every phone, car, medical instrument and industrial controller you will work with as an electrical or computer engineer contains
+digital logic. Digital design is therefore not a specialist topic: it is the common language in which hardware is described,
+verified and built. This book teaches that language from the ground up, starting with a single switch and finishing with a
+small general-purpose processor that you will design, simulate and run yourself.
+
+\subsection*{Why this book}
+This text grew out of the lectures I give for the courses \emph{\CourseName} (\CourseCode) and \emph{\CourseNameB} (\CourseCodeB) at the
+\AuthorDept, \AuthorUni. For several semesters my students asked for one document that follows the lectures in order,
+explains the reasoning that slides cannot carry, and offers enough worked examples and exercises to practise on. This book is that document.
+It does not replace the classic references listed in the Bibliography; it condenses them into the path that I have found works
+for a single semester, and it adds the thing I consider most important in a modern course: every technique is shown
+both on paper \emph{and} in VHDL, so that you see the same circuit as a truth table, a schematic, a state diagram and a hardware description.
+
+\subsection*{What is in the book}
+The ten chapters follow the course syllabus.
+\begin{itemize}
+  \item \textbf{Chapters~1--3} introduce digital systems, Boolean algebra, logic gates, logic synthesis and Karnaugh-map optimisation.
+  \item \textbf{Chapters~4--5} cover number representation, arithmetic circuits and the standard combinational building blocks (decoders, multiplexers, comparators, ALU).
+  \item \textbf{Chapters~6--8} move to sequential logic: latches and flip-flops, registers and counters, and finite state machines (FSMs) in the Moore and Mealy styles.
+  \item \textbf{Chapters~9--10} combine everything into processors: first \emph{dedicated} microprocessors (a datapath controlled by an FSM), then a small \emph{general-purpose} processor with an instruction set, an instruction cycle and a program in memory.
+\end{itemize}
+Four appendices provide a VHDL quick reference, number-system and Boolean-algebra reference tables, the complete listings of the processor designs,
+and answers to selected exercises. A glossary and an index are included at the end.
+
+\subsection*{How the book is organised}
+Each chapter opens with learning objectives and closes with a summary, exercises and suggestions for further reading.
+Worked examples are boxed and numbered; definitions and key design rules are set apart so that they are easy to find again when you revise.
+Figures are numbered by chapter, and the VHDL listings can be downloaded together with the book source so that you can run them.
+
+\subsection*{A note on originality and sources}
+Digital design rests on well-established results by many people. I have tried to give credit wherever a result, a
+historical fact or a data table originates elsewhere, and the Bibliography lists the books and papers I relied on. The explanations,
+examples, diagrams, tables and VHDL designs are my own, written for this course.
+
+\subsection*{Feedback}
+No book of this size is free of errors. If you find one, or a passage that confused you, please tell me at
+\href{mailto:ruslee.s@eng.kmutnb.ac.th}{ruslee.s@eng.kmutnb.ac.th}; corrections will be collected for the next edition.
+
+\bigskip
+\begin{flushright}
+\AuthorFull\\
+\AuthorDept\\
+\AuthorUni\\
+Bangkok
+\end{flushright}
+\clearpage

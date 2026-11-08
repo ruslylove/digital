@@ -1,0 +1,92 @@
+\chapter{Reference Tables}\label{app:tables}
+
+\section{Logic gates}
+\begin{table}[htbp]
+\centering
+\small
+\caption{Two-input gate functions.}
+\begin{tabular}{cc|ccccccc}
+\toprule
+$x$&$y$&AND&OR&NAND&NOR&XOR&XNOR&$x'$\\ \midrule
+0&0&0&0&1&1&0&1&1\\ 0&1&0&1&1&0&1&0&1\\ 1&0&0&1&1&0&1&0&0\\ 1&1&1&1&0&0&0&1&0\\ \bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Expressions and VHDL operators of the gates.}
+\begin{tabular}{lll}
+\toprule Gate & Expression & VHDL\\ \midrule
+AND & $xy$ & \code{x and y}\\ OR & $x+y$ & \code{x or y}\\ NOT & $x'$ & \code{not x}\\
+NAND & $(xy)'$ & \code{x nand y}\\ NOR & $(x+y)'$ & \code{x nor y}\\
+XOR & $x\xor y=x'y+xy'$ & \code{x xor y}\\ XNOR & $(x\xor y)'=xy+x'y'$ & \code{x xnor y}\\ \bottomrule
+\end{tabular}
+\end{table}
+
+\section{Number systems}
+\begin{table}[htbp]
+\centering
+\small
+\caption{Powers of two.}
+\begin{tabular}{rr@{\qquad}rr@{\qquad}rr}
+\toprule $n$ & $2^n$ & $n$ & $2^n$ & $n$ & $2^n$\\ \midrule
+0&1&6&64&12&4\,096\\1&2&7&128&13&8\,192\\2&4&8&256&14&16\,384\\3&8&9&512&15&32\,768\\4&16&10&1\,024&16&65\,536\\5&32&11&2\,048&20&1\,048\,576\\ \bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Four-bit binary, Gray and excess-3 codes (excess-3 is used for the decimal digits 0--9 only).}
+\begin{tabular}{cccc}
+\toprule Decimal & Binary & Gray & Excess-3\\ \midrule
+0&0000&0000&0011\\
+1&0001&0001&0100\\
+2&0010&0011&0101\\
+3&0011&0010&0110\\
+4&0100&0110&0111\\
+5&0101&0111&1000\\
+6&0110&0101&1001\\
+7&0111&0100&1010\\
+8&1000&1100&1011\\
+9&1001&1101&1100\\
+10&1010&1111&--\\
+11&1011&1110&--\\
+12&1100&1010&--\\
+13&1101&1011&--\\
+14&1110&1001&--\\
+15&1111&1000&--\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Ranges of $n$-bit integers.}
+\begin{tabular}{rrrr}
+\toprule $n$ & Unsigned & Two's complement & Hex digits\\ \midrule
+4&0 to 15&$-8$ to 7&1\\8&0 to 255&$-128$ to 127&2\\12&0 to 4\,095&$-2048$ to 2\,047&3\\16&0 to 65\,535&$-32\,768$ to 32\,767&4\\32&0 to 4\,294\,967\,295&$-2\,147\,483\,648$ to 2\,147\,483\,647&8\\ \bottomrule
+\end{tabular}
+\end{table}
+
+\section{Seven-segment display}
+\begin{table}[htbp]
+\centering
+\small
+\caption{Segments that are \emph{lit} for each decimal digit (1 = lit; segment letters as in \cref{fig:sevenseg}). For a common-anode display the control signal is the complement.}
+\begin{tabular}{c|ccccccc}
+\toprule Digit & $a$&$b$&$c$&$d$&$e$&$f$&$g$\\ \midrule
+0&1&1&1&1&1&1&0\\1&0&1&1&0&0&0&0\\2&1&1&0&1&1&0&1\\3&1&1&1&1&0&0&1\\4&0&1&1&0&0&1&1\\
+5&1&0&1&1&0&1&1\\6&1&0&1&1&1&1&1\\7&1&1&1&0&0&0&0\\8&1&1&1&1&1&1&1\\9&1&1&1&1&0&1&1\\ \bottomrule
+\end{tabular}
+\end{table}
+
+\section{ASCII printable characters}
+\begin{table}[htbp]
+\centering
+\footnotesize
+\caption{The printable ASCII characters (codes 32--126)~\cite{ansix34}.}
+\input{backmatter/ascii_table}
+\end{table}

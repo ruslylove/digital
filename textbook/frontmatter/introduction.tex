@@ -1,0 +1,86 @@
+\chapter*{Introduction: How to Use This Book}
+\addcontentsline{toc}{chapter}{Introduction: How to Use This Book}
+\markboth{Introduction}{Introduction}
+
+\section*{Who this book is for}
+This book is written for first-year students of electrical and computer engineering, who take this course in their second semester, and for anyone who wants a
+rigorous but practical first course in digital design. No prior course in electronics or programming is required.
+You should be comfortable with high-school algebra; the few additional mathematical ideas (binary numbers, sets of minterms, modular arithmetic) are introduced as they are needed.
+
+\section*{Courses}
+This book accompanies the lectures of \CourseCode\ \emph{\CourseName} and \CourseCodeB\ \emph{\CourseNameB}, which follow the same ten lectures; the chapters correspond one to one to those lectures.
+
+\section*{What you will be able to do}
+After studying the whole book you should be able to:
+\begin{enumerate}[label=\arabic*.]
+  \item convert between number systems and represent signed numbers, fractions and characters in binary;
+  \item write a Boolean function from a truth table, simplify it, and draw the resulting logic network with AND, OR, NOT, NAND, NOR and XOR gates;
+  \item analyse and design adders, decoders, encoders, multiplexers, comparators and arithmetic logic units;
+  \item explain the behaviour of SR, D, JK and T latches and flip-flops from their symbols, characteristic tables and timing diagrams;
+  \item analyse and design synchronous sequential circuits (registers, counters and finite state machines), using Moore and Mealy models;
+  \item design a dedicated microprocessor as a datapath plus a control FSM, and describe each part in VHDL; and
+  \item read, run and extend a small general-purpose processor with its own instruction set.
+\end{enumerate}
+
+\section*{Roadmap}
+The chapters build on each other, as shown in the diagram below. Chapters~1--3 and~4--5 form the combinational half of the book;
+Chapters~6--8 add memory and time; Chapters~9--10 combine both halves into processors.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    node distance=6mm and 8mm,
+    box/.style={draw=blueline, fill=bluelight, rounded corners=2pt, minimum width=29mm, minimum height=10mm,
+                align=center, font=\sffamily\scriptsize},
+    comb/.style={box, draw=kmutnborange, fill=accentlight},
+    seq/.style={box, draw=blueline, fill=bluelight},
+    proc/.style={box, draw=kmutnbgreen, fill=greenlight},
+    arr/.style={-{Stealth[length=2mm]}, thick, color=greyline}]
+  \node[comb] (c1) {1\\Digital Systems};
+  \node[comb, right=of c1] (c2) {2\\Logic Circuits};
+  \node[comb, right=of c2] (c3) {3\\Logic Optimisation};
+  \node[comb, below=of c3] (c4) {4\\Number Systems and\\Arithmetic Circuits};
+  \node[comb, left=of c4] (c5) {5\\Combinational\\Building Blocks};
+  \node[seq, below=of c5] (c6) {6\\Latches and\\Flip-Flops};
+  \node[seq, right=of c6] (c7) {7\\Registers and\\Counters};
+  \node[seq, right=of c7] (c8) {8\\Finite State\\Machines};
+  \node[proc, below=of c7] (c9) {9\\Dedicated\\Microprocessors};
+  \node[proc, right=of c9] (c10) {10\\General-Purpose\\Microprocessors};
+  \draw[arr] (c1) -- (c2); \draw[arr] (c2) -- (c3); \draw[arr] (c3) -- (c4);
+  \draw[arr] (c4) -- (c5); \draw[arr] (c5) -- (c6); \draw[arr] (c6) -- (c7);
+  \draw[arr] (c7) -- (c8); \draw[arr] (c8) -- (c9); \draw[arr] (c9) -- (c10);
+\end{tikzpicture}
+\caption*{Reading order of the chapters. Orange: combinational logic. Blue: sequential logic. Green: processors.}
+\end{figure}
+
+\section*{How each chapter is organised}
+\begin{description}[font=\sffamily\bfseries, leftmargin=1.4em, labelindent=0pt]
+  \item[Learning objectives] say what you should be able to do after the chapter.
+  \item[Sections] explain a concept, give the reasoning behind it, and then work through at least one example. Technical terms appear in \textit{italics} at the place where they are defined, and each such term is listed in the index.
+  \item[Worked examples] are boxed and numbered; try to solve them yourself before reading the solution.
+  \item[Chapter summary] lists the ideas and procedures you must remember.
+  \item[Exercises] are graded from routine drills to design problems. Answers to selected exercises are in \cref{app:answers}.
+  \item[Further reading] points to books and papers for readers who want more depth.
+\end{description}
+
+\section*{Conventions}
+\begin{itemize}
+  \item \textbf{Boolean operators.} Variables are written $x, y, z$ or $A, B, C$. AND is written by juxtaposition ($xy$) or $x\cdot y$,
+        OR as $x+y$, XOR as $x\xor y$, and NOT as $x'$ or $\NOT{x}$; the two forms of complement are interchangeable.
+  \item \textbf{Binary numbers} are set in typewriter type, e.g.\ \bin{1011}; a subscript gives the base where it might be ambiguous, e.g.\ $1011_2 = 11_{10}$.
+  \item \textbf{Minterms and maxterms} are written $m_i$ and $M_i$, where $i$ is the row number of the truth table.
+  \item \textbf{VHDL} keywords and signal names appear in \code{typewriter type}; listings are numbered by chapter and can be downloaded from the book repository.
+  \item \textbf{Register transfers} are written \rtl{R1}{R2}: the contents of register R2 are copied into R1 on the next active clock edge.
+\end{itemize}
+
+\section*{Tools}
+You can work through all of the examples with a free VHDL simulator and a schematic editor. The screenshots in this book were produced with
+Intel Quartus Prime (including its RTL viewer) and ModelSim; any standards-compliant VHDL simulator, for example GHDL, will run the listings.
+For small schematics, browser-based tools such as CircuitVerse or the desktop program Logisim are convenient.
+No physical hardware is required, but Chapter~10 explains how the processors can be loaded onto an FPGA board if one is available.
+
+\section*{Study advice}
+Digital design is learned by doing. Do not just read a K-map or a state diagram: redraw it. Write the VHDL for each design, simulate it, and
+compare the waveform with your expectation from the truth table or state diagram. When a simulation disagrees with your calculation,
+you have found the most useful thing to learn from. Work the exercises in the order given, and return to earlier chapters when a prerequisite feels shaky.
+\clearpage

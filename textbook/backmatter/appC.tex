@@ -1,0 +1,21 @@
+\chapter{Complete VHDL Listings}\label{app:listings}
+
+This appendix lists the VHDL files of the dedicated and general-purpose processors that are not printed in the chapters. The files are also supplied with the book in the directory \texttt{vhdl/}, so they can be compiled and simulated with any VHDL-2008 simulator. All listings are the author's work.
+
+\section{GCD processor (\cref{ch:dedicated})}
+\vhdlfilesmall{../vhdl/gcd/components.vhd}{GCD processor: library of components (registers, multiplexers, subtractor, comparator, \dots).}{lst:gcd-comp}
+\vhdlfilesmall{../vhdl/gcd/gcd_datapath.vhd}{GCD processor: datapath.}{lst:gcd-dp}
+\vhdlfilesmall{../vhdl/gcd/gcd_top.vhd}{GCD processor: top level connecting control unit and datapath.}{lst:gcd-top}
+\vhdlfilesmall{../vhdl/gcd/gcd_tb.vhd}{GCD processor: testbench.}{lst:gcd-tb}
+
+\section{EC-1 microprocessor (\cref{sec:ec1})}
+\vhdlfilesmall{../vhdl/ec1_components.vhd}{EC-1: components package.}{lst:ec1-comp}
+\vhdlfilesmall{../vhdl/ec1.vhd}{EC-1: top level.}{lst:ec1-top}
+\vhdlfilesmall{../vhdl/ec1_tb.vhd}{EC-1: testbench (input value 10).}{lst:ec1-tb}
+
+\section{EC-2 microprocessor (\cref{sec:ec2})}
+\vhdlfilesmall{../vhdl/EC2_Control_Unit.vhd}{EC-2: control unit.}{lst:ec2-cu}
+\vhdlfilesmall{../vhdl/EC2_Datapath.vhd}{EC-2: datapath.}{lst:ec2-dp}
+\vhdlfilesmall{../vhdl/EC2_Components.vhd}{EC-2: components package, including the RAM whose initial contents are the GCD program of \cref{tab:ec2-gcd}.}{lst:ec2-ram}
+\vhdlfilesmall{../vhdl/ec2.vhd}{EC-2: top level.}{lst:ec2-top}
+\vhdlfilesmall{../vhdl/ec2_tb.vhd}{EC-2: testbench.}{lst:ec2-tb}

@@ -1,0 +1,130 @@
+\chapter{VHDL Quick Reference}\label{app:vhdl}
+
+This appendix summarises the VHDL used in the book~\cite{ieee1076,ashenden2008}. VHDL is \emph{not} case sensitive; \texttt{--} starts a comment that runs to the end of the line.
+
+\section{Structure of a design}
+\begin{lstlisting}[caption={Skeleton of a VHDL design unit.},label={lst:a-skeleton}]
+library ieee;                          -- library clause
+use ieee.std_logic_1164.all;           -- std_logic, std_logic_vector
+use ieee.numeric_std.all;              -- unsigned, signed, resize, to_integer ...
+
+entity my_circuit is                   -- the interface
+  port (a, b : in  std_logic;
+        sel  : in  std_logic_vector(1 downto 0);
+        y    : out std_logic);
+end entity my_circuit;
+
+architecture rtl of my_circuit is      -- the implementation
+  signal tmp : std_logic;              -- internal wires
+begin
+  tmp <= a and b;                      -- concurrent statements
+  y   <= tmp;
+end architecture rtl;
+\end{lstlisting}
+
+\section{Data types}
+\begin{table}[htbp]
+\centering
+\small
+\caption{Common VHDL types.}
+\begin{tabularx}{\linewidth}{@{}lX@{}}
+\toprule Type & Use\\ \midrule
+\code{std_logic} & one bit with values \code{'0'}, \code{'1'}, \code{'Z'} (high impedance), \code{'X'} (unknown), \code{'-'} (don't care), \dots\\
+\code{std_logic_vector(7 downto 0)} & array of bits (bus); \code{"1010"} is a vector literal, \code{'1'} a bit literal\\
+\code{unsigned(3 downto 0)}, \code{signed(3 downto 0)} & vectors with arithmetic (package \code{numeric_std})\\
+\code{integer}, \code{boolean} & integers (for simulation and constants) and truth values\\
+\code{type state_type is (S0, S1, S2);} & enumerated type, e.g.\ for FSM states\\
+\code{time} & simulation time, e.g.\ \code{10 ns}\\ \bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Operators}
+\begin{itemize}
+  \item \textbf{Logical}: \code{and or nand nor xor xnor not}. In an expression with mixed operators use parentheses (VHDL has no precedence between \code{and} and \code{or}).
+  \item \textbf{Relational}: \code{= /= < <= > >=} (result: boolean).
+  \item \textbf{Arithmetic} (on \code{unsigned}, \code{signed}, \code{integer}): \code{+ - * / mod rem abs}.
+  \item \textbf{Concatenation}: \code{&}, e.g.\ \code{x <= a(2 downto 0) & '0';} is a shift left.
+  \item \textbf{Assignment}: \code{<=} for signals, \code{:=} for variables and initial values.
+\end{itemize}
+
+\section{Concurrent statements}
+\begin{lstlisting}[caption={Concurrent signal assignments.},label={lst:a-conc}]
+y <= (a and b) or c;                                   -- simple assignment
+y <= a when sel = '0' else b;                          -- conditional assignment
+with sel select                                        -- selected assignment
+  y <= i0 when "00",
+       i1 when "01",
+       i2 when "10",
+       i3 when others;
+u1 : entity work.half_adder port map (x => a, y => b, s => sum, c => cy);   -- instance
+g1 : for i in 0 to 3 generate                          -- replicated hardware
+       y(i) <= a(i) and b(i);
+     end generate g1;
+\end{lstlisting}
+
+\section{Processes}
+A \code{process} contains \emph{sequential} statements, which execute in order when a signal in its \emph{sensitivity list} changes. Signals assigned in a process get their new value only when the process suspends.
+\begin{lstlisting}[caption={Processes for combinational logic and flip-flops.},label={lst:a-proc}]
+-- combinational process: list every signal that is read
+process (a, b, sel)
+begin
+  if sel = '1' then y <= a; else y <= b; end if;       -- assign y in every branch
+end process;
+
+-- flip-flop with asynchronous reset
+process (clk, reset)
+begin
+  if reset = '1' then q <= '0';
+  elsif rising_edge(clk) then q <= d; end if;
+end process;
+
+-- case statement (all choices must be covered)
+case state is
+  when S0     => next_state <= S1;
+  when S1 | S2 => next_state <= S0;
+  when others => next_state <= S0;
+end case;
+\end{lstlisting}
+\textbf{Rules of thumb.} (1)~A combinational process must assign each of its outputs in every branch (give defaults at the top), otherwise a latch is inferred. (2)~A clocked process uses \code{rising_edge(clk)} and describes flip-flops. (3)~Do not assign the same signal from two processes.
+
+\section{Type conversions (package \texttt{numeric\_std})}
+\begin{table}[htbp]
+\centering
+\small
+\caption{Conversion functions.}
+\begin{tabular}{@{}ll@{}}
+\toprule From $\to$ to & Expression\\ \midrule
+\code{std_logic_vector} $\to$ \code{unsigned}/\code{signed} & \code{unsigned(v)}, \code{signed(v)}\\
+\code{unsigned}/\code{signed} $\to$ \code{std_logic_vector} & \code{std_logic_vector(u)}\\
+\code{integer} $\to$ \code{unsigned}/\code{signed} & \code{to_unsigned(n, width)}, \code{to_signed(n, width)}\\
+\code{unsigned}/\code{signed} $\to$ \code{integer} & \code{to_integer(u)}\\
+resize & \code{resize(u, new_width)}\\ \bottomrule
+\end{tabular}
+\end{table}
+
+\section{Testbench constructs}
+\begin{lstlisting}[caption={Clock generation, stimulus and a self-checking assertion.},label={lst:a-tb}]
+constant T : time := 10 ns;
+signal clk : std_logic := '0';
+...
+clk <= not clk after T/2;                              -- free-running clock (concurrent)
+
+stim : process
+begin
+  reset <= '1'; wait for 2*T;  reset <= '0';
+  a <= "0101"; b <= "0011";    wait for T;
+  assert s = "1000" report "5 + 3 failed" severity error;
+  report "end of simulation" severity note;
+  wait;                                                -- stop this process forever
+end process;
+\end{lstlisting}
+
+\section{Common mistakes}
+\begin{enumerate}
+  \item \textbf{Unintended latch}: a combinational process that does not assign an output in every branch.
+  \item \textbf{Missing signal in the sensitivity list} of a combinational process.
+  \item \textbf{Mixing \texttt{std\_logic\_vector} arithmetic}: use \code{unsigned}/\code{signed} and explicit conversions.
+  \item \textbf{Multiple drivers}: two concurrent assignments to the same \code{std_logic} signal produce \code{'X'}.
+  \item \textbf{Confusing \texttt{:=} and \texttt{<=}}: variables update immediately, signals at the end of the process.
+  \item \textbf{Comparing with the wrong width}: \code{count = "101"} requires a 3-bit vector.
+\end{enumerate}

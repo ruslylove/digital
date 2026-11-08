@@ -1,0 +1,63 @@
+% =====================================================================
+%  Digital Circuits and Microprocessor Fundamentals
+%  From Boolean Algebra to Dedicated Microprocessors with VHDL
+%  Textbook for courses 010113025 and 010153101, KMUTNB
+%
+%  Build:  make          (or: latexmk -xelatex main.tex)
+% =====================================================================
+\documentclass[11pt, twoside, openright]{book}
+\input{preamble}
+\input{metadata}
+
+% Uncomment to compile only some chapters while writing:
+% \includeonly{frontmatter/preface, chapters/ch01}
+
+\begin{document}
+
+% ------------------------- front matter -------------------------------
+\frontmatter
+\pagestyle{empty}
+\input{frontmatter/titlepage}
+\input{frontmatter/copyrightpage}
+\input{frontmatter/dedication}
+\pagestyle{fancy}
+\include{frontmatter/preface}
+\include{frontmatter/acknowledgements}
+\include{frontmatter/about}
+\tableofcontents
+\listoffigures
+\listoftables
+\lstlistoflistings
+\include{frontmatter/introduction}
+
+% ------------------------- main matter --------------------------------
+\mainmatter
+\include{chapters/ch01}
+\include{chapters/ch02}
+\include{chapters/ch03}
+\include{chapters/ch04}
+\include{chapters/ch05}
+\include{chapters/ch06}
+\include{chapters/ch07}
+\include{chapters/ch08}
+\include{chapters/ch09}
+\include{chapters/ch10}
+
+% ------------------------- back matter --------------------------------
+\appendix
+\include{backmatter/appA}
+\include{backmatter/appB}
+\include{backmatter/appC}
+\include{backmatter/appD}
+
+\backmatter
+\include{backmatter/glossary}
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{Bibliography}
+\bibliographystyle{IEEEtran}
+\bibliography{refs}
+\cleardoublepage
+\printindex
+
+\end{document}

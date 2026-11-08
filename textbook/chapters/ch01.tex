@@ -1,0 +1,326 @@
+\chapter{Digital Systems}\label{ch:digital}
+
+\begin{objectives}
+After studying this chapter you will be able to:
+\begin{itemize}
+  \item distinguish \emph{analog} from \emph{digital} signals and explain why most modern systems are digital;
+  \item explain how a binary number represents a quantity, and compute how many bits are needed to represent $N$ distinct items;
+  \item describe the two steps of analog-to-digital conversion (sampling and quantisation) and estimate the resolution of a converter;
+  \item outline the key inventions---relay, vacuum tube, transistor, integrated circuit, microprocessor---that led to modern digital hardware;
+  \item state Moore's law and use it to estimate how transistor counts grow; and
+  \item classify logic chips as standard (74xx), programmable (PLD/FPGA) or custom (ASIC), and describe the modern digital design flow.
+\end{itemize}
+\end{objectives}
+
+\section{Why Study Digital Systems?}
+Digital circuits are the foundation of almost every electronic product of the modern world. A short list of where you will meet them as an engineer gives an idea of the breadth of the subject:
+\begin{itemize}
+  \item \textbf{Smart devices:} phones, watches and home assistants;
+  \item \textbf{Computing:} laptops, servers and supercomputers;
+  \item \textbf{Communication:} cellular (5G) networks, Wi-Fi and the Internet;
+  \item \textbf{Automotive:} engine control, safety systems such as ABS and airbags, and infotainment;
+  \item \textbf{Aerospace and defence:} avionics, guidance systems and radar.
+\end{itemize}
+All of these systems store, move and transform information that has been encoded as numbers. A \term{digital system} is one that
+represents information with a finite set of discrete values and processes it with logic circuits. In this book we shall learn how such
+circuits are described, simplified, built and verified, and how the same ideas, scaled up, produce a processor.
+
+\section{Analog and Digital Signals}\label{sec:analog-digital}
+A \term{signal} is a quantity that varies and carries information, for example a voltage that changes with time. An \term{analog signal} is continuous in both time and amplitude: between any two instants there are infinitely many instants, and at each instant the voltage may take any value in a continuous range. A \term{digital signal} is discrete: it is defined at specific instants and takes one of a finite number of values. \Cref{fig:analog-digital} contrasts the two.
+
+\figw{410.0pt}{lect_1_analog_vs_digital}{An analog signal has continuous values; a digital signal has discrete, step-like values that are defined only at the sampling instants.}{fig:analog-digital}
+
+Why do engineers prefer digital representations? There are three main reasons.
+\begin{enumerate}
+  \item \textbf{Noise immunity.} A digital receiver need only decide whether a voltage is closer to a ``low'' or a ``high'' level, so moderate noise does not change the information. An analog signal, in contrast, is degraded irreversibly by every disturbance it picks up. This is why a digital copy of a recording is identical to its source, whereas the hiss of an analog tape accumulates with every copy.
+  \item \textbf{Exact and flexible processing.} Once information is a number, it can be stored indefinitely, copied without loss, compressed, encrypted and processed by a general-purpose machine.
+  \item \textbf{Richer information.} A digital sensor can send the measurement together with diagnostic data, calibration constants and its own identity over a single digital link, whereas an analog sensor (for instance a gauge producing a 4--20~mA current) carries just one value.
+\end{enumerate}
+
+\section{Binary Representation of Information}
+The simplest digital signal has just two values, usually called \term{0} and \term{1}. Such a signal can be produced by any device that has two stable states: a switch that is open or closed, a lamp that is off or on, a voltage that is low or high. One such value is a \term{bit} (binary digit). \Cref{fig:switch-binary} shows the correspondence between a switch and a bit.
+
+\figw{302.1pt}{lect_1_switch_binary}{A switch as a one-bit memory element: open = 0, closed = 1.}{fig:switch-binary}
+
+\subsection{Positional notation}
+A single bit can represent only two things, but a group of bits can represent many more. In a \term{positional number system} with base (radix) $r$, a number is a string of digits $d_{n-1}\dots d_1 d_0$ whose value is
+\begin{equation}
+  V = \sum_{i=0}^{n-1} d_i\, r^{\,i}.
+  \label{eq:positional}
+\end{equation}
+In the \term{binary} system $r=2$ and each $d_i\in\{0,1\}$. For instance, the binary number \bin{1001111} has the value shown in \cref{fig:binary-rep}:
+\[
+  1\cdot 2^6 + 0\cdot 2^5 + 0\cdot 2^4 + 1\cdot 2^3 + 1\cdot 2^2 + 1\cdot 2^1 + 1\cdot 2^0
+  = 64 + 8 + 4 + 2 + 1 = 79.
+\]
+
+\figw{298.9pt}{lect_1_binary_rep}{Binary representation of the decimal number 79. Each bit position has a weight that is a power of two.}{fig:binary-rep}
+
+\begin{definition}{Number of codes}{bits}
+An $n$-bit string can take $2^n$ different values. To represent $N$ distinct items by a binary code we need
+\[
+  n = \lceil \log_2 N \rceil
+\]
+bits, where $\lceil\cdot\rceil$ rounds up to the next integer.
+\end{definition}
+
+\begin{example}{Encoding the keys of a keypad}{keypad}
+A keypad is arranged as a matrix of row wires and column wires, as in \cref{fig:keypad}. Pressing a key connects one row to one column. A
+microcontroller \emph{scans} the keypad: it drives one row at a time and reads the columns to find which, if any, is connected. The
+unique (row, column) pair is then \emph{encoded} as a binary number.
+
+\textbf{Question.} How many bits are needed to encode the keys of (a) a $4\times4$ keypad and (b) a telephone keypad with 12 keys?
+
+\textbf{Solution.} (a) There are $N=16$ keys, so $n=\lceil\log_2 16\rceil = 4$ bits (key `1' could be \bin{0000}, key `2' \bin{0001}, and so on). (b) For $N=12$, $\log_2 12 \approx 3.58$, so $n=4$ bits again; four of the 16 possible codes are unused.
+\end{example}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[x=9mm,y=9mm]
+  % row wires and column wires
+  \foreach \r in {0,1,2,3}{
+    \draw[thick] (-0.8,-\r) -- (3.8,-\r);
+    \node[font=\sffamily\scriptsize, anchor=east] at (-0.9,-\r) {R\r};
+  }
+  \foreach \c in {0,1,2,3}{
+    \draw[thick, color=blueline] (\c,0.8) -- (\c,-3.8);
+    \node[font=\sffamily\scriptsize, color=blueline, anchor=south] at (\c,0.9) {C\c};
+  }
+  % key positions
+  \foreach \r in {0,1,2,3}{\foreach \c in {0,1,2,3}{
+    \fill[fill=white, draw=greyline] (\c,-\r) circle (1.2mm);
+  }}
+  % pressed key at R2,C1
+  \fill[kmutnborange] (1,-2) circle (2mm);
+  \node[font=\sffamily\scriptsize, color=accent, anchor=west] at (4.3,-2) {key pressed: R2 and C1 are connected};
+  \node[font=\sffamily\scriptsize, anchor=west] at (4.3,-2.9) {encoded as \texttt{1001} (row 2 $\to$ \texttt{10}, column 1 $\to$ \texttt{01})};
+\end{tikzpicture}
+\caption{A $4\times4$ matrix keypad. Scanning identifies the connected row and column; the pair is encoded in four bits.}
+\label{fig:keypad}
+\end{figure}
+
+\section{Analog-to-Digital Conversion}\label{sec:adc}
+The physical world is analog---temperature, pressure, sound and light vary continuously---so an interface is needed between it and a digital system. An \term{analog-to-digital converter} (ADC) performs two operations, shown in \cref{fig:adc}.
+\begin{enumerate}
+  \item \termx{Sampling}{sampling}: the value of the analog signal is measured at regular instants separated by the \emph{sampling period} $T_s$. The \emph{sampling frequency} is $f_s = 1/T_s$.
+  \item \termx{Quantisation}{quantisation}: every sampled value is replaced by the nearest of a finite set of levels. The distance between two adjacent levels is the \emph{step size} $Q$. The difference between the true sample and the level chosen is the \emph{quantisation error}, which is at most $Q/2$.
+\end{enumerate}
+The level number is then written in binary. An $n$-bit ADC with full-scale range $V_{\mathrm{FS}}$ has $2^n$ levels and
+\begin{equation}
+  Q = \frac{V_{\mathrm{FS}}}{2^n}.
+  \label{eq:adc-step}
+\end{equation}
+
+\figw{255.6pt}{lect_1_adc}{Sampling and quantisation. The dots are the samples taken every $T_s$; the stair-step is the quantised signal; the red marks are the quantisation errors.}{fig:adc}
+
+\begin{example}{Resolution of an ADC}{adc}
+A sensor produces a voltage between 0 and 5~V. It is digitised by a 10-bit ADC.
+
+\textbf{Question.} What are the step size and the largest quantisation error? How many bits would be needed to make the step smaller than 1~mV?
+
+\textbf{Solution.} With $n=10$ the number of levels is $2^{10}=1024$, so $Q = 5/1024 \approx 4.88$~mV, and the largest error is $Q/2 \approx 2.44$~mV. For $Q<1$~mV we need $2^n > 5000$, so $n \ge \lceil \log_2 5000 \rceil = 13$ bits.
+\end{example}
+
+\begin{keypoint}[Sampling rate]
+If the signal contains frequencies up to $f_{\max}$, the sampling frequency must exceed $2f_{\max}$ (the Nyquist criterion); otherwise different signals become indistinguishable after sampling. Treatment of this theorem belongs to a course on signals and systems; here it is enough to remember that sampling too slowly loses information.
+\end{keypoint}
+
+\section{From Switches to Transistors}\label{sec:switches}
+Every digital circuit is built from devices that act as electrically controlled switches. An \term{ideal switch} (\cref{fig:switches}a) changes state instantaneously, has zero resistance when closed, infinite resistance when open and dissipates no power. A real device falls short of this in every respect. The transistor, which is today's switch of choice, takes a finite time to change state (rise and fall times), has a small non-zero on-resistance and a very large but finite off-resistance, and dissipates energy while switching. Much of digital design is concerned with the consequences of these imperfections, including propagation delay and power consumption.
+
+\begin{figure}[htbp]
+\centering
+\begin{subfigure}[b]{0.43\linewidth}
+\centering
+\begin{circuitikz}[scale=0.9, transform shape]
+  \draw (0,0) to[battery1, l=$V$] (0,2) to[short] (1,2) to[spst, l=S, mirror] (3,2) to[lamp, l=lamp] (3,0) to[short] (0,0);
+\end{circuitikz}
+\caption{ideal switch}
+\end{subfigure}\hfill
+\begin{subfigure}[b]{0.50\linewidth}
+\centering
+\begin{circuitikz}[scale=0.9, transform shape]
+  \draw (0,0) node[nigfete, rotate=0](Q){};
+  \draw (Q.D) to[R, l=$R_L$] ++(0,1.6) node[vcc]{$V_{DD}$};
+  \draw (Q.S) node[ground]{};
+  \draw (Q.G) to[short, -o] ++(-1,0) node[left]{$V_{in}$};
+  \draw (Q.D) to[short, -o] ++(1,0) node[right]{$V_{out}$};
+\end{circuitikz}
+\caption{transistor used as a switch}
+\end{subfigure}
+\caption{(a)~An ideal switch connecting a battery to a lamp. (b)~An n-channel MOS transistor used as a switch: a high $V_{in}$ closes the path from drain to source and pulls $V_{out}$ low.}
+\label{fig:switches}
+\end{figure}
+
+\section{A Short History of Digital Hardware}\label{sec:history}
+The history of digital hardware is a history of better switches, summarised in \cref{fig:timeline}.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm,
+   ev/.style={font=\sffamily\scriptsize, align=center, text width=2.5cm},
+   dot/.style={circle, fill=kmutnborange, inner sep=1.6pt}]
+  \draw[line width=1.2pt, color=greyline] (0,0) -- (13.2,0);
+  \foreach \x/\y/\t/\d [count=\i] in {
+    0.3/1930s/Electromechanical\\relay logic/u,
+    2.3/1946/ENIAC: 17{,}468\\vacuum tubes/d,
+    4.3/1947/Point-contact\\transistor/u,
+    6.3/1958/{Integrated circuit\\(Kilby, Noyce)}/d,
+    8.3/1971/Intel 4004\\microprocessor/u,
+    10.3/1985/32-bit 80386\\processor/d,
+    12.3/2006/Multi-core\\Core 2 Duo/u}{
+    \node[dot] at (\x,0){};
+    \if\d u
+      \draw[color=greyline] (\x,0) -- (\x,0.55);
+      \node[ev, anchor=south] at (\x,0.55) {\textbf{\y}\\ \t};
+    \else
+      \draw[color=greyline] (\x,0) -- (\x,-0.55);
+      \node[ev, anchor=north] at (\x,-0.55) {\textbf{\y}\\ \t};
+    \fi
+  }
+\end{tikzpicture}
+\caption{Milestones in digital hardware (the date of the Intel 4004 is the year of its commercial introduction).}
+\label{fig:timeline}
+\end{figure}
+
+\subsection{Relays and vacuum tubes}
+In the 1930s digital logic was built from electromechanical \term{relays}: an electromagnet moves a metal contact. Relays are slow (milliseconds) and wear out. In the 1940s the \term{vacuum tube} replaced them. With no moving parts it could switch in microseconds, which made electronic computing practical. The \term{ENIAC} (Electronic Numerical Integrator and Computer, 1946) used 17{,}468 vacuum tubes, about 70{,}000 resistors, 10{,}000 capacitors, 1{,}500 relays and 6{,}000 manual switches; it weighed about 30 tons, occupied roughly 167~m$^2$ and consumed about 160~kW. It could perform about 5{,}000 additions per second, some 200{,}000 times faster than a human with a desk calculator.
+
+\begin{caution}[Origin of the word ``bug'']
+The word \emph{bug} for a fault predates computers, but a famous entry in the logbook of the Harvard Mark~II relay calculator, dated 9~September 1947, records a moth found trapped between the contacts of Relay~70, Panel~F, which was causing errors. The operators taped the moth into the log as ``first actual case of bug being found''; the story is credited to the team working with Grace Murray Hopper and is the origin of the term \emph{debugging}.
+\end{caution}
+
+\subsection{The transistor and the integrated circuit}
+In 1947 John Bardeen, Walter Brattain and William Shockley at Bell Laboratories demonstrated the first \term{transistor}, a solid-state device able to amplify and to switch electrical signals. It was smaller, faster, cooler and far more reliable than a vacuum tube, and the three inventors shared the 1956 Nobel Prize in Physics. In 1958 Jack Kilby (Texas Instruments) built the first \term{integrated circuit} (IC), several components on one piece of germanium, and in 1959 Robert Noyce (Fairchild Semiconductor) developed the monolithic silicon IC that is the basis of manufacturing today. Kilby was awarded the Nobel Prize in Physics in 2000. By 1961 the first \emph{logic} ICs (flip-flops with a handful of transistors) were on the market, and by 1967 a semi-custom chip with about 150 logic gates was available.
+
+\subsection{The microprocessor}
+Intel was founded in 1968 by Robert Noyce and Gordon Moore, soon joined by Andy Grove. The \term{microprocessor}, a complete central processing unit on a single chip, appeared in 1971 as the Intel 4004, designed for a calculator. The Intel 8088, a variant of the 8086, was chosen for the original IBM Personal Computer in 1981 and established the x86 architecture that remains in use. The 80386 (1985) was the first 32-bit x86 processor and made modern multitasking operating systems practical. By 2006 designers had turned from raising the clock rate, which was limited by heat, to placing several processor \emph{cores} on one chip. \Cref{tab:intel} summarises the growth of the Intel line.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Selected Intel processors. Values are approximate and are those quoted in the manufacturer's literature for the original product of each family; transistor counts of different sources vary slightly.}
+\label{tab:intel}
+\begin{tabular}{@{}lcrrrr@{}}
+\toprule
+Processor & Year & Feature size ($\mu$m) & Transistors & Clock (MHz) & Word (bits)\\
+\midrule
+4004        & 1971 & 10        & 2.3\,k  & 0.75         & 4\\
+8008        & 1972 & 10        & 3.5\,k  & 0.5--0.8     & 8\\
+8080        & 1974 & 6         & 6\,k    & 2            & 8\\
+8086        & 1978 & 3         & 29\,k   & 5--10        & 16\\
+80286       & 1982 & 1.5       & 134\,k  & 6--12        & 16\\
+80386       & 1985 & 1.5--1.0  & 275\,k  & 16--25       & 32\\
+80486       & 1989 & 1--0.6    & 1.2\,M  & 25--100      & 32\\
+Pentium     & 1993 & 0.8--0.35 & 3.2--4.5\,M & 60--300  & 32\\
+Pentium Pro & 1995 & 0.6--0.35 & 5.5\,M  & 166--200     & 32\\
+Pentium II  & 1997 & 0.35--0.25& 7.5\,M  & 233--450     & 32\\
+Pentium III & 1999 & 0.25--0.18& 9.5--28\,M & 450--1000 & 32\\
+Pentium 4   & 2001 & 0.18--0.13& 42--55\,M  & 1400--3200& 32\\
+Core 2 Duo  & 2006 & 0.065     & 291\,M  & 1800--3330   & 64\\
+Core i7     & 2008 & 0.045     & 731\,M  & 2660--3330   & 64\\
+Core i7 (Sandy Bridge) & 2011 & 0.032 & 995\,M & 3400--3800 & 64\\
+Core i7 (Skylake)      & 2015 & 0.014 & 1.75\,B & 4000--4200 & 64\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Moore's Law}\label{sec:moore}
+In 1965 Gordon Moore, then at Fairchild and later a co-founder of Intel, observed that the number of components on an integrated circuit had been doubling every year, and predicted that the trend would continue~\cite{moore1965}. He revised the doubling period to about two years in 1975, and the statement that the number of transistors per chip doubles every one to two years became known as \term{Moore's law}. It is an empirical observation about an industry, not a law of nature, but it has described the evolution of chips for half a century. \Cref{fig:moore} plots the transistor counts of \cref{tab:intel} on a logarithmic axis, on which an exponential trend appears as a straight line.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.88\linewidth, height=6.2cm, ymode=log, xlabel={Year}, ylabel={Transistors per chip},
+    xmin=1970, xmax=2018, ymin=1e3, ymax=1e10, grid=both, minor grid style={dotted, gray!40},
+    major grid style={gray!50}, tick label style={font=\small}, label style={font=\small\sffamily},
+    xtick={1970,1980,1990,2000,2010}, legend pos=north west, legend style={font=\scriptsize\sffamily}]
+\addplot[only marks, mark=*, mark size=1.6pt, color=kmutnborange] coordinates {
+  (1971,2300) (1972,3500) (1974,6000) (1978,29000) (1982,134000) (1985,275000) (1989,1200000)
+  (1993,3200000) (1995,5500000) (1997,7500000) (1999,9500000) (2001,42000000)
+  (2006,291000000) (2008,731000000) (2011,995000000) (2015,1750000000)};
+\addlegendentry{Intel processors (Table~\ref{tab:intel})}
+\addplot[domain=1971:2016, samples=2, thick, color=blueline, dashed] {2300*2^((x-1971)/2.25)};
+\addlegendentry{Doubling every 2.25 years}
+\end{axis}
+\end{tikzpicture}
+\caption{Transistor count of Intel processors from Table~\ref{tab:intel}, with a doubling time fitted between the first and last points.}
+\label{fig:moore}
+\end{figure}
+
+\begin{example}{Doubling time}{moore}
+The Intel 4004 (1971) had about 2{,}300 transistors and the Skylake Core i7 (2015) about $1.75\times10^{9}$.
+
+\textbf{Question.} How many doublings does this represent, and what is the average doubling time?
+
+\textbf{Solution.} The ratio is $1.75\times10^{9}/2300 \approx 7.6\times10^{5}$, and $\log_2(7.6\times10^{5}) \approx 19.5$ doublings. The period is $2015-1971 = 44$ years, so the average doubling time is $44/19.5 \approx 2.3$ years, consistent with Moore's revised estimate of two years.
+\end{example}
+
+\section{Types of Logic Chips}\label{sec:chiptypes}
+The hardware that implements a digital design can take one of three broad forms, summarised in \cref{tab:chiptypes}.
+
+\paragraph{Standard chips (74xx).} A standard chip contains a small, fixed amount of logic, typically fewer than 100 transistors: a few gates, a flip-flop or a counter. The \term{74xx series} (for example the 7400, which holds four 2-input NAND gates) is the best-known family. These chips are not programmable, since their function is fixed at manufacture, and today they are used mostly as ``glue logic'' between larger chips, in teaching laboratories and for very simple functions.
+
+\paragraph{Programmable logic (PLD and FPGA).} A \term{programmable logic device} (PLD) is a chip containing a collection of logic elements whose interconnections can be configured by the user \emph{after} manufacture. A \term{field-programmable gate array} (FPGA) is a very large PLD with thousands to millions of logic cells, memory blocks and arithmetic units. The designer describes the circuit in a hardware description language, such as VHDL or Verilog, and software tools translate it into a configuration file. FPGAs are excellent for prototypes, low-volume products and systems that must be updated in the field.
+
+\paragraph{Custom chips (ASIC).} An \term{application-specific integrated circuit} (ASIC) is designed for one purpose. It offers the best performance, the smallest area and the lowest power consumption, but it cannot be changed after manufacture, and the cost of design and fabrication masks (the non-recurring engineering cost) is very high. ASICs are economical only for high-volume products such as mobile phones and graphics processors.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Comparison of the three implementation technologies.}
+\label{tab:chiptypes}
+\begin{tabularx}{\linewidth}{@{}lXXX@{}}
+\toprule
+ & \textbf{Standard (74xx)} & \textbf{PLD / FPGA} & \textbf{ASIC}\\
+\midrule
+Function fixed at & manufacture & configuration (field) & manufacture\\
+Typical size & $<100$ transistors & up to millions of gates & up to billions of transistors\\
+Up-front cost & very low & low & very high\\
+Unit cost at high volume & moderate & high & lowest\\
+Performance / power & modest & good & best\\
+Typical use & glue logic, teaching & prototypes, small volumes & mass-market products\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{The Digital Design Flow}\label{sec:flow}
+A modern digital circuit is designed in two phases, shown in \cref{fig:flow}.
+
+\paragraph{Design phase.} The problem specification states \emph{what} the circuit must do. The designer enters the design either as a schematic or, more commonly, as an RTL description in a \term{hardware description language} (HDL) such as VHDL or Verilog. \emph{Functional simulation} then checks, using a test bench, that the description behaves as specified. No hardware details such as delays are involved yet.
+
+\paragraph{Implementation phase.} \termx{Synthesis}{synthesis} translates the HDL description into a netlist of gates and flip-flops. \emph{Post-synthesis simulation} checks the result; \emph{place and route} maps the netlist onto the cells of the chosen FPGA or ASIC; \emph{timing simulation} then includes the real delays, and finally the circuit is verified in hardware.
+
+\figw{309.9pt}{lect_1_design_implementation_flow}{A development flow for a digital circuit. The design phase (left) produces a verified behavioural description; the implementation phase (right) turns it into hardware.}{fig:flow}
+
+The rest of this book follows the design phase. We start at the lowest level, the logic gates, and learn how to describe and simplify circuits on paper (Chapters~2--3). We then build the arithmetic and combinational blocks that every processor contains (Chapters~4--5), add memory in the form of flip-flops (Chapters~6--7), organise it with finite state machines (Chapter~8), and finally combine all of these into dedicated and general-purpose microprocessors (Chapters~9--10). Throughout, designs are written in VHDL, which is introduced gradually and summarised in \cref{app:vhdl}.
+
+\begin{chaptersummary}
+\begin{itemize}
+  \item An \textbf{analog} signal is continuous in time and amplitude; a \textbf{digital} signal takes a finite set of values, most often two (0 and 1). Digital signals tolerate noise and can be processed exactly.
+  \item An $n$-bit binary number has $2^n$ values; encoding $N$ items needs $\lceil\log_2 N\rceil$ bits. The value of a binary number is $\sum d_i 2^i$.
+  \item \textbf{Analog-to-digital conversion} consists of \emph{sampling} (in time) and \emph{quantisation} (in amplitude); an $n$-bit ADC has step size $V_{FS}/2^n$.
+  \item Digital hardware evolved from relays to vacuum tubes (ENIAC, 1946), transistors (1947), integrated circuits (1958) and microprocessors (Intel 4004, 1971).
+  \item \textbf{Moore's law}: transistor counts per chip double about every two years.
+  \item Logic is implemented in \textbf{standard chips}, \textbf{programmable logic (PLD/FPGA)} or \textbf{ASICs}, trading flexibility against performance and volume cost.
+  \item The design flow has a \textbf{design phase} (specification, HDL entry, functional simulation) and an \textbf{implementation phase} (synthesis, place and route, timing simulation, verification).
+\end{itemize}
+\end{chaptersummary}
+
+\chapsec{Exercises}
+\begin{exlist}
+  \item Classify each of the following signals as analog or digital, and explain: (a) the output of a thermometer using a liquid column; (b) the voltage on a wire carrying the bits of a text message; (c) the position of a light switch; (d) the reading of a mercury barometer.
+  \item Convert the following binary numbers to decimal: (a) \bin{1011}; (b) \bin{110010}; (c) \bin{10000001}.
+  \item Convert the following decimal numbers to binary: (a) 37; (b) 100; (c) 255.
+  \item How many bits are required to encode (a) the 26 letters of the English alphabet; (b) the 10 decimal digits; (c) 1{,}000{,}000 distinct items?
+  \item An 8-bit ADC has a full-scale range of 0--3.3~V. Compute the step size and the maximum quantisation error. What is the binary output for an input of 1.00~V, if the code is obtained by rounding down, i.e.\ $\lfloor V/Q\rfloor$?
+  \item A temperature sensor must be read with a resolution of at least 0.1~K over a range of 0--500~K. What is the smallest number of ADC bits that suffices?
+  \item Explain why a digital signal is more tolerant of noise than an analog signal. Sketch a noisy digital waveform and show how a receiver with a single threshold recovers the original bits.
+  \item The 80386 (1985) had about 275{,}000 transistors and the 80486 (1989) about 1.2 million. Calculate the doubling time implied by these two points, and compare it with the average of \cref{ex:moore}.
+  \item List one advantage and one disadvantage of using (a) a 74xx chip, (b) an FPGA and (c) an ASIC for a product that will be sold in a quantity of 50 units.
+  \item Describe in your own words the difference between functional simulation and timing simulation. At which stage of the design flow is each performed, and why does the timing simulation need the result of place and route?
+\end{exlist}
+
+\chapsec{Further Reading}
+Brown and Vranesic~\cite{brown2009} give a concise treatment of digital hardware and the design flow in their first chapter; Hwang~\cite{hwang2018} places the same ideas in the context of microprocessor design. Moore's original 1965 article~\cite{moore1965} is short and still worth reading, and the history of the relay-to-chip transition is told in many popular accounts of the computer.

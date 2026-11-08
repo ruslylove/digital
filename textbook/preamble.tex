@@ -1,0 +1,272 @@
+% =====================================================================
+%  preamble.tex  --  packages, page geometry, styles and book macros
+%  Compile with XeLaTeX (see latexmkrc / Makefile).
+% =====================================================================
+
+% ---------- fonts -----------------------------------------------------
+\usepackage{tocloft}
+\setcounter{tocdepth}{2}
+\renewcommand{\cftchapfont}{\sffamily\bfseries}
+\renewcommand{\cftchappagefont}{\sffamily\bfseries}
+\renewcommand{\cftsecfont}{\sffamily\small}
+\renewcommand{\cftsecpagefont}{\sffamily\small}
+\setlength{\cftbeforechapskip}{0.9em}
+
+\usepackage{fontspec}
+\usepackage{unicode-math}
+\setmainfont{texgyrepagella}[
+  Extension      = .otf,
+  UprightFont    = *-regular,
+  BoldFont       = *-bold,
+  ItalicFont     = *-italic,
+  BoldItalicFont = *-bolditalic]
+\setmathfont{texgyrepagella-math.otf}
+\setsansfont{texgyreheros}[
+  Extension      = .otf,
+  UprightFont    = *-regular,
+  BoldFont       = *-bold,
+  ItalicFont     = *-italic,
+  BoldItalicFont = *-bolditalic,
+  Scale          = MatchLowercase]
+\setmonofont{FiraMono-Regular.otf}[
+  BoldFont       = FiraMono-Bold.otf,
+  Scale          = MatchLowercase]
+
+% ---------- page geometry --------------------------------------------
+% "8-page-sheet" (8 \textit{na yok}) standard textbook size: 19 x 26.5 cm
+\usepackage[
+  paperwidth  = 190mm,
+  paperheight = 265mm,
+  inner       = 26mm,
+  outer       = 20mm,
+  top         = 24mm,
+  bottom      = 26mm,
+  headheight  = 22pt,
+  headsep     = 10mm,
+  footskip    = 12mm]{geometry}
+
+\usepackage{microtype}
+\usepackage{setspace}
+\setstretch{1.08}
+\usepackage[skip=0.55em plus 0.1em]{parskip}
+\setlength{\parindent}{0pt}
+\usepackage{etoolbox}
+
+% ---------- maths, tables, graphics ----------------------------------
+\usepackage{amsmath,mathtools}
+\usepackage{booktabs,array,multirow,tabularx,makecell}
+\usepackage{graphicx}
+\usepackage[export]{adjustbox}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,shapes.geometric,fit,automata}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage[siunitx]{circuitikz}
+\usepackage{siunitx}
+\sisetup{group-separator={,}}
+\graphicspath{{figures/}{images/}{../public/}}
+
+% ---------- colours ---------------------------------------------------
+\definecolor{kmutnborange}{HTML}{E4610F}
+\definecolor{kmutnbgreen}{HTML}{0B8A3E}
+\definecolor{ink}{HTML}{1F2937}
+\definecolor{accent}{HTML}{9A3F0C}
+\definecolor{accentlight}{HTML}{FBEBDD}
+\definecolor{bluelight}{HTML}{E8EFF8}
+\definecolor{blueline}{HTML}{2B5C9E}
+\definecolor{greenlight}{HTML}{E6F4EA}
+\definecolor{greyline}{HTML}{8A8F98}
+\definecolor{codebg}{HTML}{F6F7F9}
+\definecolor{codekw}{HTML}{1D4E9E}
+\definecolor{codecm}{HTML}{4C7A34}
+\definecolor{codestr}{HTML}{A03A1B}
+\definecolor{linkblue}{HTML}{1B4F9C}
+
+% ---------- lists -----------------------------------------------------
+\usepackage[inline]{enumitem}
+\setlist{nosep, topsep=0.3em, itemsep=0.15em, leftmargin=1.5em}
+\newlist{exlist}{enumerate}{2}
+\setlist[exlist,1]{label=\textbf{\thechapter.\arabic*}, leftmargin=2.6em, itemsep=0.5em, topsep=0.4em, nosep=false}
+\setlist[exlist,2]{label=(\alph*), leftmargin=1.8em, itemsep=0.15em}
+
+% ---------- boxes -----------------------------------------------------
+\usepackage[most]{tcolorbox}
+\tcbset{
+  enhanced, breakable, boxrule=0.6pt, arc=2pt, left=8pt, right=8pt, top=6pt, bottom=6pt,
+  fonttitle=\sffamily\bfseries\small, before skip=0.8em, after skip=0.8em}
+
+% Learning objectives (opening of every chapter)
+\newtcolorbox{objectives}{
+  colback=accentlight, colframe=kmutnborange, boxrule=0pt, leftrule=3pt, arc=0pt,
+  title={Learning Objectives}, coltitle=accent, colbacktitle=accentlight,
+  attach boxed title to top left={yshift=0pt}, boxed title style={boxrule=0pt, arc=0pt, left=0pt}}
+
+% Worked examples (numbered within chapter)
+\newtcbtheorem[number within=chapter]{example}{Example}{
+  colback=white, colframe=blueline, colbacktitle=bluelight, coltitle=blueline,
+  fonttitle=\sffamily\bfseries\small, attach boxed title to top left={yshift=-\tcboxedtitleheight/2},
+  boxed title style={boxrule=0.6pt, colframe=blueline, arc=2pt}, top=10pt}{ex}
+
+% Definitions / key ideas
+\newtcbtheorem[number within=chapter]{definition}{Definition}{
+  colback=greenlight, colframe=kmutnbgreen, colbacktitle=kmutnbgreen, coltitle=white,
+  fonttitle=\sffamily\bfseries\small, boxrule=0.6pt, top=10pt,
+  attach boxed title to top left={yshift=-\tcboxedtitleheight/2},
+  boxed title style={arc=2pt}}{def}
+
+% Key points / design rules
+\newtcolorbox{keypoint}[1][Key Point]{
+  colback=bluelight, colframe=blueline, boxrule=0pt, leftrule=3pt, arc=0pt,
+  title={#1}, coltitle=blueline, colbacktitle=bluelight,
+  attach boxed title to top left={yshift=0pt}, boxed title style={boxrule=0pt, arc=0pt, left=0pt}}
+
+% Chapter summary
+\newtcolorbox{chaptersummary}{
+  colback=codebg, colframe=greyline, title={Chapter Summary}, coltitle=ink, colbacktitle=codebg,
+  boxrule=0.6pt, attach boxed title to top left={yshift=-\tcboxedtitleheight/2},
+  boxed title style={boxrule=0.6pt, colframe=greyline, arc=2pt}, top=10pt}
+
+% Caution / common mistakes
+\newtcolorbox{caution}[1][Common Mistake]{
+  colback=white, colframe=accent, boxrule=0pt, leftrule=3pt, arc=0pt,
+  title={#1}, coltitle=accent, colbacktitle=white,
+  attach boxed title to top left={yshift=0pt}, boxed title style={boxrule=0pt, arc=0pt, left=0pt}}
+
+% ---------- captions, floats ------------------------------------------
+\usepackage{float}
+\usepackage[font={small}, labelfont={sf,bf,color=accent}, labelsep=period, format=hang,
+            justification=raggedright, singlelinecheck=true, skip=6pt]{caption}
+\usepackage{subcaption}
+\captionsetup[table]{position=top}
+
+\usepackage{rotating}
+% \figw{<width>}{<file>}{<caption>}{<label>} : figure with an explicit width (set by the layout script)
+\newcommand{\figw}[4]{\begin{figure}[htbp]\centering\includegraphics[width=#1]{#2}\caption{#3}\label{#4}\end{figure}}
+\newcommand{\figside}[4]{\begin{sidewaysfigure}[p]\centering\includegraphics[width=#1]{#2}\caption{#3}\label{#4}\end{sidewaysfigure}}
+% \wavesplit{<name>}{<n>} : a wide simulation screenshot cut into n strips (each keeps the signal-name column) so that the text stays readable
+\newcommand{\wavesplit}[2]{\foreach \wsi in {1,...,#2}{\includegraphics[width=\linewidth]{#1_p\wsi}\par\vspace{1.5pt}}}
+% \fig[<graphicx keys>]{<file>}{<caption>}{<label>}   -- single figure
+\newcommand{\fig}[4][]{%
+  \begin{figure}[htbp]
+    \centering
+    \includegraphics[max width=\linewidth, max height=0.42\textheight, #1]{#2}
+    \caption{#3}\label{#4}
+  \end{figure}}
+
+% ---------- listings (VHDL) -------------------------------------------
+\usepackage{listings}
+\lstdefinelanguage{VHDLx}{
+  language=VHDL, morekeywords={%
+    library,use,entity,architecture,is,of,begin,end,port,generic,map,in,out,inout,buffer,
+    signal,variable,constant,process,if,then,elsif,else,case,when,others,for,loop,while,
+    component,package,body,type,subtype,array,downto,to,wait,until,after,report,assert,
+    rising_edge,falling_edge,with,select,generate,and,or,not,nand,nor,xor,xnor,mod,rem,abs},
+  sensitive=false, morecomment=[l]{--}}
+\lstdefinestyle{vhdl}{
+  language=VHDLx, basicstyle=\ttfamily\footnotesize, keywordstyle=\color{codekw}\bfseries,
+  commentstyle=\color{codecm}, stringstyle=\color{codestr},
+  backgroundcolor=\color{codebg}, frame=single, rulecolor=\color{greyline!50},
+  numbers=left, numberstyle=\tiny\color{greyline}, numbersep=6pt, xleftmargin=1.6em,
+  framexleftmargin=1.6em, breaklines=true, breakatwhitespace=false, tabsize=2,
+  showstringspaces=false, columns=fullflexible, keepspaces=true, aboveskip=0.6em, belowskip=0.6em,
+  captionpos=b, upquote=true, literate={↔}{$\leftrightarrow$}1}
+\lstset{style=vhdl}
+\renewcommand{\lstlistingname}{Listing}
+\lstnewenvironment{vhdl}[1][]{\lstset{style=vhdl,#1}}{}
+% \vhdlfile[<options>]{<path>}{<caption>}{<label>}
+\newcommand{\vhdlfile}[4][]{%
+  \lstinputlisting[style=vhdl, caption={#3}, label={#4}, #1]{#2}}
+
+\newcommand{\vhdlfilesmall}[4][]{%
+  \lstinputlisting[style=vhdl, basicstyle=\ttfamily\scriptsize, caption={#3}, label={#4}, #1]{#2}}
+
+% inline code
+\DeclareRobustCommand{\code}[1]{\texttt{\detokenize{#1}}}
+
+% ---------- index, glossary -------------------------------------------
+\usepackage[noautomatic]{imakeidx}
+\makeindex[intoc, title={Index}, columns=2, options={-s indexstyle.ist}]
+% \term{<phrase>}  : emphasise first use AND add to the index
+\newcommand{\term}[1]{\textit{#1}\index{#1}}
+% \termx{<shown text>}{<index entry>} : same, with a different index entry
+\newcommand{\termx}[2]{\textit{#1}\index{#2}}
+
+\newenvironment{glossarylist}{%
+  \begin{description}[font=\sffamily\bfseries, leftmargin=0pt, labelindent=0pt,
+                      itemsep=0.5em, parsep=0.2em, style=unboxed]}{\end{description}}
+\newcommand{\glossaryentry}[2]{\item[#1] #2}
+
+% ---------- headers, footers, headings --------------------------------
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{greyline}\leaders\hrule height \headrulewidth\hfill}}
+\fancyhead[LE]{\sffamily\small\thepage\quad\textcolor{greyline}{|}\quad\nouppercase{\leftmark}}
+\fancyhead[RO]{\sffamily\small\nouppercase{\rightmark}\quad\textcolor{greyline}{|}\quad\thepage}
+\renewcommand{\chaptermark}[1]{\markboth{\ifnum\value{chapter}>0 \thechapter\ \fi#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\ifnum\value{chapter}>0 \thesection\ \fi#1}}
+\fancypagestyle{plain}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}\fancyfoot[C]{\sffamily\small\thepage}}
+
+\titleformat{\chapter}[display]
+  {\sffamily\bfseries}
+  {\color{kmutnborange}\fontsize{54}{54}\selectfont\thechapter\vspace{4pt}\hrule height 1.6pt\vspace{10pt}}
+  {0pt}
+  {\color{ink}\fontsize{26}{30}\selectfont}
+\titlespacing*{\chapter}{0pt}{-6pt}{22pt}
+\titleformat{name=\chapter,numberless}[display]
+  {\sffamily\bfseries}
+  {}
+  {0pt}
+  {\color{ink}\fontsize{26}{30}\selectfont\vspace{-4pt}\hrule height 1.6pt\color{kmutnborange}\vspace{14pt}}
+\titleformat{\section}{\sffamily\bfseries\Large\color{ink}}{\color{kmutnborange}\thesection}{0.7em}{}
+\titleformat{\subsection}{\sffamily\bfseries\large\color{ink}}{\color{kmutnborange}\thesubsection}{0.7em}{}
+\titleformat{\subsubsection}{\sffamily\bfseries\normalsize\color{ink}}{}{0pt}{}
+\titlespacing*{\section}{0pt}{1.6em plus 0.3em minus 0.2em}{0.6em}
+\titlespacing*{\subsection}{0pt}{1.2em plus 0.2em minus 0.2em}{0.4em}
+\titlespacing*{\subsubsection}{0pt}{0.9em}{0.2em}
+
+% Unnumbered "end-of-chapter" headings that still land in the TOC
+\newcommand{\chapsec}[1]{\section*{#1}\addcontentsline{toc}{section}{#1}\markright{#1}}
+
+% ---------- table of contents formatting ------------------------------
+
+% ---------- cross references & hyperlinks -----------------------------
+\usepackage[
+  colorlinks=true, linkcolor=linkblue, citecolor=linkblue, urlcolor=linkblue,
+  bookmarksnumbered=true, pdfborder={0 0 0},
+  pdftitle={Digital Circuits and Microprocessor Fundamentals},
+  pdfauthor={Ruslee Sutthaweekul},
+  pdfsubject={Textbook for Courses 010113025 and 010153101, KMUTNB}]{hyperref}
+\usepackage[capitalise,noabbrev]{cleveref}
+\crefname{listing}{Listing}{Listings}
+\crefname{tcb@cnt@example}{Example}{Examples}
+\Crefname{tcb@cnt@example}{Example}{Examples}
+\crefname{tcb@cnt@definition}{Definition}{Definitions}
+\Crefname{tcb@cnt@definition}{Definition}{Definitions}
+\Crefname{listing}{Listing}{Listings}
+
+% ---------- bibliography (BibTeX + IEEEtran numeric style) -------------
+\renewcommand{\bibname}{Bibliography}
+
+% ---------- maths shorthands used throughout --------------------------
+\newcommand{\NOT}[1]{\overline{#1}}
+\newcommand{\bin}[1]{\ensuremath{\mathtt{#1}}}              % binary string, e.g. \bin{1001}
+\newcommand{\minterm}[1]{\ensuremath{m_{#1}}}
+\newcommand{\maxterm}[1]{\ensuremath{M_{#1}}}
+\newcommand{\Sm}{\ensuremath{\sum m}}
+\newcommand{\PM}{\ensuremath{\prod M}}
+\newcommand{\xor}{\ensuremath{\oplus}}
+\newcommand{\rtl}[2]{\ensuremath{#1 \leftarrow #2}}         % register transfer: R1 <- R2
+\newcommand{\dc}{\ensuremath{\mathrm{d}}}                   % don't care in a K-map
+
+% “Note to the reader” helper (used sparingly)
+\newcommand{\hint}[1]{\par\smallskip\noindent\textsf{\textbf{\textcolor{accent}{Hint.}}}~#1}
+
+% truly empty blank pages before openright chapters
+\makeatletter
+\def\cleardoublepage{\clearpage\if@twoside\ifodd\c@page\else\hbox{}\thispagestyle{empty}\newpage\fi\fi}
+\makeatother

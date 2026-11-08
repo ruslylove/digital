@@ -1,0 +1,6 @@
+heading_prefix "\\textsf{\\textbf{\\textcolor{accent}{"
+heading_suffix "}}}\\nopagebreak\n"
+headings_flag 1
+delim_0 ", "
+delim_1 ", "
+delim_2 ", "

@@ -1,0 +1,8 @@
+# latexmk configuration for the textbook (XeLaTeX + bibtex + makeindex)
+$pdf_mode = 5;                    # xelatex
+$xelatex  = 'xelatex -interaction=nonstopmode -file-line-error -synctex=1 %O %S';
+$bibtex_use = 1.5;                # run bibtex when needed
+$ENV{'BIBINPUTS'} = '.:' . ($ENV{'BIBINPUTS'} // '');
+$makeindex = 'makeindex -s ../indexstyle.ist %O -o %D %S';
+$out_dir = 'build';
+$max_repeat = 6;
