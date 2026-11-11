@@ -63,63 +63,37 @@ The output of register $A$ is fed back to one input of an adder; the other input
 \end{figure}
 
 \subsection{Sharing a functional unit with multiplexers}
-Suppose the processor must perform \emph{both} $A=A+3$ and $A=B+C$. Two adders would work, but a single adder preceded by multiplexers is cheaper. A multiplexer in front of each adder input selects the operand: $\mathit{Mux1}$ chooses between $B$ ($0$) and $A$ ($1$); $\mathit{Mux2}$ chooses between $C$ ($0$) and the constant $3$ ($1$) (\cref{fig:dp-shared}). The control unit selects the operation by the \emph{control word}, i.e.\ the values of all control signals needed in a clock cycle (\cref{tab:cw1}).
+Suppose the processor must perform \emph{both} $A=A+3$ and $A=B+C$. Two adders would work, but a single adder preceded by multiplexers is cheaper. A multiplexer in front of each adder input selects the operand: the first chooses between $B$ ($0$) and $A$ ($1$), the second between $C$ ($0$) and the constant $3$ ($1$) (\cref{fig:dp-shared}). Because the two operations need either $(B,C)$ or $(A,3)$, one control signal $\mathit{Mux}$ can drive both multiplexers. The control unit selects the operation by the \emph{control word}, i.e.\ the values of all control signals needed in a clock cycle (\cref{tab:cw1}).
 
-\begin{figure}[htbp]
-\centering
-\begin{tikzpicture}[
-  reg/.style={draw=blueline, fill=bluelight, minimum width=15mm, minimum height=9mm, font=\sffamily\small},
-  mux/.style={draw=kmutnborange, fill=accentlight, minimum width=11mm, minimum height=13mm, font=\sffamily\scriptsize, align=center},
-  add/.style={draw=kmutnbgreen, fill=greenlight, circle, minimum size=8mm, font=\sffamily},
-  w/.style={-{Stealth[length=1.8mm]}, thick, color=ink},
-  c/.style={-{Stealth[length=1.6mm]}, color=accent},
-  lab/.style={font=\sffamily\scriptsize, color=accent}]
-  \node[reg] (B) at (0,2.4) {Reg $B$};
-  \node[reg] (C) at (0,0.2) {Reg $C$};
-  \node[mux] (M1) at (3,2.4) {Mux1};
-  \node[mux] (M2) at (3,0.2) {Mux2};
-  \node[add] (P) at (5.4,1.3) {$+$};
-  \node[reg] (A) at (8,1.3) {Reg $A$};
-  % data wires
-  \draw[w] (B.east) -- ++(0.5,0) |- ([yshift=2.5mm]M1.west);
-  \draw[w] (C.east) -- ++(0.5,0) |- ([yshift=2.5mm]M2.west);
-  \draw[w] ([xshift=-7mm,yshift=-2.5mm]M2.west) node[left, font=\sffamily\scriptsize]{const.\ 3} -- ([yshift=-2.5mm]M2.west);
-  \draw[w] (M1.east) -| (P.north west);
-  \draw[w] (M2.east) -| (P.south west);
-  \draw[w] (P.east) -- (A.west);
-  % feedback of A to Mux1 (input 1)
-  \draw[w] (A.east) -- ++(0.7,0) |- (3,3.65) -- (1.9,3.65) |- ([yshift=-2.5mm]M1.west);
-  % control
-  \draw[c] (3,-1.1) node[lab, below]{Mux2} -- (M2.south);
-  \draw[c] (3.9,4.4) node[lab, above]{Mux1} -- (3.9,3.0) -- (M1.north east);
-  \draw[c] (8,-0.9) node[lab, below]{ALoad} -- (A.south);
-  \node[lab, anchor=east] at (7.2,1.9) {};
-\end{tikzpicture}
-\caption{A shared-adder datapath that performs $A=A+3$ and $A=B+C$ (author's drawing). The multiplexer inputs are numbered 0 and 1 from top to bottom; the clock, common to all registers, is not shown.}
-\label{fig:dp-shared}
-\end{figure}
+\figw{392.6pt}{lect_9_datapath_one_adder}{A shared-adder datapath that performs $A=A+3$ and $A=B+C$. Both multiplexers are driven by the same control signal $Mux$ (input $1$ selects $A$ and the constant $3$, input $0$ selects $B$ and $C$); the bus width is marked with a slash, and the clock is common to all registers.}{fig:dp-shared}
+
+The two multiplexers can also be placed \emph{in front of the destination register} instead: the adder outputs $B+C$ and $A+3$ feed a single 2-to-1 multiplexer $Amux$ that selects what is loaded into $A$ (\cref{fig:dp-combine}). This version needs two adders but only one multiplexer, and the same $ALoad$ and $Amux$ signals again define the two operations.
+
+\figw{265.0pt}{lect_9_datapath_combine}{Alternative datapath for $A=B+C$ and $A=A+3$: one multiplexer $Amux$ in front of register $A$.}{fig:dp-combine}
 
 \begin{table}[htbp]
 \centering
 \caption{Control words of the shared-adder datapath.}
 \label{tab:cw1}
-\begin{tabular}{l|ccc}
-\toprule Operation & $ALoad$ & $Mux1$ & $Mux2$\\ \midrule
-$A=A+3$ & 1 & 1 & 1\\ $A=B+C$ & 1 & 0 & 0\\ \bottomrule
+\begin{tabular}{l|cc}
+\toprule Operation & $ALoad$ & $Mux$\\ \midrule
+$A=A+3$ & 1 & 1\\ $A=B+C$ & 1 & 0\\ \bottomrule
 \end{tabular}
 \end{table}
 
 \subsection{Status signals and conditional operations}
-To implement a conditional such as \textbf{IF} $(A=0)$ the datapath must produce a \emph{status signal} for the control unit. An equality comparator can compare a register with a constant. For $A=0$ in an 8-bit register there is a cheaper solution: a single 8-input NOR gate, whose output is 1 only if every bit of $A$ is 0. Similarly, a magnitude comparator (\cref{sec:comparator}) produces $A>B$.
+To implement a conditional such as \textbf{IF} $(A=0)$ the datapath must produce a \emph{status signal} for the control unit. An equality comparator can compare a register with a constant (\cref{fig:dp-if}a). For $A=0$ in an 8-bit register there is a cheaper solution: a single 8-input NOR gate, whose output is 1 only if every bit of $A$ is 0 (\cref{fig:dp-if}b). Similarly, a magnitude comparator (\cref{sec:comparator}) produces $A>B$.
+
+\figw{332.0pt}{lect_9_datapath_if}{Generating the status signal $(A=0)$: (a)~comparator with the constant $0$; (b)~8-input NOR gate.}{fig:dp-if}
 
 \subsection{An if-then-else datapath}
 Consider the algorithm
 \begin{center}\ttfamily\small
 INPUT A;\quad IF (A = 5) THEN B = 8 ELSE B = 13; \quad OUTPUT B
 \end{center}
-The datapath of \cref{fig:ite-dp} has register $A$ (the input), register $B$ (the result), a multiplexer selecting the constant 8 or 13, a comparator that generates the status signal $(A=5)$, and an output buffer controlled by $Out$. The control signals are $ALoad$, $BLoad$, $Muxsel$ ($1$ selects 8, $0$ selects 13) and $Out$. The algorithm is converted into a sequence of control words (\cref{tab:cw-ite}); the control unit decides between control words 2 and 3 using the status signal $(A=5)$.
+The datapath of \cref{fig:ite-dp} has register $A$ (the input), register $B$ (the result), a multiplexer selecting the constant 8 or 13, an AND gate that generates the status signal $(A=5)$ by decoding the bit pattern $0101$ (the inputs for $A_3$ and $A_1$ are inverted), and an output buffer controlled by $Out$. The control signals are $ALoad$, $BLoad$, $Muxsel$ ($1$ selects 8, $0$ selects 13) and $Out$. The algorithm is converted into a sequence of control words (\cref{tab:cw-ite}); the control unit decides between control words 2 and 3 using the status signal $(A=5)$.
 
-\figw{269.3pt}{lect_9_if_then_else_datapath}{Datapath for the if-then-else algorithm.}{fig:ite-dp}
+\figw{282.1pt}{lect_9_datapath_if_then_else}{Datapath for the if-then-else algorithm.}{fig:ite-dp}
 
 \begin{table}[htbp]
 \centering
@@ -137,57 +111,9 @@ The datapath of \cref{fig:ite-dp} has register $A$ (the input), register $B$ (th
 Sum = 0\\ i = 1\\ DO \{\\ \quad Sum = Sum + i\\ \quad i = i + 1\\ \} WHILE (i != 11)\\ OUTPUT Sum
 \end{tabular}
 \end{center}
-The datapath needs two registers, $Sum$ and $i$, an adder, and a comparator that signals when $i=11$. We build it (\cref{fig:sum-dp}) with \emph{one} adder, whose first input is always $i$ and whose second input is chosen by $\mathit{addMux}$: $Sum$ (0) or the constant 1 (1). The adder output $R$ goes to both registers through input multiplexers: $\mathit{sumMux}$ chooses between $R$ (0) and the constant 0 (1), and $\mathit{iMux}$ between $R$ (0) and the constant 1 (1). With these selections each instruction of the algorithm is one control word (\cref{tab:cw-sum}): $Sum=0$ is $sumLoad=1$, $sumMux=1$; $i=1$ is $iLoad=1$, $iMux=1$; $Sum=Sum+i$ is $sumLoad=1$, $sumMux=0$, $addMux=0$; $i=i+1$ is $iLoad=1$, $iMux=0$, $addMux=1$; and the output is $OE=1$. The loop is made by the control unit (\cref{sec:cu-design}).
+The datapath needs two registers, $Sum$ and $i$, an adder, and a gate that signals when $i\neq11$. We build it (\cref{fig:sum-dp}) with \emph{one} adder, whose first input is always $i$ and whose second input is chosen by $\mathit{addMux}$: $Sum$ (0) or the constant 1 (1). The adder output $R$ goes to both registers through input multiplexers: $\mathit{sumMux}$ chooses between $R$ (0) and the constant 0 (1), and $\mathit{iMux}$ between $R$ (0) and the constant 1 (1). With these selections each instruction of the algorithm is one control word (\cref{tab:cw-sum}): $Sum=0$ is $sumLoad=1$, $sumMux=1$; $i=1$ is $iLoad=1$, $iMux=1$; $Sum=Sum+i$ is $sumLoad=1$, $sumMux=0$, $addMux=0$; $i=i+1$ is $iLoad=1$, $iMux=0$, $addMux=1$; and the output is $OE=1$. The loop is made by the control unit (\cref{sec:cu-design}).
 
-\begin{figure}[htbp]
-\centering
-\begin{tikzpicture}[
-  reg/.style={draw=blueline, fill=bluelight, minimum width=14mm, minimum height=9mm, font=\sffamily\small},
-  mux/.style={draw=kmutnborange, fill=accentlight, minimum width=11mm, minimum height=11mm, font=\sffamily\scriptsize, align=center},
-  add/.style={draw=kmutnbgreen, fill=greenlight, circle, minimum size=8mm, font=\sffamily},
-  cmp/.style={draw=greyline, fill=codebg, minimum width=14mm, minimum height=7mm, font=\sffamily\scriptsize},
-  w/.style={-{Stealth[length=1.8mm]}, thick, color=ink},
-  c/.style={-{Stealth[length=1.6mm]}, color=accent},
-  lab/.style={font=\sffamily\scriptsize, color=accent}]
-  \node[mux] (MS) at (0,3.2) {Mux\\sum};
-  \node[mux] (MI) at (0,0) {Mux\\i};
-  \node[reg] (S) at (2.6,3.2) {$Sum$};
-  \node[reg] (I) at (2.6,0) {$i$};
-  \node[mux] (MA) at (5.4,2.3) {Mux\\add};
-  \node[add] (P) at (7.6,1.6) {$+$};
-  \node[cmp] (K) at (5.4,-1.3) {$i=11$?};
-  % result bus
-  \draw[w] (P.east) -- ++(0.8,0) coordinate(r) |- (-2.4,4.6) |- ([yshift=2.5mm]MS.west);
-  \draw[w] (-2.4,4.6) -- (-2.4,0) |- ([yshift=2.5mm]MI.west);
-  \draw[fill=black] (-2.4,3.45) circle (0.4mm);
-  \node[font=\sffamily\scriptsize, anchor=south east] at (-2.45,4.65) {$R$};
-  % constants
-  \draw[w] ([xshift=-6mm,yshift=-2.5mm]MS.west) node[left, font=\sffamily\scriptsize]{0} -- ([yshift=-2.5mm]MS.west);
-  \draw[w] ([xshift=-6mm,yshift=-2.5mm]MI.west) node[left, font=\sffamily\scriptsize]{1} -- ([yshift=-2.5mm]MI.west);
-  \draw[w] ([xshift=-5mm,yshift=-2.5mm]MA.west) node[left, font=\sffamily\scriptsize]{1} -- ([yshift=-2.5mm]MA.west);
-  % mux to registers
-  \draw[w] (MS.east) -- (S.west);
-  \draw[w] (MI.east) -- (I.west);
-  % Sum to Mux add input 0
-  \draw[w] (S.east) -- ++(0.7,0) coordinate(sj) |- ([yshift=2.5mm]MA.west);
-  \draw[fill=black] (sj) circle (0.4mm);
-  % i to adder, and to comparator
-  \draw[w] (I.east) -- ++(1.0,0) coordinate(ie) -| (P.south west);
-  \draw[w] (ie) |- (K.west);
-  \draw[w] (MA.east) -| (P.north west);
-  % output
-  \draw[w] (sj) -- ++(0,1.3) node[above, font=\sffamily\scriptsize]{\textit{output (OE)}};
-  % controls
-  \draw[c] (0,4.5) node[lab, above]{sumMux} -- (MS.north);
-  \draw[c] (0,-1.2) node[lab, below]{iMux} -- (MI.south);
-  \draw[c] (2.6,-1.2) node[lab, below]{iLoad} -- (I.south);
-  \draw[c] (2.6,4.5) node[lab, above]{sumLoad} -- (S.north);
-  \draw[c] (5.4,3.5) node[lab, above]{addMux} -- (MA.north);
-  \draw[c] (K.east) -- ++(0.7,0) node[lab, right]{status $(i=11)$};
-\end{tikzpicture}
-\caption{A datapath for summing the numbers from 1 to 10 (author's drawing). Selecting multiplexer input ``0'' or ``1'' is determined by the control signal; the clock is not shown.}
-\label{fig:sum-dp}
-\end{figure}
+\figw{370.5pt}{lect_9_datapath_sum_1_to_10}{A datapath for summing the numbers from 1 to 10 with one adder and three multiplexers. The status signal $(i\neq11)$ is a NAND gate whose inputs for the zero bits of $11=00001011_2$ are inverted; the output $Sum$ is enabled by $OE$.}{fig:sum-dp}
 
 \begin{table}[htbp]
 \centering
@@ -329,7 +255,7 @@ For $X=25$, $Y=15$: $X>Y$, so $X=10$; $X<Y$, so $Y=5$; $X>Y$, so $X=5$; now $X=Y
 \begin{figure}[htbp]
 \centering
 \begin{subfigure}[b]{412.0pt}\centering
-  \includegraphics[width=410.0pt]{gcd_datapath}\caption{datapath}\label{fig:gcd-dp}
+  \includegraphics[width=399.0pt]{lect_9_gcd_datapath}\caption{datapath}\label{fig:gcd-dp}
 \end{subfigure}
 \caption{The GCD processor.}
 \end{figure}
@@ -364,8 +290,8 @@ There are two ways to describe a dedicated processor in an HDL.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\linewidth]{lect_9_gcd_fsmd}\\[6pt]
-\wavesplit{lect_9_gcd_fsmd_sim}{4}
+\includegraphics[width=0.9\linewidth]{lect_9_gcd_fsmd}\\[6pt]
+\foreach \wsi in {1,...,4}{\includegraphics[width=\linewidth,height=95pt,keepaspectratio]{lect_9_gcd_fsmd_sim_p\wsi}\par\vspace{1.5pt}}
 \caption{The FSMD GCD: logic diagram from the Quartus RTL viewer (top) and simulation (bottom). Author's screenshots.}
 \label{fig:gcd-fsmd-rtl}
 \end{figure}
@@ -384,7 +310,7 @@ There are two ways to describe a dedicated processor in an HDL.
 \chapsec{Exercises}
 \begin{exlist}
   \item \textbf{Datapath design.} Draw a dedicated datapath that performs $R_1\leftarrow R_1-R_2$. List the control signals.
-  \item \textbf{Control signals.} In the shared-adder datapath of \cref{fig:dp-shared}, give the values of $Mux1$, $Mux2$ and $ALoad$ that perform $A=B+3$ if $Mux1$ could also select $B$ and $Mux2$ the constant 3.
+  \item \textbf{Control signals.} In the shared-adder datapath of \cref{fig:dp-shared}, suppose the two multiplexers had separate select signals $Mux1$ (first multiplexer: $0=B$, $1=A$) and $Mux2$ (second multiplexer: $0=C$, $1$ = constant 3). Give the values of $Mux1$, $Mux2$ and $ALoad$ that perform $A=B+3$.
   \item \textbf{Conditional logic.} What hardware must be added to a datapath to support the instruction \textbf{IF} $(A>10)$ \textbf{THEN}~\dots? Which signal is delivered to the control unit?
   \item \textbf{Control-word sequence.} Write the control-word sequence for \emph{swapping} the contents of registers $A$ and $B$, assuming a temporary register $Temp$. Define the control signals and give one control word per step.
   \item Write the control words and draw the FSM of the control unit for the summation algorithm of \cref{tab:cw-sum}. How many states are needed? What is the status signal and in which state is it examined?

@@ -130,9 +130,9 @@ A \term{counter} is a register that goes through a predetermined sequence of sta
 \figw{247.9pt}{lect_7_counter_block}{General $n$-bit counter.}{fig:counter-block}
 
 \subsection{Ripple counters}
-In a \term{ripple counter} the clock is applied only to the first flip-flop, and the output of each flip-flop provides the clock of the next (\cref{fig:ripple}). Each stage is a T flip-flop with $T=1$ (a JK flip-flop with $J=K=1$), so each stage divides the frequency of its clock by 2, and the outputs form a binary count. The counter is very simple, but it is slower than a synchronous counter because the changes propagate, or ``ripple'', along the chain.
+In a \term{ripple counter} the clock is applied only to the first flip-flop, and the output of each flip-flop provides the clock of the next (\cref{fig:ripple-counter}). Each stage is a T flip-flop with $T=1$ (a JK flip-flop with $J=K=1$), so each stage divides the frequency of its clock by 2, and the outputs form a binary count. The counter is very simple, but it is slower than a synchronous counter because the changes propagate, or ``ripple'', along the chain.
 
-\figw{398.6pt}{lect_7_4bit_ripple_counter}{A 4-bit binary ripple counter built from T flip-flops with $T=1$.}{fig:ripple}
+\figw{398.6pt}{lect_7_4bit_ripple_counter}{A 4-bit binary ripple counter built from T flip-flops with $T=1$.}{fig:ripple-counter}
 
 \paragraph{Characteristics.} The flip-flops change one after another, not together (\cref{fig:ripple-timing}).
 \begin{itemize}

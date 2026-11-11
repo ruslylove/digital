@@ -1,6 +1,6 @@
 # Digital Circuits and Microprocessor Fundamentals — textbook (LaTeX source)
 
-*From Boolean Algebra to Dedicated Microprocessors with VHDL* — textbook for courses 010113025 (*Digital Circuit and Logic Design*) and 010153101 (*Digital Circuit and Microprocessor Fundamental*), KMUTNB. The second course (`../digital_n_micro`) includes this repository as its `common` git submodule, so the book is shared automatically once it is committed here.
+*From Boolean Algebra to Basic General-Purpose Microprocessors with VHDL* — textbook for courses 010113025 (*Digital Circuit and Logic Design*) and 010153101 (*Digital Circuit and Microprocessor Fundamental*), KMUTNB. The second course (`../digital_n_micro`) includes this repository as its `common` git submodule, so the book is shared automatically once it is committed here.
 Built from the lecture slides in `../lecture_*.md`, the TikZ figures in `../tex/` and the VHDL in `../vhdl/`.
 
 ## Build
@@ -75,9 +75,7 @@ Macros: `\term{x}` (italic + index entry), `\fig{file}{caption}{label}`, `\vhdlf
 
 ## Figures that were replaced
 
-Datapath pictures that exist in the repository only as PNG and appear to come from a textbook (`lect_9_datapath_*.png`,
-`lect_9_gcd_datapath.png`, `lect_10_ec1_datapath.png`, `lect_10_ec-2_datapath.png`, …) were **redrawn in TikZ** (Chapters 9 and 10) or replaced by
-your own TikZ sources. Photos of people, historic hardware and chips (`lect_1_*.jpg`, Boole, Shannon, …) were replaced by timeline/graph drawings made for the book.
+The datapath drawings of Chapters 9 and 10 (`lect_9_datapath_*`, `lect_9_gcd_datapath`, `lect_10_ec1_datapath`, `lect_10_ec2_datapath`) were originally only PNG pictures that appear to come from a textbook. They were redrawn as circuitikz sources in `../tex/` (with matching SVGs in `../public/` for the slides), and the book uses the PDF produced from the same sources, so slides and book show identical figures. Photos of people, historic hardware and chips (`lect_1_*.jpg`, Boole, Shannon, …) were replaced by timeline/graph drawings made for the book.
 
 ## Not verified here
 

@@ -10,6 +10,10 @@
 \renewcommand{\cftchappagefont}{\sffamily\bfseries}
 \renewcommand{\cftsecfont}{\sffamily\small}
 \renewcommand{\cftsecpagefont}{\sffamily\small}
+\renewcommand{\cftsubsecfont}{\sffamily\small}
+\renewcommand{\cftsubsecpagefont}{\sffamily\small}
+\renewcommand{\cftsubsubsecfont}{\sffamily\small}
+\renewcommand{\cftsubsubsecpagefont}{\sffamily\small}
 \setlength{\cftbeforechapskip}{0.9em}
 
 \usepackage{fontspec}
@@ -145,6 +149,8 @@
 \newcommand{\figw}[4]{\begin{figure}[htbp]\centering\includegraphics[width=#1]{#2}\caption{#3}\label{#4}\end{figure}}
 \newcommand{\figside}[4]{\begin{sidewaysfigure}[p]\centering\includegraphics[width=#1]{#2}\caption{#3}\label{#4}\end{sidewaysfigure}}
 % \wavesplit{<name>}{<n>} : a wide simulation screenshot cut into n strips (each keeps the signal-name column) so that the text stays readable
+% \wavestrip{<name>}{<i>}{<maxheight in pt>} : one strip of a split screenshot (used to spread long simulations over several floats)
+\newcommand{\wavestrip}[3]{\includegraphics[width=\linewidth,height=#3pt,keepaspectratio]{#1_p#2}\par\vspace{1.5pt}}
 \newcommand{\wavesplit}[2]{\foreach \wsi in {1,...,#2}{\includegraphics[width=\linewidth]{#1_p\wsi}\par\vspace{1.5pt}}}
 % \fig[<graphicx keys>]{<file>}{<caption>}{<label>}   -- single figure
 \newcommand{\fig}[4][]{%

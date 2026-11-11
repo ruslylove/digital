@@ -64,53 +64,15 @@ The datapath (\cref{fig:ec1-dp}) must support fetching instructions and executin
   \item The \textbf{program counter} PC (4 bits) addresses the ROM. Normally $PC\leftarrow PC+1$ (the incrementer). For \texttt{JNZ} with $A\neq0$, $PC\leftarrow IR[3:0]$; the multiplexer \textit{JNZmux} chooses between the incremented PC and the jump address.
   \item The \textbf{instruction register} IR (8 bits) holds the instruction read from the ROM. Its top three bits $IR[7:5]$ are the opcode that goes to the control unit.
   \item The \textbf{accumulator} $A$ (8 bits) takes its input either from the external input port or from the decrementer ($A-1$); the multiplexer \textit{INmux} chooses ($1$ = Input, $0$ = Dec).
-  \item A \textbf{zero detector} generates the status signal $A\neq0$ for the control unit.
+  \item A \textbf{zero detector} (an 8-input OR gate on $A$) generates the status signal $A\neq0$ for the control unit.
   \item A \textbf{three-state buffer} controlled by \textit{OutE} drives the output port with $A$.
 \end{itemize}
 The control signals, produced by the control unit, are \textit{IRload}, \textit{PCload}, \textit{INmux}, \textit{Aload}, \textit{JNZmux}, \textit{OutE} and \textit{Halt}.
 
 \begin{sidewaysfigure}[p]
 \centering
-\begin{tikzpicture}[
-  reg/.style={draw=blueline, fill=bluelight, minimum width=17mm, minimum height=9mm, font=\sffamily\small, align=center},
-  mux/.style={draw=kmutnborange, fill=accentlight, minimum width=11mm, minimum height=14mm, font=\sffamily\scriptsize, align=center},
-  fu/.style={draw=kmutnbgreen, fill=greenlight, minimum width=17mm, minimum height=8mm, font=\sffamily\small, align=center},
-  mem/.style={draw=ink, fill=codebg, minimum width=20mm, minimum height=13mm, font=\sffamily\small, align=center},
-  w/.style={-{Stealth[length=1.8mm]}, thick, color=ink},
-  lab/.style={font=\sffamily\scriptsize, color=ink}]
-  % fetch path
-  \node[mux] (JM) at (0,3.2) {JNZ\\mux};
-  \node[reg] (PC) at (3.1,3.2) {PC\\(4 bit)};
-  \node[mem] (ROM) at (6.9,3.2) {ROM\\$16\times8$};
-  \node[reg] (IR) at (10.6,3.2) {IR\\(8 bit)};
-  \node[fu] (INC) at (3.1,5.4) {$+1$};
-  \draw[w] (JM.east) -- (PC.west);
-  \draw[w] (PC.east) -- node[above, lab]{address} (ROM.west);
-  \draw[w] (ROM.east) -- node[above, lab]{instruction} (IR.west);
-  \draw[w] (PC.north) -- (INC.south);
-  \draw[w] (INC.west) -- (-1.4,5.4) |- ([yshift=3mm]JM.west);
-  \draw[w] (IR.north) -- (10.6,6.5) -- (-2.2,6.5) -- (-2.2,2.8) -- ([yshift=-3mm]JM.west);
-  \node[lab, anchor=south] at (6.0,6.5) {$IR[3:0]$ (jump address)};
-  \draw[w] (IR.south) -- ++(0,-0.9) node[below, lab]{$IR[7:5]$ = opcode (to control unit)};
-  % execute path
-  \node[mux] (IM) at (0,0) {IN\\mux};
-  \node[reg] (A) at (3.1,0) {$A$\\(8 bit)};
-  \node[fu] (DEC) at (3.1,1.55) {$A-1$};
-  \node[fu] (NZ) at (6.9,0) {$A\neq 0$};
-  \node[fu] (TR) at (3.1,-1.8) {three-state\\buffer};
-  \draw[w] (IM.east) -- (A.west);
-  \draw[w] (A.north) -- (DEC.south);
-  \draw[w] (DEC.west) -- (-1.4,1.55) |- ([yshift=3mm]IM.west);
-  \draw[w] (-2.7,-0.3) node[left, lab]{Input} -- ([yshift=-3mm]IM.west);
-  \draw[w] (A.east) -- (NZ.west);
-  \draw[w] (NZ.east) -- ++(1.2,0) node[right, lab]{status $A\neq0$};
-  \draw[w] (A.south) -- (TR.north);
-  \draw[w] (TR.east) -- ++(1.6,0) node[right, lab]{Output};
-  % annotation of controls
-  \node[lab, text width=40mm, align=left, anchor=north west, color=accent] at (7.8,-1.1)
-    {Control signals: IRload, PCload, JNZmux, INmux, Aload, OutE};
-\end{tikzpicture}
-\caption{Datapath of the EC-1 microprocessor (author's drawing). Multiplexer inputs are numbered 0 (upper) and 1 (lower). The clock is common to all registers and the control signals come from the control unit.}
+\includegraphics[width=\linewidth, height=415pt, keepaspectratio]{lect_10_ec1_datapath}
+\caption{Datapath of the EC-1 microprocessor. Multiplexer inputs are numbered $1$ (left) and $0$ (right); a slash on a bus gives its width in bits. The clock and the reset are common to all registers, and the control signals (left) come from the control unit.}
 \label{fig:ec1-dp}
 \end{sidewaysfigure}
 
@@ -208,10 +170,38 @@ A testbench (similar to \cref{lst:tb}) generates a clock of period 10~ns, holds 
 
 \begin{figure}[htbp]
 \centering
-\wavesplit{lect_10_ec-1_count_10_9}{5}\vspace{3pt}{\small (a)~start: counting 10, 9, \dots}\\[8pt]
-\wavesplit{lect_10_ec-1_count_2_1}{5}\vspace{3pt}{\small (b)~end: \dots, 2, 1 and halt}
+{\small (a)~start: counting 10, 9, \dots}\\[3pt]
+\wavestrip{lect_10_ec-1_count_10_9}{1}{175}
+\wavestrip{lect_10_ec-1_count_10_9}{2}{175}
+\wavestrip{lect_10_ec-1_count_10_9}{3}{175}
 \caption{Simulation of the EC-1 running the countdown program (author's screenshots).}
 \label{fig:ec1-sim}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\ContinuedFloat
+\wavestrip{lect_10_ec-1_count_10_9}{4}{175}
+\wavestrip{lect_10_ec-1_count_10_9}{5}{175}
+\vspace{4pt}{\small (b)~end: \dots, 2, 1 and halt}\\[3pt]
+\wavestrip{lect_10_ec-1_count_2_1}{1}{167}
+\caption[]{Simulation of the EC-1 running the countdown program (author's screenshots).}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\ContinuedFloat
+\wavestrip{lect_10_ec-1_count_2_1}{2}{167}
+\wavestrip{lect_10_ec-1_count_2_1}{3}{167}
+\wavestrip{lect_10_ec-1_count_2_1}{4}{167}
+\caption[]{Simulation of the EC-1 running the countdown program (author's screenshots).}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\ContinuedFloat
+\wavestrip{lect_10_ec-1_count_2_1}{5}{167}
+\caption[]{Simulation of the EC-1 running the countdown program (author's screenshots).}
 \end{figure}
 
 \figw{\linewidth}{lect_10_rtl_viewer_ec-1}{RTL viewer (Quartus) of the top level of the EC-1: the control unit and the datapath (author's screenshot).}{fig:ec1-rtl}
@@ -256,61 +246,15 @@ The datapath (\cref{fig:ec2-dp}) is that of EC-1 with the following changes.
   \item A \textbf{RAM} instead of the ROM, so that \texttt{STORE} is possible.
   \item A \textbf{memory-address multiplexer} (\textit{MemInst}): during \emph{fetch} the address comes from the PC ($0$); during the execution of LOAD, STORE, ADD and SUB it comes from $IR[4:0]$ ($1$). This shared address bus is the fundamental constraint of the von Neumann design.
   \item An \textbf{ALU} that adds ($\mathit{Sub}=0$) or subtracts ($\mathit{Sub}=1$) the RAM output from $A$.
-  \item A \textbf{4-to-1 accumulator multiplexer} (\textit{Asel}) that selects the input of $A$: the RAM output (LOAD, $00$), the ALU output (ADD, SUB, $01$) or the input port (IN, $10$).
-  \item Flag detectors for $A=0$ (\textit{Zero}) and $A\ge0$ (\textit{Pos}), the status signals for JZ and JPOS.
+  \item A \textbf{4-to-1 accumulator multiplexer} (\textit{Asel}) that selects the input of $A$: the RAM output (LOAD, $00$), the ALU output (ADD, SUB, $01$) or the input port (IN, $10$); code $11$ selects the constant 0.
+  \item Flag detectors for $A=0$ (\textit{Zero}, an 8-input NOR gate) and $A\ge0$ (\textit{Pos}, the inverted sign bit $A_7$), the status signals for JZ and JPOS.
 \end{enumerate}
 The control signals are \textit{IRload}, \textit{PCload}, \textit{MemInst}, \textit{MemWr} (RAM write enable), \textit{Asel}, \textit{Aload}, \textit{Sub}, \textit{JMPmux} (selects the jump address as the new PC) and \textit{Halt}.
 
 \begin{sidewaysfigure}[p]
 \centering
-\begin{tikzpicture}[
-  reg/.style={draw=blueline, fill=bluelight, minimum width=17mm, minimum height=9mm, font=\sffamily\small, align=center},
-  mux/.style={draw=kmutnborange, fill=accentlight, minimum width=11mm, minimum height=14mm, font=\sffamily\scriptsize, align=center},
-  fu/.style={draw=kmutnbgreen, fill=greenlight, minimum width=17mm, minimum height=9mm, font=\sffamily\small, align=center},
-  mem/.style={draw=ink, fill=codebg, minimum width=21mm, minimum height=14mm, font=\sffamily\small, align=center},
-  w/.style={-{Stealth[length=1.8mm]}, thick, color=ink},
-  lab/.style={font=\sffamily\scriptsize, color=ink}]
-  % fetch path
-  \node[mux] (JM) at (0,4.0) {JMP\\mux};
-  \node[reg] (PC) at (3.0,4.0) {PC\\(5 bit)};
-  \node[mux] (AM) at (6.0,4.0) {Mem\\Inst};
-  \node[mem] (RAM) at (9.3,4.0) {RAM\\$32\times8$};
-  \node[reg] (IR) at (12.6,4.0) {IR\\(8 bit)};
-  \node[fu] (INC) at (3.0,6.0) {$+1$};
-  \draw[w] (JM.east) -- (PC.west);
-  \draw[w] (PC.east) -- node[above, lab]{0} (AM.west);
-  \draw[w] (AM.east) -- node[above, lab]{address} (RAM.west);
-  \draw[w] (RAM.east) -- node[above, lab]{} (IR.west);
-  \draw[w] (PC.north) -- (INC.south);
-  \draw[w] (INC.west) -- (0,6.0) -- (JM.north);
-  \draw[w] (IR.north) -- (12.6,7.3) -- (-1.4,7.3) -- (-1.4,4.0) -- (JM.west);
-  \draw[w] (6.0,7.3) -- (AM.north);
-  \fill (6.0,7.3) circle (0.5mm);
-  \node[lab, anchor=south] at (8.5,7.3) {$IR[4:0]$ (address field)};
-  \draw[w] (IR.south) -- ++(0,-0.9) node[below, lab]{opcode $IR[7:5]$ (to control unit)};
-  % execute path
-  \node[mux] (AS) at (0,0) {Asel\\4:1};
-  \node[reg] (A) at (3.0,0) {$A$\\(8 bit)};
-  \node[fu] (ALU) at (6.0,0) {ALU\\$+/-$};
-  \node[fu] (FL) at (3.0,-2.4) {flags\\$A{=}0$, $A{\ge}0$};
-  \draw[w] (-2.3,0) node[left, lab]{Input} -- (AS.west);
-  \draw[w] (AS.east) -- (A.west);
-  \draw[w] (A.east) -- (ALU.west);
-  \draw[w] (A.south) -- (FL.north);
-  \draw[w] (FL.east) -- ++(1.5,0) node[right, lab]{Zero, Pos (status)};
-  % RAM output bus
-  \draw[w] (RAM.south east) -- ++(0,-1.2) coordinate(rb) -- (0,2.0) -- (AS.north);
-  \draw[w] (6.0,2.0) -- (ALU.north);
-  \fill (6.0,2.0) circle (0.5mm);
-  \node[lab, anchor=south] at (8.2,2.05) {RAM output};
-  % A to RAM
-  \draw[w] (3.0,0.45) -- (3.0,2.8) -- (RAM.south west);
-  \node[lab, anchor=west] at (3.25,2.55) {$A$ to RAM data in};
-  % ALU to AS
-  \draw[w] (ALU.south) -- (6.0,-1.3) -- (0,-1.3) -- (AS.south);
-  \node[lab, anchor=north] at (4.5,-1.3) {ALU output};
-\end{tikzpicture}
-\caption{Datapath of the EC-2 microprocessor (author's drawing). The memory-address multiplexer \textit{MemInst} selects the PC (0) in the fetch state and the address field of the IR (1) when a memory operand is accessed. Control signals (not drawn): IRload, PCload, JMPmux, MemInst, MemWr, Asel, Aload, Sub.}
+\includegraphics[width=\linewidth, height=425pt, keepaspectratio]{lect_10_ec2_datapath}
+\caption{Datapath of the EC-2 microprocessor. The memory-address multiplexer \textit{MemInst} selects the PC (0) in the fetch state and the address field of the IR (1) when a memory operand is accessed; the accumulator multiplexer is selected by $Asel_{1..0}$ ($00$ RAM, $01$ ALU, $10$ input port, $11$ constant $0$). $(A=0)$ and $(A\ge0)$ are the status signals for \texttt{JZ} and \texttt{JPOS}.}
 \label{fig:ec2-dp}
 \end{sidewaysfigure}
 
@@ -391,12 +335,56 @@ The program of \cref{tab:ec2-gcd} implements Euclid's algorithm of \cref{ex:gcd}
 
 \begin{figure}[htbp]
 \centering
-\wavesplit{lect_10_ec2_sim_1}{5}\vspace{3pt}{\small (a)}\\[6pt]
-\wavesplit{lect_10_ec2_sim_2}{5}\vspace{3pt}{\small (b)}\\[6pt]
-\wavesplit{lect_10_ec2_sim_3}{5}\vspace{3pt}{\small (c)}\\[6pt]
-\wavesplit{lect_10_ec2_sim_4}{5}\vspace{3pt}{\small (d)}
+{\small (a)}\\[2pt]
+\wavestrip{lect_10_ec2_sim_1}{1}{130}
+\wavestrip{lect_10_ec2_sim_1}{2}{130}
+\wavestrip{lect_10_ec2_sim_1}{3}{130}
+\wavestrip{lect_10_ec2_sim_1}{4}{130}
 \caption{Simulation of the EC-2 computing the GCD of 25 and 15: (a)--(d)~successive parts of the run: $Y$ becomes 10, then $X$ becomes 5, then $Y$ becomes 5, and finally $A=X-Y=0$, \texttt{JZ} is taken and the processor halts. Author's screenshots.}
 \label{fig:ec2-sim}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\ContinuedFloat
+\wavestrip{lect_10_ec2_sim_1}{5}{130}
+{\small (b)}\\[2pt]
+\wavestrip{lect_10_ec2_sim_2}{1}{130}
+\wavestrip{lect_10_ec2_sim_2}{2}{130}
+\wavestrip{lect_10_ec2_sim_2}{3}{130}
+\caption[]{Simulation of the EC-2 computing the GCD of 25 and 15}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\ContinuedFloat
+\wavestrip{lect_10_ec2_sim_2}{4}{130}
+\wavestrip{lect_10_ec2_sim_2}{5}{130}
+{\small (c)}\\[2pt]
+\wavestrip{lect_10_ec2_sim_3}{1}{130}
+\wavestrip{lect_10_ec2_sim_3}{2}{130}
+\caption[]{Simulation of the EC-2 computing the GCD of 25 and 15}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\ContinuedFloat
+\wavestrip{lect_10_ec2_sim_3}{3}{130}
+\wavestrip{lect_10_ec2_sim_3}{4}{130}
+\wavestrip{lect_10_ec2_sim_3}{5}{130}
+{\small (d)}\\[2pt]
+\wavestrip{lect_10_ec2_sim_4}{1}{130}
+\caption[]{Simulation of the EC-2 computing the GCD of 25 and 15}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\ContinuedFloat
+\wavestrip{lect_10_ec2_sim_4}{2}{130}
+\wavestrip{lect_10_ec2_sim_4}{3}{130}
+\wavestrip{lect_10_ec2_sim_4}{4}{130}
+\wavestrip{lect_10_ec2_sim_4}{5}{130}
+\caption[]{Simulation of the EC-2 computing the GCD of 25 and 15}
 \end{figure}
 
 \figw{\linewidth}{lect_10_rtl_viewer_ec2}{RTL viewer (Quartus) of the EC-2 top level (author's screenshot).}{fig:ec2-rtl}
