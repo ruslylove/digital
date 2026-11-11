@@ -1,0 +1,181 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{tikz}
+\usepackage{circuitikz}
+\ctikzset{logic ports=ieee}
+\usetikzlibrary{positioning, calc, arrows.meta}
+
+% Datapath of the EC-2 microprocessor (32 x 8 RAM, 5-bit PC, instruction register IR,
+% accumulator A, add/subtract unit).  Same styles as lect_10_ec1_datapath.
+% The accumulator multiplexer follows gcd/ec2 VHDL:  Asel = 00 RAM, 01 ALU, 10 Input, 11 '0'.
+% Every bus carries ONE width mark.
+
+\tikzset{reg/.style={muxdemux, muxdemux def={Lh=3.8, Rh=3.8, NL=3, NB=1, NT=1,w=5.6,NR=0},
+      muxdemux label={L1=Load, L2=Clear, L3=Clock}}}
+\tikzset{regIR/.style={muxdemux, muxdemux def={Lh=5.6, Rh=5.6, NL=3, NB=2, NT=1,w=5,NR=0},
+      muxdemux label={L1=Load, L2=Clear, L3=Clock, T1=$D_{7..0}$, B1=$IR_{7..5}$, B2=$IR_{4..0}$}}}
+\tikzset{ram/.style={muxdemux, muxdemux def={Lh=6.2, Rh=6.2, NL=3, NB=0, NT=1,w=8.4,NR=1},
+      muxdemux label={L1=$Address_{4..0}$, L2=WE, L3=Clock, T1=$Q_{7..0}$, R1=$D_{7..0}$}}}
+
+\newcommand{\vmark}[3]{\draw[thick] ($(#1,#2)+(-2pt,-3pt)$) -- ++(4pt,6pt);
+                        \node[label_text, left=1pt] at (#1,#2) {$#3$};}
+\newcommand{\hmark}[3]{\draw[thick] ($(#1,#2)+(-2pt,-3pt)$) -- ++(4pt,6pt);
+                        \node[label_text, above=2pt] at (#1,#2) {$#3$};}
+
+\newcommand{\hmarkc}[2]{\draw[thick] ($(#1)+(-2pt,-3pt)$) -- ++(4pt,6pt);
+                        \node[label_text, above=2pt] at (#1) {$#2$};}
+
+\begin{document}
+\makeatletter\def\pgf@circ@font@tiny{\small}\makeatother
+\begin{circuitikz}[
+    font=\sffamily,
+    label_text/.style={font=\normalsize},
+    bus/.style={-Latex, line width=1.5pt},
+    bus line/.style={line width=1.5pt},
+    control_signal/.style={-Latex, line width=0.5pt},
+    junction/.style={circ, scale=0.9},
+]
+
+    % ================================================================ instruction cycle part
+    \node[regIR] at (0,10.5) (IR) {$IR$};
+    \node[reg, muxdemux label={T1=$D_{4..0}$, B1=$Q_{4..0}$}] at (1.17,4.5) (PC) {$PC$};
+
+    % JMPmux: input 1 = IR[4..0] (left), input 0 = PC + 1 (right)
+    \draw[thick] (0.27,7.0) -- (2.07,7.0) -- (1.47,6.3) -- (0.87,6.3) -- cycle;
+    \node[label_text] at (0.67,6.75) {$1$};
+    \node[label_text] at (1.67,6.75) {$0$};
+
+    % 5-bit incrementer
+    \node[draw, thick, align=center, minimum width=2.8cm, minimum height=1.3cm, inner sep=1pt, font=\normalsize] (Inc) at (4.5,6.6) {5-bit\\Increment};
+
+    % Meminst: memory address multiplexer, input 1 = IR[4..0] (left), input 0 = PC (right)
+    \draw[thick] (-0.23,1.5) -- (1.57,1.5) -- (0.97,0.8) -- (0.37,0.8) -- cycle;
+    \node[label_text] at (0.17,1.25) {$1$};
+    \node[label_text] at (1.17,1.25) {$0$};
+
+    % RAM
+    \node[ram] at (9.7,-0.7) (RAM) {};
+    \node[font=\small, align=center] at ($(RAM.center)+(-0.1,0.1)$) {32\,$\times$\,8\\RAM};
+
+    % ---------------------------------------------------------------- buses of the instruction cycle
+    % RAM output -> IR (loop over the top); junction at (9.7,9.0) feeds the accumulator part
+    \draw[bus line] (RAM.btpin 1) -- (9.7,12.4) -- (0,12.4);
+    \draw[bus] (0,12.4) -- (IR.btpin 1);
+    \hmark{5.0}{12.4}{8}
+    % IR[7..5] to the control unit
+    \draw[bus] (IR.bbpin 1) -- (IR.bbpin 1 |- 0,7.9) -- (-7.6,7.9) node[left, label_text] {$IR_{7..5}$};
+    \vmark{-0.7}{8.4}{3}
+    % IR[4..0] -> JMPmux input 1, branch to the Meminst multiplexer
+    \draw[bus line] (IR.bbpin 2) -- (0.7,7.5);
+    \draw[bus] (0.7,7.5) -- (0.7,7.0);
+    \vmark{0.7}{8.3}{5}
+    \node[junction] at (0.7,7.5) {};
+    \draw[bus line] (0.7,7.5) -- (-1.9,7.5) -- (-1.9,2.4) -- (0.17,2.4);
+    \draw[bus] (0.17,2.4) -- (0.17,1.5);
+    % JMPmux -> PC
+    \draw[bus] (1.17,6.3) -- (PC.btpin 1);
+    \vmark{1.17}{5.9}{5}
+    % PC -> junction -> Meminst input 0 and incrementer
+    \draw[bus line] (PC.bbpin 1) -- (1.17,2.5);
+    \vmark{1.17}{2.95}{5}
+    \draw[bus] (1.17,2.5) -- (1.17,1.5);
+    \node[junction] at (1.17,2.5) {};
+    \draw[bus line] (1.17,2.5) -- (4.5,2.5);
+    \draw[bus] (4.5,2.5) -- (Inc.south);
+    % incrementer -> JMPmux input 0
+    \draw[bus line] (Inc.north) -- (4.5,8.3) -- (1.67,8.3);
+    \draw[bus] (1.67,8.3) -- (1.67,7.0);
+    \vmark{4.5}{7.7}{5}
+    % Meminst -> RAM address
+    \draw[bus line] (0.67,0.8) -- (0.67,0 |- RAM.blpin 1);
+    \draw[bus] (0.67,0 |- RAM.blpin 1) -- (RAM.blpin 1);
+    \hmarkc{4.5,0 |- RAM.blpin 1}{5}
+
+    % ================================================================ instruction set part
+    \node[reg, muxdemux label={T1=$D_{7..0}$, B1=$A_{7..0}$}] at (19.0,3.0) (A) {$A$};
+
+    % Amux: inputs 3 2 1 0 = '0' | Input | ALU | RAM, selected by Asel(1..0)
+    \draw[thick] (17.5,6.6) -- (20.5,6.6) -- (19.6,5.9) -- (18.4,5.9) -- cycle;
+    \node[label_text] at (17.95,6.35) {$3$};
+    \node[label_text] at (18.65,6.35) {$2$};
+    \node[label_text] at (19.35,6.35) {$1$};
+    \node[label_text] at (20.05,6.35) {$0$};
+    \draw[bus] (19.0,5.9) -- (A.btpin 1);
+    \vmark{19.0}{4.9}{8}
+
+    \node[above,label_text] at (18.65,10.5) {$Input$};
+    \draw[bus] (18.65,10.5) -- (18.65,6.6);
+    \vmark{18.65}{7.9}{8}
+    \node[above,label_text] at (17.95,7.4) {$'0'$};
+    \draw[bus] (17.95,7.4) -- (17.95,6.6);
+
+    % RAM output also feeds Amux input 0 and the add/subtract unit
+    \node[junction] at (9.7,9.0) {};
+    \draw[bus line] (9.7,9.0) -- (24.0,9.0);
+    \draw[bus] (20.05,9.0) -- (20.05,6.6);
+    \node[junction] at (20.05,9.0) {};
+    \draw[bus] (24.0,9.0) -- (24.0,-1.6);
+
+    % accumulator bus A (junction J1 feeds the RAM data input and the add/subtract unit)
+    \draw[bus line] (A.bbpin 1) -- (19.0,-10.4);
+    \vmark{19.0}{1.3}{8}
+    \node[junction] at (19.0,-0.7) {};
+    \draw[bus] (19.0,-0.7) -- (RAM.rpin 1);
+    \draw[bus line] (19.0,-0.7) -- (22.0,-0.7);
+    \draw[bus] (22.0,-0.7) -- (22.0,-1.6);
+
+    % add/subtract unit (A - RAM when Sub = 1)
+    \node[draw, thick, align=center, minimum width=3.6cm, minimum height=1.4cm, inner sep=1pt, font=\normalsize] (AS) at (23.0,-2.2) {\hspace{0.5cm}Add-\\\hspace{0.5cm}Subtract};
+    \node[font=\small] at (21.75,-2.2) {$Sub$};
+    \draw[bus line] (22.6,-2.8) -- (22.6,-3.6) -- (25.6,-3.6) -- (25.6,7.9) -- (19.35,7.9);
+    \draw[bus] (19.35,7.9) -- (19.35,6.6);
+    \vmark{25.6}{3.0}{8}
+
+    % (A = 0): 8-input NOR, every bit of A wired to one input
+    \node[nor port, number inputs=8, rotate=180, scale=1.8, anchor=out] (Nor) at (14.4,-7.0) {};
+    \foreach \k in {1,...,8} {
+        \draw (Nor.in \k) -- (19.0,0 |- Nor.in \k) node[junction, scale=0.7] {};
+    }
+    \draw[control_signal] (Nor.out) -- (-7.7,-7.0) node[left, label_text] {$(A = 0)$};
+
+    % (A >= 0): inverted sign bit A7
+    \node[not port, rotate=180] (Not) at (16.2,-9.4) {};
+    \node[junction] at (19.0,-9.4) {};
+    \draw (Not.in) -- (19.0,-9.4);
+    \hmark{18.2}{-9.4}{1}
+    \node[label_text, below=3pt] at (18.6,-9.4) {$A_7$};
+    \draw[control_signal] (Not.out) -- (-7.7,-9.4) node[left, label_text] {$(A \geq 0)$};
+
+    \draw[bus] (19.0,-10.0) -- (19.0,-11.4) node[below, label_text] {$Output$};
+
+    % ================================================================ control signals
+    \draw[control_signal] (-8.5,0 |- IR.blpin 1) node[left, label_text] {$IRload$} -- (IR.blpin 1);
+    \draw[control_signal] (-8.5,6.55) node[left, label_text] {$JMPmux$} -- (0.741,6.55);
+    \draw[control_signal] (-8.5,0 |- PC.blpin 1) node[left, label_text] {$PCload$} -- (PC.blpin 1);
+    \draw[control_signal] (-8.5,0.95) node[left, label_text] {$Meminst$} -- (0.241,0.95);
+    \draw[control_signal] (-8.5,0 |- RAM.blpin 2) node[left, label_text] {$MemWr$} -- (RAM.blpin 2);
+
+    \draw[line width=1.5pt, -Latex] (-8.5,-2.6) node[left, label_text] {$Asel_{1..0}$} -- (14.9,-2.6) |- (18.27,5.97);
+    \hmark{-5}{-2.6}{2}
+    \draw[control_signal] (-8.5,-3.2) node[left, label_text] {$Aload$} -- (15.4,-3.2) |- (A.blpin 1);
+    \draw[control_signal] (-8.5,-3.8) node[left, label_text] {$Sub$} -- (20.6,-3.8) |- (21.4,-2.2);
+    \draw[control_signal] (-8.5,-4.4) node[left, label_text] {$Reset$} -- (15.9,-4.4) |- (A.blpin 2);
+    \draw[control_signal] (-8.5,-5.0) node[left, label_text] {$Clock$} -- (16.4,-5.0) |- (A.blpin 3);
+    % Reset -> Clear of IR and PC; Clock -> clock of IR, PC and RAM
+    \draw[control_signal] (-3.4,-4.4) to[short,*-] (-3.4,0 |- IR.blpin 2) -- (IR.blpin 2);
+    \draw[control_signal] (-3.4,0 |- PC.blpin 2) to[short,*-] (PC.blpin 2);
+    \draw[control_signal] (-3.0,-5.0) to[short,*-] (-3.0,0 |- IR.blpin 3) -- (IR.blpin 3);
+    \draw[control_signal] (-3.0,0 |- PC.blpin 3) to[short,*-] (PC.blpin 3);
+    \draw[control_signal] (7.2,-5.0) to[short,*-] (7.2,0 |- RAM.blpin 3) -- (RAM.blpin 3);
+
+    % ================================================================ part labels
+    \begin{scope}[blue!70!cyan, font=\sffamily\normalsize]
+        \draw[<->, thick] (-3,-12.6) -- (6.8,-12.6);
+        \node at (1.9,-13.3) {Instruction Cycle Operations};
+        \draw[<->, thick] (7.5,-12.6) -- (11.9,-12.6);
+        \node at (9.7,-13.3) {Memory};
+        \draw[<->, thick] (14,-12.6) -- (26,-12.6);
+        \node at (20,-13.3) {Instruction Set Operations};
+    \end{scope}
+
+\end{circuitikz}
+\end{document}

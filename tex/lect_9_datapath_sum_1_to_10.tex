@@ -1,0 +1,113 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{tikz}
+\usepackage{circuitikz}
+\ctikzset{logic ports=ieee}
+\usetikzlibrary{positioning, calc, decorations.markings}
+
+% Datapath that computes  sum = 1 + 2 + ... + 10  with registers i and sum,
+% three 2-to-1 multiplexers (iMux, sumMux, addMux) and one adder.
+% Same building blocks and styles as lect_9_datapath_combine.
+
+\tikzset{register/.style={muxdemux, muxdemux def={Lh=2.4, Rh=2.4, NL=2, NB=1, NT=1,w=4.8,NR=0},
+                            muxdemux label={L1=Load, L2=Clock, R1=right1, R2=right,T1=$D_{7..0}$,B1=$Q_{7..0}$,},},
+                 }
+
+\tikzset{adder/.style={muxdemux, muxdemux def={Lh=1, Rh=1,NL=0, NB=1, NT=2,w=2,NR=0}}}
+
+\begin{document}
+\makeatletter\def\pgf@circ@font@tiny{\footnotesize}\makeatother
+\begin{circuitikz}[
+    font=\sffamily,
+    label_text/.style={font=\small},
+    bus/.style={-Latex, line width=1.5pt},
+    bus plain/.style={-Latex, line width=1.5pt},
+    bus line/.style={line width=1.5pt},
+    control_signal/.style={-Latex, line width=0.5pt},
+    junction/.style={circ, scale=0.9},
+]
+
+    % ---------------------------------------------------------------- registers
+    \node[register] at (0,6)   (I)   {$i$};
+    \node[register] at (8.4,6) (Sum) {$sum$};
+
+    % ---------------------------------------------------------------- multiplexers
+    % iMux: input 1 = '1' (left), input 0 = result (right)
+    \draw[thick] (-0.9,9.4) -- (0.9,9.4) -- (0.3,8.7) -- (-0.3,8.7) -- cycle;
+    \node[label_text] at (-0.5,9.15) {$1$};
+    \node[label_text] at ( 0.5,9.15) {$0$};
+    % sumMux: input 1 = '0' (left), input 0 = result (right)
+    \draw[thick] (7.5,8.6) -- (9.3,8.6) -- (8.7,7.9) -- (8.1,7.9) -- cycle;
+    \node[label_text] at (7.9,8.35) {$1$};
+    \node[label_text] at (8.9,8.35) {$0$};
+    % addMux: input 1 = '1' (left), input 0 = sum (right)
+    \draw[thick] (5.1,2.9) -- (6.9,2.9) -- (6.3,2.2) -- (5.7,2.2) -- cycle;
+    \node[label_text] at (5.5,2.65) {$1$};
+    \node[label_text] at (6.5,2.65) {$0$};
+
+    % constants
+    \node[above,label_text] at (-0.5,10.5) (one1) {$'1'$};
+    \node[above,label_text] at ( 7.9,10.5) (zero) {$'0'$};
+    \node[above,label_text] at ( 5.5,3.9)  (one2) {$'1'$};
+    \draw[bus] (one1) -- (-0.5,9.4);
+    \draw[bus] (zero) -- (7.9,8.6);
+    \draw[bus] (one2) -- (5.5,2.9);
+
+    % multiplexer outputs -> D inputs
+    \draw[bus] (0,8.7) -- (I.btpin 1);
+    \draw[bus] (8.4,7.9) -- (Sum.btpin 1);
+
+    % ---------------------------------------------------------------- adder
+    \node[adder, box only, anchor=center] at (5.0,0.4) (Add) {+};
+
+    % register i -> adder (left input), junction on the i bus
+    \draw[bus line] (I.bbpin 1) -- (0,-0.3);
+    \draw[bus] (0,3.4) -- (4.0,3.4) -| (Add.btpin 1);
+    \node[junction] at (0,3.4) {};
+    % addMux -> adder (right input)
+    \draw[bus] (6.0,2.2) -- ++(0,-0.6) -| (Add.btpin 2);
+
+    % register sum -> addMux input 0 and the output buffer
+    \draw[bus line] (Sum.bbpin 1) -- (8.4,-1.0);
+    \draw[bus] (8.4,3.4) -- (6.5,3.4) -- (6.5,2.9);
+    \node[junction] at (8.4,3.4) {};
+
+    % result bus: adder output -> iMux and sumMux (input 0)
+    \draw[bus line] (Add.bbpin 1) -- ++(0,-0.9) -| (3.0,2.6);
+    \draw[bus] (3.0,2.6) -- (3.0,9.9);
+    \draw[thick] (2.85,2.9) -- (3.15,3.5);
+    \node[label_text, left] at (2.9,2.9) {$8$};
+    \node[junction] at (3.0,9.9) {};
+    \draw[bus] (3.0,9.9) -| (0.5,9.4);
+    \draw[bus line] (3.0,9.9) -| (8.9,9.9);
+    \draw[bus] (8.9,9.9) -- (8.9,8.6);
+
+    % ---------------------------------------------------------------- (i /= 11) detector
+    % 8-input NAND; the inputs of the bits that are 0 in 00001011 are inverted
+    \node[nand port, number inputs=8, rotate=180, scale=1.8, anchor=out] (Gate) at (-4.6,0.9) {};
+    \foreach \k in {1,...,8} {
+        \draw (Gate.in \k) -- (0,0 |- Gate.in \k) node[junction, scale=0.7] {};
+    }
+    \foreach \k in {8,7,6,5,3} {
+        \draw[fill=white] ($(Gate.in \k)+(-0.6,0)$) circle (2.2pt);
+    }
+    \node[label_text, anchor=south west] at (0.1,0 |- Gate.in 8) {$i_7$};
+    \node[label_text, anchor=north west] at (0.1,0 |- Gate.in 1) {$i_0$};
+    \draw[control_signal] (Gate.out) -- ++(-1.0,0) node[left, label_text] {$(i \neq 11)$};
+
+    % ---------------------------------------------------------------- tri-state output of sum
+    \node[buffer port, rotate=-90, yscale=-1, scale=0.5] (Tri) at (8.4,-1.4) {};
+    \draw[bus] (8.4,-1.0) -- (Tri.bin);
+    \draw[bus] (Tri.bout) -- ++(0,-1.1) node[below, label_text] {$Output$};
+
+    % ---------------------------------------------------------------- control signals
+    \draw[control_signal] (-4.5,8.85) node[left, label_text] {$iMux$} -- (-0.429,8.85);
+    \draw[control_signal] (-4.5,8.15) node[left, label_text] {$sumMux$} -- (7.971,8.15);
+    \draw[control_signal] (-4.5,7.5) node[left, label_text] {$sumLoad$} -- (5.9,7.5) |- (Sum.blpin 1);
+    \draw[control_signal] (-4.5,0 |- I.blpin 1) node[left, label_text] {$iLoad$} -- (I.blpin 1);
+    \draw[control_signal] (-4.5,0 |- I.blpin 2) node[left, label_text] {$Clock$} -- (I.blpin 2);
+    \draw[control_signal] (-2.6,0 |- I.blpin 2) to[short,*-] (-2.6,4.5) -- (5.9,4.5) |- (Sum.blpin 2);
+    \draw[control_signal] (-4.5,2.3) node[left, label_text] {$addMux$} -- (5.571,2.3);
+    \draw[control_signal] (-4.5,-1.4) node[left, label_text] {$OE$} -- (Tri.up);
+
+\end{circuitikz}
+\end{document}

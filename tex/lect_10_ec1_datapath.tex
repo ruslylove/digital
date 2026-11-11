@@ -1,0 +1,139 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{tikz}
+\usepackage{circuitikz}
+\ctikzset{logic ports=ieee}
+\usetikzlibrary{positioning, calc, arrows.meta}
+
+% Datapath of the EC-1 microprocessor (16 x 8 ROM, program counter PC, instruction
+% register IR, accumulator A, decrementer).  Same styles as lect_9_datapath_combine.
+% Every bus carries ONE width mark.
+
+\tikzset{reg/.style={muxdemux, muxdemux def={Lh=3.8, Rh=3.8, NL=3, NB=1, NT=1,w=5.6,NR=0},
+      muxdemux label={L1=Load, L2=Clear, L3=Clock}}}
+\tikzset{regIR/.style={muxdemux, muxdemux def={Lh=5.6, Rh=5.6, NL=3, NB=2, NT=1,w=5,NR=0},
+      muxdemux label={L1=Load, L2=Clear, L3=Clock, T1=$D_{7..0}$, B1=$IR_{7..5}$, B2=$IR_{3..0}$}}}
+\tikzset{rom/.style={muxdemux, muxdemux def={Lh=5, Rh=5, NL=1, NB=0, NT=1,w=8,NR=0},
+      muxdemux label={L1=$Address_{3..0}$, T1=$Q_{7..0}$}}}
+
+% slash + width on a vertical / horizontal bus
+\newcommand{\vmark}[3]{\draw[thick] ($(#1,#2)+(-2pt,-3pt)$) -- ++(4pt,6pt);
+                        \node[label_text, left=1pt] at (#1,#2) {$#3$};}
+\newcommand{\hmark}[3]{\draw[thick] ($(#1,#2)+(-2pt,-3pt)$) -- ++(4pt,6pt);
+                        \node[label_text, above=2pt] at (#1,#2) {$#3$};}
+
+\begin{document}
+\makeatletter\def\pgf@circ@font@tiny{\small}\makeatother
+\begin{circuitikz}[
+    font=\sffamily,
+    label_text/.style={font=\normalsize},
+    bus/.style={-Latex, line width=1.5pt},
+    bus line/.style={line width=1.5pt},
+    control_signal/.style={-Latex, line width=0.5pt},
+    junction/.style={circ, scale=0.9},
+]
+
+    % ================================================================ instruction cycle part
+    \node[regIR] at (0,10.5) (IR) {$IR$};
+    \node[reg, muxdemux label={T1=$D_{3..0}$, B1=$Q_{3..0}$}] at (1.17,4.2) (PC) {$PC$};
+
+    % JNZmux: input 1 = IR[3..0] (left), input 0 = PC + 1 (right)
+    \draw[thick] (0.27,7.0) -- (2.07,7.0) -- (1.47,6.3) -- (0.87,6.3) -- cycle;
+    \node[label_text] at (0.67,6.75) {$1$};
+    \node[label_text] at (1.67,6.75) {$0$};
+
+    % 4-bit incrementer
+    \node[draw, thick, align=center, minimum width=2.8cm, minimum height=1.3cm, inner sep=1pt, font=\normalsize] (Inc) at (4.5,6.6) {4-bit\\Increment};
+
+    % ROM
+    \node[rom, anchor=lpin 1] at (7.5,1.8) (ROM) {};
+    \node[font=\small, align=center] at ($(ROM.center)+(0.25,0.5)$) {16\,$\times$\,8\\ROM};
+
+    % ---------------------------------------------------------------- buses of the instruction cycle
+    % ROM output -> IR (loop over the top)
+    \draw[bus line] (ROM.btpin 1) -- (ROM.btpin 1 |- 0,12.4) -- (0,12.4);
+    \draw[bus] (0,12.4) -- (IR.btpin 1);
+    \hmark{5.0}{12.4}{8}
+    % IR[7..5] to the control unit
+    \draw[bus] (IR.bbpin 1) -- (IR.bbpin 1 |- 0,7.9) -- (-7.6,7.9) node[left, label_text] {$IR_{7..5}$};
+    \vmark{-0.7}{8.4}{3}
+    % IR[3..0] -> JNZmux input 1
+    \draw[bus] (IR.bbpin 2) -- (0.7,7.0);
+    \vmark{0.7}{7.9}{4}
+    % JNZmux -> PC
+    \draw[bus] (1.17,6.3) -- (PC.btpin 1);
+    \vmark{1.17}{5.9}{4}
+    % PC -> ROM address, junction feeds the incrementer
+    \draw[bus line] (PC.bbpin 1) -- (1.17,1.8) -- (6.8,1.8);
+    \draw[bus] (6.8,1.8) -- (ROM.blpin 1);
+    \hmark{2.9}{1.8}{4}
+    \draw[bus] (4.5,1.8) -- (Inc.south);
+    \node[junction] at (4.5,1.8) {};
+    % incrementer -> JNZmux input 0
+    \draw[bus line] (Inc.north) -- (4.5,8.3) -- (1.67,8.3);
+    \draw[bus] (1.67,8.3) -- (1.67,7.0);
+    \vmark{4.5}{7.7}{4}
+
+    % ================================================================ instruction set part
+    \node[reg, muxdemux label={T1=$D_{7..0}$, B1=$A_{7..0}$}] at (17.2,4.6) (A) {$A$};
+
+    % INmux: input 1 = Input (left), input 0 = decrementer (right)
+    \draw[thick] (16.3,9.0) -- (18.1,9.0) -- (17.5,8.3) -- (16.9,8.3) -- cycle;
+    \node[label_text] at (16.7,8.75) {$1$};
+    \node[label_text] at (17.7,8.75) {$0$};
+
+    \node[above,label_text] at (16.7,11.6) {$Input$};
+    \draw[bus] (16.7,11.6) -- (16.7,9.0);
+    \vmark{16.7}{10.3}{8}
+    \draw[bus] (17.2,8.3) -- (A.btpin 1);
+    \vmark{17.2}{7.2}{8}
+
+    % decrementer
+    \node[draw, thick, align=center, minimum width=2.8cm, minimum height=1.3cm, inner sep=1pt, font=\normalsize] (Dec) at (21.0,1.4) {8-bit\\Decrement};
+    \draw[bus line] (A.bbpin 1) -- (17.2,-5.8);
+    \vmark{17.2}{2.5}{8}
+    \draw[bus] (17.2,1.4) -- (Dec.west);
+    \node[junction] at (17.2,1.4) {};
+    \draw[bus line] (Dec.east) -- (23.6,1.4) -- (23.6,9.8) -- (17.7,9.8);
+    \draw[bus] (17.7,9.8) -- (17.7,9.0);
+    \vmark{23.6}{5.5}{8}
+
+    % (A /= 0): 8-input OR, every bit of A is wired to one input
+    \node[or port, number inputs=8, rotate=180, scale=1.8, anchor=out] (Or) at (13.3,-4.4) {};
+    \foreach \k in {1,...,8} {
+        \draw (Or.in \k) -- (17.2,0 |- Or.in \k) node[junction, scale=0.7] {};
+    }
+    \draw[control_signal] (Or.out) -- (-7.7,-4.4) node[left, label_text] {$(A \neq 0)$};
+
+    % tri-state output buffer
+    \node[buffer port, rotate=-90, yscale=-1, scale=0.5] (Tri) at (17.2,-6.6) {};
+    \draw[bus] (17.2,-5.8) -- (Tri.bin);
+    \draw[bus] (Tri.bout) -- ++(0,-1.4) node[below, label_text] {$Output$};
+
+    % ================================================================ control signals
+    \draw[control_signal] (-8.5,0 |- IR.blpin 1) node[left, label_text] {$IRload$} -- (IR.blpin 1);
+    \draw[control_signal] (-8.5,6.55) node[left, label_text] {$JNZmux$} -- (0.741,6.55);
+    \draw[control_signal] (-8.5,0 |- PC.blpin 1) node[left, label_text] {$PCload$} -- (PC.blpin 1);
+
+    \draw[control_signal] (-8.5,-0.2) node[left, label_text] {$INmux$} -- (13.2,-0.2) |- (16.771,8.45);
+    \draw[control_signal] (-8.5,-0.8) node[left, label_text] {$Aload$} -- (13.7,-0.8) |- (A.blpin 1);
+    \draw[control_signal] (-8.5,-1.4) node[left, label_text] {$Reset$} -- (14.2,-1.4) |- (A.blpin 2);
+    \draw[control_signal] (-8.5,-2.0) node[left, label_text] {$Clock$} -- (14.7,-2.0) |- (A.blpin 3);
+    % Reset -> Clear of IR and PC; Clock -> clock of IR and PC
+    \draw[control_signal] (-3.4,-1.4) to[short,*-] (-3.4,0 |- IR.blpin 2) -- (IR.blpin 2);
+    \draw[control_signal] (-3.4,0 |- PC.blpin 2) to[short,*-] (PC.blpin 2);
+    \draw[control_signal] (-3.0,-2.0) to[short,*-] (-3.0,0 |- IR.blpin 3) -- (IR.blpin 3);
+    \draw[control_signal] (-3.0,0 |- PC.blpin 3) to[short,*-] (PC.blpin 3);
+    \draw[control_signal] (-8.5,-6.6) node[left, label_text] {$OutE$} -- (Tri.up);
+
+    % ================================================================ part labels
+    \begin{scope}[blue!70!cyan, font=\sffamily\normalsize]
+        \draw[<->, thick] (-3,-9.4) -- (6.8,-9.4);
+        \node at (1.9,-10.1) {Instruction Cycle Operations};
+        \draw[<->, thick] (7.5,-9.4) -- (11.2,-9.4);
+        \node at (9.3,-10.1) {Memory};
+        \draw[<->, thick] (13,-9.4) -- (24,-9.4);
+        \node at (18.5,-10.1) {Instruction Set Operations};
+    \end{scope}
+
+\end{circuitikz}
+\end{document}

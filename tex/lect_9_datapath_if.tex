@@ -1,0 +1,64 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{tikz}
+\usepackage{circuitikz}
+\ctikzset{logic ports=ieee}
+\usetikzlibrary{positioning, calc, decorations.markings}
+
+% Testing A = 0 in a datapath:  (a) with a comparator "=" and the constant '0',
+%                               (b) with an 8-input NOR gate.
+% Same building blocks and styles as lect_9_datapath_combine.
+
+\tikzset{register/.style={muxdemux, muxdemux def={Lh=2.4, Rh=2.4, NL=2, NB=1, NT=1,w=4.8,NR=0},
+                            muxdemux label={L1=Load, L2=Clock, R1=right1, R2=right,T1=$D_{7..0}$,B1=$Q_{7..0}$,},},
+                 }
+
+\begin{document}
+\makeatletter\def\pgf@circ@font@tiny{\footnotesize}\makeatother
+\begin{circuitikz}[
+    font=\sffamily,
+    label_text/.style={font=\small},
+    bus/.style={-Latex, line width=1.5pt,
+        postaction={decorate},
+        decoration={markings, mark=at position 0.5 with {
+            \draw[thick,-] (-2pt,-3pt) -- (2pt,3pt);
+            \node[above left=0.5pt] {\small $8$};
+        }}},
+    bus plain/.style={-Latex, line width=1.5pt},
+    control_signal/.style={-Latex, line width=0.5pt},
+]
+
+    % ======================================================== (a) comparator
+    \node[register] at (0,5) (A) {$A$};
+    \draw[bus plain,-] ($(A.btpin 1)+(0,1)$) -- (A.btpin 1);
+    \draw[control_signal,-] ($(A.blpin 1)+(-0.8,0)$) -- (A.blpin 1);
+    \draw[control_signal,-] ($(A.blpin 2)+(-0.8,0)$) -- (A.blpin 2);
+
+    % comparator block "="
+    \node[draw, thick, minimum width=1.6cm, minimum height=1.4cm, inner sep=0pt] (Eq) at (-1.8,0.8) {$=$};
+    \draw[bus] (A.bbpin 1) -- ++(0,-1.4) |- ($(Eq.east)+(0,0.3)$);
+    \node[label_text, anchor=west] (zero) at (1.3,0.5) {$'0'$};
+    \draw[bus plain] (zero.west) -- ($(Eq.east)+(0,-0.3)$);
+    \draw[control_signal] (Eq.west) -- ++(-1.1,0) node[left, label_text] {$(A=0)$};
+    \node[font=\small] at (0,-1.1) {(a)};
+
+    % ======================================================== (b) NOR gate
+    \begin{scope}[xshift=8.5cm]
+        \node[register] at (0,5) (A2) {$A$};
+        \draw[bus plain,-] ($(A2.btpin 1)+(0,1)$) -- (A2.btpin 1);
+        \draw[control_signal,-] ($(A2.blpin 1)+(-0.8,0)$) -- (A2.blpin 1);
+        \draw[control_signal,-] ($(A2.blpin 2)+(-0.8,0)$) -- (A2.blpin 2);
+
+        % 8-input NOR: every bit of A is wired to one input
+        \node[nor port, number inputs=8, rotate=180, scale=1.8, anchor=out] (Nor) at (-4.6,1.0) {};
+        \draw[bus,-] (A2.bbpin 1) -- (0,3.1);
+        \draw[line width=1.5pt] (0,3.1) -- (0,-0.1);
+        \foreach \k in {1,...,8} {
+            \draw (Nor.in \k) -- (0,0 |- Nor.in \k) node[circ, scale=0.7] {};
+        }
+        \node[label_text, anchor=south west] at (0.1,0 |- Nor.in 8) {$A_7$};
+        \node[label_text, anchor=north west] at (0.1,0 |- Nor.in 1) {$A_0$};
+        \draw[control_signal] (Nor.out) -- ++(-1.1,0) node[left, label_text] {$(A=0)$};
+        \node[font=\small] at (0,-1.1) {(b)};
+    \end{scope}
+\end{circuitikz}
+\end{document}

@@ -1,0 +1,90 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{tikz}
+\usepackage{circuitikz}
+\usetikzlibrary{positioning, calc, decorations.markings}
+
+% Combined datapath for  A = B + C  and  A = A + 3  (one register A, a 2-to-1 multiplexer Amux).
+% Same building blocks and styles as lect_9_datapath_A_plus_3 / lect_9_datapath_A_B_plus_C.
+
+\tikzset{register/.style={muxdemux, muxdemux def={Lh=2.4, Rh=2.4, NL=2, NB=1, NT=1,w=4.8,NR=0},
+                            muxdemux label={L1=Load, L2=Clock, R1=right1, R2=right,T1=$D_{7..0}$,B1=$Q_{7..0}$,},},
+                 }
+
+\tikzset{adder/.style={muxdemux, muxdemux def={Lh=1, Rh=1,NL=0, NB=1, NT=2,w=2,NR=0}}}
+
+\begin{document}
+\makeatletter\def\pgf@circ@font@tiny{\footnotesize}\makeatother
+\begin{circuitikz}[
+    font=\sffamily,
+    arrow/.style={-Latex, line width=0.5pt},
+    label_text/.style={font=\small},
+    bus/.style={-Latex, line width=1.5pt,
+        postaction={decorate},
+        decoration={markings, mark=at position 0.5 with {
+            \draw[thick,-] (-2pt,-3pt) -- (2pt,3pt);
+            \node[above left=0.5pt] {\small $8$};
+        }}},
+    bus plain/.style={-Latex, line width=1.5pt},
+    control_signal/.style={-Latex, line width=0.5pt},
+]
+
+    % ---------------------------------------------------------------- components
+    % Sources B and C
+    \node[register] at (-2.6,7) (B) {$B$};
+    \node[register] at ( 2.6,7) (C) {$C$};
+
+    % Adder 1:  B + C
+    \node[adder, box only, anchor=center] at (0,4.8) (Add) {+};
+
+    % 2-to-1 multiplexer (input 1 on the left, input 0 on the right, output at the bottom)
+    \draw[thick] (-1.4,3.4) -- (0.4,3.4) -- (-0.2,2.7) -- (-0.8,2.7) -- cycle;
+    \node[label_text] at (-1.0,3.15) {$1$};
+    \node[label_text] at ( 0.0,3.15) {$0$};
+
+    % Destination register A (centred under the multiplexer output at x = -0.5)
+    \node[register] at (-0.5,1.2) (A) {$A$};
+
+    % Adder 2:  A + '3'
+    \node[adder, box only, anchor=btpin 1] (Add3) at (-0.5,-1.6) {+};
+
+    % ---------------------------------------------------------------- data buses
+    % D inputs of B and C
+    \draw[bus] ($(B.btpin 1)+(0,1.1)$) -- (B.btpin 1);
+    \draw[bus] ($(C.btpin 1)+(0,1.1)$) -- (C.btpin 1);
+
+    % B and C to the adder
+    \draw[bus] (B.bbpin 1) -- ++(0,-1) -| (Add.btpin 1);
+    \draw[bus] (C.bbpin 1) -- ++(0,-1) -| (Add.btpin 2);
+
+    % adder 1 -> multiplexer input 0
+    \draw[bus] (Add.bbpin 1) -- (0,3.4);
+
+    % multiplexer -> register A
+    \draw[bus plain] (-0.5,2.7) -- (A.btpin 1);
+
+    % register A -> adder 2 (left input)
+    \draw[bus] (A.bbpin 1) -- (Add3.btpin 1);
+
+    % constant 3 -> adder 2 (right input)
+    \node[above,label_text] at ($(Add3.btpin 2)+(0,1.2)$) (three) {$'3'$};
+    \draw[bus] (three) -- (Add3.btpin 2);
+
+    % adder 2 -> multiplexer input 1 (feedback loop around the left)
+    \draw[bus] (Add3.bbpin 1) -- ++(0,-0.6) -| (-3.4,3.9) -| (-1.0,3.4);
+
+    % ---------------------------------------------------------------- control signals
+    % multiplexer select
+    \draw[control_signal] (-6.6,2.85) node[left, label_text] {$Amux$} -- (-0.93,2.85);
+
+    % load of A, short load stubs on B and C
+    \draw[control_signal] (-6.6,0 |- A.blpin 1) node[left, label_text] {$ALoad$} -- (A.blpin 1);
+    \draw[control_signal] ($(B.blpin 1)+(-0.6,0)$) -- (B.blpin 1);
+    \draw[control_signal] ($(C.blpin 1)+(-0.6,0)$) -- (C.blpin 1);
+
+    % common clock rail
+    \draw[control_signal] (-6.6,0 |- A.blpin 2) node[left, label_text] {$Clock$} -- (A.blpin 2);
+    \draw[control_signal] (-5.5,0 |- A.blpin 2) to[short,*-] (-5.5,0 |- B.blpin 2) -- (B.blpin 2);
+    \draw[control_signal] (-5.5,5.6) to[short,*-] (0,5.6) |- (C.blpin 2);
+
+\end{circuitikz}
+\end{document}

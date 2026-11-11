@@ -1,0 +1,134 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{tikz}
+\usepackage{circuitikz}
+\ctikzset{logic ports=ieee}
+\usetikzlibrary{positioning, calc, decorations.markings}
+
+% Datapath of the GCD processor: registers X and Y, input multiplexers (In_X, In_Y),
+% comparator, two operand multiplexers (selected by XY) and a subtractor.
+%   XY = 0 :  Sub = X - Y     XY = 1 :  Sub = Y - X     (as in gcd_datapath.vhd)
+% Same building blocks and styles as lect_9_datapath_combine.
+
+\tikzset{register/.style={muxdemux, muxdemux def={Lh=3.2, Rh=3.2, NL=3, NB=1, NT=1,w=4.8,NR=0},
+                            muxdemux label={L1=Load, L2=Clear, L3=Clock, T1=$D_{7..0}$,B1=$Q_{7..0}$,},},
+                 }
+
+% slash + "8" on a vertical bus at (x,y)
+\newcommand{\vmark}[2]{\draw[thick] ($(#1,#2)+(-2pt,-3pt)$) -- ++(4pt,6pt);
+                        \node[label_text, left=1pt] at (#1,#2) {$8$};}
+
+\begin{document}
+\makeatletter\def\pgf@circ@font@tiny{\footnotesize}\makeatother
+\begin{circuitikz}[
+    font=\sffamily,
+    label_text/.style={font=\small},
+    bus/.style={-Latex, line width=1.5pt},
+    bus line/.style={line width=1.5pt},
+    control_signal/.style={-Latex, line width=0.5pt},
+    junction/.style={circ, scale=0.9},
+]
+
+    % ---------------------------------------------------------------- registers
+    \node[register] at (0,6.5)   (X) {$X$};
+    \node[register] at (6.8,6.5) (Y) {$Y$};
+
+    % input multiplexers: input 1 = external input, input 0 = subtractor result
+    \draw[thick] (-0.9,10.0) -- (0.9,10.0) -- (0.3,9.3) -- (-0.3,9.3) -- cycle;
+    \node[label_text] at (-0.5,9.75) {$1$};
+    \node[label_text] at ( 0.5,9.75) {$0$};
+    \draw[thick] (5.9,10.0) -- (7.7,10.0) -- (7.1,9.3) -- (6.5,9.3) -- cycle;
+    \node[label_text] at (6.3,9.75) {$1$};
+    \node[label_text] at (7.3,9.75) {$0$};
+
+    \node[above,label_text] at (-0.5,12.4) (inx) {$Input\_X$};
+    \node[above,label_text] at ( 6.3,12.4) (iny) {$Input\_Y$};
+    \draw[bus] (inx) -- (-0.5,10.0);
+    \draw[bus] (iny) -- (6.3,10.0);
+    \draw[thick] (-0.5,11.1) ++(-2pt,-3pt) -- ++(4pt,6pt);  \node[label_text,left=1pt] at (-0.5,11.1) {$8$};
+    \draw[thick] (6.3,11.1) ++(-2pt,-3pt) -- ++(4pt,6pt);   \node[label_text,left=1pt] at (6.3,11.1) {$8$};
+
+    \draw[bus] (0,9.3) -- (X.btpin 1);
+    \draw[bus] (6.8,9.3) -- (Y.btpin 1);
+
+    % ---------------------------------------------------------------- register outputs
+    \draw[bus line] (X.bbpin 1) -- (0,-3.2);        % X bus, continues to the output buffer
+    \draw[bus line] (Y.bbpin 1) -- (6.8,2.2);       % Y bus
+    \vmark{0}{4.6}  \vmark{6.8}{4.6}
+    
+    % X line (y = 3.0) and Y line (y = 2.2) towards comparator and operand multiplexers
+    \draw[bus line] (6.8,2.2) -- (1.3,2.2);
+    \draw[bus line] (1.3,2.2) -- (-1.4,2.2);
+    \draw[bus line] (0,3.0) -- (3.7,3.0);
+    \draw[bus] (0,3.0) -- (-1.4,3.0);
+    \draw[bus] (1.3,2.2) -- (-1.4,2.2);
+    \node[junction] at (0,3.0) {};
+
+    % ---------------------------------------------------------------- comparator
+    \draw[thick] (-5.8,1.7) rectangle (-1.4,3.5);
+    \node[label_text, anchor=south] at (-3.6,3.5-0.05) {\small Comparator};
+    \node[label_text, anchor=east] at (-1.5,3.0) {$X$};
+    \node[label_text, anchor=east] at (-1.5,2.2) {$Y$};
+    \node[label_text, anchor=west] at (-5.7,3.0) {$(X=Y)$};
+    \node[label_text, anchor=west] at (-5.7,2.2) {$(X>Y)$};
+    \draw[control_signal] (-5.8,3.0) -- (-6.9,3.0) node[left, label_text] {$(X=Y)$};
+    \draw[control_signal] (-5.8,2.2) -- (-6.9,2.2) node[left, label_text] {$(X>Y)$};
+
+    % ---------------------------------------------------------------- operand multiplexers
+    % Sub-A mux: input 1 = Y (left), input 0 = X (right)
+    \draw[thick] (0.9,1.1) -- (2.7,1.1) -- (2.1,0.4) -- (1.5,0.4) -- cycle;
+    \node[label_text] at (1.3,0.85) {$1$};
+    \node[label_text] at (2.3,0.85) {$0$};
+    % Sub-B mux: input 1 = X (left), input 0 = Y (right)
+    \draw[thick] (3.3,1.1) -- (5.1,1.1) -- (4.5,0.4) -- (3.9,0.4) -- cycle;
+    \node[label_text] at (3.7,0.85) {$1$};
+    \node[label_text] at (4.7,0.85) {$0$};
+
+    % taps: Y -> (1.3, A-in1) and (4.7, B-in0);  X -> (2.3, A-in0) and (3.7, B-in1)
+    \draw[bus] (1.3,2.2) -- (1.3,1.1);
+    \draw[bus] (4.7,2.2) -- (4.7,1.1);
+    \draw[bus] (2.3,3.0) -- (2.3,1.1);
+    \draw[bus] (3.7,3.0) -- (3.7,1.1);
+    \node[junction] at (1.3,2.2) {};
+    \node[junction] at (4.7,2.2) {};
+    \node[junction] at (2.3,3.0) {};
+    \node[junction] at (3.7,3.0) {};
+
+    % ---------------------------------------------------------------- subtractor
+    \node[draw, thick, minimum width=3.6cm, minimum height=1.2cm, inner sep=0pt] (Sub) at (3.0,-2.0) {Subtractor};
+    \draw[bus] (1.8,0.4) -- (1.8,-0.6) -| (2.4,-1.4);
+    \draw[bus] (4.2,0.4) -- (4.2,-0.6) -| (3.6,-1.4);
+    \vmark{1.8}{-0.1}  \vmark{4.2}{-0.1}
+
+    % subtractor result: back to both input multiplexers (input 0)
+    \draw[bus line] (3.0,-2.6) -- (3.0,-3.4) -- (9.6,-3.4) -- (9.6,11.5) -- (0.5,11.5);
+    \draw[bus] (0.5,11.5) -- (0.5,10.0);
+    \draw[bus line] (7.5,11.5) -- (7.5,10.0);
+    \draw[bus] (7.5,10.8) -- (7.5,10.0);
+    \node[junction] at (7.5,11.5) {};
+    \vmark{9.6}{4.0}
+
+    % ---------------------------------------------------------------- tri-state output of X
+    \node[buffer port, rotate=-90, yscale=-1, scale=0.5] (Tri) at (0,-3.6) {};
+    \draw[bus] (0,-3.2) -- (Tri.bin);
+    \draw[bus] (Tri.bout) -- ++(0,-1.2) node[below, label_text] {$Output$};
+
+    % ---------------------------------------------------------------- control signals
+    % input multiplexer selects
+    \draw[control_signal] (-6.9,9.45) node[left, label_text] {$In\_X$} -- (-0.429,9.45);
+    \draw[control_signal] (-6.9,8.6) node[left, label_text] {$In\_Y$} -- (5.4,8.6) -- (5.4,9.45) -- (6.371,9.45);
+
+    % load / clear / clock
+    \draw[control_signal] (-6.9,0 |- X.blpin 1) node[left, label_text] {$XLoad$} -- (X.blpin 1);
+    \draw[control_signal] (-6.9,4.8) node[left, label_text] {$YLoad$} -- (3.8,4.8) |- (Y.blpin 1);
+    \draw[control_signal] (-6.9,4.4) node[left, label_text] {$Reset$} -- (4.2,4.4) |- (Y.blpin 2);
+    \draw[control_signal] (-6.9,4.0) node[left, label_text] {$Clock$} -- (4.6,4.0) |- (Y.blpin 3);
+    \draw[control_signal] (-2.9,4.4) to[short,*-] (-2.9,0 |- X.blpin 2) -- (X.blpin 2);
+    \draw[control_signal] (-2.5,4.0) to[short,*-] (-2.5,0 |- X.blpin 3) -- (X.blpin 3);
+
+    % operand multiplexer select and output enable
+    \draw[control_signal] (-6.9,-0.1) node[left, label_text] {$XY$} -- (3.0,-0.1) -- (3.0,0.55) -- (3.771,0.55);
+    \draw[control_signal] (0.6,-0.1) to[short,*-] (0.6,0.55) -- (1.371,0.55);
+    \draw[control_signal] (-6.9,-3.6) node[left, label_text] {$Out$} -- (Tri.up);
+
+\end{circuitikz}
+\end{document}

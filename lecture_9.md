@@ -178,7 +178,7 @@ What if we need to perform both `A = A + 3` and `A = B + C`? We can create a mor
 
 :: right ::
 
-<img src="/lect_9_datapath_combine.png" class="rounded-lg bg-white p-4 w-95 mx-auto" alt="Combined Datapath with MUX">
+<img src="/lect_9_datapath_combine.svg" class="rounded-lg bg-white p-4 w-95 mx-auto" alt="Combined Datapath with MUX">
 <p class="text-center text-sm">Figure 9-7: Datapath for A = A + 3 with MUX</p>
 
 ---
@@ -197,7 +197,7 @@ To perform multiple operations using a single functional unit (the adder), we us
 </div>
 <div class="col-span-2">
 
-<img src="/lect_9_datapath_one_adder.png" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Datapath for A = A + 3 and A = B + C using only one adder">
+<img src="/lect_9_datapath_one_adder.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Datapath for A = A + 3 and A = B + C using only one adder">
 <p class="text-center text-sm">Figure 9-8: Datapath for A = A + 3 and A = B + C using only one adder</p>
 
 </div>
@@ -221,7 +221,7 @@ To implement conditional statements like `IF (A = 0) THEN...`, the datapath must
 
 <div class="col-span-2">
 
-<img src="/lect_9_datapath_if.png" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Datapath for A=0 check">
+<img src="/lect_9_datapath_if.svg" class="rounded-lg bg-white p-4 w-full mx-auto" alt="Datapath for A=0 check">
 <p class="text-center text-sm">Figure 9-9: Datapath for A=0 check; (a) Using comparator; (b) Using NOR gate</p>
 
 </div>
@@ -258,7 +258,7 @@ $$
 
 <div class="col-span-2">
 
-<img src="/lect_9_datapath_one_adder.png" class="rounded-lg bg-white p-4 w-full" alt="Control Word Table Example"> 
+<img src="/lect_9_datapath_one_adder.svg" class="rounded-lg bg-white p-4 w-full" alt="Control Word Table Example"> 
 <p class="text-center text-sm">Figure 9-10: Datapath for A = A + 3 and A = B + C</p>
 </div>
 </div>
@@ -292,7 +292,7 @@ OUTPUT B
 
 <div class="col-span-1">
 
-<img src="/lect_9_datapath_if_then_else.png" class="rounded-lg bg-white p-4 w-full" alt="if-then-else datapath">
+<img src="/lect_9_datapath_if_then_else.svg" class="rounded-lg bg-white p-4 w-full" alt="if-then-else datapath">
 <p class="text-center text-sm">Figure 9-11: Datapath for if-then-else</p>
 
 </div>
@@ -334,7 +334,7 @@ $$
 
 <div class="col-span-1">
 
-<img src="/lect_9_datapath_if_then_else.png" class="rounded-lg bg-white p-5 w-full mx-auto" alt="if-then-else datapath">
+<img src="/lect_9_datapath_if_then_else.svg" class="rounded-lg bg-white p-5 w-full mx-auto" alt="if-then-else datapath">
 <p class="text-center text-sm">Figure 9-12: Datapath for if-then-else</p>
 
 </div>
@@ -378,7 +378,7 @@ OUTPUT Sum
 
 :: right ::
 
-<img src="/lect_9_datapath_sum_1_to_10.png" class="rounded-lg bg-white p-4 w-full" alt="Counter datapath with adder">
+<img src="/lect_9_datapath_sum_1_to_10.svg" class="rounded-lg bg-white p-4 w-full" alt="Counter datapath with adder">
 <p class="text-center text-sm">Figure 9-13: Datapath for summing numbers from 1 to 10</p>
 
 ---
@@ -419,7 +419,7 @@ $$
 </div>
 
 <div>
-<img src="/lect_9_datapath_sum_1_to_10.png" class="rounded-lg bg-white p-1 w-full mx-auto" alt="Counter datapath with adder">
+<img src="/lect_9_datapath_sum_1_to_10.svg" class="rounded-lg bg-white p-1 w-full mx-auto" alt="Counter datapath with adder">
 <p class="text-center text-sm">Figure 9-14: Datapath for summing numbers from 1 to 10</p>
 </div>
 </div>
@@ -908,7 +908,7 @@ OUTPUT X
 <div>
 
 **Datapath:**
-<img src="/lect_9_gcd_datapath.png" class="rounded-lg bg-white p-1 w-75 mx-auto" alt="GCD Datapath">
+<img src="/lect_9_gcd_datapath.svg" class="rounded-lg bg-white p-1 w-75 mx-auto" alt="GCD Datapath">
 <p class="text-center text-sm">Figure 9-26: GCD Datapath</p>
 
 </div>
@@ -1402,7 +1402,7 @@ end Structural;
 ```
 ---
 
-<img src="/lect_9_gcd.png" class="rounded-lg bg-white p-1 w-170 mx-auto" alt="GCD Control Unit and Datapath">
+<img src="/lect_9_gcd.svg" class="rounded-lg bg-white p-1 w-170 mx-auto" alt="GCD Control Unit and Datapath">
 <p class="text-center text-sm">Figure 9-28: GCD Control Unit and Datapath</p>
 
 <img src="/lect_9_gcd_sim.png" class="rounded-lg bg-white p-1 w-full mx-auto" alt="GCD Simulation">

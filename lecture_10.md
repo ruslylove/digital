@@ -142,7 +142,7 @@ The datapath must support fetching instructions and executing data operations.
 
 ## EC-1 Datapath
 
-<div class="grid grid-cols-2 gap-4">
+<div class="grid grid-cols-2 gap-8">
 <div class="text-base">
 
 **Instruction Cycle Logic:**
@@ -151,23 +151,25 @@ The datapath must support fetching instructions and executing data operations.
     *   For `JNZ`, if taken: `PC = IR[3:0]` (Jump address).
     *   Uses a `JNZmux` to select between incremented PC and Jump address.
 
+</div>
+<div class="text-base">
+
 **Execution Logic:**
 *   **Accumulator (A) Logic:**
     *   Input from generic `Input` port or Input from `Decrement Unit`.
     *   Selected by `INmux`.
 *   **Output:** Tri-state buffer controlled by `OutE`.
+*   **Status:** `(A ≠ 0)` is an 8-input OR gate on A.
 
 </div>
-<div>
+</div>
 
-<!-- Placeholder for Datapath Image - Ideally this would be an SVG -->
+---
 
-<img src="/lect_10_ec1_datapath.png" class="rounded-lg bg-white p-2 w-full object-contain mx-auto" alt="EC-1 Datapath">
+## EC-1 Datapath Diagram
+
+<img src="/lect_10_ec1_datapath.svg" class="rounded-lg bg-white p-1 mx-auto object-contain" style="height: 430px" alt="EC-1 Datapath">
 <p class="text-center text-sm">Figure 10-1. EC-1 Datapath Diagram</p>
-
-
-</div>
-</div>
 
 ---
 
@@ -1325,25 +1327,37 @@ To support the new instructions, the datapath is upgraded:
 
 ---
 
-## EC-2 Datapath Diagram
+## EC-2 Datapath: Control Signals
 
-<div class="grid grid-cols-5 gap-4">
-<div class="col-span-2">
+<div class="grid grid-cols-2 gap-8">
+<div class="text-base">
 
 **Key Control Signals:**
 *   `MemInst`: Selects address source (0=PC, 1=IR).
 *   `MemWr`: Enables writing to RAM.
-*   `Asel`: Selects Accumulator input source.
 *   `Sub`: Selects ALU operation (0=Add, 1=Sub).
 *   `JMPmux`: Controls PC update for Jumps.
 
 </div>
-<div class="col-span-3">
+<div class="text-base">
 
-<img src="/lect_10_ec-2_datapath.png" class="mx-auto p-4 w-full" alt="EC-2 Datapath" />
+**Accumulator input (`Asel`):**
+*   `00`: RAM output (`LOAD`)
+*   `01`: ALU output (`ADD`/`SUB`)
+*   `10`: Input port (`IN`)
+*   `11`: constant `'0'`
+
+**Status:** `(A = 0)` (8-input NOR) and `(A ≥ 0)` (inverted sign bit `A7`).
+
+</div>
+</div>
+
+---
+
+## EC-2 Datapath Diagram
+
+<img src="/lect_10_ec2_datapath.svg" class="rounded-lg bg-white p-1 mx-auto object-contain" style="height: 430px" alt="EC-2 Datapath">
 <p class="text-center text-sm">Figure 10-10. EC-2 Datapath</p>
-</div>
-</div>
 
 ---
 
