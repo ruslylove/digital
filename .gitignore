@@ -16,3 +16,6 @@ textbook/figsrc/
 textbook/CV.docx
 textbook/20210225_MU-PRESS_01.pdf
 "textbook/การเขียนตำราหนังสือ Dec_1_2023 - จันทร ศรีชาติ.pdf"
+
+# this project uses pnpm (pnpm-lock.yaml); npm creates a conflicting lock file
+package-lock.json
