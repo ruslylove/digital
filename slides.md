@@ -15,7 +15,7 @@ mdc: true
 # lineNumbers: true
 favicon: '/img/60348.jpg'
 author: Dr. Ruslee Sutthaweekul
-semester: 2/2025
+semester: auto   # auto = from today's date (Jul-Oct: 1/year, Nov-Dec: 2/year, Jan-Jun: 2/year-1); or fix e.g. 2/2025
 subject: 010113025 Digital Circuit & Logic Design
 hideInToc: true
 # Digital Circuit and Logic Design
@@ -24,7 +24,7 @@ hideInToc: true
 
 Presented by {{ $slidev.configs.author }}
 
-Semester {{ $slidev.configs.semester }}
+Semester <Semester />
 
 <div @click="$slidev.nav.next" class="mt-12 py-1" hover:bg="white op-10">
   Press Space for next page <carbon:arrow-right />
