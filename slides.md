@@ -81,5 +81,5 @@ src: lecture_10.md
 src: lecture_end.md
 ---
 ---
-src: mini_project_25.md
+src: mini_project_26.md
 ---

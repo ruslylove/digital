@@ -1,0 +1,38 @@
+\documentclass[border=8pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{decorations.pathreplacing,calc}
+\begin{document}
+\begin{tikzpicture}[font=\sffamily, x=0.95cm, y=1.5cm, line cap=round, line join=round]
+  \definecolor{sig}{HTML}{4B3FBF}
+  \definecolor{delimfill}{HTML}{FBE9D0}
+  \definecolor{delimline}{HTML}{E0A458}
+  \fill[delimfill, draw=delimline, thick, rounded corners=2pt] (6.350,-0.25) rectangle (10.350,1.35);
+  \node[font=\sffamily\bfseries\small, text=brown!70!black] at (8.350,0.95) {delimiter};
+  \node[font=\sffamily\footnotesize, text=brown!70!black] at (8.350,0.62) {level 0 for 2000\,ms};
+  \draw[gray!60, dotted] (-0.5,1) -- (15.850,1);
+  \node[left, font=\sffamily\small] at (-0.4,1) {1};  \node[left, font=\sffamily\small] at (-0.4,0) {0};
+  \draw[sig, very thick] (0.000,0.000) -- (0.000,0.000) -- (0.350,0.000) -- (0.350,1.000) -- (1.350,1.000) -- (1.350,0.000) -- (2.350,0.000) -- (2.350,1.000) -- (4.350,1.000) -- (4.350,0.000) -- (5.350,0.000) -- (5.350,1.000) -- (6.350,1.000) -- (6.350,0.000) -- (10.350,0.000) -- (10.350,1.000) -- (11.350,1.000) -- (11.350,0.000) -- (12.350,0.000) -- (12.350,1.000) -- (13.350,1.000) -- (13.350,0.000) -- (14.350,0.000) -- (14.350,1.000) -- (15.350,1.000) -- (15.350,0.000) -- (15.850,0.000);
+  \node[font=\sffamily\footnotesize, text=gray!70!black] at (0.850,-0.5) {500};
+  \node[font=\sffamily\footnotesize, text=gray!70!black] at (0.850,1.3) {dot};
+  \node[font=\sffamily\footnotesize, text=gray!70!black] at (1.850,-0.5) {500};
+  \node[font=\sffamily\footnotesize, text=gray!70!black] at (3.350,-0.5) {1000};
+  \node[font=\sffamily\footnotesize, text=gray!70!black] at (3.350,1.3) {dash};
+  \node[font=\sffamily\footnotesize, text=gray!70!black] at (4.850,-0.5) {500};
+  \node[font=\sffamily\footnotesize, text=gray!70!black] at (5.850,-0.5) {500};
+  \node[font=\sffamily\footnotesize, text=gray!70!black] at (5.850,1.3) {dot};
+  \node[font=\sffamily\bfseries\small, text=brown!70!black] at (8.350,-0.5) {2000};
+  \node[font=\sffamily\footnotesize, text=gray!70!black] at (10.850,-0.5) {500};
+  \node[font=\sffamily\footnotesize, text=gray!70!black] at (10.850,1.3) {dot};
+  \node[font=\sffamily\footnotesize, text=gray!70!black] at (11.850,-0.5) {500};
+  \node[font=\sffamily\footnotesize, text=gray!70!black] at (12.850,-0.5) {500};
+  \node[font=\sffamily\footnotesize, text=gray!70!black] at (12.850,1.3) {dot};
+  \node[font=\sffamily\footnotesize, text=gray!70!black] at (13.850,-0.5) {500};
+  \node[font=\sffamily\footnotesize, text=gray!70!black] at (14.850,-0.5) {500};
+  \node[font=\sffamily\footnotesize, text=gray!70!black] at (14.850,1.3) {dot};
+  \draw[decorate, decoration={brace, amplitude=5pt}, gray!70!black] (0.350,1.75) -- (6.350,1.75);
+  \node[font=\sffamily\small] at (3.350,2.2) {R\,($\cdot$\,---\,$\cdot$)};
+  \draw[decorate, decoration={brace, amplitude=5pt}, gray!70!black] (10.350,1.75) -- (15.350,1.75);
+  \node[font=\sffamily\small] at (12.850,2.2) {S\,($\cdot$\,$\cdot$\,$\cdot$)};
+  \node[anchor=east, font=\sffamily\footnotesize, text=gray!70!black] at (15.850,-0.95) {Unit: ms};
+\end{tikzpicture}
+\end{document}
