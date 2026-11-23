@@ -22,7 +22,6 @@ layout: intro
 - **Section 1:** Asst. Prof. Dr. Noppadol Charbkaew (Leader)
 - **Section 2:** Asst. Prof. Dr. Ruslee Sutthaweekul
 - **Section 3:** Assoc. Prof. Chatchai Sermpongpan
-- **Section 4\*:** Asst. Prof. Dr. Noppadol Charbkaew (M 13:00-16:00)
 
 ---
 layout: intro
